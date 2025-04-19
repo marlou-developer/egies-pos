@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
+
 
 class AuthenticatedSessionController extends Controller
 {
@@ -33,8 +35,16 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        if (Auth::user()->user_type == 1) {
+            return redirect()->intended(RouteServiceProvider::ADMIN);
+        } elseif (Auth::user()->user_type == 2) {
+            return redirect()->intended(RouteServiceProvider::STAFF);
+        }
+
+        // Optional fallback if user_type is something else
+        return redirect()->intended('/'); // or to a default dashboard
     }
+
 
     /**
      * Destroy an authenticated session.

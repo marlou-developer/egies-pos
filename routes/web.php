@@ -10,11 +10,11 @@ Route::get('/', function () {
 });
 
 
-// Route::middleware('auth:sanctum')->prefix('administrator')->group(function () {
-//     Route::get('dashboard', function () {
-//         return Inertia::render('administrator/page');
-//     });
-// });
+Route::middleware('auth:sanctum')->prefix('administrator')->group(function () {
+    Route::get('dashboard', function () {
+        return Inertia::render('administrator/dashboard/page');
+    });
+});
 
 Route::prefix('administrator')->group(function () {
     Route::get('dashboard', function () {
@@ -23,7 +23,7 @@ Route::prefix('administrator')->group(function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    return Inertia::render('administrator/dashboard/page');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

@@ -64,11 +64,11 @@ export default function SidebarSection({ navigation }) {
                                 </div>
 
                                 {/* Sidebar content */}
-                              <SidebarMobileSection 
-                              setOpenIndex={setOpenIndex}
-                              openIndex={openIndex}
-                              navigation={navigation}
-                              />
+                                <SidebarMobileSection
+                                    setOpenIndex={setOpenIndex}
+                                    openIndex={openIndex}
+                                    navigation={navigation}
+                                />
                             </div>
                         </Transition.Child>
                     </div>
@@ -77,7 +77,7 @@ export default function SidebarSection({ navigation }) {
 
             {/* Desktop sidebar */}
             <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-                <div className="flex grow flex-col gap-y-5 border-r border-gray-300 bg-white px-1.5 pb-4 shadow-md">
+                <div className="flex grow flex-col gap-y-5 border-r border-gray-300 bg-gradient-to-br from-pink-100 via-pink-200 to-pink-200 px-1.5 pb-4 shadow-md">
                     <div className="flex h-16 shrink-0 items-center">
                         <img
                             className="h-8 w-auto"
@@ -85,10 +85,10 @@ export default function SidebarSection({ navigation }) {
                             alt="Your Company"
                         />
                     </div>
-                   <SidebarDesktopSection
-                   setOpenIndex={setOpenIndex}
-                   openIndex={openIndex}
-                   navigation={navigation}/>
+                    <SidebarDesktopSection
+                        setOpenIndex={setOpenIndex}
+                        openIndex={openIndex}
+                        navigation={navigation} />
                 </div>
             </div>
         </>

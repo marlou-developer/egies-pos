@@ -7,7 +7,7 @@ import { createRoot } from "react-dom/client";
 import store from "./app/store/store";
 import { Provider } from "react-redux";
 
-const appName = import.meta.env.VITE_APP_NAME || "Laravel";
+const appName = import.meta.env.VITE_APP_NAME || "POS";
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

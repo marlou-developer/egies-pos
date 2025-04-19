@@ -1,8 +1,23 @@
 import Input from "@/app/_components/input";
+import InputError from "@/Components/InputError";
+import { useForm } from "@inertiajs/react";
 
-export default function Page() {
+export default function Page({ status, canResetPassword }) {
+    const { data, setData, post, processing, errors, reset } = useForm({
+        email: '',
+        password: '',
+        remember: false,
+    });
+
+    const submit = (e) => {
+        e.preventDefault();
+
+        post(route('auth.login'), {
+            onFinish: () => reset('password'),
+        });
+    };
     return (
-        <div className="min-h-screen flex fle-col items-center justify-center py-6 px-4 bg-gradient-to-br from-pink-100 via-pink-200 to-pink-300">
+        <div className="min-h-screen flex fle-col items-center justify-center py-6 px-4 bg-gradient-to-br from-pink-300 via-pink-100 to-pink-300">
             <div className="grid md:grid-cols-2 items-center gap-10 max-w-6xl max-md:max-w-md w-full">
                 <div>
                     <h2 className="lg:text-5xl text-3xl font-bold lg:leading-[57px] text-slate-900">
@@ -17,7 +32,7 @@ export default function Page() {
                     </p>
                 </div>
 
-                <form className="max-w-md md:ml-auto w-full shadow-xl rounded-lg bg-gradient-to-br from-pink-300 via-pink-200 to-pink-300 p-8">
+                <form onSubmit={submit} className="max-w-md md:ml-auto w-full shadow-xl rounded-lg bg-gradient-to-br from-pink-300 via-pink-200 to-pink-300 p-8">
                     <h3 className="text-slate-900 lg:text-3xl text-2xl font-bold mb-8">
                         Sign in
                     </h3>
@@ -30,6 +45,18 @@ export default function Page() {
                                 name="Email"
                                 label="Email"
                                 type="email"
+                                value={data.email}
+                                onChange={(e) =>
+                                    setData(
+                                        "email",
+                                        e.target.value
+                                    )
+                                }
+                                autoComplete="email"
+                            />
+                            <InputError
+                                message={errors.email}
+                                className="mt-2"
                             />
                         </div>
                         <div>
@@ -39,6 +66,19 @@ export default function Page() {
                                 name="Password"
                                 label="Password"
                                 type="password"
+                                value={data.password}
+                                onChange={(e) =>
+                                    setData(
+                                        "password",
+                                        e.target.value
+                                    )
+                                }
+
+                                autoComplete="current-password"
+                            />
+                            <InputError
+                                message={errors.password}
+                                className="mt-2"
                             />
                         </div>
                         <div className="flex flex-wrap items-center justify-between gap-4">
@@ -57,8 +97,8 @@ export default function Page() {
                     </div>
 
                     <div className="!mt-12">
-                        <button type="button" className="w-full shadow-xl py-2.5 px-4 text-sm font-semibold rounded text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
-                            Log in
+                        <button disabled={processing} type="submit" className="w-full shadow-xl py-2.5 px-4 text-sm font-semibold rounded text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
+                            {processing ? "Loading..." : "Log in"}
                         </button>
                     </div>
 
