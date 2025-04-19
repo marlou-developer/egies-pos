@@ -15,9 +15,9 @@ import SidebarSection from "@/app/_sections/sidebar-section";
 import TopbarSection from "@/app/_sections/topbar-section";
 
 const navigation = [
-    { name: "Dashboard", href: "#", icon: HomeIcon, current: true },
-    { name: "POS", href: "#", icon: CalculatorIcon, current: false },
-    { name: "Products Section", href: "#", icon: ShoppingBagIcon, current: false },
+    { name: "Dashboard", href: "/administrator/dashboard", icon: HomeIcon, current: false },
+    { name: "POS", href: "/administrator/pos", icon: CalculatorIcon, current: false },
+    { name: "Products Section", href: "/administrator/products", icon: ShoppingBagIcon, current: false },
     // {
     //     name: "Team",
     //     href: "#",
@@ -38,15 +38,15 @@ const navigation = [
     //         { name: "Register", href: "#", icon: HomeIcon, current: false },
     //     ],
     // },
-    { name: "Shopee Section", href: "#", icon: ShoppingCartIcon, current: false },
+    { name: "Shopee Section", href: "/administrator/shopee", icon: ShoppingCartIcon, current: false },
     {
         name: "Sales Section",
-        href: "#",
+        href: "/administrator/sales",
         icon: PresentationChartBarIcon,
         current: false,
     },
-    { name: "Report Section", href: "#", icon: ChartPieIcon, current: false },
-    { name: "User Management", href: "#", icon: UsersIcon, current: false },
+    { name: "Report Section", href: "/administrator/reports", icon: ChartPieIcon, current: false },
+    { name: "User Management", href: "/administrator/users", icon: UsersIcon, current: false },
 ];
 
 const userNavigation = [
@@ -54,7 +54,7 @@ const userNavigation = [
     { name: "Sign out", href: "#" },
 ];
 
-export default function Layout({ children }) {
+export default function AdminLayout({ children }) {
     return (
         <>
             <div>

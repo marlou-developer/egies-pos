@@ -14,6 +14,24 @@ Route::middleware('auth:sanctum')->prefix('administrator')->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('administrator/dashboard/page');
     });
+    Route::get('pos', function () {
+        return Inertia::render('administrator/pos/page');
+    });
+    Route::get('products', function () {
+        return Inertia::render('administrator/products/page');
+    });
+    Route::get('shopee', function () {
+        return Inertia::render('administrator/shopee/page');
+    });
+    Route::get('sales', function () {
+        return Inertia::render('administrator/sales/page');
+    });
+    Route::get('reports', function () {
+        return Inertia::render('administrator/reports/page');
+    });
+    Route::get('users', function () {
+        return Inertia::render('administrator/users/page');
+    });
 });
 
 Route::prefix('administrator')->group(function () {

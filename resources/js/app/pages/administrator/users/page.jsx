@@ -1,7 +1,11 @@
 import React from 'react'
+import AdminLayout from '../layout'
+import UsersSection from './sections/users-section'
 
-export default function Page() {
+export default function UserPage() {
   return (
-    <div>user Page</div>
+    <AdminLayout>
+      <UsersSection />
+    </AdminLayout>
   )
 }
