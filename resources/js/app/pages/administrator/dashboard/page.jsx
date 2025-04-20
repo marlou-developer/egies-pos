@@ -30,7 +30,7 @@ export default function Page() {
                     icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
                 />
             </div>
-            <div className="flex gap-3">
+            {/* <div className="flex gap-3">
                 <Button loading={true} variant="primary">
                     hello
                 </Button>
@@ -68,7 +68,7 @@ export default function Page() {
             <Button onClick={() => setOpen(true)}>Open</Button>
             <Modal open={open} setOpen={setOpen}>
                 this is the body
-            </Modal>
+            </Modal> */}
         </AdminLayout>
     );
 }
