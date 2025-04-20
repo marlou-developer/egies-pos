@@ -1,5 +1,5 @@
 import { Transition } from "@headlessui/react";
-import { Cog6ToothIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Cog6ToothIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import React, { useState, Fragment } from "react";
 import { setSidebarOpen } from "../redux/app-slice";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,7 +11,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-export default function SidebarSection({ navigation }) {
+export default function SidebarSection({ navigation, collapsed, setCollapsed }) {
     const { sidebarOpen } = useSelector((store) => store.app);
     const dispatch = useDispatch();
     const [openIndex, setOpenIndex] = useState(null);
@@ -48,18 +48,11 @@ export default function SidebarSection({ navigation }) {
                                 <div className="absolute top-0 left-full flex w-16 justify-center pt-5">
                                     <button
                                         type="button"
-                                        onClick={() =>
-                                            dispatch(setSidebarOpen(false))
-                                        }
+                                        onClick={() => dispatch(setSidebarOpen(false))}
                                         className="-m-2.5 p-2.5"
                                     >
-                                        <span className="sr-only">
-                                            Close sidebar
-                                        </span>
-                                        <XMarkIcon
-                                            className="size-6 text-white"
-                                            aria-hidden="true"
-                                        />
+                                        <span className="sr-only">Close sidebar</span>
+                                        <XMarkIcon className="size-6 text-white" aria-hidden="true" />
                                     </button>
                                 </div>
 
@@ -76,19 +69,41 @@ export default function SidebarSection({ navigation }) {
             </Transition>
 
             {/* Desktop sidebar */}
-            <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-                <div className="flex grow flex-col gap-y-5 border-r border-gray-300 bg-gradient-to-br from-pink-100 via-pink-200 to-pink-200 px-1.5 pb-4 shadow-md">
-                    <div className="flex h-16 shrink-0 items-center">
-                        <img
-                            className="h-8 w-auto"
-                            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=blue&shade=600"
-                            alt="Your Company"
-                        />
+            <div className={classNames(
+                "hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:flex-col transition-all duration-300 ease-in-out",
+                collapsed ? "lg:w-20" : "lg:w-72"
+            )}>
+                <div className="flex grow flex-col gap-y-5 border-r border-gray-300 bg-gradient-to-br from-pink-100 via-pink-200 to-pink-200 px-1.5 pb-4 shadow-md relative">
+                    {/* Collapse toggle button */}
+                    <button
+                        onClick={() => setCollapsed(!collapsed)}
+                        className="absolute -right-3 top-4 z-10 bg-white border border-gray-300 rounded-full p-1 shadow"
+                    >
+                        {collapsed ? (
+                            <ChevronRightIcon className="h-4 w-4" />
+                        ) : (
+                            <ChevronLeftIcon className="h-4 w-4" />
+                        )}
+                    </button>
+
+                    {/* Logo */}
+                    <div className="flex h-16 shrink-0 items-center justify-center">
+                        {!collapsed && (
+                            <img
+                                className="h-8 w-auto"
+                                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=blue&shade=600"
+                                alt="Your Company"
+                            />
+                        )}
                     </div>
+
+                    {/* Sidebar content */}
                     <SidebarDesktopSection
                         setOpenIndex={setOpenIndex}
                         openIndex={openIndex}
-                        navigation={navigation} />
+                        navigation={navigation}
+                        collapsed={collapsed} // optional: pass to render minimized icons
+                    />
                 </div>
             </div>
         </>

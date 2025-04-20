@@ -4,7 +4,7 @@ import ProductsSection from './products-section'
 export default function PosSection() {
     return (
         <div class="w-full">
-            <div class="flex lg:flex-row flex-col-reverse shadow-md shadow-pink-400">
+            <div class="flex lg:flex-row flex-col-reverse shadow-lg">
                 <ProductsSection />
                 <div class="w-full lg:w-2/5">
                     <div class="flex flex-row items-center justify-between px-5 mt-5">
