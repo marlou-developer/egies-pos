@@ -7,10 +7,10 @@ import { createRoot } from "react-dom/client";
 import store from "./app/store/store";
 import { Provider } from "react-redux";
 
-const appName = import.meta.env.VITE_APP_NAME || "POS";
+const appName = import.meta.env.VITE_APP_NAME || "Egie's POS";
 
 createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
+    title: (title) => `${title} ${appName}`,
     resolve: (name) =>
         resolvePageComponent(
             `./app/pages/${name}.jsx`,

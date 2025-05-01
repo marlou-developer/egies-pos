@@ -19,7 +19,6 @@ const category = [
     {
         category_name: "Cream"
     },
-    // More product...
 ];
 
 export default function AddCategoryComponent({ open, setOpenCategory }) {
