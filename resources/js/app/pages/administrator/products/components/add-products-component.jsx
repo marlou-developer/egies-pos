@@ -9,7 +9,7 @@ import {
 import UploadProductSection from "../sections/upload-product-section";
 import { useDispatch, useSelector } from "react-redux";
 import { setProduct } from "@/app/redux/product-slice";
-import { create_product_thunk } from "@/app/redux/product-thunk";
+import { create_product_thunk, get_product_thunk } from "@/app/redux/product-thunk";
 import { message } from "antd";
 import store from "@/app/store/store";
 
@@ -63,7 +63,7 @@ export default function AddProductComponent({ open, setOpenProduct }) {
 
         try {
             await store.dispatch(create_product_thunk(fd));
-            // await store.dispatch(get_rent_thunk());
+            await store.dispatch(get_product_thunk());
             message.success("Product successfully saved!");
             setOpenProduct(false);
         } catch (error) {
@@ -329,9 +329,10 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                         </button>
                                         <button
                                             type="submit"
+                                            disabled={loading}
                                             className="ml-4 inline-flex justify-center rounded-md bg-pink-500 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-pink-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-600"
                                         >
-                                            Save
+                                            {loading ? "Saving..." : "Save"}
                                         </button>
                                     </div>
                                 </form>
