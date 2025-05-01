@@ -14,11 +14,13 @@ import { message } from "antd";
 import store from "@/app/store/store";
 
 export default function AddProductComponent({ open, setOpenProduct }) {
-
+    const { categories } = useSelector((state) => state.categories)
     const [loading, setLoading] = useState(false);
     const [uploadedFile1, setUploadedFile1] = useState(null);
     const { product } = useSelector((state) => state.products);
     const dispatch = useDispatch();
+
+    console.log('categories', categories)
 
     function data_handler(eOrKey, value) {
         if (typeof eOrKey === 'string') {
@@ -161,12 +163,20 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                                             Category
                                                         </label>
                                                         <div className="mt-2">
-                                                            <input
-                                                                id="product_name"
-                                                                name="product_name"
+                                                            <select
+                                                                onChange={data_handler}
+                                                                value={product?.category_id ?? ""}
+                                                                name="category_id"
                                                                 type="text"
                                                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
-                                                            />
+                                                            >
+                                                                <option value="">Select a category</option>
+                                                                {categories?.map((category) => (
+                                                                    <option key={category.id} value={category.id}>
+                                                                        {category.name}
+                                                                    </option>
+                                                                ))}
+                                                            </select>
                                                         </div>
                                                     </div>
                                                     <div>
