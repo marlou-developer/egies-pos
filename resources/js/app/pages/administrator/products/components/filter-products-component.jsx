@@ -126,6 +126,40 @@ export default function FilterProductsComponent({ open, setOpenFilter }) {
                                                             </select>
                                                         </div>
                                                     </div>
+                                                    <div>
+                                                        <label
+                                                            htmlFor="product_status"
+                                                            className="block text-sm font-medium text-pink-600"
+                                                        >
+                                                            Product Stock Status
+                                                        </label>
+                                                        <div className="mt-2">
+                                                            <select
+                                                                id="product_status"
+                                                                name="product_status"
+                                                                autoComplete="product_status"
+                                                                className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
+                                                            >
+                                                                <option
+                                                                    value=""
+                                                                    disabled
+                                                                    selected
+                                                                >
+                                                                    -- Stock Status
+                                                                    --
+                                                                </option>
+                                                                <option>
+                                                                    In Stock
+                                                                </option>
+                                                                <option>
+                                                                    Low Stock
+                                                                </option>
+                                                                <option>
+                                                                    Out of Stock
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -142,7 +176,7 @@ export default function FilterProductsComponent({ open, setOpenFilter }) {
                                             type="submit"
                                             className="ml-4 inline-flex justify-center rounded-md bg-pink-500 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-pink-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-600"
                                         >
-                                            Save
+                                            Filter
                                         </button>
                                     </div>
                                 </form>

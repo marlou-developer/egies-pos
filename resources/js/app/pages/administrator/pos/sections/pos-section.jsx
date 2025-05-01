@@ -1,5 +1,5 @@
-import React from 'react'
-import ProductsSection from './products-section'
+import React from "react";
+import ProductsSection from "./products-section";
 
 export default function PosSection() {
     return (
@@ -17,13 +17,46 @@ export default function PosSection() {
                     <div class="px-5 py-4 mt-5 overflow-y-auto h-64">
                         <div class="flex flex-row justify-between items-center mb-4">
                             <div class="flex flex-row items-center w-2/5">
-                                <img src="https://source.unsplash.com/4u_nRgiLW3M/600x600" class="w-10 h-10 object-cover rounded-md" alt="" />
-                                <span class="ml-4 font-semibold text-sm">Make up</span>
+                                <img
+                                    src="https://source.unsplash.com/4u_nRgiLW3M/600x600"
+                                    class="w-10 h-10 object-cover rounded-md"
+                                    alt=""
+                                />
+                                <span class="ml-4 font-semibold text-sm">
+                                    Make up
+                                </span>
+                                <span class="ml-4 font-semibold text-sm">
+                                    <select
+                                        id="category_name"
+                                        name="category_name"
+                                        autoComplete="category_name"
+                                        className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pl-3 pr-1 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
+                                    >
+                                        <option>SRP Price</option>
+                                        <option>Reseller Price</option>
+                                        <option>City Distributor Price</option>
+                                        <option>District Distributor Price</option>
+                                        <option>Provincial Distributor Price</option>
+                                    </select>
+                                </span>
+                               
                             </div>
                             <div class="w-32 flex justify-between">
-                                <span class="px-3 py-1 rounded-md bg-gray-300 ">-</span>
-                                <span class="font-semibold mx-4">2</span>
-                                <span class="px-3 py-1 rounded-md bg-gray-300 ">+</span>
+                                <span class="px-3 py-1 rounded-md bg-gray-300 ">
+                                    -
+                                </span>
+                                <span class="font-semibold mx-1">
+                                    <input
+                                        id="category_name"
+                                        name="category_name"
+                                        type="text"
+                                        value="25"
+                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
+                                    />
+                                </span>
+                                <span class="px-3 py-1 rounded-md bg-gray-300 ">
+                                    +
+                                </span>
                             </div>
                             <div class="font-semibold text-lg w-16 text-center">
                                 ₱13.50
@@ -31,13 +64,31 @@ export default function PosSection() {
                         </div>
                         <div class="flex flex-row justify-between items-center mb-4">
                             <div class="flex flex-row items-center w-2/5">
-                                <img src="https://source.unsplash.com/sc5sTPMrVfk/600x600" class="w-10 h-10 object-cover rounded-md" alt="" />
-                                <span class="ml-4 font-semibold text-sm">Lipstick</span>
+                                <img
+                                    src="https://source.unsplash.com/sc5sTPMrVfk/600x600"
+                                    class="w-10 h-10 object-cover rounded-md"
+                                    alt=""
+                                />
+                                <span class="ml-4 font-semibold text-sm">
+                                    Lipstick
+                                </span>
                             </div>
                             <div class="w-32 flex justify-between">
-                                <span class="px-3 py-1 rounded-md bg-gray-300 ">-</span>
-                                <span class="font-semibold mx-4">10</span>
-                                <span class="px-3 py-1 rounded-md bg-gray-300 ">+</span>
+                                <span class="px-3 py-1 rounded-md bg-gray-300 ">
+                                    -
+                                </span>
+                                <span class="font-semibold mx-1">
+                                    <input
+                                        id="category_name"
+                                        name="category_name"
+                                        type="text"
+                                        value="25"
+                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
+                                    />
+                                </span>
+                                <span class="px-3 py-1 rounded-md bg-gray-300 ">
+                                    +
+                                </span>
                             </div>
                             <div class="font-semibold text-lg w-16 text-center">
                                 ₱3.50
@@ -45,13 +96,31 @@ export default function PosSection() {
                         </div>
                         <div class="flex flex-row justify-between items-center mb-4">
                             <div class="flex flex-row items-center w-2/5">
-                                <img src="https://source.unsplash.com/MNtag_eXMKw/600x600" class="w-10 h-10 object-cover rounded-md" alt="" />
-                                <span class="ml-4 font-semibold text-sm">Lipstick</span>
+                                <img
+                                    src="https://source.unsplash.com/MNtag_eXMKw/600x600"
+                                    class="w-10 h-10 object-cover rounded-md"
+                                    alt=""
+                                />
+                                <span class="ml-4 font-semibold text-sm">
+                                    Lipstick
+                                </span>
                             </div>
                             <div class="w-32 flex justify-between">
-                                <span class="px-3 py-1 rounded-md bg-gray-300 ">-</span>
-                                <span class="font-semibold mx-4">10</span>
-                                <span class="px-3 py-1 rounded-md bg-gray-300 ">+</span>
+                                <span class="px-3 py-1 rounded-md bg-gray-300 ">
+                                    -
+                                </span>
+                                <span class="font-semibold mx-1">
+                                    <input
+                                        id="category_name"
+                                        name="category_name"
+                                        type="text"
+                                        value="25"
+                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
+                                    />
+                                </span>
+                                <span class="px-3 py-1 rounded-md bg-gray-300 ">
+                                    +
+                                </span>
                             </div>
                             <div class="font-semibold text-lg w-16 text-center">
                                 ₱3.50
@@ -59,13 +128,31 @@ export default function PosSection() {
                         </div>
                         <div class="flex flex-row justify-between items-center mb-4">
                             <div class="flex flex-row items-center w-2/5">
-                                <img src="https://source.unsplash.com/MNtag_eXMKw/600x600" class="w-10 h-10 object-cover rounded-md" alt="" />
-                                <span class="ml-4 font-semibold text-sm">Lipstick</span>
+                                <img
+                                    src="https://source.unsplash.com/MNtag_eXMKw/600x600"
+                                    class="w-10 h-10 object-cover rounded-md"
+                                    alt=""
+                                />
+                                <span class="ml-4 font-semibold text-sm">
+                                    Lipstick
+                                </span>
                             </div>
                             <div class="w-32 flex justify-between">
-                                <span class="px-3 py-1 rounded-md bg-gray-300 ">-</span>
-                                <span class="font-semibold mx-4">10</span>
-                                <span class="px-3 py-1 rounded-md bg-gray-300 ">+</span>
+                                <span class="px-3 py-1 rounded-md bg-gray-300 ">
+                                    -
+                                </span>
+                                <span class="font-semibold mx-1">
+                                    <input
+                                        id="category_name"
+                                        name="category_name"
+                                        type="text"
+                                        value="25"
+                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
+                                    />
+                                </span>
+                                <span class="px-3 py-1 rounded-md bg-gray-300 ">
+                                    +
+                                </span>
                             </div>
                             <div class="font-semibold text-lg w-16 text-center">
                                 ₱3.50
@@ -73,13 +160,31 @@ export default function PosSection() {
                         </div>
                         <div class="flex flex-row justify-between items-center mb-4">
                             <div class="flex flex-row items-center w-2/5">
-                                <img src="https://source.unsplash.com/MNtag_eXMKw/600x600" class="w-10 h-10 object-cover rounded-md" alt="" />
-                                <span class="ml-4 font-semibold text-sm">Soap</span>
+                                <img
+                                    src="https://source.unsplash.com/MNtag_eXMKw/600x600"
+                                    class="w-10 h-10 object-cover rounded-md"
+                                    alt=""
+                                />
+                                <span class="ml-4 font-semibold text-sm">
+                                    Soap
+                                </span>
                             </div>
                             <div class="w-32 flex justify-between">
-                                <span class="px-3 py-1 rounded-md bg-red-300 text-white">x</span>
-                                <span class="font-semibold mx-4">1</span>
-                                <span class="px-3 py-1 rounded-md bg-gray-300 ">+</span>
+                                <span class="px-3 py-1 rounded-md bg-red-300 text-white">
+                                    x
+                                </span>
+                                <span class="font-semibold mx-1">
+                                    <input
+                                        id="category_name"
+                                        name="category_name"
+                                        type="text"
+                                        value="25"
+                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
+                                    />
+                                </span>
+                                <span class="px-3 py-1 rounded-md bg-gray-300 ">
+                                    +
+                                </span>
                             </div>
                             <div class="font-semibold text-lg w-16 text-center">
                                 ₱2.50
@@ -87,13 +192,31 @@ export default function PosSection() {
                         </div>
                         <div class="flex flex-row justify-between items-center mb-4">
                             <div class="flex flex-row items-center w-2/5">
-                                <img src="https://source.unsplash.com/4u_nRgiLW3M/600x600" class="w-10 h-10 object-cover rounded-md" alt="" />
-                                <span class="ml-4 font-semibold text-sm">Soap</span>
+                                <img
+                                    src="https://source.unsplash.com/4u_nRgiLW3M/600x600"
+                                    class="w-10 h-10 object-cover rounded-md"
+                                    alt=""
+                                />
+                                <span class="ml-4 font-semibold text-sm">
+                                    Soap
+                                </span>
                             </div>
                             <div class="w-32 flex justify-between">
-                                <span class="px-3 py-1 rounded-md bg-red-300 text-white">x</span>
-                                <span class="font-semibold mx-4">1</span>
-                                <span class="px-3 py-1 rounded-md bg-gray-300 ">+</span>
+                                <span class="px-3 py-1 rounded-md bg-red-300 text-white">
+                                    x
+                                </span>
+                                <span class="font-semibold mx-1">
+                                    <input
+                                        id="category_name"
+                                        name="category_name"
+                                        type="text"
+                                        value="25"
+                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
+                                    />
+                                </span>
+                                <span class="px-3 py-1 rounded-md bg-gray-300 ">
+                                    +
+                                </span>
                             </div>
                             <div class="font-semibold text-lg w-16 text-center">
                                 ₱2.50
@@ -103,19 +226,27 @@ export default function PosSection() {
                     <div class="px-5 mt-5">
                         <div class="py-4 rounded-md shadow-lg">
                             <div class=" px-4 flex justify-between ">
-                                <span class="font-semibold text-sm">Subtotal</span>
+                                <span class="font-semibold text-sm">
+                                    Subtotal
+                                </span>
                                 <span class="font-bold">₱35.25</span>
                             </div>
                             <div class=" px-4 flex justify-between ">
-                                <span class="font-semibold text-sm">Discount</span>
+                                <span class="font-semibold text-sm">
+                                    Discount
+                                </span>
                                 <span class="font-bold">- ₱5.00</span>
                             </div>
                             <div class=" px-4 flex justify-between ">
-                                <span class="font-semibold text-sm">Sales Tax</span>
+                                <span class="font-semibold text-sm">
+                                    Sales Tax
+                                </span>
                                 <span class="font-bold">₱2.25</span>
                             </div>
                             <div class="border-t-2 mt-3 py-2 px-4 flex items-center justify-between">
-                                <span class="font-semibold text-2xl">Total</span>
+                                <span class="font-semibold text-2xl">
+                                    Total
+                                </span>
                                 <span class="font-bold text-2xl">₱37.50</span>
                             </div>
                         </div>
@@ -124,11 +255,20 @@ export default function PosSection() {
                         <div class="rounded-md shadow-lg px-4 py-4">
                             <div class="flex flex-row justify-between items-center">
                                 <div class="flex flex-col">
-                                    <span class="uppercase text-xs font-semibold">cashless credit</span>
-                                    <span class="text-xl font-bold text-pink-300">₱32.50</span>
-                                    <span class=" text-xs text-gray-400 ">Available</span>
+                                    <span class="uppercase text-xs font-semibold">
+                                        cashless credit
+                                    </span>
+                                    <span class="text-xl font-bold text-pink-300">
+                                        ₱32.50
+                                    </span>
+                                    <span class=" text-xs text-gray-400 ">
+                                        Available
+                                    </span>
                                 </div>
-                                <div class="px-4 py-3 bg-gray-300 text-gray-800 rounded-md font-bold"> Cancel</div>
+                                <div class="px-4 py-3 bg-gray-300 text-gray-800 rounded-md font-bold">
+                                    {" "}
+                                    Cancel
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -139,6 +279,6 @@ export default function PosSection() {
                     </div>
                 </div>
             </div>
-        </div >
-    )
+        </div>
+    );
 }
