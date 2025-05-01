@@ -20,15 +20,9 @@ export default function Page({ status, canResetPassword }) {
         <div className="min-h-screen flex fle-col items-center justify-center py-6 px-4 bg-gradient-to-br from-pink-300 via-pink-100 to-pink-300">
             <div className="grid md:grid-cols-2 items-center gap-10 max-w-6xl max-md:max-w-md w-full">
                 <div>
-                    <h2 className="lg:text-5xl text-3xl font-bold lg:leading-[57px] text-slate-900">
-                        Seamless Login for Exclusive Access
-                    </h2>
-                    <p className="text-sm mt-6 text-slate-500 leading-relaxed">
-                        Immerse yourself in a hassle-free login journey with our intuitively designed login form. Effortlessly access your account.
-                    </p>
-                    <p className="text-sm mt-12 text-slate-500">
-                        Don't have an account
-                        <a href="javascript:void(0);" className="text-blue-600 font-medium hover:underline ml-1">Register here</a>
+                    <img src="./images/logo.png" alt="" />
+                    <p className="text-sm mt-3 text-slate-500 leading-relaxed">
+                        Immerse yourself in a hassle-free, seamless exclusive login journey with our intuitively designed login form. Effortlessly access your account.
                     </p>
                 </div>
 

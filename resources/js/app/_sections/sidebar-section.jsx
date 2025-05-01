@@ -90,8 +90,8 @@ export default function SidebarSection({ navigation, collapsed, setCollapsed }) 
                     <div className="flex h-16 shrink-0 items-center justify-center">
                         {!collapsed && (
                             <img
-                                className="h-8 w-auto"
-                                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=blue&shade=600"
+                                className="h-16 w-auto"
+                                src="/images/logo.png"
                                 alt="Your Company"
                             />
                         )}

@@ -16,7 +16,7 @@ export default function SidebarMobileSection({
                 <div className="flex h-16 shrink-0 items-center">
                     <img
                         className="h-8 w-auto"
-                        src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=blue&shade=600"
+                        src="images/logo.png"
                         alt="Your Company"
                     />
                 </div>
