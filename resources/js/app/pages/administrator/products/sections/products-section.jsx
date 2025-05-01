@@ -6,9 +6,11 @@ import {
     PencilSquareIcon,
     TrashIcon,
 } from "@heroicons/react/20/solid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddCategoryComponent from "../components/add-category-component";
 import FilterProductsComponent from "../components/filter-products-component";
+import store from "@/app/store/store";
+import { get_category_thunk } from "@/app/redux/category-thunk";
 
 const product = [
     {
@@ -55,6 +57,10 @@ export default function ProductsSection() {
     const [openProduct, setOpenProduct] = useState(false);
     const [openCategory, setOpenCategory] = useState(false);
     const [openFilter, setOpenFilter] = useState(false);
+
+    useEffect(() => {
+        store.dispatch(get_category_thunk())
+    }, []);
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">
@@ -69,44 +75,44 @@ export default function ProductsSection() {
                     </p>
                 </div>
                 <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                     {/* Button Group */}
-            <span className="isolate inline-flex rounded-md shadow-xs">
-                <button
-                    type="button"
-                    onClick={() => setOpenProduct(true)} // Set openProduct state to true when clicked
-                    className="relative inline-flex items-center rounded-l-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
-                >
-                    <FaClipboardList className="float-left mr-1 text-pink-500" />
-                    Add New Product
-                </button>
-                <button
-                    type="button"
-                    onClick={() => setOpenCategory(true)}
-                    className="relative -ml-px inline-flex items-center bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
-                >
-                    <FaList className="float-left mr-1 text-pink-500" />
-                    Add Category
-                </button>
-                <button
-                    type="button" // Set openProduct state to true when clicked
-                    className="relative -ml-px inline-flex items-center bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
-                >
-                    <FaPrint className="float-left mr-1 text-pink-500" />
-                    Print
-                </button>
-                <button
-                    type="button"
-                    onClick={() => setOpenFilter(true)}
-                    className="relative -ml-px inline-flex items-center rounded-r-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-50 focus:z-10"
-                >
-                    <FaFilter className="float-left mr-1 text-pink-500" />
-                    Filter Products
-                </button>
-            </span>
+                    {/* Button Group */}
+                    <span className="isolate inline-flex rounded-md shadow-xs">
+                        <button
+                            type="button"
+                            onClick={() => setOpenProduct(true)} // Set openProduct state to true when clicked
+                            className="relative inline-flex items-center rounded-l-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
+                        >
+                            <FaClipboardList className="float-left mr-1 text-pink-500" />
+                            Add New Product
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setOpenCategory(true)}
+                            className="relative -ml-px inline-flex items-center bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
+                        >
+                            <FaList className="float-left mr-1 text-pink-500" />
+                            Add Category
+                        </button>
+                        <button
+                            type="button" // Set openProduct state to true when clicked
+                            className="relative -ml-px inline-flex items-center bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
+                        >
+                            <FaPrint className="float-left mr-1 text-pink-500" />
+                            Print
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setOpenFilter(true)}
+                            className="relative -ml-px inline-flex items-center rounded-r-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-50 focus:z-10"
+                        >
+                            <FaFilter className="float-left mr-1 text-pink-500" />
+                            Filter Products
+                        </button>
+                    </span>
 
-            <AddProductComponent open={openProduct} setOpenProduct={setOpenProduct} />
-            <AddCategoryComponent open={openCategory} setOpenCategory={setOpenCategory} />
-            <FilterProductsComponent open={openFilter} setOpenFilter={setOpenFilter} />
+                    <AddProductComponent open={openProduct} setOpenProduct={setOpenProduct} />
+                    <AddCategoryComponent open={openCategory} setOpenCategory={setOpenCategory} />
+                    <FilterProductsComponent open={openFilter} setOpenFilter={setOpenFilter} />
                 </div>
             </div>
 

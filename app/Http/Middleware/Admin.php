@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\Response;
 
-class TechTeam
+class Admin
 {
     /**
      * Handle an incoming request.

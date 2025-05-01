@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import {
@@ -8,23 +8,47 @@ import {
     FaMoneyBill1Wave,
 } from "react-icons/fa6";
 import classNames from "classnames";
+import store from "@/app/store/store";
+import { create_category_thunk, get_category_thunk } from "@/app/redux/category-thunk";
+import { message } from "antd";
+import { useSelector } from "react-redux";
 
-const category = [
-    {
-        category_name: "Soap"
-    },
-    {
-        category_name: "Make-Up"
-    },
-    {
-        category_name: "Cream"
-    },
-];
+// const category = [
+//     {
+//         category_name: "Soap"
+//     },
+//     {
+//         category_name: "Make-Up"
+//     },
+//     {
+//         category_name: "Cream"
+//     },
+// ];
 
 export default function AddCategoryComponent({ open, setOpenCategory }) {
+    const { categories } = useSelector((state) => state.categories)
+    const [loading, setLoading] = useState(false)
+    const [form, setForm] = useState({})
+    const createCategory = async (e) => {
+        setLoading(true);
+        try {
+            await store.dispatch(
+                create_category_thunk({
+                    ...form,
+                })
+            );
+            store.dispatch(get_category_thunk())
+            message.success("Successfully Added!");
+        } catch (error) {
+            message.error("Failed to add category. Please try again."); // Show error message
+        } finally {
+            setLoading(false); // Always reset loading state
+        }
+    };
+    console.log('category', categories)
     return (
         <>
-           <Dialog
+            <Dialog
                 open={open}
                 onClose={setOpenCategory}
                 className="relative z-50"
@@ -38,7 +62,7 @@ export default function AddCategoryComponent({ open, setOpenCategory }) {
                                 transition
                                 className="pointer-events-auto w-screen max-w-md transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700"
                             >
-                                <form className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl">
+                                <form onSubmit={createCategory} className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl">
                                     <div className="h-0 flex-1 overflow-y-auto">
                                         <div className="bg-pink-200 px-4 py-6 sm:px-6">
                                             <div className="flex items-center justify-between">
@@ -91,7 +115,7 @@ export default function AddCategoryComponent({ open, setOpenCategory }) {
                                                             Existing Categories
                                                         </label>
                                                         <div className="mt-2">
-                                                            {category.map(
+                                                            {categories?.map(
                                                                 (category, categoryIdx) => (
                                                                     <span
                                                                         key={categoryIdx}
@@ -100,10 +124,10 @@ export default function AddCategoryComponent({ open, setOpenCategory }) {
                                                                                 category.length - 1
                                                                                 ? "border-b border-gray-200"
                                                                                 : "",
-                                                                            "inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 mr-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset"
+                                                                            "inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 mr-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset mt-3"
                                                                         )}
                                                                     >
-                                                                        {category.category_name}
+                                                                        {category.name}
                                                                     </span>
                                                                 )
                                                             )}
@@ -118,8 +142,14 @@ export default function AddCategoryComponent({ open, setOpenCategory }) {
                                                         </label>
                                                         <div className="mt-2">
                                                             <input
-                                                                id="category_name"
-                                                                name="category_name"
+                                                                onChange={(e) =>
+                                                                    setForm({
+                                                                        ...form,
+                                                                        name: e.target.value,
+                                                                    })
+                                                                }
+                                                                value={form.name}
+                                                                name="name"
                                                                 type="text"
                                                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
                                                             />

@@ -1,4 +1,5 @@
-import { create_category_service } from "../pages/services/category-service";
+import { create_category_service, get_category_service } from "../pages/services/category-service";
+import { categorySlice } from "./category-slice";
 
 export function create_category_thunk(data) {
     return async function (dispatch, getState) {
@@ -7,12 +8,12 @@ export function create_category_thunk(data) {
     };
 }
 
-// export function get_internet_plan_thunk() {
-//     return async function (dispatch, getState) {
-//         const res = await get_internet_plan_service()
-//         dispatch(internetPlanSlice.actions.setInternetPlans(res.data.result));
-//     };
-// }
+export function get_category_thunk() {
+    return async function (dispatch, getState) {
+        const res = await get_category_service()
+        dispatch(categorySlice.actions.setCategories(res.data.result));
+    };
+}
 
 // export function get_internet_plan_by_id_thunk(id) {
 //     return async function (dispatch, getState) {
