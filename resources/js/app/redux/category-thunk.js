@@ -1,4 +1,4 @@
-import { create_category_service, get_category_service } from "../pages/services/category-service";
+import { create_category_service, delete_category_service, get_category_service, update_category_service } from "../pages/services/category-service";
 import { categorySlice } from "./category-slice";
 
 export function create_category_thunk(data) {
@@ -24,15 +24,15 @@ export function get_category_thunk() {
 // }
 
 
-// export function delete_internet_plan_thunk(id) {
-//     return async function (dispatch, getState) {
-//         const res = await delete_internet_plan_service(id)
-//     };
-// }
+export function delete_category_thunk(id) {
+    return async function (dispatch, getState) {
+        const res = await delete_category_service(id)
+    };
+}
 
 
-// export function update_internet_plan_thunk(data) {
-//     return async function (dispatch, getState) {
-//         const res = await update_internet_plan_service(data)
-//     };
-// }
+export function update_category_thunk(data) {
+    return async function (dispatch, getState) {
+        const res = await update_category_service(data)
+    };
+}
