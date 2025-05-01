@@ -13,10 +13,10 @@ export default function SidebarMobileSection({
     return (
         <>
             <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-3 pb-4">
-                <div className="flex h-16 shrink-0 items-center">
+                <div className="flex justify-center h-16 shrink-0 items-center">
                     <img
                         className="h-8 w-auto"
-                        src="images/logo.png"
+                        src="/images/logo.png"
                         alt="Your Company"
                     />
                 </div>

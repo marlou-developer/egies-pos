@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import {
@@ -6,11 +6,76 @@ import {
     FaClipboard,
     FaMoneyBill1Wave,
 } from "react-icons/fa6";
+import UploadProductSection from "../sections/upload-product-section";
+import { useDispatch, useSelector } from "react-redux";
+import { setProduct } from "@/app/redux/product-slice";
+import { create_product_thunk } from "@/app/redux/product-thunk";
+import { message } from "antd";
+import store from "@/app/store/store";
 
 export default function AddProductComponent({ open, setOpenProduct }) {
+
+    const [loading, setLoading] = useState(false);
+    const [uploadedFile1, setUploadedFile1] = useState(null);
+    const { product } = useSelector((state) => state.products);
+    const dispatch = useDispatch();
+
+    function data_handler(eOrKey, value) {
+        if (typeof eOrKey === 'string') {
+            // Called manually with key and value (like for WYSIWYG)
+            dispatch(setProduct({
+                ...product,
+                [eOrKey]: value,
+            }));
+        } else {
+            // Regular input onChange event
+            dispatch(setProduct({
+                ...product,
+                [eOrKey.target.name]: eOrKey.target.value,
+            }));
+        }
+    }
+
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        setLoading(true);
+
+        const fd = new FormData();
+        fd.append('product_id', product.id ?? '');
+        fd.append('file_name', product.file_name ?? '');
+        fd.append('name', product.name ?? '');
+        fd.append('category_id', product.category_id ?? '');
+        fd.append('quantity', product.quantity ?? '');
+        fd.append('status', product.status ?? '');
+        fd.append('cost', product.cost ?? '');
+        fd.append('srp', product.srp ?? '');
+        fd.append('reseller', product.reseller ?? '');
+        fd.append('city_distributor', product.city_distributor ?? '');
+        fd.append('district_distributor', product.district_distributor ?? '');
+        fd.append('provincial_distributor', product.provincial_distributor ?? '');
+
+        if (uploadedFile1 && uploadedFile1.length > 0) {
+            Array.from(uploadedFile1).forEach((file) => {
+                fd.append('uploads[]', file);
+            });
+        }
+
+        try {
+            await store.dispatch(create_product_thunk(fd));
+            // await store.dispatch(get_rent_thunk());
+            message.success("Product successfully saved!");
+            setOpenProduct(false);
+        } catch (error) {
+            message.error("Failed to add Product. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return (
         <>
-           <Dialog
+            <Dialog
                 open={open}
                 onClose={setOpenProduct}
                 className="relative z-50"
@@ -24,7 +89,7 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                 transition
                                 className="pointer-events-auto w-screen max-w-md transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700"
                             >
-                                <form className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl">
+                                <form onSubmit={handleSubmit} className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl">
                                     <div className="h-0 flex-1 overflow-y-auto">
                                         <div className="bg-pink-200 px-4 py-6 sm:px-6">
                                             <div className="flex items-center justify-between">
@@ -80,8 +145,9 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                                         </label>
                                                         <div className="mt-2">
                                                             <input
-                                                                id="product_name"
-                                                                name="product_name"
+                                                                onChange={data_handler}
+                                                                value={product?.name ?? ""}
+                                                                name="name"
                                                                 type="text"
                                                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                                             />
@@ -112,54 +178,26 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                                         </label>
                                                         <div className="mt-2">
                                                             <input
-                                                                id="product_name"
-                                                                name="product_name"
+                                                                onChange={data_handler}
+                                                                value={product?.quantity ?? ""}
+                                                                name="quantity"
                                                                 type="text"
                                                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                                             />
                                                         </div>
                                                     </div>
 
-                                                    <div className="col-span-full">
-                                                        <label
-                                                            htmlFor="cover-photo"
-                                                            className="block text-sm/6 font-medium text-pink-600"
-                                                        >
-                                                            Product Image
-                                                        </label>
-                                                        <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                                                    <div className="sm:col-span-12">
+                                                        <hr />
+                                                        <h3 className="text-base font-medium text-white pt-3">
+                                                            Upload Room Images
+                                                        </h3>
+                                                        <div className="mt-2 flex justify-center rounded-lg border border-dashed border-pink-300 px-6 py-10">
                                                             <div className="text-center">
-                                                                <PhotoIcon
-                                                                    aria-hidden="true"
-                                                                    className="mx-auto size-12 text-gray-300"
+                                                                <UploadProductSection
+                                                                    files={uploadedFile1}
+                                                                    setFiles={setUploadedFile1}
                                                                 />
-                                                                <div className="mt-4 flex text-sm/6 text-gray-600">
-                                                                    <label
-                                                                        htmlFor="file-upload"
-                                                                        className="relative cursor-pointer rounded-md bg-white text-pink-500 font-semibold focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
-                                                                    >
-                                                                        <span>
-                                                                            Upload
-                                                                            a
-                                                                            file
-                                                                        </span>
-                                                                        <input
-                                                                            id="file-upload"
-                                                                            name="file-upload"
-                                                                            type="file"
-                                                                            className="sr-only"
-                                                                        />
-                                                                    </label>
-                                                                    <p className="pl-1">
-                                                                        or drag
-                                                                        and drop
-                                                                    </p>
-                                                                </div>
-                                                                <p className="text-xs/5 text-gray-600">
-                                                                    PNG, JPG,
-                                                                    GIF up to
-                                                                    10MB
-                                                                </p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -180,8 +218,9 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                                         </label>
                                                         <div className="mt-2">
                                                             <input
-                                                                id="cost_price"
-                                                                name="cost_price"
+                                                                onChange={data_handler}
+                                                                value={product?.cost ?? ""}
+                                                                name="cost"
                                                                 type="number"
                                                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                                             />
@@ -196,8 +235,9 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                                         </label>
                                                         <div className="mt-2">
                                                             <input
-                                                                id="product_name"
-                                                                name="product_name"
+                                                                onChange={data_handler}
+                                                                value={product?.srp ?? ""}
+                                                                name="srp"
                                                                 type="number"
                                                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                                             />
@@ -212,8 +252,9 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                                         </label>
                                                         <div className="mt-2">
                                                             <input
-                                                                id="product_name"
-                                                                name="product_name"
+                                                                onChange={data_handler}
+                                                                value={product?.reseller ?? ""}
+                                                                name="reseller"
                                                                 type="number"
                                                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                                             />
@@ -228,8 +269,9 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                                         </label>
                                                         <div className="mt-2">
                                                             <input
-                                                                id="product_name"
-                                                                name="product_name"
+                                                                onChange={data_handler}
+                                                                value={product?.city_distributor ?? ""}
+                                                                name="city_distributor"
                                                                 type="number"
                                                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                                             />
@@ -245,8 +287,9 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                                         </label>
                                                         <div className="mt-2">
                                                             <input
-                                                                id="product_name"
-                                                                name="product_name"
+                                                                onChange={data_handler}
+                                                                value={product?.district_distributor ?? ""}
+                                                                name="district_distributor"
                                                                 type="number"
                                                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                                             />
@@ -262,8 +305,9 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                                         </label>
                                                         <div className="mt-2">
                                                             <input
-                                                                id="product_name"
-                                                                name="product_name"
+                                                                onChange={data_handler}
+                                                                value={product?.provincial_distributor ?? ""}
+                                                                name="provincial_distributor"
                                                                 type="number"
                                                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                                             />

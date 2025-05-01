@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('category_id')->nullable();
+            $table->string('quantity')->nullable();
+            $table->string('status')->nullable();
             $table->string('cost')->nullable();
             $table->string('srp')->nullable();
             $table->string('reseller')->nullable();

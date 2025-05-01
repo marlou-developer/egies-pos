@@ -1,4 +1,5 @@
-import { create_product_service } from "../pages/services/product-service";
+import { create_product_service, get_product_service } from "../pages/services/product-service";
+import { productSlice } from "./product-slice";
 
 
 export function create_product_thunk(data) {
@@ -8,12 +9,12 @@ export function create_product_thunk(data) {
     };
 }
 
-// export function get_internet_plan_thunk() {
-//     return async function (dispatch, getState) {
-//         const res = await get_internet_plan_service()
-//         dispatch(internetPlanSlice.actions.setInternetPlans(res.data.result));
-//     };
-// }
+export function get_product_thunk() {
+    return async function (dispatch, getState) {
+        const res = await get_product_service()
+        dispatch(productSlice.actions.setProducts(res.data.result));
+    };
+}
 
 // export function get_internet_plan_by_id_thunk(id) {
 //     return async function (dispatch, getState) {
