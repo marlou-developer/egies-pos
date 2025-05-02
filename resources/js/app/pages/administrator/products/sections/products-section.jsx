@@ -26,20 +26,11 @@ export default function ProductsSection() {
     const [current, setCurrent] = useState(1);
     const [pageSize] = useState(10);
 
-    const dispatch = useDispatch();
     const { products } = useSelector((state) => state.products) || { products: { data: [], total: 0, last_page: 1 } };
 
     const [openProduct, setOpenProduct] = useState(false);
     const [openCategory, setOpenCategory] = useState(false);
     const [openFilter, setOpenFilter] = useState(false);
-
-    useEffect(() => {
-        dispatch(get_category_thunk());
-    }, [dispatch]);
-
-    useEffect(() => {
-        dispatch(get_product_thunk(current, pageSize));
-    }, [current, pageSize, dispatch]);
 
     const handlePrint = () => {
         const printContent = document.getElementById('product-table'); // Get the table by its ID
@@ -61,7 +52,7 @@ export default function ProductsSection() {
                 th, td { padding: 8px; text-align: left; border: 1px solid #000; }
                 th { background-color: #f4f4f4; }
                 
-                th:nth-child(11), td:nth-child(11) {
+                th:nth-child(10), td:nth-child(10) {
                   display: none;
                 }
     
@@ -152,6 +143,18 @@ export default function ProductsSection() {
                                         scope="col"
                                         className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
                                     >
+                                        Brand
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
+                                    >
+                                        Barcode
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
+                                    >
                                         Category
                                     </th>
                                     <th
@@ -159,12 +162,6 @@ export default function ProductsSection() {
                                         className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter lg:table-cell"
                                     >
                                         Quantity
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter"
-                                    >
-                                        Status
                                     </th>
                                     <th
                                         scope="col"
@@ -212,16 +209,15 @@ export default function ProductsSection() {
                             </thead>
                             <tbody>
                                 {products?.data?.map((product, productIdx) => {
-                                    let status = "In Stock"; // Default status
+                                    let quantityy = product?.quantity;// Default status
                                     let statusClass = "inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20";
 
                                     if (product.quantity == 0) {
-                                        status = "Out of Stock";
                                         statusClass = "inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20";
                                     } else if (product.quantity >= 1 && product.quantity <= 10) {
-                                        status = "Low Stock";
                                         statusClass = "inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20";
                                     }
+
                                     return (
                                         <tr key={product.id || product.name}>
                                             <td className={classNames(productIdx !== products.length - 1 ? "border-b border-gray-200" : "", "py-4 pr-3 pl-4 text-sm font-bold text-pink-500")}>
@@ -237,10 +233,36 @@ export default function ProductsSection() {
                                                 )}
                                             >
                                                 <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 mr-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
-                                                    {product?.categories?.name}
+                                                    {product?.brand}
                                                 </span>
                                             </td>
                                             <td
+                                                className={classNames(
+                                                    productIdx !==
+                                                        product.length - 1
+                                                        ? "border-b border-gray-200"
+                                                        : "",
+                                                    "hidden px-3 py-4 text-sm font-bold whitespace-nowrap text-gray-500 sm:table-cell"
+                                                )}
+                                            >
+                                                <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 mr-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
+                                                    {product?.barcode}
+                                                </span>
+                                            </td>
+                                            <td
+                                                className={classNames(
+                                                    productIdx !==
+                                                        product.length - 1
+                                                        ? "border-b border-gray-200"
+                                                        : "",
+                                                    "hidden px-3 py-4 text-sm font-bold whitespace-nowrap text-gray-500 sm:table-cell"
+                                                )}
+                                            >
+                                                <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 mr-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
+                                                    {product?.categories?.name}
+                                                </span>
+                                            </td>
+                                            {/* <td
                                                 className={classNames(
                                                     productIdx !==
                                                         product.length - 1
@@ -253,7 +275,7 @@ export default function ProductsSection() {
                                                     {product.quantity}
                                                 </span>
 
-                                            </td>
+                                            </td> */}
                                             <td
                                                 className={classNames(
                                                     productIdx !==
@@ -264,7 +286,7 @@ export default function ProductsSection() {
                                                 )}
                                             >
                                                 <span className={statusClass}>
-                                                    {status}
+                                                    {quantityy}
                                                 </span>
                                             </td>
                                             <td

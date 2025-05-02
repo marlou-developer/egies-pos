@@ -16,6 +16,8 @@ class Product extends Model
         'category_id',
         'quantity',
         'status',
+        'barcode',
+        'brand',
         'cost',
         'srp',
         'reseller',

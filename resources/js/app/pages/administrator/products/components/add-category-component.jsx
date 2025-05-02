@@ -12,6 +12,7 @@ import { message } from "antd";
 import { useSelector } from "react-redux";
 import EditCategorySection from "../sections/edit-category-section";
 import DeleteCategorySection from "../sections/delete-category-section";
+import Input from "@/app/_components/input";
 
 export default function AddCategoryComponent({ open, setOpenCategory }) {
     const { categories } = useSelector((state) => state.categories);
@@ -19,7 +20,7 @@ export default function AddCategoryComponent({ open, setOpenCategory }) {
     const [form, setForm] = useState({});
 
     const createCategory = async (e) => {
-        // e.preventDefault();
+        e.preventDefault();
         setLoading(true);
         try {
             await store.dispatch(create_category_thunk({
@@ -28,6 +29,7 @@ export default function AddCategoryComponent({ open, setOpenCategory }) {
             );
             message.success("Successfully added!");
             await store.dispatch(get_category_thunk());
+            setOpenCategory(false)
         } catch (error) {
             message.error("Failed to add category. Please try again.");
         } finally {
@@ -92,23 +94,15 @@ export default function AddCategoryComponent({ open, setOpenCategory }) {
                                             </div>
 
                                             <form onSubmit={createCategory}>
-                                                <div>
-                                                    <label htmlFor="category_name" className="block text-sm font-medium text-pink-600">
-                                                        New Category Name
-                                                    </label>
-                                                    <div className="mt-2">
-                                                        <input
-                                                            onChange={(e) =>
-                                                                setForm({ ...form, name: e.target.value })
-                                                            }
-                                                            value={form.name || ""}
-                                                            name="name"
-                                                            type="text"
-                                                            required
-                                                            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
-                                                        />
-                                                    </div>
-                                                </div>
+                                                <Input
+                                                    onChange={(e) =>
+                                                        setForm({ ...form, name: e.target.value })
+                                                    }
+                                                    value={form.name || ""}
+                                                    name="name"
+                                                    label="New Category Name"
+                                                    type="text"
+                                                />
 
                                                 <div className="flex justify-end mt-6">
                                                     <button

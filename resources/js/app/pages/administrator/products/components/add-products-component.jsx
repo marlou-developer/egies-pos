@@ -12,6 +12,7 @@ import { setProduct } from "@/app/redux/product-slice";
 import { create_product_thunk, get_product_thunk } from "@/app/redux/product-thunk";
 import { message } from "antd";
 import store from "@/app/store/store";
+import Input from "@/app/_components/input";
 
 export default function AddProductComponent({ open, setOpenProduct }) {
     const { categories } = useSelector((state) => state.categories)
@@ -53,6 +54,8 @@ export default function AddProductComponent({ open, setOpenProduct }) {
         fd.append('cost', product.cost ?? '');
         fd.append('srp', product.srp ?? '');
         fd.append('reseller', product.reseller ?? '');
+        fd.append('brand', product.brand ?? '');
+        fd.append('barcode', product.barcode ?? '');
         fd.append('city_distributor', product.city_distributor ?? '');
         fd.append('district_distributor', product.district_distributor ?? '');
         fd.append('provincial_distributor', product.provincial_distributor ?? '');
@@ -139,36 +142,42 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                                         <hr />
                                                     </div>
                                                     <div>
-                                                        <label
-                                                            htmlFor="product_name"
-                                                            className="block text-sm/6 font-medium text-pink-600"
-                                                        >
-                                                            Product Name
-                                                        </label>
-                                                        <div className="mt-2">
-                                                            <input
-                                                                onChange={data_handler}
-                                                                value={product?.name ?? ""}
-                                                                name="name"
-                                                                type="text"
-                                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
-                                                            />
-                                                        </div>
+                                                        <Input
+                                                            onChange={data_handler}
+                                                            value={product?.barcode ?? ""}
+                                                            name="barcode"
+                                                            label="Barcode"
+                                                            type="text"
+                                                        />
+
                                                     </div>
                                                     <div>
-                                                        <label
-                                                            htmlFor="product_name"
-                                                            className="block text-sm/6 font-medium text-pink-600"
-                                                        >
-                                                            Category
-                                                        </label>
+                                                        <Input
+                                                            onChange={data_handler}
+                                                            value={product?.brand ?? ""}
+                                                            name="brand"
+                                                            label="Brand"
+                                                            type="text"
+                                                        />
+                                                    </div>
+                                                    <div>
+
+                                                        <Input
+                                                            onChange={data_handler}
+                                                            value={product?.name ?? ""}
+                                                            name="name"
+                                                            label="Product Name"
+                                                            type="text"
+                                                        />
+                                                    </div>
+                                                    <div>
                                                         <div className="mt-2">
                                                             <select
                                                                 onChange={data_handler}
                                                                 value={product?.category_id ?? ""}
                                                                 name="category_id"
                                                                 type="text"
-                                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
+                                                                className="block w-full rounded-md bg-white px-3 py-2.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                                             >
                                                                 <option value="">Select a category</option>
                                                                 {categories?.map((category) => (
@@ -180,21 +189,14 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <label
-                                                            htmlFor="product_name"
-                                                            className="block text-sm/6 font-medium text-pink-600"
-                                                        >
-                                                            Quantity
-                                                        </label>
-                                                        <div className="mt-2">
-                                                            <input
-                                                                onChange={data_handler}
-                                                                value={product?.quantity ?? ""}
-                                                                name="quantity"
-                                                                type="number"
-                                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
-                                                            />
-                                                        </div>
+
+                                                        <Input
+                                                            onChange={data_handler}
+                                                            value={product?.quantity ?? ""}
+                                                            name="quantity"
+                                                            label="Quantity"
+                                                            type="number"
+                                                        />
                                                     </div>
 
                                                     <div className="sm:col-span-12">
@@ -220,108 +222,65 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                                         <hr />
                                                     </div>
                                                     <div>
-                                                        <label
-                                                            htmlFor="cost_price"
-                                                            className="block text-sm/6 font-medium text-pink-600"
-                                                        >
-                                                            Cost Per Unit
-                                                        </label>
-                                                        <div className="mt-2">
-                                                            <input
-                                                                onChange={data_handler}
-                                                                value={product?.cost ?? ""}
-                                                                name="cost"
-                                                                type="number"
-                                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
-                                                            />
-                                                        </div>
+
+                                                        <Input
+                                                            onChange={data_handler}
+                                                            value={product?.cost ?? ""}
+                                                            name="cost"
+                                                            label="Cost Per Unit"
+                                                            type="number"
+                                                        />
                                                     </div>
                                                     <div>
-                                                        <label
-                                                            htmlFor="product_name"
-                                                            className="block text-sm/6 font-medium text-pink-600"
-                                                        >
-                                                            SRP Price
-                                                        </label>
-                                                        <div className="mt-2">
-                                                            <input
-                                                                onChange={data_handler}
-                                                                value={product?.srp ?? ""}
-                                                                name="srp"
-                                                                type="number"
-                                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
-                                                            />
-                                                        </div>
+
+                                                        <Input
+                                                            onChange={data_handler}
+                                                            value={product?.srp ?? ""}
+                                                            name="srp"
+                                                            label="SRP Price"
+                                                            type="number"
+                                                        />
                                                     </div>
                                                     <div>
-                                                        <label
-                                                            htmlFor="product_name"
-                                                            className="block text-sm/6 font-medium text-pink-600"
-                                                        >
-                                                            Reseller Price
-                                                        </label>
-                                                        <div className="mt-2">
-                                                            <input
-                                                                onChange={data_handler}
-                                                                value={product?.reseller ?? ""}
-                                                                name="reseller"
-                                                                type="number"
-                                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
-                                                            />
-                                                        </div>
+
+                                                        <Input
+                                                            onChange={data_handler}
+                                                            value={product?.reseller ?? ""}
+                                                            name="reseller"
+                                                            label="Reseller Price"
+                                                            type="number"
+                                                        />
                                                     </div>
                                                     <div>
-                                                        <label
-                                                            htmlFor="product_name"
-                                                            className="block text-sm/6 font-medium text-pink-600"
-                                                        >
-                                                            Distributor Price
-                                                        </label>
-                                                        <div className="mt-2">
-                                                            <input
-                                                                onChange={data_handler}
-                                                                value={product?.city_distributor ?? ""}
-                                                                name="city_distributor"
-                                                                type="number"
-                                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
-                                                            />
-                                                        </div>
+
+                                                        <Input
+                                                            onChange={data_handler}
+                                                            value={product?.city_distributor ?? ""}
+                                                            name="city_distributor"
+                                                            label="Distributor Price"
+                                                            type="number"
+                                                        />
                                                     </div>
                                                     <div>
-                                                        <label
-                                                            htmlFor="product_name"
-                                                            className="block text-sm/6 font-medium text-pink-600"
-                                                        >
-                                                            District Distributor
-                                                            Price
-                                                        </label>
-                                                        <div className="mt-2">
-                                                            <input
-                                                                onChange={data_handler}
-                                                                value={product?.district_distributor ?? ""}
-                                                                name="district_distributor"
-                                                                type="number"
-                                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
-                                                            />
-                                                        </div>
+
+                                                        <Input
+                                                            onChange={data_handler}
+                                                            value={product?.district_distributor ?? ""}
+                                                            name="district_distributor"
+                                                            label="District Distributor Price"
+                                                            type="number"
+                                                        />
                                                     </div>
                                                     <div>
-                                                        <label
-                                                            htmlFor="product_name"
-                                                            className="block text-sm/6 font-medium text-pink-600"
-                                                        >
-                                                            Provincial
-                                                            Distributor Price
-                                                        </label>
-                                                        <div className="mt-2">
-                                                            <input
-                                                                onChange={data_handler}
-                                                                value={product?.provincial_distributor ?? ""}
-                                                                name="provincial_distributor"
-                                                                type="number"
-                                                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
-                                                            />
-                                                        </div>
+
+
+                                                        <Input
+                                                            onChange={data_handler}
+                                                            value={product?.provincial_distributor ?? ""}
+                                                            name="provincial_distributor"
+                                                            label="Provincial Distributor Price"
+                                                            type="number"
+                                                        />
                                                     </div>
                                                 </div>
                                             </div>

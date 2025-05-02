@@ -9,35 +9,50 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-public function index(Request $request)
-{
-    $perPage = $request->input('per_page', 10);
+    public function index(Request $request)
+    {
+        $perPage = $request->input('per_page', 10);
 
-    $products = Product::with(['categories'])
-        ->orderBy('created_at', 'desc')
-        ->paginate($perPage);
+        $query = Product::with(['categories'])->orderBy('created_at', 'desc');
 
-    foreach ($products as $product) {
-        if ($product->quantity == 0) {
-            $product->status = 'Out of Stock';
-        } elseif ($product->quantity >= 1 && $product->quantity <= 10) {
-            $product->status = 'Low Stock';
-        } else {
-            $product->status = 'In Stock';
+        if ($request->filled('category_id') && $request->category_id !== 'undefined') {
+            $query->where('category_id', $request->category_id);
         }
+
+        if ($request->filled('name') && $request->name !== 'undefined') {
+            $query->where('name', $request->name);
+        }
+        if ($request->filled('barcode') && $request->barcode !== 'undefined') {
+            $query->where('barcode', $request->barcode);
+        }
+
+        if ($request->filled('quantity') && $request->quantity !== 'undefined') {
+            $quantity = (int) $request->quantity;
+            if ($quantity === 0) {
+                $query->where('quantity', 0);
+            } elseif ($quantity <= 10) {
+                $query->whereBetween('quantity', [1, 10]);
+            } elseif ($quantity >= 11) {
+                $query->where('quantity', '>=', 11);
+            }
+        }
+
+        $products['data'] = $query->get();
+
+        return response()->json($products, 200);
     }
 
-    return response()->json($products, 200);
-}
+
 
 
     public function store(Request $request)
     {
-        $request->validate([
+        $data =  $request->validate([
             'name' => 'required|string|max:255',
-            'category_id',
+            'category_id' => 'nullable|string',
             'quantity' => 'nullable|string',
-            'status' => 'nullable|string',
+            'barcode' => 'nullable',
+            'brand' => 'nullable|string',
             'cost' => 'nullable|string',
             'srp' => 'nullable|string',
             'reseller' => 'nullable|string',
@@ -46,18 +61,7 @@ public function index(Request $request)
             'provincial_distributor' => 'nullable|string',
         ]);
 
-        $product = Product::create($request->only([
-            'name',
-            'category_id',
-            'quantity',
-            'status',
-            'cost',
-            'srp',
-            'reseller',
-            'city_distributor',
-            'district_distributor',
-            'provincial_distributor',
-        ]));
+        $product = Product::create($data);
 
         $this->handleFileUploads($request, 'uploads', $product);
 

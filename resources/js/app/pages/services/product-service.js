@@ -11,7 +11,7 @@ export function create_product_service(data) {
 
 export function get_product_service() {
     try {
-        const result = axios.get('/api/product')
+        const result = axios.get('/api/product'+window.location.search)
         return result
     } catch (error) {
 

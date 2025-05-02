@@ -3059,6 +3059,7 @@ return array(
     'Illuminate\\Http\\Resources\\MergeValue' => $vendorDir . '/laravel/framework/src/Illuminate/Http/Resources/MergeValue.php',
     'Illuminate\\Http\\Resources\\MissingValue' => $vendorDir . '/laravel/framework/src/Illuminate/Http/Resources/MissingValue.php',
     'Illuminate\\Http\\Resources\\PotentiallyMissing' => $vendorDir . '/laravel/framework/src/Illuminate/Http/Resources/PotentiallyMissing.php',
+    'Illuminate\\Http\\Resources\\TransformsToResource' => $vendorDir . '/laravel/framework/src/Illuminate/Http/Resources/TransformsToResource.php',
     'Illuminate\\Http\\Response' => $vendorDir . '/laravel/framework/src/Illuminate/Http/Response.php',
     'Illuminate\\Http\\ResponseTrait' => $vendorDir . '/laravel/framework/src/Illuminate/Http/ResponseTrait.php',
     'Illuminate\\Http\\StreamedEvent' => $vendorDir . '/laravel/framework/src/Illuminate/Http/StreamedEvent.php',

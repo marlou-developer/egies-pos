@@ -1,6 +1,7 @@
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { Transition } from "@headlessui/react"; // Import Transition component
 import { useState } from "react";
+import { Link } from "@inertiajs/react";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -58,7 +59,7 @@ export default function DisclosureComponent({
                 <ul className="mt-1 px-2">
                     {item.children.map((subItem) => (
                         <li key={subItem.name}>
-                            <a
+                            <Link
                                 href={subItem.href}
                                 className={classNames(
                                     subItem.current
@@ -79,7 +80,7 @@ export default function DisclosureComponent({
                                     />
                                     {subItem.name}
                                 </div>
-                            </a>
+                            </Link>
                         </li>
                     ))}
                 </ul>
