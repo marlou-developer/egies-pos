@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { get_product_thunk } from "@/app/redux/product-thunk";
 import { FaCirclePlus, FaClipboardList, FaFilter, FaList, FaPrint } from "react-icons/fa6";
-import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import { ChevronDownIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/20/solid";
 import AddProductComponent from "../components/add-products-component";
 import AddCategoryComponent from "../components/add-category-component";
 import FilterProductsComponent from "../components/filter-products-component";
 import store from "@/app/store/store";
 import { get_category_thunk } from "@/app/redux/category-thunk";
+import ProductOptionMenuSection from "./product-option-menu-section";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -337,43 +336,16 @@ export default function ProductsSection() {
                                             >
                                                 ₱{parseFloat(product.provincial_distributor).toLocaleString('en-PH', { minimumFractionDigits: 2 })}
                                             </td>
-                                            <td className="relative py-4 pr-4 pl-3 text-right text-sm font-medium">
-                                                <Menu as="div" className="relative inline-block text-left">
-                                                    <MenuButton className="inline-flex justify-center gap-x-1.5 rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-600 ring-1 ring-gray-300 hover:bg-pink-200 hover:text-gray-700">
-                                                        Options
-                                                        <ChevronDownIcon className="-mr-1 size-5 text-gray-400" />
-                                                    </MenuButton>
-                                                    <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
-                                                        <div className="py-1">
-                                                            <MenuItem>
-                                                                {({ active }) => (
-                                                                    <a href="#" className={`group flex items-center px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}>
-                                                                        <PencilSquareIcon className="mr-3 size-5 text-gray-400" />
-                                                                        Edit Product
-                                                                    </a>
-                                                                )}
-                                                            </MenuItem>
-                                                            <MenuItem>
-                                                                {({ active }) => (
-                                                                    <a href="#" className={`group flex items-center px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}>
-                                                                        <FaCirclePlus className="mr-3 size-5 text-gray-400" />
-                                                                        Add Stock
-                                                                    </a>
-                                                                )}
-                                                            </MenuItem>
-                                                        </div>
-                                                        <div className="py-1">
-                                                            <MenuItem>
-                                                                {({ active }) => (
-                                                                    <a href="#" className={`group flex items-center px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}>
-                                                                        <TrashIcon className="mr-3 size-5 text-gray-400" />
-                                                                        Remove Product
-                                                                    </a>
-                                                                )}
-                                                            </MenuItem>
-                                                        </div>
-                                                    </MenuItems>
-                                                </Menu>
+                                            <td
+                                                className={classNames(
+                                                    productIdx !==
+                                                        product.length - 1
+                                                        ? "border-b border-gray-200"
+                                                        : "",
+                                                    "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
+                                                )}
+                                            >
+                                                <ProductOptionMenuSection />
                                             </td>
                                         </tr>
                                     );
