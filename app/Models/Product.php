@@ -5,6 +5,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends Model
 {
@@ -21,4 +23,13 @@ class Product extends Model
         'district_distributor',
         'provincial_distributor',
     ];
+
+    public function uploads(): HasMany
+    {
+        return $this->hasMany(Upload::class, 'product_id', 'id');
+    }
+    public function categories(): HasOne
+    {
+        return $this->hasOne(Category::class, 'id', 'category_id');
+    }
 }

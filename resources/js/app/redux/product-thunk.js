@@ -9,12 +9,18 @@ export function create_product_thunk(data) {
     };
 }
 
-export function get_product_thunk() {
-    return async function (dispatch, getState) {
-        const res = await get_product_service()
-        dispatch(productSlice.actions.setProducts(res.data.result));
+export function get_product_thunk(page = 1, perPage = 10) {
+    return async function (dispatch) {
+        try {
+            const res = await get_product_service(page, perPage);
+
+            dispatch(productSlice.actions.setProducts(res.data));
+        } catch (error) {
+            console.error("Error fetching products:", error);
+        }
     };
 }
+
 
 // export function get_internet_plan_by_id_thunk(id) {
 //     return async function (dispatch, getState) {

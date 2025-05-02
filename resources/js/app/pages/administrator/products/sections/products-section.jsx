@@ -1,92 +1,108 @@
-import AddProductComponent from "../components/add-products-component";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { get_product_thunk } from "@/app/redux/product-thunk";
 import { FaCirclePlus, FaClipboardList, FaFilter, FaList, FaPrint } from "react-icons/fa6";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import {
-    ChevronDownIcon,
-    PencilSquareIcon,
-    TrashIcon,
-} from "@heroicons/react/20/solid";
-import { useEffect, useState } from "react";
+import { ChevronDownIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/20/solid";
+import AddProductComponent from "../components/add-products-component";
 import AddCategoryComponent from "../components/add-category-component";
 import FilterProductsComponent from "../components/filter-products-component";
 import store from "@/app/store/store";
 import { get_category_thunk } from "@/app/redux/category-thunk";
-import { useSelector } from "react-redux";
-
-// const product = [
-//     {
-//         product_name: "Brilliant Soap",
-//         category: "Soap",
-//         quantity: "200",
-//         cost_price: "100.00",
-//         srp_price: "250.00",
-//         reseller_price: "220.00",
-//         city_price: "200.00",
-//         district_price: "180.00",
-//         provincial_price: "150.00",
-//     },
-//     {
-//         product_name: "Lip Stick A",
-//         category: "Make-Up",
-//         quantity: "20",
-//         cost_price: "280.00",
-//         srp_price: "450.00",
-//         reseller_price: "430.00",
-//         city_price: "410.00",
-//         district_price: "390.00",
-//         provincial_price: "360.00",
-//     },
-//     {
-//         product_name: "Make-Up Kit B",
-//         category: "Make-Up",
-//         quantity: "30",
-//         cost_price: "400.00",
-//         srp_price: "550.00",
-//         reseller_price: "530.00",
-//         city_price: "510.00",
-//         district_price: "590.00",
-//         provincial_price: "560.00",
-//     },
-//     // More product...
-// ];
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
+function getStatusLabelAndClass(quantity) {
+    if (quantity === 0) {
+        return { label: "Out of Stock", className: "bg-red-50 text-red-700 ring-red-600/20" };
+    } else if (quantity <= 10) {
+        return { label: "Low Stock", className: "bg-yellow-50 text-yellow-700 ring-yellow-600/20" };
+    }
+    return { label: "In Stock", className: "bg-green-50 text-green-700 ring-green-600/20" };
+}
+
 export default function ProductsSection() {
-    const { products } = useSelector((state) => state.products)
+    const [current, setCurrent] = useState(1);
+    const [pageSize] = useState(10);
+
+    const dispatch = useDispatch();
+    const { products } = useSelector((state) => state.products) || { products: { data: [], total: 0, last_page: 1 } };
+
     const [openProduct, setOpenProduct] = useState(false);
     const [openCategory, setOpenCategory] = useState(false);
     const [openFilter, setOpenFilter] = useState(false);
 
     useEffect(() => {
-        store.dispatch(get_category_thunk())
-    }, []);
+        dispatch(get_category_thunk());
+    }, [dispatch]);
 
-    console.log('products', products)
+    useEffect(() => {
+        dispatch(get_product_thunk(current, pageSize));
+    }, [current, pageSize, dispatch]);
+
+    const handlePrint = () => {
+        const printContent = document.getElementById('product-table'); // Get the table by its ID
+
+        if (!printContent) {
+            console.error("Table content not found.");
+            return;
+        }
+
+        const printWindow = window.open('', '', 'height=600,width=800');
+
+        printWindow.document.write(`
+          <html>
+            <head>
+              <title>Products</title>
+              <style>
+                body { font-family: Arial, sans-serif; padding: 20px; }
+                table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+                th, td { padding: 8px; text-align: left; border: 1px solid #000; }
+                th { background-color: #f4f4f4; }
+                
+                th:nth-child(11), td:nth-child(11) {
+                  display: none;
+                }
+    
+                /* Adjust icon sizes */
+                img, svg, i, .icon { 
+                  width: 16px !important;
+                  height: 16px !important;
+                }
+              </style>
+            </head>
+            <body>
+              <h2>Report</h2>
+              ${printContent.outerHTML} 
+            </body>
+          </html>
+        `);
+
+        printWindow.document.close();
+        printWindow.print();
+    };
+
     return (
         <div className="px-4 sm:px-6 lg:px-8">
+            {/* Header Section */}
             <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto">
                     <FaClipboardList className="float-left mr-1 mt-1 text-pink-500" />
-                    <h1 className="text-base font-semibold text-pink-500">
-                        Products Section
-                    </h1>
+                    <h1 className="text-base font-semibold text-pink-500">Products Section</h1>
                     <p className="mt-2 text-sm text-gray-700">
-                        A list of all the products in your account including
-                        their product name, quantity, category and price.
+                        A list of all the products in your account including their product name, quantity, category and price.
                     </p>
                 </div>
                 <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                    {/* Button Group */}
                     <span className="isolate inline-flex rounded-md shadow-xs">
                         <button
                             type="button"
-                            onClick={() => setOpenProduct(true)} // Set openProduct state to true when clicked
+                            onClick={() => setOpenProduct(true)}
                             className="relative inline-flex items-center rounded-l-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
                         >
-                            <FaClipboardList className="float-left mr-1 text-pink-500" />
+                            <FaClipboardList className="mr-1 text-pink-500" />
                             Add New Product
                         </button>
                         <button
@@ -94,14 +110,15 @@ export default function ProductsSection() {
                             onClick={() => setOpenCategory(true)}
                             className="relative -ml-px inline-flex items-center bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
                         >
-                            <FaList className="float-left mr-1 text-pink-500" />
+                            <FaList className="mr-1 text-pink-500" />
                             Add Category
                         </button>
                         <button
-                            type="button" // Set openProduct state to true when clicked
+                            type="button"
+                            onClick={handlePrint}
                             className="relative -ml-px inline-flex items-center bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
                         >
-                            <FaPrint className="float-left mr-1 text-pink-500" />
+                            <FaPrint className="mr-1 text-pink-500" />
                             Print
                         </button>
                         <button
@@ -109,21 +126,21 @@ export default function ProductsSection() {
                             onClick={() => setOpenFilter(true)}
                             className="relative -ml-px inline-flex items-center rounded-r-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-50 focus:z-10"
                         >
-                            <FaFilter className="float-left mr-1 text-pink-500" />
+                            <FaFilter className="mr-1 text-pink-500" />
                             Filter Products
                         </button>
                     </span>
-
                     <AddProductComponent open={openProduct} setOpenProduct={setOpenProduct} />
                     <AddCategoryComponent open={openCategory} setOpenCategory={setOpenCategory} />
                     <FilterProductsComponent open={openFilter} setOpenFilter={setOpenFilter} />
                 </div>
             </div>
 
+            {/* Product Table */}
             <div className="mt-8 flow-root">
                 <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
                     <div className="inline-block min-w-full py-2 align-middle">
-                        <table className="min-w-full border-separate border-spacing-0">
+                        <table id="product-table" className="min-w-full border-separate border-spacing-0">
                             <thead>
                                 <tr>
                                     <th
@@ -195,7 +212,7 @@ export default function ProductsSection() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {products.map((product, productIdx) => {
+                                {products?.data?.map((product, productIdx) => {
                                     let status = "In Stock"; // Default status
                                     let statusClass = "inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20";
 
@@ -206,19 +223,9 @@ export default function ProductsSection() {
                                         status = "Low Stock";
                                         statusClass = "inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20";
                                     }
-
                                     return (
-
-                                        <tr key={product.name}>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "py-4 pr-3 pl-4 text-sm font-bold whitespace-nowrap text-pink-500 sm:pl-6 lg:pl-8"
-                                                )}
-                                            >
+                                        <tr key={product.id || product.name}>
+                                            <td className={classNames(productIdx !== products.length - 1 ? "border-b border-gray-200" : "", "py-4 pr-3 pl-4 text-sm font-bold text-pink-500")}>
                                                 {product.name}
                                             </td>
                                             <td
@@ -231,7 +238,7 @@ export default function ProductsSection() {
                                                 )}
                                             >
                                                 <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 mr-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
-                                                    {product.category}
+                                                    {product?.categories?.name}
                                                 </span>
                                             </td>
                                             <td
@@ -270,7 +277,7 @@ export default function ProductsSection() {
                                                     "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
                                                 )}
                                             >
-                                                ₱{product.cost}
+                                                ₱{parseFloat(product.cost).toLocaleString('en-PH', { minimumFractionDigits: 2 })}
                                             </td>
                                             <td
                                                 className={classNames(
@@ -281,117 +288,88 @@ export default function ProductsSection() {
                                                     "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
                                                 )}
                                             >
-                                                ₱{product.srp}
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
-                                                )}
-                                            >
-                                                ₱{product.reseller}
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
-                                                )}
-                                            >
-                                                ₱{product.city_distributor}
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
-                                                )}
-                                            >
-                                                ₱{product.district_distributor}
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
-                                                )}
-                                            >
-                                                ₱{product.provincial_distributor}
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-8 lg:pr-8"
-                                                )}
-                                            >
-                                                <Menu
-                                                    as="div"
-                                                    className="relative inline-block text-left"
-                                                >
-                                                    <div>
-                                                        <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-600 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-pink-200 hover:text-gray-700">
-                                                            Options
-                                                            <ChevronDownIcon
-                                                                aria-hidden="true"
-                                                                className="-mr-1 size-5 text-gray-400"
-                                                            />
-                                                        </MenuButton>
-                                                    </div>
+                                                ₱{parseFloat(product.srp).toLocaleString('en-PH', { minimumFractionDigits: 2 })}
 
-                                                    <MenuItems
-                                                        transition
-                                                        className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
-                                                    >
+                                            </td>
+                                            <td
+                                                className={classNames(
+                                                    productIdx !==
+                                                        product.length - 1
+                                                        ? "border-b border-gray-200"
+                                                        : "",
+                                                    "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
+                                                )}
+                                            >
+                                                ₱{parseFloat(product.reseller).toLocaleString('en-PH', { minimumFractionDigits: 2 })}
+
+                                            </td>
+                                            <td
+                                                className={classNames(
+                                                    productIdx !==
+                                                        product.length - 1
+                                                        ? "border-b border-gray-200"
+                                                        : "",
+                                                    "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
+                                                )}
+                                            >
+                                                ₱{parseFloat(product.city_distributor).toLocaleString('en-PH', { minimumFractionDigits: 2 })}
+
+                                            </td>
+                                            <td
+                                                className={classNames(
+                                                    productIdx !==
+                                                        product.length - 1
+                                                        ? "border-b border-gray-200"
+                                                        : "",
+                                                    "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
+                                                )}
+                                            >
+                                                ₱{parseFloat(product.district_distributor).toLocaleString('en-PH', { minimumFractionDigits: 2 })}
+                                            </td>
+                                            <td
+                                                className={classNames(
+                                                    productIdx !==
+                                                        product.length - 1
+                                                        ? "border-b border-gray-200"
+                                                        : "",
+                                                    "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
+                                                )}
+                                            >
+                                                ₱{parseFloat(product.provincial_distributor).toLocaleString('en-PH', { minimumFractionDigits: 2 })}
+                                            </td>
+                                            <td className="relative py-4 pr-4 pl-3 text-right text-sm font-medium">
+                                                <Menu as="div" className="relative inline-block text-left">
+                                                    <MenuButton className="inline-flex justify-center gap-x-1.5 rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-600 ring-1 ring-gray-300 hover:bg-pink-200 hover:text-gray-700">
+                                                        Options
+                                                        <ChevronDownIcon className="-mr-1 size-5 text-gray-400" />
+                                                    </MenuButton>
+                                                    <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
                                                         <div className="py-1">
-                                                            <MenuItem className="group">
-                                                                <a
-                                                                    href="#"
-                                                                    className="group flex items-center px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
-                                                                >
-                                                                    <PencilSquareIcon
-                                                                        aria-hidden="true"
-                                                                        className="mr-3 size-5 text-gray-400 group-data-focus:text-gray-500"
-                                                                    />
-                                                                    Edit Product
-                                                                </a>
+                                                            <MenuItem>
+                                                                {({ active }) => (
+                                                                    <a href="#" className={`group flex items-center px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}>
+                                                                        <PencilSquareIcon className="mr-3 size-5 text-gray-400" />
+                                                                        Edit Product
+                                                                    </a>
+                                                                )}
                                                             </MenuItem>
-                                                            <MenuItem className="group">
-                                                                <a
-                                                                    href="#"
-                                                                    className="group flex items-center px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
-                                                                >
-                                                                    <FaCirclePlus
-                                                                        aria-hidden="true"
-                                                                        className="mr-3 size-5 text-gray-400 group-data-focus:text-gray-500"
-                                                                    />
-                                                                    Add Stock
-                                                                </a>
+                                                            <MenuItem>
+                                                                {({ active }) => (
+                                                                    <a href="#" className={`group flex items-center px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}>
+                                                                        <FaCirclePlus className="mr-3 size-5 text-gray-400" />
+                                                                        Add Stock
+                                                                    </a>
+                                                                )}
                                                             </MenuItem>
                                                         </div>
                                                         <div className="py-1">
-                                                            <MenuItem className="group">
-                                                                <a
-                                                                    href="#"
-                                                                    className="group flex items-center px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
-                                                                >
-                                                                    <TrashIcon
-                                                                        aria-hidden="true"
-                                                                        className="mr-3 size-5 text-gray-400 group-data-focus:text-gray-500"
-                                                                    />
-                                                                    Remove Product
-                                                                </a>
+                                                            <MenuItem>
+                                                                {({ active }) => (
+                                                                    <a href="#" className={`group flex items-center px-4 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'}`}>
+                                                                        <TrashIcon className="mr-3 size-5 text-gray-400" />
+                                                                        Remove Product
+                                                                    </a>
+                                                                )}
                                                             </MenuItem>
                                                         </div>
                                                     </MenuItems>
@@ -402,6 +380,28 @@ export default function ProductsSection() {
                                 })}
                             </tbody>
                         </table>
+
+                        {/* Pagination */}
+                        <div className="w-full mt-4">
+                            {products?.last_page > 1 && (
+                                <div className="flex justify-between items-center">
+                                    <div>
+                                        Showing {(current - 1) * pageSize + 1} to {Math.min(current * pageSize, products.total)} of {products.total} entries
+                                    </div>
+                                    <div className="flex space-x-2">
+                                        {Array.from({ length: products.last_page }, (_, i) => i + 1).map((pageNum) => (
+                                            <button
+                                                key={pageNum}
+                                                onClick={() => setCurrent(pageNum)}
+                                                className={`px-3 py-1 border rounded ${pageNum === current ? "bg-pink-500 text-white" : "bg-white text-pink-500 border-pink-500"}`}
+                                            >
+                                                {pageNum}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

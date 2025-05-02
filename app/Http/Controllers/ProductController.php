@@ -9,24 +9,27 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    public function index()
-    {
-        $products = Product::get();
+public function index(Request $request)
+{
+    $perPage = $request->input('per_page', 10);
 
-        foreach ($products as $product) {
-            if ($product->quantity == 0) {
-                $product->status = 'Out of Stock';
-            } elseif ($product->quantity >= 1 && $product->quantity <= 10) {
-                $product->status = 'Low Stock';
-            } else {
-                $product->status = 'In Stock';
-            }
+    $products = Product::with(['categories'])
+        ->orderBy('created_at', 'desc')
+        ->paginate($perPage);
+
+    foreach ($products as $product) {
+        if ($product->quantity == 0) {
+            $product->status = 'Out of Stock';
+        } elseif ($product->quantity >= 1 && $product->quantity <= 10) {
+            $product->status = 'Low Stock';
+        } else {
+            $product->status = 'In Stock';
         }
-
-        return response()->json([
-            'result' => $products
-        ], 200);
     }
+
+    return response()->json($products, 200);
+}
+
 
     public function store(Request $request)
     {
