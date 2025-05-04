@@ -9,7 +9,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::get();
+        $categories = Category::with('products')->get();
         return response()->json([
             'result' => $categories
         ], 200);

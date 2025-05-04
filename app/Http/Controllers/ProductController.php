@@ -22,8 +22,8 @@ class ProductController extends Controller
         if ($request->filled('name') && $request->name !== 'undefined') {
             $query->where('name', $request->name);
         }
-        if ($request->filled('barcode') && $request->barcode !== 'undefined') {
-            $query->where('barcode', $request->barcode);
+        if ($request->filled('delivery_receipt_no') && $request->delivery_receipt_no !== 'undefined') {
+            $query->where('delivery_receipt_no', $request->delivery_receipt_no);
         }
 
         if ($request->filled('quantity') && $request->quantity !== 'undefined') {
@@ -59,8 +59,9 @@ class ProductController extends Controller
             'city_distributor' => 'nullable|string',
             'district_distributor' => 'nullable|string',
             'provincial_distributor' => 'nullable|string',
+            'delivery_receipt_no' => 'nullable|string',
         ]);
-
+        
         $product = Product::create($data);
 
         $this->handleFileUploads($request, 'uploads', $product);

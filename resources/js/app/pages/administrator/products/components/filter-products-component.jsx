@@ -20,13 +20,15 @@ const category = [
 ];
 
 export default function FilterProductsComponent({ open, setOpenFilter }) {
-    const [search, setSearch] = useState({})
+    const [search, setSearch] = useState({});
     const { categories } = useSelector((state) => state.categories);
 
-    console.log('categories', categories)
+    console.log("categories", categories);
 
     function search_products() {
-        router.visit(`?name=${search?.name}&category_id=${search?.category_id}&quantity=${search?.quantity}&barcode=${search?.barcode}`)
+        router.visit(
+            `?name=${search?.name}&category_id=${search?.category_id}&quantity=${search?.quantity}&delivery_receipt_no=${search?.delivery_receipt_no}`
+        );
     }
     return (
         <>
@@ -84,19 +86,26 @@ export default function FilterProductsComponent({ open, setOpenFilter }) {
                                                 <div className="space-y-6 pt-6 pb-5">
                                                     <div>
                                                         <label
-                                                            htmlFor="barcode"
+                                                            htmlFor="delivery_receipt_no"
                                                             className="block text-sm font-medium text-pink-600"
                                                         >
-                                                            Barcode
+                                                            Delivery Receipt
                                                         </label>
                                                         <div className="mt-2">
                                                             <input
-                                                                onChange={(e) => setSearch({
-                                                                    ...search,
-                                                                    [e.target.name]: e.target.value
-                                                                })}
-                                                                id="barcode"
-                                                                name="barcode"
+                                                                onChange={(e) =>
+                                                                    setSearch({
+                                                                        ...search,
+                                                                        [e
+                                                                            .target
+                                                                            .name]:
+                                                                            e
+                                                                                .target
+                                                                                .value,
+                                                                    })
+                                                                }
+                                                                id="delivery_receipt_no"
+                                                                name="delivery_receipt_no"
                                                                 type="text"
                                                                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
                                                             />
@@ -111,10 +120,17 @@ export default function FilterProductsComponent({ open, setOpenFilter }) {
                                                         </label>
                                                         <div className="mt-2">
                                                             <input
-                                                                onChange={(e) => setSearch({
-                                                                    ...search,
-                                                                    [e.target.name]: e.target.value
-                                                                })}
+                                                                onChange={(e) =>
+                                                                    setSearch({
+                                                                        ...search,
+                                                                        [e
+                                                                            .target
+                                                                            .name]:
+                                                                            e
+                                                                                .target
+                                                                                .value,
+                                                                    })
+                                                                }
                                                                 id="name"
                                                                 name="name"
                                                                 type="text"
@@ -135,10 +151,17 @@ export default function FilterProductsComponent({ open, setOpenFilter }) {
                                                                 id="category_id"
                                                                 name="category_id"
                                                                 autoComplete="category_id"
-                                                                onChange={(e) => setSearch({
-                                                                    ...search,
-                                                                    [e.target.name]: e.target.value
-                                                                })}
+                                                                onChange={(e) =>
+                                                                    setSearch({
+                                                                        ...search,
+                                                                        [e
+                                                                            .target
+                                                                            .name]:
+                                                                            e
+                                                                                .target
+                                                                                .value,
+                                                                    })
+                                                                }
                                                                 className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                                             >
                                                                 <option
@@ -149,14 +172,24 @@ export default function FilterProductsComponent({ open, setOpenFilter }) {
                                                                     -- Category
                                                                     --
                                                                 </option>
-                                                                {
-                                                                    categories.map((res, i) => {
-                                                                        return <option value={res.id}>
-                                                                            {res.name}
-                                                                        </option>
-                                                                    })
-                                                                }
-
+                                                                {categories.map(
+                                                                    (
+                                                                        res,
+                                                                        i
+                                                                    ) => {
+                                                                        return (
+                                                                            <option
+                                                                                value={
+                                                                                    res.id
+                                                                                }
+                                                                            >
+                                                                                {
+                                                                                    res.name
+                                                                                }
+                                                                            </option>
+                                                                        );
+                                                                    }
+                                                                )}
                                                             </select>
                                                         </div>
                                                     </div>
@@ -171,10 +204,17 @@ export default function FilterProductsComponent({ open, setOpenFilter }) {
                                                             <select
                                                                 id="quantity"
                                                                 name="quantity"
-                                                                onChange={(e) => setSearch({
-                                                                    ...search,
-                                                                    [e.target.name]: e.target.value
-                                                                })}
+                                                                onChange={(e) =>
+                                                                    setSearch({
+                                                                        ...search,
+                                                                        [e
+                                                                            .target
+                                                                            .name]:
+                                                                            e
+                                                                                .target
+                                                                                .value,
+                                                                    })
+                                                                }
                                                                 autoComplete="quantity"
                                                                 className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                                             >
@@ -183,8 +223,8 @@ export default function FilterProductsComponent({ open, setOpenFilter }) {
                                                                     disabled
                                                                     selected
                                                                 >
-                                                                    -- Stock Status
-                                                                    --
+                                                                    -- Stock
+                                                                    Status --
                                                                 </option>
                                                                 <option value="11">
                                                                     In Stock

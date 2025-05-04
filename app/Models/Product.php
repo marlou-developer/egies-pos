@@ -24,6 +24,7 @@ class Product extends Model
         'city_distributor',
         'district_distributor',
         'provincial_distributor',
+        'delivery_receipt_no'
     ];
 
     public function uploads(): HasMany

@@ -9,6 +9,7 @@ export const productSlice = createSlice({
             current_page: 1,
             last_page: 1,
         },
+        carts:[],
         product: {},
     },
     reducers: {
@@ -18,9 +19,12 @@ export const productSlice = createSlice({
         setProduct: (state, action) => {
             state.product = action.payload;
         },
+        setCarts: (state, action) => {
+            state.carts = action.payload;
+        },
     },
 });
 
-export const { setProducts, setProduct } = productSlice.actions;
+export const { setProducts, setProduct,setCarts } = productSlice.actions;
 
 export default productSlice.reducer;

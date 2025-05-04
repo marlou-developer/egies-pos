@@ -1,9 +1,35 @@
 import React from "react";
 import ProductsSection from "./products-section";
+import { useDispatch, useSelector } from "react-redux";
+import { setCarts } from "@/app/redux/product-slice";
 
 export default function PosSection() {
+    const { carts } = useSelector((store) => store.products);
+    const dispatch = useDispatch();
+    const total_price = carts.reduce(
+        (sum, product) => (sum + parseFloat(product.srp)) * parseInt(product.pcs),
+        0
+    );
+
+    const addPCS = (value) => {
+        const data = carts.map((item) =>
+            item.id === value.id ? { ...item, pcs: item.pcs + 1 } : item
+        );
+        dispatch(setCarts(data));
+    };
+    console.log("sdfdadwad", carts);
+
+    const subtractPCS = (value) => {
+        const updated = carts
+            .map((item) =>
+                item.id === value.id ? { ...item, pcs: item.pcs - 1 } : item
+            )
+            .filter((item) => item.pcs > 0); // ⬅️ Remove items with 0 pcs
+
+        dispatch(setCarts(updated));
+    };
     return (
-        <div class="w-full">
+        <div class="w-full ">
             <div class="flex lg:flex-row flex-col-reverse shadow-lg">
                 <ProductsSection />
                 <div class="w-full lg:w-2/5">
@@ -14,214 +40,49 @@ export default function PosSection() {
                             <span class="px-4 py-2 rounded-md bg-gray-100 text-gray-800">Setting</span>
                         </div> */}
                     </div>
-                    <div class="px-5 py-4 mt-5 overflow-y-auto h-64">
-                        <div class="flex flex-row justify-between items-center mb-4">
-                            <div class="flex flex-row items-center w-2/5">
-                                <img
-                                    src="https://source.unsplash.com/4u_nRgiLW3M/600x600"
-                                    class="w-10 h-10 object-cover rounded-md"
-                                    alt=""
-                                />
-                                <span class="ml-4 font-semibold text-sm">
-                                    Make up
-                                </span>
-                                <span class="ml-4 font-semibold text-sm">
-                                    <select
-                                        id="category_name"
-                                        name="category_name"
-                                        autoComplete="category_name"
-                                        className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pl-3 pr-1 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
-                                    >
-                                        <option>SRP Price</option>
-                                        <option>Reseller Price</option>
-                                        <option>City Distributor Price</option>
-                                        <option>District Distributor Price</option>
-                                        <option>Provincial Distributor Price</option>
-                                    </select>
-                                </span>
-                               
-                            </div>
-                            <div class="w-32 flex justify-between">
-                                <span class="px-3 py-1 rounded-md bg-gray-300 ">
-                                    -
-                                </span>
-                                <span class="font-semibold mx-1">
-                                    <input
-                                        id="category_name"
-                                        name="category_name"
-                                        type="text"
-                                        value="25"
-                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
-                                    />
-                                </span>
-                                <span class="px-3 py-1 rounded-md bg-gray-300 ">
-                                    +
-                                </span>
-                            </div>
-                            <div class="font-semibold text-lg w-16 text-center">
-                                ₱13.50
-                            </div>
-                        </div>
-                        <div class="flex flex-row justify-between items-center mb-4">
-                            <div class="flex flex-row items-center w-2/5">
-                                <img
-                                    src="https://source.unsplash.com/sc5sTPMrVfk/600x600"
-                                    class="w-10 h-10 object-cover rounded-md"
-                                    alt=""
-                                />
-                                <span class="ml-4 font-semibold text-sm">
-                                    Lipstick
-                                </span>
-                            </div>
-                            <div class="w-32 flex justify-between">
-                                <span class="px-3 py-1 rounded-md bg-gray-300 ">
-                                    -
-                                </span>
-                                <span class="font-semibold mx-1">
-                                    <input
-                                        id="category_name"
-                                        name="category_name"
-                                        type="text"
-                                        value="25"
-                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
-                                    />
-                                </span>
-                                <span class="px-3 py-1 rounded-md bg-gray-300 ">
-                                    +
-                                </span>
-                            </div>
-                            <div class="font-semibold text-lg w-16 text-center">
-                                ₱3.50
-                            </div>
-                        </div>
-                        <div class="flex flex-row justify-between items-center mb-4">
-                            <div class="flex flex-row items-center w-2/5">
-                                <img
-                                    src="https://source.unsplash.com/MNtag_eXMKw/600x600"
-                                    class="w-10 h-10 object-cover rounded-md"
-                                    alt=""
-                                />
-                                <span class="ml-4 font-semibold text-sm">
-                                    Lipstick
-                                </span>
-                            </div>
-                            <div class="w-32 flex justify-between">
-                                <span class="px-3 py-1 rounded-md bg-gray-300 ">
-                                    -
-                                </span>
-                                <span class="font-semibold mx-1">
-                                    <input
-                                        id="category_name"
-                                        name="category_name"
-                                        type="text"
-                                        value="25"
-                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
-                                    />
-                                </span>
-                                <span class="px-3 py-1 rounded-md bg-gray-300 ">
-                                    +
-                                </span>
-                            </div>
-                            <div class="font-semibold text-lg w-16 text-center">
-                                ₱3.50
-                            </div>
-                        </div>
-                        <div class="flex flex-row justify-between items-center mb-4">
-                            <div class="flex flex-row items-center w-2/5">
-                                <img
-                                    src="https://source.unsplash.com/MNtag_eXMKw/600x600"
-                                    class="w-10 h-10 object-cover rounded-md"
-                                    alt=""
-                                />
-                                <span class="ml-4 font-semibold text-sm">
-                                    Lipstick
-                                </span>
-                            </div>
-                            <div class="w-32 flex justify-between">
-                                <span class="px-3 py-1 rounded-md bg-gray-300 ">
-                                    -
-                                </span>
-                                <span class="font-semibold mx-1">
-                                    <input
-                                        id="category_name"
-                                        name="category_name"
-                                        type="text"
-                                        value="25"
-                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
-                                    />
-                                </span>
-                                <span class="px-3 py-1 rounded-md bg-gray-300 ">
-                                    +
-                                </span>
-                            </div>
-                            <div class="font-semibold text-lg w-16 text-center">
-                                ₱3.50
-                            </div>
-                        </div>
-                        <div class="flex flex-row justify-between items-center mb-4">
-                            <div class="flex flex-row items-center w-2/5">
-                                <img
-                                    src="https://source.unsplash.com/MNtag_eXMKw/600x600"
-                                    class="w-10 h-10 object-cover rounded-md"
-                                    alt=""
-                                />
-                                <span class="ml-4 font-semibold text-sm">
-                                    Soap
-                                </span>
-                            </div>
-                            <div class="w-32 flex justify-between">
-                                <span class="px-3 py-1 rounded-md bg-red-300 text-white">
-                                    x
-                                </span>
-                                <span class="font-semibold mx-1">
-                                    <input
-                                        id="category_name"
-                                        name="category_name"
-                                        type="text"
-                                        value="25"
-                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
-                                    />
-                                </span>
-                                <span class="px-3 py-1 rounded-md bg-gray-300 ">
-                                    +
-                                </span>
-                            </div>
-                            <div class="font-semibold text-lg w-16 text-center">
-                                ₱2.50
-                            </div>
-                        </div>
-                        <div class="flex flex-row justify-between items-center mb-4">
-                            <div class="flex flex-row items-center w-2/5">
-                                <img
-                                    src="https://source.unsplash.com/4u_nRgiLW3M/600x600"
-                                    class="w-10 h-10 object-cover rounded-md"
-                                    alt=""
-                                />
-                                <span class="ml-4 font-semibold text-sm">
-                                    Soap
-                                </span>
-                            </div>
-                            <div class="w-32 flex justify-between">
-                                <span class="px-3 py-1 rounded-md bg-red-300 text-white">
-                                    x
-                                </span>
-                                <span class="font-semibold mx-1">
-                                    <input
-                                        id="category_name"
-                                        name="category_name"
-                                        type="text"
-                                        value="25"
-                                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
-                                    />
-                                </span>
-                                <span class="px-3 py-1 rounded-md bg-gray-300 ">
-                                    +
-                                </span>
-                            </div>
-                            <div class="font-semibold text-lg w-16 text-center">
-                                ₱2.50
-                            </div>
-                        </div>
+                    <div class="px-5 py-4 mt-5 overflow-y-auto h-72">
+                        {carts.map((res) => {
+                            return (
+                                <div class="flex flex-row justify-between items-center mb-4">
+                                    <div class="flex flex-row items-center w-2/5">
+                                        <img
+                                            src={res?.uploads[0]?.file}
+                                            class="w-10 h-10 object-cover rounded-md"
+                                            alt=""
+                                        />
+                                        <span class="ml-4 font-semibold text-sm">
+                                            {res?.name}
+                                        </span>
+                                    </div>
+                                    <div class="w-[115px] flex justify-between">
+                                        <button
+                                            onClick={() => subtractPCS(res)}
+                                            class="px-3 py-1 rounded-md bg-gray-300 "
+                                        >
+                                            -
+                                        </button>
+                                        <span class="font-semibold mx-1">
+                                            <input
+                                                id="pcs"
+                                                name="pcs"
+                                                type="text"
+                                                value={res?.pcs}
+                                                className="block text-center w-full rounded-md bg-white py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
+                                            />
+                                        </span>
+                                        <button
+                                            onClick={() => addPCS(res)}
+                                            class="px-3 py-1 rounded-md bg-gray-300 "
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+                                    <div class="font-semibold text-lg  text-left">
+                                        ₱ {parseInt(res?.srp).toFixed(2)}
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
                     <div class="px-5 mt-5">
                         <div class="py-4 rounded-md shadow-lg">
@@ -247,11 +108,13 @@ export default function PosSection() {
                                 <span class="font-semibold text-2xl">
                                     Total
                                 </span>
-                                <span class="font-bold text-2xl">₱37.50</span>
+                                <span class="font-bold text-2xl">
+                                    ₱{total_price.toFixed(2)}
+                                </span>
                             </div>
                         </div>
                     </div>
-                    <div class="px-5 mt-5">
+                    {/* <div class="px-5 mt-5">
                         <div class="rounded-md shadow-lg px-4 py-4">
                             <div class="flex flex-row justify-between items-center">
                                 <div class="flex flex-col">
@@ -271,7 +134,7 @@ export default function PosSection() {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     <div class="px-5 mt-5">
                         <div class="px-4 py-4 rounded-md shadow-lg text-center bg-pink-300 text-white font-semibold">
                             Pay With Cashless Credit

@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('city_distributor')->nullable();
             $table->string('district_distributor')->nullable();
             $table->string('provincial_distributor')->nullable();
+            $table->string('delivery_receipt_no')->nullable();
             $table->timestamps();
         });
     }
