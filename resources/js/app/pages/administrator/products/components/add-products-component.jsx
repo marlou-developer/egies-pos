@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import React, { Fragment, useState } from "react";
+import { Transition } from "@headlessui/react";
 import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { FaCircleInfo, FaClipboard, FaMoneyBill1Wave } from "react-icons/fa6";
 import UploadProductSection from "../sections/upload-product-section";
@@ -86,20 +86,48 @@ export default function AddProductComponent({ open, setOpenProduct }) {
 
     return (
         <>
-            <Dialog
-                open={open}
-                onClose={setOpenProduct}
-                className="relative z-50"
-            >
-                <div className="fixed inset-0" />
+            <Transition show={open} as={Fragment}>
+                <div
+                    onClick={() => setOpenProduct(false)}
+                    className="relative z-50"
+                >
+                    {/* Backdrop */}
+                    <div>
+                        <div className="fixed inset-0 bg-gray-900/80" />
+                    </div>
 
-                <div className="fixed inset-0 overflow-hidden">
-                    <div className="absolute inset-0 overflow-hidden">
-                        <div className="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10 sm:pl-16">
-                            <DialogPanel
-                                transition
-                                className="pointer-events-auto w-screen max-w-md transform transition duration-500 ease-in-out data-closed:translate-x-full sm:duration-700"
+                    {/* Sidebar panel */}
+                    <div className="fixed inset-0 flex w justify-end w-full">
+                        <Transition.Child
+                            as={Fragment}
+                            enter="transform transition duration-500 ease-out"
+                            enterFrom="translate-x-full"
+                            enterTo="translate-x-0"
+                            leave="transform transition duration-500 ease-in"
+                            leaveFrom="translate-x-0"
+                            leaveTo="translate-x-full"
+                        >
+                            <div
+                                onClick={(e) => e.stopPropagation()}
+                                className="relative flex w-full max-w-md flex-1"
                             >
+                                {/* Close button */}
+                                <div className="absolute top-0 left-full flex w-16 justify-center pt-5">
+                                    <button
+                                        type="button"
+                                        onClick={() => setOpenProduct(false)}
+                                        className="-m-2.5 p-2.5"
+                                    >
+                                        <span className="sr-only">
+                                            Close sidebar
+                                        </span>
+                                        <XMarkIcon
+                                            className="size-6 text-white"
+                                            aria-hidden="true"
+                                        />
+                                    </button>
+                                </div>
+
                                 <form
                                     onSubmit={handleSubmit}
                                     className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
@@ -107,10 +135,10 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                     <div className="h-0 flex-1 overflow-y-auto">
                                         <div className="bg-pink-200 px-4 py-6 sm:px-6">
                                             <div className="flex items-center justify-between">
-                                                <DialogTitle className="text-base font-semibold text-pink-600">
+                                                <div className="text-base font-semibold text-pink-600">
                                                     <FaClipboard className="float-left mr-1 mt-1" />
                                                     New Product
-                                                </DialogTitle>
+                                                </div>
                                                 <div className="ml-3 flex h-7 items-center">
                                                     <button
                                                         type="button"
@@ -393,11 +421,11 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                         </button>
                                     </div>
                                 </form>
-                            </DialogPanel>
-                        </div>
+                            </div>
+                        </Transition.Child>
                     </div>
                 </div>
-            </Dialog>
+            </Transition>
         </>
     );
 }
