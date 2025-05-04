@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useRef } from "react";
 import ProductsSection from "./products-section";
 import { useDispatch, useSelector } from "react-redux";
 import { setCarts } from "@/app/redux/product-slice";
+import PrintReceiptSection from "./print-receipt-section";
 
 export default function PosSection() {
     const { carts } = useSelector((store) => store.products);
     const dispatch = useDispatch();
+  
     const total_price = carts.reduce(
         (sum, product) => (sum + parseFloat(product.srp)) * parseInt(product.pcs),
         0
@@ -28,6 +30,7 @@ export default function PosSection() {
 
         dispatch(setCarts(updated));
     };
+ 
     return (
         <div class="w-full ">
             <div class="flex lg:flex-row flex-col-reverse shadow-lg">
@@ -40,7 +43,7 @@ export default function PosSection() {
                             <span class="px-4 py-2 rounded-md bg-gray-100 text-gray-800">Setting</span>
                         </div> */}
                     </div>
-                    <div class="px-5 py-4 mt-5 overflow-y-auto h-72">
+                    <div  class="px-5 py-4 mt-5 overflow-y-auto h-72">
                         {carts.map((res) => {
                             return (
                                 <div class="flex flex-row justify-between items-center mb-4">
@@ -136,9 +139,7 @@ export default function PosSection() {
                         </div>
                     </div> */}
                     <div class="px-5 mt-5">
-                        <div class="px-4 py-4 rounded-md shadow-lg text-center bg-pink-300 text-white font-semibold">
-                            Pay With Cashless Credit
-                        </div>
+                      <PrintReceiptSection />
                     </div>
                 </div>
             </div>
