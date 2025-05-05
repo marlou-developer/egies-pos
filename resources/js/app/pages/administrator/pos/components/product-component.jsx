@@ -8,12 +8,14 @@ export default function ProductComponent({ product }) {
 
     function add_to_cart(value) {
         const result = carts.find((res) => res.id == value.id);
+       
         if (!result) {
             dispatch(
                 setCarts([
                     ...carts,
                     {
                         ...value,
+                        sub_price:0,
                         pcs: 1,
                     },
                 ])
