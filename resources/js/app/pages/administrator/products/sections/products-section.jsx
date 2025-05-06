@@ -442,7 +442,7 @@ export default function ProductsSection() {
                                                     "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
                                                 )}
                                             >
-                                                <ProductOptionMenuSection />
+                                                <ProductOptionMenuSection data={product} />
                                             </td>
                                         </tr>
                                     );
@@ -473,11 +473,10 @@ export default function ProductsSection() {
                                                 onClick={() =>
                                                     setCurrent(pageNum)
                                                 }
-                                                className={`px-3 py-1 border rounded ${
-                                                    pageNum === current
+                                                className={`px-3 py-1 border rounded ${pageNum === current
                                                         ? "bg-pink-500 text-white"
                                                         : "bg-white text-pink-500 border-pink-500"
-                                                }`}
+                                                    }`}
                                             >
                                                 {pageNum}
                                             </button>

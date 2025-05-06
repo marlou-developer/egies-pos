@@ -11,7 +11,7 @@ export function create_product_service(data) {
 
 export function get_product_service() {
     try {
-        const result = axios.get('/api/product'+window.location.search)
+        const result = axios.get('/api/product' + window.location.search)
         return result
     } catch (error) {
 
@@ -23,14 +23,14 @@ export function get_product_service() {
 //     return res.data
 // }
 
-// export function delete_category_service(id) {
-//     try {
-//         const result = axios.delete(`/api/category/${id}`)
-//         return result
-//     } catch (error) {
+export function delete_product_service(id) {
+    try {
+        const result = axios.delete(`/api/product/${id}`)
+        return result
+    } catch (error) {
 
-//     }
-// }
+    }
+}
 
 // export function update_category_service(data) {
 //     try {

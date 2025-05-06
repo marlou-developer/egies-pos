@@ -61,7 +61,7 @@ class ProductController extends Controller
             'provincial_distributor' => 'nullable|string',
             'delivery_receipt_no' => 'nullable|string',
         ]);
-        
+
         $product = Product::create($data);
 
         $this->handleFileUploads($request, 'uploads', $product);
@@ -88,5 +88,12 @@ class ProductController extends Controller
                 ]);
             }
         }
+    }
+
+
+    public function destroy(Product $product)
+    {
+        $product->delete();
+        return response()->json(['message' => 'Product deleted successfully']);
     }
 }
