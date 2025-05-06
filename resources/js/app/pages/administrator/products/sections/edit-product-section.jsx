@@ -63,7 +63,7 @@ export default function EditProductSection({ data }) {
 
     return (
         <>
-            <Tooltip title="Remove Product">
+            <Tooltip title="Edit Product">
                 <button
                     className="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                     onClick={openModal}
