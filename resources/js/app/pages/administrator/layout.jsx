@@ -6,6 +6,7 @@ import { CalculatorIcon, ChartPieIcon, HomeIcon, PresentationChartBarIcon, Shopp
 const navigation = [
     { name: "Dashboard", href: "/administrator/dashboard", icon: HomeIcon, current: false },
     { name: "POS", href: "/administrator/pos", icon: CalculatorIcon, current: false },
+    { name: "Customer Section", href: "/administrator/customer", icon: UsersIcon, current: false },
     { name: "Products Section", href: "/administrator/products", icon: ShoppingBagIcon, current: false },
     { name: "Shopee Section", href: "/administrator/shopee", icon: ShoppingCartIcon, current: false },
     {
