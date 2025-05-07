@@ -58,7 +58,7 @@ export default function AddProductComponent({ open, setOpenProduct }) {
         fd.append("srp", product.srp ?? "");
         fd.append("reseller", product.reseller ?? "");
         fd.append("brand", product.brand ?? "");
-        fd.append("barcode", product.barcode ?? "");
+        // fd.append("barcode", product.barcode ?? "");
         fd.append("delivery_receipt_no", product.delivery_receipt_no ?? "");
         fd.append("city_distributor", product.city_distributor ?? "");
         fd.append("district_distributor", product.district_distributor ?? "");

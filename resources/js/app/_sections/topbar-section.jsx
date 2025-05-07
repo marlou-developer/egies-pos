@@ -44,8 +44,8 @@ export default function TopbarSection({ userNavigation }) {
                 <div aria-hidden="true" className="h-6 w-px bg-gray-200 lg:hidden" />
 
                 <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 px-8">
-                    <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-                        <SearchSection />
+                    <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 justify-end">
+                        {/* <SearchSection /> */}
                         <div className="flex items-center gap-x-4 lg:gap-x-6">
                             {/* Separator */}
                             <div

@@ -41,18 +41,27 @@ export default function ProductComponent({ product }) {
             class="px-3 py-3 flex flex-col border border-gray-200 rounded-md h-32 justify-between"
         >
             <div>
-                <div class="font-bold text-gray-800">{product.name}</div>
+                <div class="font-bold flex text-gray-800">{product.name}</div>
                 <span class="font-light text-sm text-gray-400">
                     {product.description}
                 </span>
             </div>
-            <div class="flex flex-row justify-between items-center">
-                <span class="self-end font-bold text-lg text-pink-300">
-                    {product.price}
+            <div class="flex flex-row justify-between items-end ">
+
+                <span class="text-lg text-pink-500">
+                    <span className="text-gray-800 text-sm">
+                        SRP:&nbsp;
+                    </span>
+                    ₱
+                    {parseFloat(
+                        product.srp
+                    ).toLocaleString("en-PH", {
+                        minimumFractionDigits: 2,
+                    })}
                 </span>
                 <img
                     src={product?.uploads[0]?.file}
-                    className="h-14 w-14 object-cover rounded-md"
+                    className="h-20 w-24 object-cover rounded-md"
                     alt=""
                 />
             </div>

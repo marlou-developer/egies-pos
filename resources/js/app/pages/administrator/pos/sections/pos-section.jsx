@@ -7,7 +7,7 @@ import PrintReceiptSection from "./print-receipt-section";
 export default function PosSection() {
     const { carts } = useSelector((store) => store.products);
     const dispatch = useDispatch();
-    const [overallDiscount, setOverallDiscount] = useState(0);
+    const [overallDiscount, setOverallDiscount] = useState(null);
 
     const total_price =
         carts.reduce(
@@ -40,10 +40,10 @@ export default function PosSection() {
         const updated = carts.map((item) =>
             item.id === result.id
                 ? {
-                      ...item,
-                      sub_price: result[value],
-                      type_item_discount: value,
-                  }
+                    ...item,
+                    sub_price: result[value],
+                    type_item_discount: value,
+                }
                 : item
         );
         dispatch(setCarts(updated));
@@ -155,10 +155,12 @@ export default function PosSection() {
                                     </div>
                                     <div class="font-semibold text-xl flex-1  flex flex-col gap-3  text-left">
                                         <div className="flex-1">
-                                            ₱{" "}
-                                            {parseInt(res?.sub_price).toFixed(
-                                                2
-                                            )}
+                                            ₱
+                                            {parseFloat(
+                                                res.sub_price
+                                            ).toLocaleString("en-PH", {
+                                                minimumFractionDigits: 2,
+                                            })}
                                         </div>
                                         <div className="flex-1">
                                             <input
@@ -181,7 +183,8 @@ export default function PosSection() {
                     </div>
                     <div class="px-5 mt-5">
                         <div class="py-4 rounded-md shadow-lg">
-                            <div className="px-4">
+                            <div className="px-4 mb-4">
+                                {/* <label htmlFor="">Discount:</label> */}
                                 <input
                                     placeholder="Overall Product Discount"
                                     type="number"
@@ -219,7 +222,7 @@ export default function PosSection() {
                                     Discount Per Order
                                 </span>
                                 <span class="font-bold">
-                                    ₱{parseFloat(overallDiscount)?.toFixed(2)}
+                                    ₱{isNaN(parseFloat(overallDiscount)) ? "0.00" : parseFloat(overallDiscount).toFixed(2)}
                                 </span>
                             </div>
 
