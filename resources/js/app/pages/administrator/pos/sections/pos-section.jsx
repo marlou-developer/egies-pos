@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import ProductsSection from "./products-section";
 import { useDispatch, useSelector } from "react-redux";
 import { setCarts } from "@/app/redux/product-slice";
@@ -7,12 +7,16 @@ import PrintReceiptSection from "./print-receipt-section";
 export default function PosSection() {
     const { carts } = useSelector((store) => store.products);
     const dispatch = useDispatch();
+    const [overallDiscount, setOverallDiscount] = useState(0);
 
-    const total_price = carts.reduce(
-        (sum, product) =>
-            sum + parseFloat(product.sub_price) * parseInt(product.pcs),
-        0
-    );
+    const total_price =
+        carts.reduce(
+            (sum, product) =>
+                sum +
+                (parseFloat(product.sub_price) * parseInt(product.pcs) -
+                    (parseFloat(product.discount) || 0)),
+            0
+        ) - parseFloat(overallDiscount || 0);
 
     const addPCS = (value) => {
         const data = carts.map((item) =>
@@ -45,6 +49,27 @@ export default function PosSection() {
         dispatch(setCarts(updated));
     }
 
+    const updateDiscount = (value, discountValue) => {
+        const updated = carts.map((item) =>
+            item.id === value.id
+                ? { ...item, discount: parseFloat(discountValue) || 0 }
+                : item
+        );
+        dispatch(setCarts(updated));
+    };
+
+
+    const subtotal = carts.reduce(
+        (sum, product) => sum + parseFloat(product.sub_price) * parseInt(product.pcs),
+        0
+    );
+    
+    const totalItemDiscount = carts.reduce(
+        (sum, product) => sum + (parseFloat(product.discount) || 0),
+        0
+    );
+    
+    const totalDiscount = totalItemDiscount + parseFloat(overallDiscount || 0);
     return (
         <div class="w-full ">
             <div class="flex lg:flex-row flex-col-reverse shadow-lg">
@@ -61,7 +86,7 @@ export default function PosSection() {
                         {carts.map((res) => {
                             return (
                                 <div class="flex flex-row gap-3 border-pink-300 border  p-2 rounded-lg shadow-md justify-between items-center mb-4">
-                                    <div class="flex flex-row gap-3 items-center w-2/5">
+                                    <div class="flex flex-1 flex-row gap-3 items-center w-2/5">
                                         <img
                                             src={res?.uploads[0]?.file}
                                             class="w-10 h-10 object-cover rounded-md"
@@ -72,7 +97,7 @@ export default function PosSection() {
                                         </span>
                                     </div>
 
-                                    <div class="w-[115px] flex flex-col gap-3 justify-between">
+                                    <div class="flex-1 flex flex-col gap-3 justify-between">
                                         <div className="flex w-full">
                                             <button
                                                 onClick={() => subtractPCS(res)}
@@ -131,8 +156,27 @@ export default function PosSection() {
                                             </select>
                                         </span>
                                     </div>
-                                    <div class="font-semibold text-lg  text-left">
-                                        ₱ {parseInt(res?.sub_price).toFixed(2)}
+                                    <div class="font-semibold text-xl flex-1  flex flex-col gap-3  text-left">
+                                        <div className="flex-1">
+                                            ₱{" "}
+                                            {parseInt(res?.sub_price).toFixed(
+                                                2
+                                            )}
+                                        </div>
+                                        <div className="flex-1">
+                                            <input
+                                                placeholder="Discount"
+                                                type="number"
+                                                value={res.discount || ""}
+                                                onChange={(e) =>
+                                                    updateDiscount(
+                                                        res,
+                                                        e.target.value
+                                                    )
+                                                }
+                                                className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pl-3 pr-1 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             );
@@ -140,24 +184,35 @@ export default function PosSection() {
                     </div>
                     <div class="px-5 mt-5">
                         <div class="py-4 rounded-md shadow-lg">
+                            <div className="px-4">
+                                <input
+                                    placeholder="Overall Product Discount"
+                                    type="number"
+                                    value={overallDiscount}
+                                    onChange={(e) =>
+                                        setOverallDiscount(e.target.value)
+                                    }
+                                    className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pl-3 pr-1 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
+                                />
+                            </div>
                             <div class=" px-4 flex justify-between ">
                                 <span class="font-semibold text-sm">
                                     Subtotal
                                 </span>
-                                <span class="font-bold">₱35.25</span>
+                                <span class="font-bold">₱{subtotal.toFixed(2)}</span>
                             </div>
                             <div class=" px-4 flex justify-between ">
                                 <span class="font-semibold text-sm">
-                                    Discount
+                                    Total Discount
                                 </span>
-                                <span class="font-bold">- ₱5.00</span>
+                                <span class="font-bold">₱{totalDiscount.toFixed(2)}</span>
                             </div>
-                            <div class=" px-4 flex justify-between ">
+                            {/* <div class=" px-4 flex justify-between ">
                                 <span class="font-semibold text-sm">
                                     Sales Tax
                                 </span>
                                 <span class="font-bold">₱2.25</span>
-                            </div>
+                            </div> */}
                             <div class="border-t-2 mt-3 py-2 px-4 flex items-center justify-between">
                                 <span class="font-semibold text-2xl">
                                     Total
