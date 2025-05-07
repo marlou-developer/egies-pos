@@ -56,7 +56,7 @@ export default function PosSection() {
                     <div class="px-5 py-4 overflow-y-auto h-72">
                         {carts.map((res) => {
                             return (
-                                <div class="flex flex-row gap-3 border-red-300 border  p-2 rounded-lg shadow-md justify-between items-center mb-4">
+                                <div class="flex flex-row gap-3 border-pink-300 border  p-2 rounded-lg shadow-md justify-between items-center mb-4">
                                     <div class="flex flex-row gap-3 items-center w-2/5">
                                         <img
                                             src={res?.uploads[0]?.file}

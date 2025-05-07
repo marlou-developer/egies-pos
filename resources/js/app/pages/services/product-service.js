@@ -32,11 +32,11 @@ export function delete_product_service(id) {
     }
 }
 
-// export function update_category_service(data) {
-//     try {
-//         const result = axios.put(`/api/category/${data.id}`, data)
-//         return result
-//     } catch (error) {
+export function update_product_service(data) {
+    try {
+        const result = axios.put(`/api/product/${data.id}`, data)
+        return result
+    } catch (error) {
 
-//     }
-// }
+    }
+}

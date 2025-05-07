@@ -439,7 +439,7 @@ export default function ProductsSection() {
                                                         product.length - 1
                                                         ? "border-b border-gray-200"
                                                         : "",
-                                                    "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
+                                                    "px-3 py-4 text-sm text-gray-700 "
                                                 )}
                                             >
                                                 <ProductOptionMenuSection data={product} />

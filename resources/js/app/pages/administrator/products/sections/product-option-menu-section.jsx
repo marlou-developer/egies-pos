@@ -23,7 +23,7 @@ export default function ProductOptionMenuSection({ data }) {
                         </MenuItem> */}
                         <MenuItem as="a" href="#" className="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
                             <FaCirclePlus className="mr-3 size-5 text-gray-400" />
-                            Add Stock
+                            <b>Add Stock</b>
                         </MenuItem>
                         <DeleteProductSection data={data} />
                     </div>
