@@ -3,6 +3,7 @@ import ProductsSection from "./products-section";
 import { useDispatch, useSelector } from "react-redux";
 import { setCarts } from "@/app/redux/product-slice";
 import PrintReceiptSection from "./print-receipt-section";
+import CreditPurchaseSection from "./credit-purchase-section";
 
 export default function PosSection() {
     const { carts } = useSelector((store) => store.products);
@@ -273,6 +274,9 @@ export default function PosSection() {
                     </div> */}
                     <div class="px-5 mt-5">
                         <PrintReceiptSection />
+                    </div>
+                    <div class="px-5 mt-5">
+                        <CreditPurchaseSection />
                     </div>
                 </div>
             </div>

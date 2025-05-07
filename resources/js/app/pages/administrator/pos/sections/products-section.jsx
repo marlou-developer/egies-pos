@@ -49,17 +49,20 @@ export default function ProductsSection() {
             <hr />
 
             {/* PRODUCT GRID */}
-            <div className="px-5 mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {activeProducts && activeProducts.length > 0 ? (
-                    activeProducts.map((product, index) => (
-                        <ProductComponent key={index} product={product} />
-                    ))
-                ) : (
-                    <div className="text-center text-gray-500 mt-4 col-span-full">
-                        No product available
-                    </div>
-                )}
+            <div className="px-5 mt-4 max-h-[600px] overflow-y-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    {activeProducts && activeProducts.length > 0 ? (
+                        activeProducts.map((product, index) => (
+                            <ProductComponent key={index} product={product} />
+                        ))
+                    ) : (
+                        <div className="text-center text-gray-500 mt-4 col-span-full">
+                            No product available
+                        </div>
+                    )}
+                </div>
             </div>
+
         </div>
     );
 }

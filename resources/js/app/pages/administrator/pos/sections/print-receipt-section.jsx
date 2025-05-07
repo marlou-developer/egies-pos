@@ -64,9 +64,9 @@ export default function PrintReceiptSection() {
     return (
         <button
             onClick={handlePrint}
-            className="px-4 py-4 w-full rounded-md shadow-lg text-center bg-pink-300 text-white font-semibold"
+            className="px-4 py-4 w-full rounded-md shadow-lg text-center bg-pink-300 hover:bg-pink-400 text-white font-semibold"
         >
-            Pay With Cashless Credit
+            Pay
         </button>
     );
 }
