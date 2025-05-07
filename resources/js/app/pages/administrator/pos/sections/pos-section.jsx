@@ -10,7 +10,7 @@ export default function PosSection() {
 
     const total_price = carts.reduce(
         (sum, product) =>
-            (sum + parseFloat(product.sub_price)) * parseInt(product.pcs),
+            sum + parseFloat(product.sub_price) * parseInt(product.pcs),
         0
     );
 
@@ -35,7 +35,11 @@ export default function PosSection() {
     function add_sub_price(result, value) {
         const updated = carts.map((item) =>
             item.id === result.id
-                ? { ...item, sub_price: result[value], type_item_discount: value }
+                ? {
+                      ...item,
+                      sub_price: result[value],
+                      type_item_discount: value,
+                  }
                 : item
         );
         dispatch(setCarts(updated));
