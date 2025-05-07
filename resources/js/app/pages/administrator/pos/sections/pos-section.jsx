@@ -58,17 +58,17 @@ export default function PosSection() {
         dispatch(setCarts(updated));
     };
 
-
     const subtotal = carts.reduce(
-        (sum, product) => sum + parseFloat(product.sub_price) * parseInt(product.pcs),
+        (sum, product) =>
+            sum + parseFloat(product.sub_price) * parseInt(product.pcs),
         0
     );
-    
+
     const totalItemDiscount = carts.reduce(
         (sum, product) => sum + (parseFloat(product.discount) || 0),
         0
     );
-    
+
     const totalDiscount = totalItemDiscount + parseFloat(overallDiscount || 0);
     return (
         <div class="w-full ">
@@ -135,7 +135,6 @@ export default function PosSection() {
                                                 autoComplete="pricing"
                                                 className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pl-3 pr-1 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                             >
-                                               
                                                 <option value="srp" selected>
                                                     SRP Price
                                                 </option>
@@ -188,7 +187,11 @@ export default function PosSection() {
                                     type="number"
                                     value={overallDiscount}
                                     onChange={(e) =>
-                                        setOverallDiscount(e.target.value)
+                                        setOverallDiscount(
+                                            e.target.value == ""
+                                                ? 0
+                                                : e.target.value
+                                        )
                                     }
                                     className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pl-3 pr-1 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                 />
@@ -197,28 +200,36 @@ export default function PosSection() {
                                 <span class="font-semibold text-sm">
                                     Subtotal
                                 </span>
-                                <span class="font-bold">₱{subtotal.toFixed(2)}</span>
+                                <span class="font-bold">
+                                    ₱{subtotal.toFixed(2)}
+                                </span>
                             </div>
 
                             <div class=" px-4 flex justify-between ">
                                 <span class="font-semibold text-sm">
                                     Discount Per Item
                                 </span>
-                                <span class="font-bold">₱{totalItemDiscount?.toFixed(2)}</span>
+                                <span class="font-bold">
+                                    ₱{totalItemDiscount?.toFixed(2)}
+                                </span>
                             </div>
 
                             <div class=" px-4 flex justify-between ">
                                 <span class="font-semibold text-sm">
                                     Discount Per Order
                                 </span>
-                                <span class="font-bold">₱{parseFloat(overallDiscount)?.toFixed(2)}</span>
+                                <span class="font-bold">
+                                    ₱{parseFloat(overallDiscount)?.toFixed(2)}
+                                </span>
                             </div>
-                            
+
                             <div class=" px-4 flex justify-between ">
                                 <span class="font-semibold text-sm">
                                     Total Discount
                                 </span>
-                                <span class="font-bold">₱{totalDiscount?.toFixed(2)}</span>
+                                <span class="font-bold">
+                                    ₱{totalDiscount?.toFixed(2)}
+                                </span>
                             </div>
                             {/* <div class=" px-4 flex justify-between ">
                                 <span class="font-semibold text-sm">
