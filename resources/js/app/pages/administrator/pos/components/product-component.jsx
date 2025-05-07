@@ -1,5 +1,5 @@
 import { setCarts } from "@/app/redux/product-slice";
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function ProductComponent({ product }) {
@@ -8,20 +8,33 @@ export default function ProductComponent({ product }) {
 
     function add_to_cart(value) {
         const result = carts.find((res) => res.id == value.id);
-       
+
         if (!result) {
             dispatch(
                 setCarts([
                     ...carts,
                     {
                         ...value,
-                        sub_price:0,
+                        sub_price: 0,
                         pcs: 1,
                     },
                 ])
             );
         }
     }
+
+    useEffect(() => {
+        if (carts) {
+            dispatch(
+                setCarts(
+                    carts.map((res) => ({
+                        ...res,
+                        sub_price: res.srp,
+                    }))
+                )
+            );
+        }
+    }, [carts.length]);
     return (
         <button
             onClick={() => add_to_cart(product)}
