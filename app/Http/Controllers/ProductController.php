@@ -91,6 +91,15 @@ class ProductController extends Controller
     }
 
 
+    public function update(Request $request,  $id)
+    {
+        $product = Product::where('id', $id)->first();
+        if ($product) {
+            $product->update($request->all());
+        }
+    }
+
+
     public function destroy(Product $product)
     {
         $product->delete();

@@ -40,7 +40,7 @@ export default function DeleteProductSection({ data }) {
                     onClick={openModal}
                 >
                     <TrashIcon className="mr-3 size-5 text-gray-400" />
-                    Remove Product
+                    <b>Remove Product</b>
                 </button>
             </Tooltip>
             <Modal open={isModalOpen} setOpen={setIsModalOpen} width="w-1/4">

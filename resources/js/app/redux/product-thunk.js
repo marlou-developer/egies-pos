@@ -1,4 +1,4 @@
-import { create_product_service, delete_product_service, get_product_service } from "../pages/services/product-service";
+import { create_product_service, delete_product_service, get_product_service, update_product_service } from "../pages/services/product-service";
 import { productSlice } from "./product-slice";
 
 
@@ -38,8 +38,8 @@ export function delete_product_thunk(id) {
 }
 
 
-// export function update_internet_plan_thunk(data) {
-//     return async function (dispatch, getState) {
-//         const res = await update_internet_plan_service(data)
-//     };
-// }
+export function update_product_thunk(data) {
+    return async function (dispatch, getState) {
+        const res = await update_product_service(data)
+    };
+}

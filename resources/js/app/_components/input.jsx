@@ -48,7 +48,7 @@ export default function Input({
             peer-placeholder-shown:top-2.5
             peer-focus:-top-3
             peer-focus:text-sm
-            peer-focus:text-red-400 
+            peer-focus:text-pink-400 
           `}
                 >
                     {label}

@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react'
 import { FaCircleInfo, FaClipboard, FaMoneyBill1Wave } from 'react-icons/fa6';
 import { useSelector } from 'react-redux';
 import UploadProductSection from './upload-product-section';
+import { get_product_thunk, update_product_thunk } from '@/app/redux/product-thunk';
 
 export default function EditProductSection({ data }) {
     const { product } = useSelector((state) => state.products)
@@ -49,17 +50,19 @@ export default function EditProductSection({ data }) {
         setLoading(true);
         try {
             await store.dispatch(
-                update_category_thunk(form)
+                update_product_thunk(form)
             );
-            store.dispatch(get_category_thunk())
+            store.dispatch(get_product_thunk())
             message.success("Updated Successfully!");
             setIsModalOpen(false);
         } catch (error) {
-            message.error("Failed to edit category. Please try again."); // Show error message
+            message.error("Failed to edit Product. Please try again.");
         } finally {
-            setLoading(false); // Always reset loading state
+            setLoading(false);
         }
     };
+
+    console.log('foaaaarmm', form)
 
     return (
         <>
@@ -69,9 +72,12 @@ export default function EditProductSection({ data }) {
                     onClick={openModal}
                 >
                     <PencilSquareIcon className="mr-3 size-5 text-gray-400" />
-                    Edit Product
+                    <b>Edit Product</b>
                 </button>
             </Tooltip>
+            <div>
+
+            </div>
             <DrawerSection open={isModalOpen} setOpen={setIsModalOpen}>
                 <form
                     onSubmit={editCategory}
@@ -119,11 +125,13 @@ export default function EditProductSection({ data }) {
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={data_handler}
-                                            value={
-                                                product?.delivery_receipt_no ??
-                                                ""
+                                            onChange={(e) =>
+                                                setForm({
+                                                    ...form,
+                                                    name: e.target.value,
+                                                })
                                             }
+                                            value={form?.delivery_receipt_no}
                                             name="delivery_receipt_no"
                                             label="Delivery Receipt #"
                                             type="text"
@@ -145,8 +153,13 @@ export default function EditProductSection({ data }) {
                                                     </div> */}
                                     <div>
                                         <Input
-                                            onChange={data_handler}
-                                            value={product?.brand ?? ""}
+                                            onChange={(e) =>
+                                                setForm({
+                                                    ...form,
+                                                    name: e.target.value,
+                                                })
+                                            }
+                                            value={form?.brand}
                                             name="brand"
                                             label="Brand"
                                             type="text"
@@ -154,8 +167,13 @@ export default function EditProductSection({ data }) {
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={data_handler}
-                                            value={product?.name ?? ""}
+                                            onChange={(e) =>
+                                                setForm({
+                                                    ...form,
+                                                    name: e.target.value,
+                                                })
+                                            }
+                                            value={form?.name}
                                             name="name"
                                             label="Product Name"
                                             type="text"
@@ -164,22 +182,19 @@ export default function EditProductSection({ data }) {
                                     <div>
                                         <div className="mt-2">
                                             <select
-                                                onChange={data_handler}
-                                                value={
-                                                    product?.category_id ?? ""
+                                                onChange={(e) =>
+                                                    setForm({
+                                                        ...form,
+                                                        category_id: e.target.value,
+                                                    })
                                                 }
+                                                value={form?.category_id ?? ""}
                                                 name="category_id"
-                                                type="text"
                                                 className="block w-full rounded-md bg-white px-3 py-2.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                             >
-                                                <option value="">
-                                                    Select a category
-                                                </option>
+                                                <option value="">Select a category</option>
                                                 {categories?.map((category) => (
-                                                    <option
-                                                        key={category.id}
-                                                        value={category.id}
-                                                    >
+                                                    <option key={category.id} value={category.id}>
                                                         {category.name}
                                                     </option>
                                                 ))}
@@ -188,8 +203,13 @@ export default function EditProductSection({ data }) {
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={data_handler}
-                                            value={product?.quantity ?? ""}
+                                            onChange={(e) =>
+                                                setForm({
+                                                    ...form,
+                                                    name: e.target.value,
+                                                })
+                                            }
+                                            value={form?.quantity}
                                             name="quantity"
                                             label="Quantity"
                                             type="number"
@@ -220,8 +240,13 @@ export default function EditProductSection({ data }) {
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={data_handler}
-                                            value={product?.cost ?? ""}
+                                            onChange={(e) =>
+                                                setForm({
+                                                    ...form,
+                                                    name: e.target.value,
+                                                })
+                                            }
+                                            value={form?.cost}
                                             name="cost"
                                             label="Cost Per Unit"
                                             type="number"
@@ -229,8 +254,13 @@ export default function EditProductSection({ data }) {
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={data_handler}
-                                            value={product?.srp ?? ""}
+                                            onChange={(e) =>
+                                                setForm({
+                                                    ...form,
+                                                    name: e.target.value,
+                                                })
+                                            }
+                                            value={form?.srp}
                                             name="srp"
                                             label="SRP Price"
                                             type="number"
@@ -238,8 +268,13 @@ export default function EditProductSection({ data }) {
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={data_handler}
-                                            value={product?.reseller ?? ""}
+                                            onChange={(e) =>
+                                                setForm({
+                                                    ...form,
+                                                    name: e.target.value,
+                                                })
+                                            }
+                                            value={form?.reseller}
                                             name="reseller"
                                             label="Reseller Price"
                                             type="number"
@@ -247,10 +282,13 @@ export default function EditProductSection({ data }) {
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={data_handler}
-                                            value={
-                                                product?.city_distributor ?? ""
+                                            onChange={(e) =>
+                                                setForm({
+                                                    ...form,
+                                                    name: e.target.value,
+                                                })
                                             }
+                                            value={form?.city_distributor}
                                             name="city_distributor"
                                             label="Distributor Price"
                                             type="number"
@@ -258,11 +296,13 @@ export default function EditProductSection({ data }) {
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={data_handler}
-                                            value={
-                                                product?.district_distributor ??
-                                                ""
+                                            onChange={(e) =>
+                                                setForm({
+                                                    ...form,
+                                                    name: e.target.value,
+                                                })
                                             }
+                                            value={form?.district_distributor}
                                             name="district_distributor"
                                             label="District Distributor Price"
                                             type="number"
@@ -270,11 +310,13 @@ export default function EditProductSection({ data }) {
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={data_handler}
-                                            value={
-                                                product?.provincial_distributor ??
-                                                ""
+                                            onChange={(e) =>
+                                                setForm({
+                                                    ...form,
+                                                    name: e.target.value,
+                                                })
                                             }
+                                            value={form?.provincial_distributor}
                                             name="provincial_distributor"
                                             label="Provincial Distributor Price"
                                             type="number"
@@ -287,7 +329,7 @@ export default function EditProductSection({ data }) {
                     <div className="flex shrink-0 justify-end px-4 py-4">
                         <button
                             type="button"
-                            onClick={() => setOpenProduct(false)}
+                            onClick={() => setIsModalOpen(false)}
                             className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
                         >
                             Cancel
@@ -327,5 +369,5 @@ export default function EditProductSection({ data }) {
                 </form>
             </DrawerSection> */}
         </>
-    )
+    );
 }
