@@ -83,7 +83,7 @@ export default function PosSection() {
                             <span class="px-4 py-2 rounded-md bg-gray-100 text-gray-800">Setting</span>
                         </div> */}
                     </div>
-                    <div class="px-5 py-4 overflow-y-auto h-72">
+                    <div class="px-5 py-4 overflow-y-auto h-96">
                         {carts.map((res) => {
                             return (
                                 <div class="flex flex-row gap-3 border-pink-300 border  p-2 rounded-lg shadow-md justify-between items-center mb-4">
