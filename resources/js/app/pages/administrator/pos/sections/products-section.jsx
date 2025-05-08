@@ -19,7 +19,7 @@ export default function ProductsSection() {
             <div className="flex flex-row justify-between items-center px-5 mt-5">
                 <div className="text-gray-800">
                     <div className="font-bold text-xl">
-                        Synergy's Beauty Products
+                        Egie's Beauty Products
                     </div>
                 </div>
             </div>

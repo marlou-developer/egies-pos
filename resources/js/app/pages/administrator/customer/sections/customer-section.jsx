@@ -1,18 +1,20 @@
 import { FaBook, FaFilter, FaPercent, FaUserPlus, FaUsers } from "react-icons/fa6";
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import {
-  ArchiveBoxIcon,
-  ArrowRightCircleIcon,
-  ChevronDownIcon,
-  DocumentDuplicateIcon,
-  HeartIcon,
-  PencilSquareIcon,
-  TrashIcon,
-  UserPlusIcon,
+    ArchiveBoxIcon,
+    ArrowRightCircleIcon,
+    ChevronDownIcon,
+    DocumentDuplicateIcon,
+    HeartIcon,
+    PencilSquareIcon,
+    TrashIcon,
+    UserPlusIcon,
 } from '@heroicons/react/20/solid'
 import { useState } from "react";
 import AddCustomerComponent from "../components/add-customer-component";
 import FilterCustomersComponent from "../components/filter-customers-component";
+import CustomerMenuSection from "./customer-menu-section";
+import { useSelector } from "react-redux";
 
 const people = [
     {
@@ -29,8 +31,11 @@ function classNames(...classes) {
 }
 
 export default function CustomerSection() {
+    const { customers } = useSelector((state) => state.customers)
     const [openCustomer, setOpenCustomer] = useState(false);
     const [openCFilter, setOpenCFilter] = useState(false);
+
+    console.log('customers', customers)
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">
@@ -46,33 +51,33 @@ export default function CustomerSection() {
                 </div>
                 <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                     <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                                        <span className="isolate inline-flex rounded-md shadow-xs">
-                                            <button
-                                                type="button"
-                                                onClick={() => setOpenCustomer(true)}
-                                                className="relative inline-flex items-center rounded-l-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
-                                            >
-                                                <FaUserPlus className="mr-1 text-pink-500" />
-                                                Add New Customer
-                                            </button>
-                                            <button
-                                                type="button"
-                                                onClick={() => setOpenCFilter(true)}
-                                                className="relative -ml-px inline-flex items-center rounded-r-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-50 focus:z-10"
-                                            >
-                                                <FaFilter className="mr-1 text-pink-500" />
-                                                Filter Customers
-                                            </button>
-                                        </span>
-                                        <AddCustomerComponent
-                                            open={openCustomer}
-                                            setOpenCustomer={setOpenCustomer}
-                                        />
-                                        <FilterCustomersComponent
-                                            open={openCFilter}
-                                            setOpenCFilter={setOpenCFilter}
-                                        />
-                                    </div>
+                        <span className="isolate inline-flex rounded-md shadow-xs">
+                            <button
+                                type="button"
+                                onClick={() => setOpenCustomer(true)}
+                                className="relative inline-flex items-center rounded-l-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
+                            >
+                                <FaUserPlus className="mr-1 text-pink-500" />
+                                Add New Customer
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setOpenCFilter(true)}
+                                className="relative -ml-px inline-flex items-center rounded-r-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-50 focus:z-10"
+                            >
+                                <FaFilter className="mr-1 text-pink-500" />
+                                Filter Customers
+                            </button>
+                        </span>
+                        <AddCustomerComponent
+                            open={openCustomer}
+                            setOpenCustomer={setOpenCustomer}
+                        />
+                        <FilterCustomersComponent
+                            open={openCFilter}
+                            setOpenCFilter={setOpenCFilter}
+                        />
+                    </div>
                 </div>
             </div>
             <div className="mt-8 flow-root">
@@ -97,6 +102,18 @@ export default function CustomerSection() {
                                         scope="col"
                                         className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter lg:table-cell"
                                     >
+                                        Mobile No.
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter lg:table-cell"
+                                    >
+                                        Email
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter lg:table-cell"
+                                    >
                                         Customer Type
                                     </th>
                                     <th
@@ -114,115 +131,77 @@ export default function CustomerSection() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {people.map((person, personIdx) => (
-                                    <tr key={person.email}>
+                                {customers?.result?.map((customer, customerIdx) => (
+                                    <tr key={customer.email}>
                                         <td
                                             className={classNames(
-                                                personIdx !== people.length - 1
+                                                customerIdx !== customers.length - 1
                                                     ? "border-b border-gray-200"
                                                     : "",
                                                 "py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6 lg:pl-8"
                                             )}
                                         >
-                                            {person.name}
+                                            {customer.name}
                                         </td>
                                         <td
                                             className={classNames(
-                                                personIdx !== people.length - 1
+                                                customerIdx !== customers.length - 1
                                                     ? "border-b border-gray-200"
                                                     : "",
                                                 "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 sm:table-cell"
                                             )}
                                         >
-                                            {person.title}
+                                            {customer.street}, {customer.postal}, {customer.brgy}, {customer.city}, {customer.province}
                                         </td>
                                         <td
                                             className={classNames(
-                                                personIdx !== people.length - 1
+                                                customerIdx !== customers.length - 1
                                                     ? "border-b border-gray-200"
                                                     : "",
                                                 "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
                                             )}
                                         >
-                                            {person.email}
+                                            {customer.mobile_no}
                                         </td>
                                         <td
                                             className={classNames(
-                                                personIdx !== people.length - 1
+                                                customerIdx !== customers.length - 1
+                                                    ? "border-b border-gray-200"
+                                                    : "",
+                                                "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
+                                            )}
+                                        >
+                                            {customer.email}
+                                        </td>
+                                        <td
+                                            className={classNames(
+                                                customerIdx !== customers.length - 1
                                                     ? "border-b border-gray-200"
                                                     : "",
                                                 "px-3 py-4 text-sm whitespace-nowrap text-gray-500"
                                             )}
                                         >
-                                            {person.role}
+                                            {customer.role}
                                         </td>
                                         <td
                                             className={classNames(
-                                                personIdx !== people.length - 1
+                                                customerIdx !== customers.length - 1
+                                                    ? "border-b border-gray-200"
+                                                    : "",
+                                                "px-3 py-4 text-sm whitespace-nowrap text-gray-500"
+                                            )}
+                                        >
+                                            {customer.role}
+                                        </td>
+                                        <td
+                                            className={classNames(
+                                                customerIdx !== customers.length - 1
                                                     ? "border-b border-gray-200"
                                                     : "",
                                                 "relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-8 lg:pr-8"
                                             )}
                                         >
-                                            <Menu
-                                                as="div"
-                                                className="relative inline-block text-left"
-                                            >
-                                                <div>
-                                                    <MenuButton className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50">
-                                                        Options
-                                                        <ChevronDownIcon
-                                                            aria-hidden="true"
-                                                            className="-mr-1 size-5 text-gray-400"
-                                                        />
-                                                    </MenuButton>
-                                                </div>
-
-                                                <MenuItems
-                                                    transition
-                                                    className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
-                                                >
-                                                    <div className="py-1">
-                                                        <MenuItem className="group">
-                                                            <a
-                                                                href="#"
-                                                                className="group flex items-center px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
-                                                            >
-                                                                <PencilSquareIcon
-                                                                    aria-hidden="true"
-                                                                    className="mr-3 size-5 text-gray-400 group-data-focus:text-gray-500"
-                                                                />
-                                                                Edit Customer
-                                                            </a>
-                                                        </MenuItem>
-                                                        <MenuItem className="group">
-                                                            <a
-                                                                href="#"
-                                                                className="group flex items-center px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
-                                                            >
-                                                                <FaBook 
-                                                                    aria-hidden="true"
-                                                                    className="mr-3 size-5 text-gray-400 group-data-focus:text-gray-500"
-                                                                />
-                                                                View Credits
-                                                            </a>
-                                                        </MenuItem>
-                                                        <MenuItem className="group">
-                                                            <a
-                                                                href="#"
-                                                                className="group flex items-center px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden"
-                                                            >
-                                                                <FaPercent
-                                                                    aria-hidden="true"
-                                                                    className="mr-3 size-5 text-gray-400 group-data-focus:text-gray-500"
-                                                                />
-                                                                Product Discounts
-                                                            </a>
-                                                        </MenuItem>
-                                                    </div>
-                                                  
-                                                </MenuItems>
-                                            </Menu>
+                                            <CustomerMenuSection />
                                         </td>
                                     </tr>
                                 ))}

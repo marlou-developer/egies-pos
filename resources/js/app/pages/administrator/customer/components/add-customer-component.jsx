@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import {
 
@@ -8,16 +8,81 @@ import {
 } from "react-icons/fa6";
 import DrawerSection from "@/app/_sections/drawer-section";
 import Input from "@/app/_components/input";
+import { useDispatch, useSelector } from "react-redux";
+import { create_customer_thunk } from "@/app/redux/customer-thunk";
+import { message } from "antd";
+import { setCustomer } from "@/app/redux/customer-slice";
+import store from "@/app/store/store";
 
 export default function AddCustomerComponent({ open, setOpenCustomer }) {
+
+    const [loading, setLoading] = useState(false);
+    const [uploadedFile1, setUploadedFile1] = useState(null);
+    const { customer } = useSelector((state) => state.customers);
+    const dispatch = useDispatch();
+
+
+    function data_handler(eOrKey, value) {
+        if (typeof eOrKey === "string") {
+            // Called manually with key and value (like for WYSIWYG)
+            dispatch(
+                setCustomer({
+                    ...customer,
+                    [eOrKey]: value,
+                })
+            );
+        } else {
+            // Regular input onChange event
+            dispatch(
+                setCustomer({
+                    ...customer,
+                    [eOrKey.target.name]: eOrKey.target.value,
+                })
+            );
+        }
+    }
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        setLoading(true);
+
+        const fd = new FormData();
+        fd.append("customer_id", customer.id ?? "");
+        fd.append("file_name", customer.file_name ?? "");
+        fd.append("name", customer.name ?? "");
+        fd.append("street", customer.street ?? "");
+        fd.append("brgy", customer.brgy ?? "");
+        fd.append("city", customer.city ?? "");
+        fd.append("province", customer.province ?? "");
+        fd.append("postal", customer.postal ?? "");
+        fd.append("mobile_no", customer.mobile_no ?? "");
+        fd.append("email", customer.email ?? "");
+        // fd.append("due_period", customer.due_period ?? "");
+
+        if (uploadedFile1 && uploadedFile1.length > 0) {
+            Array.from(uploadedFile1).forEach((file) => {
+                fd.append("uploads[]", file);
+            });
+        }
+
+        try {
+            await store.dispatch(create_customer_thunk(fd));
+            // await store.dispatch(get_customer_thunk());
+            message.success("Customer successfully saved!");
+            setOpenCustomer(false);
+        } catch (error) {
+            message.error("Failed to add Customer. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    }
     return (
         <>
             <DrawerSection
                 open={open}
-                onClose={setOpenCustomer}
-                className="relative z-50"
+                setOpen={setOpenCustomer}
             >
-                <form className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl">
+                <form onSubmit={handleSubmit} className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl">
                     <div className="h-0 flex-1 overflow-y-auto">
                         <div className="bg-pink-200 px-4 py-6 sm:px-6">
                             <div className="flex items-center justify-between">
@@ -65,11 +130,11 @@ export default function AddCustomerComponent({ open, setOpenCustomer }) {
 
                                     <div>
                                         <Input
-                                            // onChange={data_handler}
-                                            // value={
-                                            //     product?.name ??
-                                            //     ""
-                                            // }
+                                            onChange={data_handler}
+                                            value={
+                                                customer?.name ??
+                                                ""
+                                            }
                                             name="name"
                                             label="Customer Name"
                                             type="text"
@@ -77,23 +142,23 @@ export default function AddCustomerComponent({ open, setOpenCustomer }) {
                                     </div>
                                     <div>
                                         <Input
-                                            // onChange={data_handler}
-                                            // value={
-                                            //     product?.Address ??
-                                            //     ""
-                                            // }
-                                            name="street_address"
+                                            onChange={data_handler}
+                                            value={
+                                                customer?.street ??
+                                                ""
+                                            }
+                                            name="street"
                                             label=" Street Address"
                                             type="text"
                                         />
                                     </div>
                                     <div>
                                         <Input
-                                            // onChange={data_handler}
-                                            // value={
-                                            //     product?.brgy ??
-                                            //     ""
-                                            // }
+                                            onChange={data_handler}
+                                            value={
+                                                customer?.brgy ??
+                                                ""
+                                            }
                                             name="brgy"
                                             label="Barangay"
                                             type="text"
@@ -101,11 +166,11 @@ export default function AddCustomerComponent({ open, setOpenCustomer }) {
                                     </div>
                                     <div>
                                         <Input
-                                            // onChange={data_handler}
-                                            // value={
-                                            //     product?.city ??
-                                            //     ""
-                                            // }
+                                            onChange={data_handler}
+                                            value={
+                                                customer?.city ??
+                                                ""
+                                            }
                                             name="city"
                                             label="City"
                                             type="text"
@@ -113,11 +178,11 @@ export default function AddCustomerComponent({ open, setOpenCustomer }) {
                                     </div>
                                     <div>
                                         <Input
-                                            // onChange={data_handler}
-                                            // value={
-                                            //     product?.province ??
-                                            //     ""
-                                            // }
+                                            onChange={data_handler}
+                                            value={
+                                                customer?.province ??
+                                                ""
+                                            }
                                             name="province"
                                             label="Province"
                                             type="text"
@@ -125,11 +190,11 @@ export default function AddCustomerComponent({ open, setOpenCustomer }) {
                                     </div>
                                     <div>
                                         <Input
-                                            // onChange={data_handler}
-                                            // value={
-                                            //     product?.postal ??
-                                            //     ""
-                                            // }
+                                            onChange={data_handler}
+                                            value={
+                                                customer?.postal ??
+                                                ""
+                                            }
                                             name="postal"
                                             label="Postal Code"
                                             type="text"
@@ -137,11 +202,11 @@ export default function AddCustomerComponent({ open, setOpenCustomer }) {
                                     </div>
                                     <div>
                                         <Input
-                                            // onChange={data_handler}
-                                            // value={
-                                            //     product?.mobile_no ??
-                                            //     ""
-                                            // }
+                                            onChange={data_handler}
+                                            value={
+                                                customer?.mobile_no ??
+                                                ""
+                                            }
                                             name="mobile_no"
                                             label="Mobile No."
                                             type="text"
@@ -149,11 +214,11 @@ export default function AddCustomerComponent({ open, setOpenCustomer }) {
                                     </div>
                                     <div>
                                         <Input
-                                            // onChange={data_handler}
-                                            // value={
-                                            //     product?.email ??
-                                            //     ""
-                                            // }
+                                            onChange={data_handler}
+                                            value={
+                                                customer?.email ??
+                                                ""
+                                            }
                                             name="email"
                                             label="Email Address"
                                             type="text"
@@ -223,9 +288,10 @@ export default function AddCustomerComponent({ open, setOpenCustomer }) {
                         </button>
                         <button
                             type="submit"
+                            disabled={loading}
                             className="ml-4 inline-flex justify-center rounded-md bg-pink-500 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-pink-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-600"
                         >
-                            Save
+                            {loading ? "Saving..." : "Save"}
                         </button>
                     </div>
                 </form>
