@@ -11,11 +11,11 @@ export default function UploadProductSection({ files, setFiles }) {
             return { file, fileUrl };
         });
         setUploadedFiles((prevFiles) => [...prevFiles, ...newFiles]);
-        setFiles(fileList); // Ensuring that the parent receives the files
+        setFiles(fileList);
     };
 
     const handleFileInputChange = (e) => {
-        const files = e.target.files; // Get all selected files
+        const files = e.target.files;
         displayUploadedFiles(files);
     };
 
@@ -29,11 +29,10 @@ export default function UploadProductSection({ files, setFiles }) {
     };
 
     const handleRemoveFile = (e, fileToRemove) => {
-        e.preventDefault(); // Prevent form submission or other default behaviors
+        e.preventDefault();
         const updatedFiles = uploadedFiles.filter((fileData) => fileData.file !== fileToRemove);
-        setUploadedFiles(updatedFiles); // Update the local state
+        setUploadedFiles(updatedFiles);
 
-        // Update the parent state as well to reflect the removal of the file
         setFiles((prevFiles) => {
             const updatedParentFiles = Array.from(prevFiles).filter((file) => file !== fileToRemove);
             return updatedParentFiles;

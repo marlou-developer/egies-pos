@@ -13,7 +13,7 @@ class ProductController extends Controller
     {
         $perPage = $request->input('per_page', 10);
 
-        $query = Product::with(['categories'])->orderBy('created_at', 'desc');
+        $query = Product::with(['categories', 'uploads'])->orderBy('created_at', 'desc');
 
         if ($request->filled('category_id') && $request->category_id !== 'undefined') {
             $query->where('category_id', $request->category_id);

@@ -11,8 +11,9 @@ import { FaCircleInfo, FaClipboard, FaMoneyBill1Wave } from 'react-icons/fa6';
 import { useSelector } from 'react-redux';
 import UploadProductSection from './upload-product-section';
 import { get_product_thunk, update_product_thunk } from '@/app/redux/product-thunk';
+import ProductImageSection from './product-image-section';
 
-export default function EditProductSection({ data }) {
+export default function EditProductSection({ data, isOpen, setIsOpen } ) {
     const { product } = useSelector((state) => state.products)
     const { categories } = useSelector((state) => state.categories)
     const [uploadedFile1, setUploadedFile1] = useState(null);
@@ -25,27 +26,8 @@ export default function EditProductSection({ data }) {
         setForm(data)
     }, [])
 
-    function data_handler(eOrKey, value) {
-        if (typeof eOrKey === "string") {
-            // Called manually with key and value (like for WYSIWYG)
-            dispatch(
-                setProduct({
-                    ...product,
-                    [eOrKey]: value,
-                })
-            );
-        } else {
-            // Regular input onChange event
-            dispatch(
-                setProduct({
-                    ...product,
-                    [eOrKey.target.name]: eOrKey.target.value,
-                })
-            );
-        }
-    }
 
-    const editCategory = async (e) => {
+    const editProduct = async (e) => {
         e.preventDefault()
         setLoading(true);
         try {
@@ -54,7 +36,7 @@ export default function EditProductSection({ data }) {
             );
             store.dispatch(get_product_thunk())
             message.success("Updated Successfully!");
-            setIsModalOpen(false);
+            setIsOpen(false);
         } catch (error) {
             message.error("Failed to edit Product. Please try again.");
         } finally {
@@ -78,9 +60,9 @@ export default function EditProductSection({ data }) {
             <div>
 
             </div>
-            <DrawerSection open={isModalOpen} setOpen={setIsModalOpen}>
+            <DrawerSection open={isOpen} setOpen={setIsOpen} >
                 <form
-                    onSubmit={editCategory}
+                    onSubmit={editProduct}
                     className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
                 >
                     <div className="h-0 flex-1 overflow-y-auto">
@@ -93,7 +75,7 @@ export default function EditProductSection({ data }) {
                                 <div className="ml-3 flex h-7 items-center">
                                     <button
                                         type="button"
-                                        onClick={() => setOpenProduct(false)}
+                                        onClick={() => setIsOpen(false)}
                                         className="relative rounded-md bg-pink-200 text-gray-400 hover:text-gray-600 focus:ring-2 focus:ring-white focus:outline-hidden"
                                     >
                                         <span className="absolute -inset-2.5" />
@@ -128,7 +110,7 @@ export default function EditProductSection({ data }) {
                                             onChange={(e) =>
                                                 setForm({
                                                     ...form,
-                                                    name: e.target.value,
+                                                    delivery_receipt_no: e.target.value,
                                                 })
                                             }
                                             value={form?.delivery_receipt_no}
@@ -156,7 +138,7 @@ export default function EditProductSection({ data }) {
                                             onChange={(e) =>
                                                 setForm({
                                                     ...form,
-                                                    name: e.target.value,
+                                                    brand: e.target.value,
                                                 })
                                             }
                                             value={form?.brand}
@@ -206,7 +188,7 @@ export default function EditProductSection({ data }) {
                                             onChange={(e) =>
                                                 setForm({
                                                     ...form,
-                                                    name: e.target.value,
+                                                    quantity: e.target.value,
                                                 })
                                             }
                                             value={form?.quantity}
@@ -227,6 +209,7 @@ export default function EditProductSection({ data }) {
                                                     files={uploadedFile1}
                                                     setFiles={setUploadedFile1}
                                                 />
+                                                <ProductImageSection data={data} />
                                             </div>
                                         </div>
                                     </div>
@@ -243,7 +226,7 @@ export default function EditProductSection({ data }) {
                                             onChange={(e) =>
                                                 setForm({
                                                     ...form,
-                                                    name: e.target.value,
+                                                    cost: e.target.value,
                                                 })
                                             }
                                             value={form?.cost}
@@ -257,7 +240,7 @@ export default function EditProductSection({ data }) {
                                             onChange={(e) =>
                                                 setForm({
                                                     ...form,
-                                                    name: e.target.value,
+                                                    srp: e.target.value,
                                                 })
                                             }
                                             value={form?.srp}
@@ -271,7 +254,7 @@ export default function EditProductSection({ data }) {
                                             onChange={(e) =>
                                                 setForm({
                                                     ...form,
-                                                    name: e.target.value,
+                                                    reseller: e.target.value,
                                                 })
                                             }
                                             value={form?.reseller}
@@ -285,7 +268,7 @@ export default function EditProductSection({ data }) {
                                             onChange={(e) =>
                                                 setForm({
                                                     ...form,
-                                                    name: e.target.value,
+                                                    city_distributor: e.target.value,
                                                 })
                                             }
                                             value={form?.city_distributor}
@@ -299,7 +282,7 @@ export default function EditProductSection({ data }) {
                                             onChange={(e) =>
                                                 setForm({
                                                     ...form,
-                                                    name: e.target.value,
+                                                    district_distributor: e.target.value,
                                                 })
                                             }
                                             value={form?.district_distributor}
@@ -313,7 +296,7 @@ export default function EditProductSection({ data }) {
                                             onChange={(e) =>
                                                 setForm({
                                                     ...form,
-                                                    name: e.target.value,
+                                                    provincial_distributor: e.target.value,
                                                 })
                                             }
                                             value={form?.provincial_distributor}
@@ -329,7 +312,7 @@ export default function EditProductSection({ data }) {
                     <div className="flex shrink-0 justify-end px-4 py-4">
                         <button
                             type="button"
-                            onClick={() => setIsModalOpen(false)}
+                            onClick={() => setIsOpen(false)}
                             className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
                         >
                             Cancel
