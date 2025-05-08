@@ -25,8 +25,8 @@ export default function ProductsSection() {
             </div>
 
             {/* TABS */}
-            <div className="mt-5 px-5 max-h-36 overflow-y-auto mb-2">
-                <div className="gap-2 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4">
+            <div className="mt-5 px-5 max-h-36 overflow-x-auto mb-2 pb-4">
+                <div className="flex space-x-2">
                     {categories
                         .slice()
                         .sort((a, b) => a.name.localeCompare(b.name))
@@ -34,8 +34,8 @@ export default function ProductsSection() {
                             <span
                                 key={category.name}
                                 onClick={() => setActiveCategory(category.name)}
-                                className={`cursor-pointer flex flex-1 w-full bg-pink-300 justify-center px-5 py-2 rounded-lg text-sm mr-4 mb-2 
-                                ${activeCategory === category.name
+                                className={`cursor-pointer flex-shrink-0 bg-pink-300 justify-center px-5 py-2 rounded-lg text-sm 
+                    ${activeCategory === category.name
                                         ? "bg-pink-400 text-white"
                                         : "font-semibold text-gray-700 hover:bg-pink-200"
                                     }`}
