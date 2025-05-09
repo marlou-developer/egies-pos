@@ -22,4 +22,12 @@ class CustomerController extends Controller
             'response' => 'success',
         ], 200);
     }
+
+    public function update(Request $request,  $id)
+    {
+        $customer = Customer::where('id', $id)->first();
+        if ($customer) {
+            $customer->update($request->all());
+        }
+    }
 }

@@ -23,18 +23,18 @@ export function get_customer_service() {
 //     return res.data
 // }
 
-export function delete_product_service(id) {
+export function delete_customer_service(id) {
     try {
-        const result = axios.delete(`/api/product/${id}`)
+        const result = axios.delete(`/api/customer/${id}`)
         return result
     } catch (error) {
 
     }
 }
 
-export function update_product_service(data) {
+export function update_customer_service(data) {
     try {
-        const result = axios.put(`/api/product/${data.id}`, data)
+        const result = axios.put(`/api/customer/${data.id}`, data)
         return result
     } catch (error) {
 

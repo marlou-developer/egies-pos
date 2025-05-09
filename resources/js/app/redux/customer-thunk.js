@@ -1,4 +1,4 @@
-import { create_customer_service, get_customer_service } from "../pages/services/customer-service";
+import { create_customer_service, get_customer_service, update_customer_service } from "../pages/services/customer-service";
 import { customerSlice } from "./customer-slice";
 
 
@@ -31,15 +31,15 @@ export function get_customer_thunk() {
 // }
 
 
-export function delete_product_thunk(id) {
+export function delete_customer_thunk(id) {
     return async function (dispatch, getState) {
-        const res = await delete_product_service(id)
+        const res = await delete_customer_service(id)
     };
 }
 
 
-export function update_product_thunk(data) {
+export function update_customer_thunk(data) {
     return async function (dispatch, getState) {
-        const res = await update_product_service(data)
+        const res = await update_customer_service(data)
     };
 }

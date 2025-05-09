@@ -198,10 +198,10 @@ export default function CustomerSection() {
                                                 customerIdx !== customers.length - 1
                                                     ? "border-b border-gray-200"
                                                     : "",
-                                                "relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-8 lg:pr-8"
+                                                "px-3 py-4 text-sm text-gray-700"
                                             )}
                                         >
-                                            <CustomerMenuSection />
+                                            <CustomerMenuSection data={customer} />
                                         </td>
                                     </tr>
                                 ))}
