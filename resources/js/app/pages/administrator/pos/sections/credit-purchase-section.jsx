@@ -1,6 +1,6 @@
-import Modal from '@/Components/Modal';
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { Modal } from "@/Components/Modal";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function CreditPurchaseSection() {
     const { customers } = useSelector((state) => state.customers);
@@ -8,7 +8,7 @@ export default function CreditPurchaseSection() {
     const openModal = () => setIsModalOpen(true);
     const [loading, setLoading] = useState(false);
 
-    console.log('customer', customers)
+    console.log("customer", customers);
 
     return (
         <div>
@@ -38,7 +38,6 @@ export default function CreditPurchaseSection() {
                                     <option disabled>No customers found</option>
                                 )}
                             </select>
-
                         </div>
                         <div className="flex gap-2 items-center justify-end mt-4">
                             <button
