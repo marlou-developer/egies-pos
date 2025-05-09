@@ -13,7 +13,7 @@ import UploadProductSection from './upload-product-section';
 import { get_product_thunk, update_product_thunk } from '@/app/redux/product-thunk';
 import ProductImageSection from './product-image-section';
 
-export default function EditProductSection({ data, isOpen, setIsOpen } ) {
+export default function EditProductSection({ data, isOpen, setIsOpen }) {
     const { product } = useSelector((state) => state.products)
     const { categories } = useSelector((state) => state.categories)
     const [uploadedFile1, setUploadedFile1] = useState(null);
@@ -27,9 +27,53 @@ export default function EditProductSection({ data, isOpen, setIsOpen } ) {
     }, [])
 
 
-    const editProduct = async (e) => {
-        e.preventDefault()
+    // const editProduct = async (e) => {
+    //     e.preventDefault()
+    //     setLoading(true);
+    //     try {
+    //         await store.dispatch(
+    //             update_product_thunk(form)
+    //         );
+    //         store.dispatch(get_product_thunk())
+    //         message.success("Updated Successfully!");
+    //         setIsOpen(false);
+    //     } catch (error) {
+    //         message.error("Failed to edit Product. Please try again.");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+
+    async function editProduct(e) {
+        e.preventDefault();
         setLoading(true);
+
+        const fd = new FormData();
+        fd.append("product_id", product.id ?? "");
+        fd.append("file_name", product.file_name ?? "");
+        fd.append("name", product.name ?? "");
+        fd.append("category_id", product.category_id ?? "");
+        fd.append("quantity", product.quantity ?? "");
+        fd.append("status", product.status ?? "");
+        fd.append("cost", product.cost ?? "");
+        fd.append("srp", product.srp ?? "");
+        fd.append("reseller", product.reseller ?? "");
+        fd.append("brand", product.brand ?? "");
+        fd.append("delivery_receipt_no", product.delivery_receipt_no ?? "");
+        fd.append("city_distributor", product.city_distributor ?? "");
+        fd.append("district_distributor", product.district_distributor ?? "");
+        fd.append(
+            "provincial_distributor",
+            product.provincial_distributor ?? ""
+        );
+
+        if (uploadedFile1 && uploadedFile1.length > 0) {
+            Array.from(uploadedFile1).forEach((file) => {
+                fd.append("uploads[]", file);
+            });
+        }
+
         try {
             await store.dispatch(
                 update_product_thunk(form)
@@ -42,7 +86,7 @@ export default function EditProductSection({ data, isOpen, setIsOpen } ) {
         } finally {
             setLoading(false);
         }
-    };
+    }
 
     console.log('foaaaarmm', form)
 
@@ -205,11 +249,11 @@ export default function EditProductSection({ data, isOpen, setIsOpen } ) {
                                         </h3>
                                         <div className="mt-2 flex justify-center rounded-lg border border-dashed border-pink-300 px-6 py-10">
                                             <div className="text-center">
-                                                <UploadProductSection
+                                                <ProductImageSection
                                                     files={uploadedFile1}
                                                     setFiles={setUploadedFile1}
+                                                    data={data}
                                                 />
-                                                <ProductImageSection data={data} />
                                             </div>
                                         </div>
                                     </div>

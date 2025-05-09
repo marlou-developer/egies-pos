@@ -64,7 +64,7 @@ export default function UploadProductSection({ files, setFiles }) {
                     <h4 className="text-center text-pink-300 text-sm font-medium leading-snug">Drag and Drop your file here or</h4>
                     <div className="flex items-center justify-center">
                         <label>
-                            <input type="file" hidden onChange={handleFileInputChange} multiple />
+                            <input type="file" hidden onChange={handleFileInputChange} />
                             <div className="flex w-28 h-9 px-2 flex-col border rounded-full border-pink-300 shadow text-gray-500 text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none">Choose File</div>
                         </label>
                     </div>
