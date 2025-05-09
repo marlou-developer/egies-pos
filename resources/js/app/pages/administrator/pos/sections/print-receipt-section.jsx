@@ -1,3 +1,11 @@
+import Button from "@/app/_components/button";
+import Input from "@/app/_components/input";
+import Modal from "@/app/_components/modal";
+import { create_cart_thunk } from "@/app/redux/cart-thunk";
+import { setCarts } from "@/app/redux/product-slice";
+import store from "@/app/store/store";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
     render,
     Printer,
@@ -7,8 +15,24 @@ import {
     Br,
     Cut,
 } from "react-thermal-printer";
+import Swal from "sweetalert2";
 
-export default function PrintReceiptSection() {
+export default function PrintReceiptSection({
+    total_price,
+    totalItemDiscount,
+    subtotal,
+    totalDiscount,
+    discount_per_order,
+    data,
+    setOverallDiscount,
+}) {
+    const [loading, setLoading] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [form, setForm] = useState({
+        customer_amount: 0,
+        change: 0,
+    });
+    const dispatch = useDispatch();
     const handlePrint = async () => {
         try {
             const data = await render(
@@ -61,12 +85,137 @@ export default function PrintReceiptSection() {
         }
     };
 
+    async function submit_payment(params) {
+        try {
+            setLoading(true);
+            await store.dispatch(
+                create_cart_thunk({
+                    customer_amount: form.customer_amount,
+                    change: form.change,
+                    cart_items: data,
+                    total_price: total_price,
+                    discount_per_order: discount_per_order,
+                    total_item_discount: totalItemDiscount,
+                    sub_total: subtotal,
+                    total_discount: totalDiscount,
+                })
+            );
+            await Swal.fire({
+                icon: "success",
+                title: "Your cart has been paid",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+            dispatch(setCarts([]));
+            setOverallDiscount(0);
+            setLoading(false);
+            setIsOpen(false);
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Payment Unsuccessful",
+                showConfirmButton: false,
+                timer: 1500,
+            });
+        }
+    }
+
     return (
-        <button
-            onClick={handlePrint}
-            className="px-4 py-4 w-full rounded-md shadow-lg text-center bg-pink-300 hover:bg-pink-400 text-white font-semibold"
-        >
-            Pay
-        </button>
+        <>
+            <Button
+                disabled={data.length == 0}
+                onClick={() => setIsOpen(true)}
+                className="w-full bg-pink-500 hover:bg-pink-600"
+            >
+                PAY
+            </Button>
+
+            <Modal
+                onClose={() => setIsOpen(false)}
+                isOpen={isOpen}
+                title="PAYMENT METHOD"
+            >
+                <div className="flex flex-col gap-3">
+                    <div class="py-4 rounded-md ">
+                        <div class=" px-4 flex justify-between ">
+                            <span class="font-semibold text-sm">Subtotal</span>
+                            <span class="font-bold">
+                                ₱{subtotal.toFixed(2)}
+                            </span>
+                        </div>
+
+                        <div class=" px-4 flex justify-between ">
+                            <span class="font-semibold text-sm">
+                                Discount Per Item
+                            </span>
+                            <span class="font-bold">
+                                ₱{totalItemDiscount?.toFixed(2)}
+                            </span>
+                        </div>
+
+                        <div class=" px-4 flex justify-between ">
+                            <span class="font-semibold text-sm">
+                                Discount Per Order
+                            </span>
+                            <span class="font-bold">
+                                ₱
+                                {isNaN(parseFloat(discount_per_order))
+                                    ? "0.00"
+                                    : parseFloat(discount_per_order).toFixed(2)}
+                            </span>
+                        </div>
+
+                        <div class=" px-4 flex justify-between ">
+                            <span class="font-semibold text-sm">
+                                Total Discount
+                            </span>
+                            <span class="font-bold">
+                                ₱{totalDiscount?.toFixed(2)}
+                            </span>
+                        </div>
+                        {/* <div class=" px-4 flex justify-between ">
+                                <span class="font-semibold text-sm">
+                                    Sales Tax
+                                </span>
+                                <span class="font-bold">₱2.25</span>
+                            </div> */}
+                        <div class="border-t-2 mt-3 py-2 px-4 flex items-center justify-between">
+                            <span class="font-semibold text-2xl">Total</span>
+                            <span class="font-bold text-2xl">
+                                ₱{total_price.toFixed(2)}
+                            </span>
+                        </div>
+                        <div class="border-t-2 mt-3 py-2 px-4 flex items-center justify-between">
+                            <span class="font-semibold text-2xl">Change</span>
+                            <span class="font-bold text-2xl">
+                                ₱{form.change.toFixed(2)}
+                            </span>
+                        </div>
+                    </div>
+                    <Input
+                        onChange={(e) =>
+                            setForm({
+                                customer_amount: e.target.value,
+                                change:
+                                    parseFloat(
+                                        e.target.value == ""
+                                            ? 0
+                                            : e.target.value
+                                    ) - total_price,
+                            })
+                        }
+                        label="Amount"
+                    />
+                    <Button
+                        disabled={form.change < 0}
+                        loading={loading}
+                        onClick={submit_payment}
+                        className="w-full bg-pink-500 hover:bg-pink-600"
+                    >
+                        SUBMIT
+                    </Button>
+                </div>
+            </Modal>
+        </>
     );
 }

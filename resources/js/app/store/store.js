@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import categorySlice from "../redux/category-slice";
 import productSlice from "../redux/product-slice";
 import customerSlice from "../redux/customer-slice";
+import cartSlice  from "../redux/cart-slice";
 
 const store = configureStore({
     reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
         categories: categorySlice,
         products: productSlice,
         customers: customerSlice,
+        carts: cartSlice,
     },
 });
 

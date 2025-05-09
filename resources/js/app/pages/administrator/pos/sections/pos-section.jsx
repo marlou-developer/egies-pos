@@ -10,15 +10,6 @@ export default function PosSection() {
     const dispatch = useDispatch();
     const [overallDiscount, setOverallDiscount] = useState(null);
 
-    const total_price =
-        carts.reduce(
-            (sum, product) =>
-                sum +
-                (parseFloat(product.sub_price) * parseInt(product.pcs) -
-                    (parseFloat(product.discount) || 0)),
-            0
-        ) - parseFloat(overallDiscount || 0);
-
     const addPCS = (value) => {
         const data = carts.map((item) =>
             item.id === value.id ? { ...item, pcs: item.pcs + 1 } : item
@@ -41,10 +32,10 @@ export default function PosSection() {
         const updated = carts.map((item) =>
             item.id === result.id
                 ? {
-                    ...item,
-                    sub_price: result[value],
-                    type_item_discount: value,
-                }
+                      ...item,
+                      sub_price: result[value],
+                      type_item_discount: value,
+                  }
                 : item
         );
         dispatch(setCarts(updated));
@@ -71,6 +62,16 @@ export default function PosSection() {
     );
 
     const totalDiscount = totalItemDiscount + parseFloat(overallDiscount || 0);
+
+    const total_price =
+        carts.reduce(
+            (sum, product) =>
+                sum +
+                (parseFloat(product.sub_price) * parseInt(product.pcs) -
+                    (parseFloat(product.discount) || 0)),
+            0
+        ) - parseFloat(overallDiscount || 0);
+
     return (
         <div class="w-full ">
             <div class="flex lg:flex-row flex-col-reverse shadow-lg">
@@ -223,7 +224,12 @@ export default function PosSection() {
                                     Discount Per Order
                                 </span>
                                 <span class="font-bold">
-                                    ₱{isNaN(parseFloat(overallDiscount)) ? "0.00" : parseFloat(overallDiscount).toFixed(2)}
+                                    ₱
+                                    {isNaN(parseFloat(overallDiscount))
+                                        ? "0.00"
+                                        : parseFloat(overallDiscount).toFixed(
+                                              2
+                                          )}
                                 </span>
                             </div>
 
@@ -251,29 +257,21 @@ export default function PosSection() {
                             </div>
                         </div>
                     </div>
-                    {/* <div class="px-5 mt-5">
-                        <div class="rounded-md shadow-lg px-4 py-4">
-                            <div class="flex flex-row justify-between items-center">
-                                <div class="flex flex-col">
-                                    <span class="uppercase text-xs font-semibold">
-                                        cashless credit
-                                    </span>
-                                    <span class="text-xl font-bold text-pink-300">
-                                        ₱32.50
-                                    </span>
-                                    <span class=" text-xs text-gray-400 ">
-                                        Available
-                                    </span>
-                                </div>
-                                <div class="px-4 py-3 bg-gray-300 text-gray-800 rounded-md font-bold">
-                                    {" "}
-                                    Cancel
-                                </div>
-                            </div>
-                        </div>
-                    </div> */}
+
                     <div class="px-5 mt-5">
-                        <PrintReceiptSection />
+                        <PrintReceiptSection
+                            data={carts}
+                            subtotal={subtotal}
+                            totalItemDiscount={totalItemDiscount}
+                            totalDiscount={totalDiscount}
+                            total_price={total_price}
+                            setOverallDiscount={setOverallDiscount}
+                            discount_per_order={
+                                isNaN(parseFloat(overallDiscount))
+                                    ? "0"
+                                    : overallDiscount
+                            }
+                        />
                     </div>
                     <div class="px-5 mt-5">
                         <CreditPurchaseSection />
