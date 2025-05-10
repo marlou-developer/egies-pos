@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->string('cost')->nullable();
             $table->string('srp')->nullable();
+            $table->string('shopee')->nullable();
+            $table->string('customer')->nullable();
             $table->string('reseller')->nullable();
             $table->string('city_distributor')->nullable();
             $table->string('district_distributor')->nullable();

@@ -20,6 +20,8 @@ class Product extends Model
         'brand',
         'cost',
         'srp',
+        'shopee',
+        'customer',
         'reseller',
         'city_distributor',
         'district_distributor',

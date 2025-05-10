@@ -55,6 +55,8 @@ class ProductController extends Controller
             'brand' => 'nullable|string',
             'cost' => 'nullable|string',
             'srp' => 'nullable|string',
+            'shopee' => 'nullable|string',
+            'customer' => 'nullable|string',
             'reseller' => 'nullable|string',
             'city_distributor' => 'nullable|string',
             'district_distributor' => 'nullable|string',
@@ -120,7 +122,7 @@ class ProductController extends Controller
                     'product_id' => $product->id,
                     'file' => $url,
                 ]);
-            }   
+            }
         }
     }
 

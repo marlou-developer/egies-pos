@@ -206,6 +206,27 @@ export default function PrintReceiptSection({
                         }
                         label="Amount"
                     />
+                    <select
+                        onChange={(e) =>
+                            setForm({
+                                customer_amount: e.target.value,
+                                change:
+                                    parseFloat(
+                                        e.target.value == ""
+                                            ? 0
+                                            : e.target.value
+                                    ) - total_price,
+                            })
+                        }
+                        className="rounded-md text-gray-500 mt-2 mb-2"
+                        label="Mode of Payment"
+                    >
+                        <option disabled selected>Mode of Payment:</option>
+                        <option value="Cash">Cash</option>
+                        <option value="E-Wallet">E-Wallet</option>
+                        <option value="Bank Transfer">Bank Transfer</option>
+                        <option value="Credit/Debit Card">Credit/Debit Card</option>
+                    </select>
                     <Button
                         disabled={form.change < 0}
                         loading={loading}

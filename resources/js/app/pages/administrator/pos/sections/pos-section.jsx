@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCarts } from "@/app/redux/product-slice";
 import PrintReceiptSection from "./print-receipt-section";
 import CreditPurchaseSection from "./credit-purchase-section";
+import { UserIcon } from "@heroicons/react/24/outline";
 
 export default function PosSection() {
     const { carts } = useSelector((store) => store.products);
@@ -32,10 +33,10 @@ export default function PosSection() {
         const updated = carts.map((item) =>
             item.id === result.id
                 ? {
-                      ...item,
-                      sub_price: result[value],
-                      type_item_discount: value,
-                  }
+                    ...item,
+                    sub_price: result[value],
+                    type_item_discount: value,
+                }
                 : item
         );
         dispatch(setCarts(updated));
@@ -77,6 +78,21 @@ export default function PosSection() {
             <div class="flex lg:flex-row flex-col-reverse shadow-lg">
                 <ProductsSection />
                 <div class="w-full lg:w-2/5">
+                    <div className="px-5 flex w-full gap-3">
+                        <div className="w-full">
+                            <button className="flex border bg-pink-500 hover:bg-pink-400 text-white border-gray-500 rounded-md p-2 w-full items-center justify-center">
+                                <UserIcon className="h-5" />
+                                Select Customer
+                            </button>
+                        </div>
+                        <div className="w-full">
+                            <select className="w-full rounded-md" name="">
+                                <option disabled selected>Select Store</option>
+                                <option value="Store">Store</option>
+                                <option value="Shopee">Shopee</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="flex flex-row items-center justify-between px-5 mt-5">
                         <div class="font-bold text-xl">Current Order</div>
                         {/* <div class="font-semibold">
@@ -228,8 +244,8 @@ export default function PosSection() {
                                     {isNaN(parseFloat(overallDiscount))
                                         ? "0.00"
                                         : parseFloat(overallDiscount).toFixed(
-                                              2
-                                          )}
+                                            2
+                                        )}
                                 </span>
                             </div>
 
