@@ -251,7 +251,7 @@ export default function EditCustomerSection({ data, isOpen, setIsOpen }) {
                                         </div>
                                     </div> */}
 
-                                    <div className="sm:col-span-12">
+                                    {/* <div className="sm:col-span-12">
                                         <FaMoneyBill1Wave className="float-left size-5 mr-1 mt-3 text-pink-500" />
                                         <h3 className="text-base font-medium text-gray-600 pt-3">
                                             Pricing Information
@@ -298,7 +298,7 @@ export default function EditCustomerSection({ data, isOpen, setIsOpen }) {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>

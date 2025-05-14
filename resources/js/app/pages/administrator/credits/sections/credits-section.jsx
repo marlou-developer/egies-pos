@@ -1,8 +1,9 @@
 import React from 'react'
 import { FaCashRegister, FaFilter, FaMoneyBill, FaUserPlus, FaUsers } from 'react-icons/fa6'
+import UpdateStatusSection from './update-status-section'
 
 const customers = [
-  { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member', status:'Paid' },
+  { name: 'Lindsay Walton', title: 'Front-end Developer', email: '2000', role: 'Member', due: '10/20/2025', status: 'Paid' },
   // More people...
 ]
 
@@ -87,6 +88,12 @@ export default function CreditsSection() {
                   </th>
                   <th
                     scope="col"
+                    className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter lg:table-cell"
+                  >
+                    Due Date
+                  </th>
+                  <th
+                    scope="col"
                     className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter"
                   >
                     Status
@@ -140,7 +147,17 @@ export default function CreditsSection() {
                         "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
                       )}
                     >
-                      {customer.email}
+                      <b>{customer.email}</b>
+                    </td>
+                    <td
+                      className={classNames(
+                        customerIdx !== customers.length - 1
+                          ? "border-b border-gray-200"
+                          : "",
+                        "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
+                      )}
+                    >
+                      {customer.due}
                     </td>
                     <td
                       className={classNames(
@@ -160,7 +177,8 @@ export default function CreditsSection() {
                         "px-3 py-4 text-sm text-gray-700"
                       )}
                     >
-                      {/* <CustomerMenuSection data={customer} /> */}
+                      <UpdateStatusSection />
+
                     </td>
                   </tr>
                 ))}
