@@ -1,7 +1,7 @@
 import { useState } from "react";
 import SidebarSection from "@/app/_sections/sidebar-section";
 import TopbarSection from "@/app/_sections/topbar-section";
-import { BookOpenIcon, CalculatorIcon, ChartPieIcon, HomeIcon, PresentationChartBarIcon, ShoppingBagIcon, ShoppingCartIcon, UsersIcon } from "@heroicons/react/24/outline";
+import { BanknotesIcon, BookOpenIcon, CalculatorIcon, ChartPieIcon, HomeIcon, PresentationChartBarIcon, ShoppingBagIcon, ShoppingCartIcon, UsersIcon } from "@heroicons/react/24/outline";
 import { FaBook } from "react-icons/fa6";
 
 const navigation = [
@@ -10,13 +10,14 @@ const navigation = [
     { name: "Customer Section", href: "/administrator/customer", icon: UsersIcon, current: false },
     { name: "Products Section", href: "/administrator/products", icon: ShoppingBagIcon, current: false },
     { name: "Shopee Section", href: "/administrator/shopee", icon: ShoppingCartIcon, current: false },
+    { name: "Credits Section", href: "/administrator/credits", icon: BanknotesIcon, current: false },
+
     {
         name: "Sales Section",
         href: "/administrator/sales",
         icon: PresentationChartBarIcon,
         current: false,
     },
-    { name: "Credits Section", href: "/administrator/credits", icon: BookOpenIcon, current: false },
     { name: "Report Section", href: "/administrator/reports", icon: ChartPieIcon, current: false },
     { name: "User Management", href: "/administrator/users", icon: UsersIcon, current: false },
 ];

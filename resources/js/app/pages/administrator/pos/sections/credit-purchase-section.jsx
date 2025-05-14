@@ -28,8 +28,8 @@ export default function CreditPurchaseSection() {
                                 <option disabled selected>
                                     Select Customer
                                 </option>
-                                {customers?.length > 0 ? (
-                                    customers.result.map((cust) => (
+                                {customers?.result?.length > 0 ? (
+                                    customers?.result?.map((cust) => (
                                         <option key={cust.id} value={cust.id}>
                                             {cust.name}
                                         </option>

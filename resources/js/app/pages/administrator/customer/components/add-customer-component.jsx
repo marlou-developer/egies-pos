@@ -9,7 +9,7 @@ import {
 import DrawerSection from "@/app/_sections/drawer-section";
 import Input from "@/app/_components/input";
 import { useDispatch, useSelector } from "react-redux";
-import { create_customer_thunk } from "@/app/redux/customer-thunk";
+import { create_customer_thunk, get_customer_thunk } from "@/app/redux/customer-thunk";
 import { message } from "antd";
 import { setCustomer } from "@/app/redux/customer-slice";
 import store from "@/app/store/store";
@@ -67,7 +67,7 @@ export default function AddCustomerComponent({ open, setOpenCustomer }) {
 
         try {
             await store.dispatch(create_customer_thunk(fd));
-            // await store.dispatch(get_customer_thunk());
+            await store.dispatch(get_customer_thunk());
             message.success("Customer successfully saved!");
             setOpenCustomer(false);
         } catch (error) {
@@ -224,7 +224,7 @@ export default function AddCustomerComponent({ open, setOpenCustomer }) {
                                             type="email"
                                         />
                                     </div>
-
+{/* 
                                     <div className="sm:col-span-12">
                                         <FaCalendarDays className="float-left size-5 mr-1 mt-3 text-pink-500" />
                                         <h3 className="text-base font-medium text-gray-600 pt-3">
@@ -272,7 +272,7 @@ export default function AddCustomerComponent({ open, setOpenCustomer }) {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
 
                                 </div>
                             </div>
