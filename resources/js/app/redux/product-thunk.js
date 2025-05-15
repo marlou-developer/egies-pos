@@ -38,8 +38,8 @@ export function delete_product_thunk(id) {
 }
 
 
-export function update_product_thunk(data) {
+export function update_product_thunk(id,data) {
     return async function (dispatch, getState) {
-        const res = await update_product_service(data)
+        const res = await update_product_service(id,data)
     };
 }

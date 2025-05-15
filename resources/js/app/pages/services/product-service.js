@@ -32,9 +32,9 @@ export function delete_product_service(id) {
     }
 }
 
-export function update_product_service(data) {
+export function update_product_service(id,data) {
     try {
-        const result = axios.put(`/api/product/${data.id}`, data)
+        const result = axios.post(`/api/update_product`, data)
         return result
     } catch (error) {
 

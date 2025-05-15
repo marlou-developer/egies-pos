@@ -1,21 +1,27 @@
-import Input from '@/app/_components/input';
-import DrawerSection from '@/app/_sections/drawer-section';
-import { get_category_thunk, update_category_thunk } from '@/app/redux/category-thunk';
-import { setProduct } from '@/app/redux/product-slice';
-import store from '@/app/store/store';
-import { PencilSquareIcon } from '@heroicons/react/20/solid';
-import { XMarkIcon } from '@heroicons/react/24/outline';
-import { message, Tooltip } from 'antd';
-import React, { useEffect, useState } from 'react'
-import { FaCircleInfo, FaClipboard, FaMoneyBill1Wave } from 'react-icons/fa6';
-import { useSelector } from 'react-redux';
-import UploadProductSection from './upload-product-section';
-import { get_product_thunk, update_product_thunk } from '@/app/redux/product-thunk';
-import ProductImageSection from './product-image-section';
+import Input from "@/app/_components/input";
+import DrawerSection from "@/app/_sections/drawer-section";
+import {
+    get_category_thunk,
+    update_category_thunk,
+} from "@/app/redux/category-thunk";
+import { setProduct } from "@/app/redux/product-slice";
+import store from "@/app/store/store";
+import { PencilSquareIcon } from "@heroicons/react/20/solid";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import { message, Tooltip } from "antd";
+import React, { useEffect, useState } from "react";
+import { FaCircleInfo, FaClipboard, FaMoneyBill1Wave } from "react-icons/fa6";
+import { useSelector } from "react-redux";
+import UploadProductSection from "./upload-product-section";
+import {
+    get_product_thunk,
+    update_product_thunk,
+} from "@/app/redux/product-thunk";
+import ProductImageSection from "./product-image-section";
 
 export default function EditProductSection({ data, isOpen, setIsOpen }) {
-    const { product } = useSelector((state) => state.products)
-    const { categories } = useSelector((state) => state.categories)
+    const { product } = useSelector((state) => state.products);
+    const { categories } = useSelector((state) => state.categories);
     const [uploadedFile1, setUploadedFile1] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => setIsModalOpen(true);
@@ -23,9 +29,8 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
     const [form, setForm] = useState({});
 
     useEffect(() => {
-        setForm(data)
-    }, [])
-
+        setForm(data);
+    }, [isOpen]);
 
     // const editProduct = async (e) => {
     //     e.preventDefault()
@@ -44,29 +49,24 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
     //     }
     // };
 
-
     async function editProduct(e) {
         e.preventDefault();
         setLoading(true);
-
         const fd = new FormData();
-        fd.append("product_id", product.id ?? "");
-        fd.append("file_name", product.file_name ?? "");
-        fd.append("name", product.name ?? "");
-        fd.append("category_id", product.category_id ?? "");
-        fd.append("quantity", product.quantity ?? "");
-        fd.append("status", product.status ?? "");
-        fd.append("cost", product.cost ?? "");
-        fd.append("srp", product.srp ?? "");
-        fd.append("reseller", product.reseller ?? "");
-        fd.append("brand", product.brand ?? "");
-        fd.append("delivery_receipt_no", product.delivery_receipt_no ?? "");
-        fd.append("city_distributor", product.city_distributor ?? "");
-        fd.append("district_distributor", product.district_distributor ?? "");
-        fd.append(
-            "provincial_distributor",
-            product.provincial_distributor ?? ""
-        );
+        fd.append("product_id", form.id ?? "");
+        fd.append("file_name", form.file_name ?? "");
+        fd.append("name", form.name ?? "");
+        fd.append("category_id", form.category_id ?? "");
+        fd.append("quantity", form.quantity ?? "");
+        fd.append("status", form.status ?? "");
+        fd.append("cost", form.cost ?? "");
+        fd.append("srp", form.srp ?? "");
+        fd.append("reseller", form.reseller ?? "");
+        fd.append("brand", form.brand ?? "");
+        fd.append("delivery_receipt_no", form.delivery_receipt_no ?? "");
+        fd.append("city_distributor", form.city_distributor ?? "");
+        fd.append("district_distributor", form.district_distributor ?? "");
+        fd.append("provincial_distributor", form.provincial_distributor ?? "");
 
         if (uploadedFile1 && uploadedFile1.length > 0) {
             Array.from(uploadedFile1).forEach((file) => {
@@ -75,10 +75,8 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
         }
 
         try {
-            await store.dispatch(
-                update_product_thunk(form)
-            );
-            store.dispatch(get_product_thunk())
+            await store.dispatch(update_product_thunk(form.id, fd));
+            store.dispatch(get_product_thunk());
             message.success("Updated Successfully!");
             setIsOpen(false);
         } catch (error) {
@@ -88,7 +86,7 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
         }
     }
 
-    console.log('foaaaarmm', form)
+    console.log("uploadedFile1", uploadedFile1);
 
     return (
         <>
@@ -101,10 +99,8 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                     <b>Edit Product</b>
                 </button>
             </Tooltip>
-            <div>
-
-            </div>
-            <DrawerSection open={isOpen} setOpen={setIsOpen} >
+            <div></div>
+            <DrawerSection open={isOpen} setOpen={setIsOpen}>
                 <form
                     onSubmit={editProduct}
                     className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
@@ -135,7 +131,8 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                             </div>
                             <div className="mt-1">
                                 <p className="text-sm text-gray-600">
-                                    Get started by updating the information below to modify your product.
+                                    Get started by updating the information
+                                    below to modify your product.
                                 </p>
                             </div>
                         </div>
@@ -154,7 +151,8 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                             onChange={(e) =>
                                                 setForm({
                                                     ...form,
-                                                    delivery_receipt_no: e.target.value,
+                                                    delivery_receipt_no:
+                                                        e.target.value,
                                                 })
                                             }
                                             value={form?.delivery_receipt_no}
@@ -211,16 +209,22 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                                 onChange={(e) =>
                                                     setForm({
                                                         ...form,
-                                                        category_id: e.target.value,
+                                                        category_id:
+                                                            e.target.value,
                                                     })
                                                 }
                                                 value={form?.category_id ?? ""}
                                                 name="category_id"
                                                 className="block w-full rounded-md bg-white px-3 py-2.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                             >
-                                                <option value="">Select a category</option>
+                                                <option value="">
+                                                    Select a category
+                                                </option>
                                                 {categories?.map((category) => (
-                                                    <option key={category.id} value={category.id}>
+                                                    <option
+                                                        key={category.id}
+                                                        value={category.id}
+                                                    >
                                                         {category.name}
                                                     </option>
                                                 ))}
@@ -312,7 +316,8 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                             onChange={(e) =>
                                                 setForm({
                                                     ...form,
-                                                    city_distributor: e.target.value,
+                                                    city_distributor:
+                                                        e.target.value,
                                                 })
                                             }
                                             value={form?.city_distributor}
@@ -326,7 +331,8 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                             onChange={(e) =>
                                                 setForm({
                                                     ...form,
-                                                    district_distributor: e.target.value,
+                                                    district_distributor:
+                                                        e.target.value,
                                                 })
                                             }
                                             value={form?.district_distributor}
@@ -340,7 +346,8 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                             onChange={(e) =>
                                                 setForm({
                                                     ...form,
-                                                    provincial_distributor: e.target.value,
+                                                    provincial_distributor:
+                                                        e.target.value,
                                                 })
                                             }
                                             value={form?.provincial_distributor}
