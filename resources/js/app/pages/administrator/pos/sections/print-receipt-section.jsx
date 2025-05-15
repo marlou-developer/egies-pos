@@ -397,6 +397,7 @@ export default function PrintReceiptSection({
                                             ) - total_price,
                                     })
                                 }
+                                name="amount"
                                 label="Amount"
                             />
                             <select
