@@ -7,6 +7,16 @@ use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
+
+    public function search_customer(Request $request)
+    {
+        $search = $request->input('search');
+    
+        $results = Customer::where('name', 'like', '%' . $search . '%')->get();
+    
+        return response()->json($results, 200);
+    }
+    
     public function index()
     {
         $customers = Customer::with('customer_ids')->get();

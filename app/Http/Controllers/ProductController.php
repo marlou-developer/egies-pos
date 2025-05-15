@@ -93,23 +93,25 @@ class ProductController extends Controller
     }
 
 
-    public function update(Request $request, $id)
+    public function update_product(Request $request)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::where('id',$request->product_id)->first();
 
         // Update product data excluding uploads
-        $product->update($request->except('uploads'));
+        if($product){
+            $product->update($request->all());
+            $this->handleUpdateUploads($request, 'uploads', $product);
+        }
+       
 
         // Handle file updates
-        $this->handleUpdateUploads($request, 'uploads', $product);
 
-        return response()->json(['message' => 'Product and image updated successfully.']);
+        return response()->json(['message' =>'succes']);
     }
 
     private function handleUpdateUploads(Request $request, string $fileKey, Product $product)
     {
         if ($request->hasFile($fileKey)) {
-            Upload::where('product_id', $product->id)->delete();
 
             $files = $request->file($fileKey);
 
@@ -117,11 +119,13 @@ class ProductController extends Controller
                 $path = $file->store('Personal-' . date("Y"), 's3');
                 $url = Storage::disk('s3')->url($path);
 
+                $upload = Upload::where('product_id', $product->id)->first();
                 // Create new upload record
-                Upload::create([
-                    'product_id' => $product->id,
-                    'file' => $url,
-                ]);
+                if ($upload) {
+                    $upload->update([
+                        'file' => $url
+                    ]);
+                }
             }
         }
     }

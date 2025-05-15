@@ -9,6 +9,15 @@ export function create_customer_service(data) {
     }
 }
 
+export function search_customer_service(data) {
+    try {
+        const result = axios.get('/api/search_customer?search='+ data)
+        return result
+    } catch (error) {
+
+    }
+}
+
 export function get_customer_service() {
     try {
         const result = axios.get('/api/customer' + window.location.search)

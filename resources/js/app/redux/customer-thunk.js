@@ -1,4 +1,4 @@
-import { create_customer_service, get_customer_service, update_customer_service } from "../pages/services/customer-service";
+import { create_customer_service, get_customer_service, search_customer_service, update_customer_service } from "../pages/services/customer-service";
 import { customerSlice } from "./customer-slice";
 
 
@@ -9,6 +9,12 @@ export function create_customer_thunk(data) {
     };
 }
 
+export function search_customer_thunk(search) {
+    return async function (dispatch, getState) {
+        const res = await search_customer_service(search)
+        return res;
+    };
+}
 export function get_customer_thunk() {
     return async function (dispatch) {
         try {

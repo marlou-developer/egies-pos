@@ -33,10 +33,10 @@ export default function PosSection() {
         const updated = carts.map((item) =>
             item.id === result.id
                 ? {
-                    ...item,
-                    sub_price: result[value],
-                    type_item_discount: value,
-                }
+                      ...item,
+                      sub_price: result[value],
+                      type_item_discount: value,
+                  }
                 : item
         );
         dispatch(setCarts(updated));
@@ -78,7 +78,7 @@ export default function PosSection() {
             <div class="flex lg:flex-row flex-col-reverse shadow-lg">
                 <ProductsSection />
                 <div class="w-full lg:w-2/5">
-                    <div className="px-5 flex w-full gap-3">
+                    {/* <div className="px-5 flex w-full gap-3">
                         <div className="w-full">
                             <button className="flex border bg-pink-500 hover:bg-pink-400 text-white border-gray-500 rounded-md p-2 w-full items-center justify-center">
                                 <UserIcon className="h-5" />
@@ -92,7 +92,7 @@ export default function PosSection() {
                                 <option value="Shopee">Shopee</option>
                             </select>
                         </div>
-                    </div>
+                    </div> */}
                     <div class="flex flex-row items-center justify-between px-5 mt-5">
                         <div class="font-bold text-xl">Current Order</div>
                         {/* <div class="font-semibold">
@@ -104,15 +104,25 @@ export default function PosSection() {
                         {carts.map((res) => {
                             return (
                                 <div class="flex flex-row gap-3 border-pink-300 border  p-2 rounded-lg shadow-md justify-between items-center mb-4">
-                                    <div class="flex flex-1 flex-row gap-3 items-center w-2/5">
-                                        <img
-                                            src={res?.uploads[0]?.file}
-                                            class="w-10 h-10 object-cover rounded-md"
-                                            alt=""
-                                        />
-                                        <span class="font-semibold text-sm">
-                                            {res?.name}
-                                        </span>
+                                    <div class="flex flex-1 flex-col gap-3 items-start  justify-between w-2/5">
+                                        <div className="flex text-center w-full gap-3">
+                                            <img
+                                                src={res?.uploads[0]?.file}
+                                                class="w-10 h-10 object-cover rounded-md"
+                                                alt=""
+                                            />
+                                            <span class="font-semibold text-sm">
+                                                {res?.name}
+                                            </span>
+                                        </div>
+                                        <div className="font-bold">
+                                            ₱{" "}
+                                            {parseFloat(
+                                                res.sub_price
+                                            ).toLocaleString("en-PH", {
+                                                minimumFractionDigits: 2,
+                                            })}
+                                        </div>
                                     </div>
 
                                     <div class="flex-1 flex flex-col gap-3 justify-between">
@@ -175,10 +185,10 @@ export default function PosSection() {
                                         <div className="flex-1">
                                             ₱
                                             {parseFloat(
-                                                res.sub_price
-                                            ).toLocaleString("en-PH", {
-                                                minimumFractionDigits: 2,
-                                            })}
+                                                Number(res.sub_price) *
+                                                    Number(res.pcs ?? "1") -
+                                                    Number(res.discount ?? "0")
+                                            ).toFixed(2)}
                                         </div>
                                         <div className="flex-1">
                                             <input
@@ -200,7 +210,7 @@ export default function PosSection() {
                         })}
                     </div>
                     <div class="px-5 mt-5">
-                        <div class="py-4 rounded-md shadow-lg">
+                        <div class="rounded-md shadow-lg">
                             <div className="px-4 mb-4">
                                 {/* <label htmlFor="">Discount:</label> */}
                                 <input
@@ -244,8 +254,8 @@ export default function PosSection() {
                                     {isNaN(parseFloat(overallDiscount))
                                         ? "0.00"
                                         : parseFloat(overallDiscount).toFixed(
-                                            2
-                                        )}
+                                              2
+                                          )}
                                 </span>
                             </div>
 
@@ -289,9 +299,9 @@ export default function PosSection() {
                             }
                         />
                     </div>
-                    <div class="px-5 mt-5">
+                    {/* <div class="px-5 mt-5">
                         <CreditPurchaseSection />
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
