@@ -11,12 +11,15 @@ class CustomerController extends Controller
     public function search_customer(Request $request)
     {
         $search = $request->input('search');
-    
-        $results = Customer::where('name', 'like', '%' . $search . '%')->get();
-    
-        return response()->json($results, 200);
+
+        $results = [];
+        if (!empty($search)) {
+            $results = Customer::where('name', 'like', '%' . $search . '%')->get();
+        }
+
+        return response()->json($results);
     }
-    
+
     public function index()
     {
         $customers = Customer::with('customer_ids')->get();

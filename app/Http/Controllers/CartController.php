@@ -16,13 +16,13 @@ class CartController extends Controller
 
         $cart = Cart::create([
             'cart_id' => $cart_id,
-            'customer_id'=>$request->customer_id,
+            'customer_id' => $request->customer_id,
             'sub_total' => $request->sub_total,
             'discount_per_item' => $request->total_item_discount,
             'discount_per_order' => $request->discount_per_order,
             'total_price' => $request->total_price,
             'payment_type' => $request->payment_type,
-            'status' => 'Paid',
+            'status' => $request->is_credit == 'true' ? 'Pending' : 'Paid',
             'customer_amount' => $request->customer_amount,
             'change' => $request->change,
             'is_credit' => $request->is_credit,
@@ -39,7 +39,7 @@ class CartController extends Controller
                 default => 'SRP',
             };
 
-            $discount = $item['discount']??0;
+            $discount = $item['discount'] ?? 0;
             $quantity = $item['pcs'];
             $price = $subPrice;
             $fixed_price = $price - $discount;
