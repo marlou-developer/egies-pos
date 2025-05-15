@@ -17,9 +17,16 @@ Route::middleware('auth:sanctum')->prefix('administrator')->group(function () {
     Route::get('pos', function () {
         return Inertia::render('administrator/pos/page');
     });
-    Route::get('customer', function () {
-        return Inertia::render('administrator/customer/page');
+
+    Route::prefix('customer')->group(function () {
+        Route::get('/', function () {
+            return Inertia::render('administrator/customer/page');
+        });
+        Route::get('/{cust_id}', function () {
+            return Inertia::render('administrator/customer/id/page');
+        });
     });
+
     Route::get('products', function () {
         return Inertia::render('administrator/products/page');
     });

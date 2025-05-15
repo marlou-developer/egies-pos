@@ -178,7 +178,6 @@ export default function CreditsSection() {
                       )}
                     >
                       <UpdateStatusSection />
-
                     </td>
                   </tr>
                 ))}
