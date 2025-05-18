@@ -1,5 +1,13 @@
+import { create_product_discount_service } from "../pages/services/product-discount-service";
 import { create_product_service, delete_product_service, get_product_service, update_product_service } from "../pages/services/product-service";
 import { productSlice } from "./product-slice";
+
+
+export function create_product_discount_thunk(data) {
+    return async function (dispatch, getState) {
+        const res = await create_product_discount_service(data)
+    };
+}
 
 
 export function create_product_thunk(data) {
@@ -8,7 +16,6 @@ export function create_product_thunk(data) {
 
     };
 }
-
 export function get_product_thunk() {
     return async function (dispatch) {
         try {

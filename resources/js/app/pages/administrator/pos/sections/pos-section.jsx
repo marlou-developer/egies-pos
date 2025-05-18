@@ -10,7 +10,7 @@ export default function PosSection() {
     const { carts } = useSelector((store) => store.products);
     const dispatch = useDispatch();
     const [overallDiscount, setOverallDiscount] = useState(null);
-
+    const [store, setStore] = useState("Store");
     const addPCS = (value) => {
         const data = carts.map((item) =>
             item.id === value.id ? { ...item, pcs: item.pcs + 1 } : item
@@ -76,23 +76,27 @@ export default function PosSection() {
     return (
         <div class="w-full ">
             <div class="flex lg:flex-row flex-col-reverse shadow-lg">
-                <ProductsSection />
+                <ProductsSection storeName={store}/>
                 <div class="w-full lg:w-2/5">
-                    {/* <div className="px-5 flex w-full gap-3">
-                        <div className="w-full">
+                    <div className="px-5 flex w-full gap-3">
+                        {/* <div className="w-full">
                             <button className="flex border bg-pink-500 hover:bg-pink-400 text-white border-gray-500 rounded-md p-2 w-full items-center justify-center">
                                 <UserIcon className="h-5" />
                                 Select Customer
                             </button>
-                        </div>
+                        </div> */}
                         <div className="w-full">
-                            <select className="w-full rounded-md" name="">
-                                <option disabled selected>Select Store</option>
+                            <select
+                                value={store}
+                                onChange={(e) => setStore(e.target.value)}
+                                className="w-full rounded-md"
+                                name=""
+                            >
                                 <option value="Store">Store</option>
                                 <option value="Shopee">Shopee</option>
                             </select>
                         </div>
-                    </div> */}
+                    </div>
                     <div class="flex flex-row items-center justify-between px-5 mt-5">
                         <div class="font-bold text-xl">Current Order</div>
                         {/* <div class="font-semibold">

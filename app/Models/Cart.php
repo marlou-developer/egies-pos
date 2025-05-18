@@ -11,6 +11,7 @@ class Cart extends Model
         'cart_id',
         'customer_id',
         'sub_total',
+        'customer_total_discount',
         'discount_per_item',
         'discount_per_order',
         'total_price',

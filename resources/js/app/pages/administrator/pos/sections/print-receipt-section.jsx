@@ -42,6 +42,40 @@ export default function PrintReceiptSection({
         payment_type: null,
     });
     const dispatch = useDispatch();
+    const discounts = form?.customer?.discount ?? [];
+
+    const discountMap = discounts.reduce((acc, curr) => {
+        acc[curr.product_id] = curr;
+        return acc;
+    }, {});
+
+    const filtered = data.map((item) => {
+        const customer_discount = discountMap[item.id];
+        return customer_discount ? { ...item, ...customer_discount } : item;
+    });
+
+    const list_of_available_discount = filtered
+        .map((res) => (res.customer_discount ? res : null)) // return null instead of undefined
+        .filter((item) => item !== null); // remove nulls
+
+    const customer_total_discount = list_of_available_discount.reduce(
+        (sum, item) => sum + Number(item.customer_discount),
+        0
+    );
+    const overall_total = total_price - customer_total_discount;
+
+
+    
+    useEffect(()=>{
+        if(form.is_credit){
+            setForm({
+                ...form,
+                customer_amount:overall_total,
+                change:0
+            })
+        }
+    },[form.is_credit])
+    
     const handlePrint = async () => {
         try {
             const data = await render(
@@ -94,6 +128,7 @@ export default function PrintReceiptSection({
         }
     };
 
+    console.log('filtered',filtered)
     function reset_data(params) {
         setOverallDiscount(0);
         setLoading(false);
@@ -106,7 +141,6 @@ export default function PrintReceiptSection({
         setCustomer(null);
     }
     useEffect(() => {
-
         if (!isOpen) {
             reset_data();
         }
@@ -120,12 +154,14 @@ export default function PrintReceiptSection({
                     customer_amount: form.customer_amount,
                     change: form.change,
                     payment_type: form.payment_type,
-                    cart_items: data,
-                    total_price: total_price,
+                    cart_items: filtered,
+                    total_price: overall_total,
+                    customer_total_discount: customer_total_discount ?? 0,
                     discount_per_order: discount_per_order,
                     total_item_discount: totalItemDiscount,
                     sub_total: subtotal,
-                    total_discount: totalDiscount,
+                    total_discount:
+                        totalDiscount + (customer_total_discount ?? 0),
                     is_credit: `${form?.is_credit}` ?? null,
                     due_date: form?.due_date ?? null,
                     customer_id: form?.customer?.id ?? null,
@@ -195,6 +231,35 @@ export default function PrintReceiptSection({
                 title="PAYMENT METHOD"
             >
                 <div className="flex flex-col gap-3">
+                    {list_of_available_discount &&
+                        list_of_available_discount?.length != 0 && (
+                            <div className="p-4 bg-white border border-pink-500 rounded-md">
+                                <div className="font-black">
+                                    List of Item Discount
+                                </div>
+                                <div className="flex flex-col gap-1.5">
+                                    {list_of_available_discount?.map(
+                                        (res, i) => {
+                                            return (
+                                                <div
+                                                    className="flex items-center justify-between"
+                                                    key={i}
+                                                >
+                                                    <div>{res.name}</div>
+                                                    <div>
+                                                        Discounted:₱{" "}
+                                                        {Number(
+                                                            res.customer_discount
+                                                        ).toFixed(2)}
+                                                    </div>
+                                                </div>
+                                            );
+                                        }
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
                     <div className="flex flex-row gap-10 ">
                         <div class="flex-1 ">
                             <div class=" px-4 flex justify-between ">
@@ -206,6 +271,14 @@ export default function PrintReceiptSection({
                                 </span>
                             </div>
 
+                            <div class=" px-4 flex justify-between ">
+                                <span class="font-semibold text-sm">
+                                    Customer Total Discount
+                                </span>
+                                <span class="font-bold">
+                                    ₱{customer_total_discount?.toFixed(2)}
+                                </span>
+                            </div>
                             <div class=" px-4 flex justify-between ">
                                 <span class="font-semibold text-sm">
                                     Discount Per Item
@@ -243,7 +316,7 @@ export default function PrintReceiptSection({
                                     Total
                                 </span>
                                 <span class="font-bold text-2xl">
-                                    ₱{total_price.toFixed(2)}
+                                    ₱{overall_total.toFixed(2)}
                                 </span>
                             </div>
                             <div class="border-t-2 py-2 px-4 flex items-center justify-between">
@@ -394,9 +467,11 @@ export default function PrintReceiptSection({
                                                 e.target.value == ""
                                                     ? 0
                                                     : e.target.value
-                                            ) - total_price,
+                                            ) - overall_total,
                                     })
                                 }
+                                disabled={form.is_credit}
+                                value={form?.customer_amount}
                                 name="amount"
                                 label="Amount"
                             />

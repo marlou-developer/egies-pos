@@ -1,4 +1,4 @@
-import { get_category_service } from "../pages/services/category-service";
+import { create_category_service, delete_category_service, get_category_service, update_category_service } from "../pages/services/category-service";
 import { categorySlice } from "./category-slice";
 
 export function create_category_thunk(data) {

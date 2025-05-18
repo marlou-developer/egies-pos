@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('cart_id')->nullable();
             $table->string('customer_id')->nullable();
             $table->string('sub_total')->nullable();
+            $table->string('customer_total_discount')->nullable();
             $table->string('discount_per_item')->nullable();
             $table->string('discount_per_order')->nullable();
             $table->string('total_price')->nullable();

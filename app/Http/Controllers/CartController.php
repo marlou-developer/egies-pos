@@ -18,6 +18,7 @@ class CartController extends Controller
             'cart_id' => $cart_id,
             'customer_id' => $request->customer_id,
             'sub_total' => $request->sub_total,
+            'customer_total_discount' => $request->customer_total_discount,
             'discount_per_item' => $request->total_item_discount,
             'discount_per_order' => $request->discount_per_order,
             'total_price' => $request->total_price,
@@ -41,6 +42,7 @@ class CartController extends Controller
 
             $discount = $item['discount'] ?? 0;
             $quantity = $item['pcs'];
+            $customer_discount = $item['customer_discount'] ?? 0;
             $price = $subPrice;
             $fixed_price = $price - $discount;
             $total = ($quantity * $price) - $discount;
@@ -49,6 +51,7 @@ class CartController extends Controller
                 'cart_id' => $cart->id,
                 'product_id' => $item['id'],
                 'discount' => $discount,
+                'customer_discount' => $customer_discount,
                 'pricing_type' => $pricing_type,
                 'quantity' => $quantity,
                 'price' => $price,

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ProductComponent from "../components/product-component";
 import { useSelector } from "react-redux";
 
-export default function ProductsSection() {
+export default function ProductsSection({storeName}) {
     const { categories } = useSelector((store) => store.categories); // ⬅️ This must come before using `categories`
     const [activeCategory, setActiveCategory] = useState("");
 
@@ -53,7 +53,10 @@ export default function ProductsSection() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                     {activeProducts && activeProducts.length > 0 ? (
                         activeProducts.map((product, index) => (
-                            <ProductComponent key={index} product={product} />
+                            <ProductComponent 
+                            storeName={storeName}
+                            key={index} 
+                            product={product} />
                         ))
                     ) : (
                         <div className="text-center text-gray-500 mt-4 col-span-full">

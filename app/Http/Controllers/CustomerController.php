@@ -14,7 +14,7 @@ class CustomerController extends Controller
 
         $results = [];
         if (!empty($search)) {
-            $results = Customer::where('name', 'like', '%' . $search . '%')->get();
+            $results = Customer::where('name', 'like', '%' . $search . '%')->with(['discount'])->get();
         }
 
         return response()->json($results);

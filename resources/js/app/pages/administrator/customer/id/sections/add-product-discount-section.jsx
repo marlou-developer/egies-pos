@@ -1,7 +1,10 @@
 import React, { useState } from "react";
-import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import {
-
+    ChevronDownIcon,
+    PhotoIcon,
+    XMarkIcon,
+} from "@heroicons/react/24/outline";
+import {
     FaCalendarDays,
     FaProductHunt,
     FaUser,
@@ -10,80 +13,56 @@ import {
 import DrawerSection from "@/app/_sections/drawer-section";
 import Input from "@/app/_components/input";
 import { useDispatch, useSelector } from "react-redux";
-import { create_customer_thunk, get_customer_thunk } from "@/app/redux/customer-thunk";
+import {
+    create_customer_thunk,
+    get_customer_thunk,
+} from "@/app/redux/customer-thunk";
 import { message } from "antd";
 import { setCustomer } from "@/app/redux/customer-slice";
 import store from "@/app/store/store";
+import { create_product_discount_thunk } from "@/app/redux/product-thunk";
+import { stringify } from "postcss";
 
 export default function AddProductDiscountSection({ open, setOpenCustomer }) {
-
     const [loading, setLoading] = useState(false);
     const [uploadedFile1, setUploadedFile1] = useState(null);
     const { customer } = useSelector((state) => state.customers);
-    const dispatch = useDispatch();
+    const { products } = useSelector((state) => state.products);
+    const [form, setForm] = useState({});
+    const customer_id = window.location.pathname.split("/")[3];
 
-
-    function data_handler(eOrKey, value) {
-        if (typeof eOrKey === "string") {
-            // Called manually with key and value (like for WYSIWYG)
-            dispatch(
-                setCustomer({
-                    ...customer,
-                    [eOrKey]: value,
-                })
-            );
-        } else {
-            // Regular input onChange event
-            dispatch(
-                setCustomer({
-                    ...customer,
-                    [eOrKey.target.name]: eOrKey.target.value,
-                })
-            );
-        }
-    }
-
+    console.log("form", form);
     async function handleSubmit(e) {
         e.preventDefault();
         setLoading(true);
 
         const fd = new FormData();
-        fd.append("customer_id", customer.id ?? "");
-        fd.append("file_name", customer.file_name ?? "");
-        fd.append("name", customer.name ?? "");
-        fd.append("street", customer.street ?? "");
-        fd.append("brgy", customer.brgy ?? "");
-        fd.append("city", customer.city ?? "");
-        fd.append("province", customer.province ?? "");
-        fd.append("postal", customer.postal ?? "");
-        fd.append("mobile_no", customer.mobile_no ?? "");
-        fd.append("email", customer.email ?? "");
-        // fd.append("due_period", customer.due_period ?? "");
-
-        if (uploadedFile1 && uploadedFile1.length > 0) {
-            Array.from(uploadedFile1).forEach((file) => {
-                fd.append("uploads[]", file);
-            });
-        }
+        fd.append("customer_id", customer_id ?? "");
+        fd.append("discount", form.discount ?? "");
+        fd.append("product_id", form.product.id ?? "");
 
         try {
-            await store.dispatch(create_customer_thunk(fd));
-            await store.dispatch(get_customer_thunk());
+            await store.dispatch(create_product_discount_thunk(fd));
+            // await store.dispatch(get_customer_thunk());
             message.success("Customer successfully saved!");
             setOpenCustomer(false);
         } catch (error) {
-            message.error("Failed to add Customer. Please try again.");
+            if (error.status == 422) {
+                message.error(error.response.data.message);
+            } else {
+                message.error("Failed to add Customer. Please try again.");
+            }
         } finally {
             setLoading(false);
         }
     }
     return (
         <>
-            <DrawerSection
-                open={open}
-                setOpen={setOpenCustomer}
-            >
-                <form onSubmit={handleSubmit} className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl">
+            <DrawerSection open={open} setOpen={setOpenCustomer}>
+                <form
+                    onSubmit={handleSubmit}
+                    className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
+                >
                     <div className="h-0 flex-1 overflow-y-auto">
                         <div className="bg-pink-200 px-4 py-6 sm:px-6">
                             <div className="flex items-center justify-between">
@@ -94,9 +73,7 @@ export default function AddProductDiscountSection({ open, setOpenCustomer }) {
                                 <div className="ml-3 flex h-7 items-center">
                                     <button
                                         type="button"
-                                        onClick={() =>
-                                            setOpenCustomer(false)
-                                        }
+                                        onClick={() => setOpenCustomer(false)}
                                         className="relative rounded-md bg-pink-200 text-gray-400 hover:text-gray-600 focus:ring-2 focus:ring-white focus:outline-hidden"
                                     >
                                         <span className="absolute -inset-2.5" />
@@ -112,9 +89,9 @@ export default function AddProductDiscountSection({ open, setOpenCustomer }) {
                             </div>
                             <div className="mt-1">
                                 <p className="text-sm text-gray-600">
-                                    Get started by filling in
-                                    the information below to
-                                    create your new Customer Product Discount.
+                                    Get started by filling in the information
+                                    below to create your new Customer Product
+                                    Discount.
                                 </p>
                             </div>
                         </div>
@@ -128,29 +105,91 @@ export default function AddProductDiscountSection({ open, setOpenCustomer }) {
                                         </h3>
                                         <hr />
                                     </div>
-
-                                    <div>
-                                        <Input
-                                            onChange={data_handler}
-                                            value={
-                                                customer?.name ??
-                                                ""
+                                    <div className="flex flex-col gap-1.5">
+                                        <div>
+                                            Product Name: {form?.product?.name}
+                                        </div>
+                                        <div>
+                                            Shopee Price:{" "}
+                                            {form?.product?.shopee}
+                                        </div>
+                                        <div>
+                                            SRP Price: {form?.product?.srp}
+                                        </div>
+                                        <div>
+                                            City Distributor Price:{" "}
+                                            {form?.product?.city_distributor}
+                                        </div>
+                                        <div>
+                                            District Distributor Price:{" "}
+                                            {
+                                                form?.product
+                                                    ?.district_distributor
                                             }
-                                            name="name"
-                                            label="Product Name"
-                                            type="text"
-                                        />
+                                        </div>
+                                        <div>
+                                            Provincial Distributor Price:{" "}
+                                            {
+                                                form?.product
+                                                    ?.provincial_distributor
+                                            }
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label
+                                            htmlFor="product_id"
+                                            className="block text-sm/6 font-medium text-gray-900"
+                                        >
+                                            Product
+                                        </label>
+                                        <div className="mt-2 grid grid-cols-1">
+                                            <select
+                                                id="product"
+                                                name="product"
+                                                onChange={(e) =>
+                                                    setForm({
+                                                        ...form,
+                                                        [e.target.name]:
+                                                            JSON.parse(
+                                                                e.target.value
+                                                            ),
+                                                    })
+                                                }
+                                                className="col-start-1 py-2.5 row-start-1 w-full appearance-none rounded-md bg-white pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                                            >
+                                                <option selected disabled>
+                                                    select product
+                                                </option>
+                                                {products.data?.map(
+                                                    (res, i) => {
+                                                        return (
+                                                            <option
+                                                                value={JSON.stringify(
+                                                                    res
+                                                                )}
+                                                                key={i}
+                                                            >
+                                                                {res.name}
+                                                            </option>
+                                                        );
+                                                    }
+                                                )}
+                                            </select>
+                                        </div>
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={data_handler}
-                                            value={
-                                                customer?.street ??
-                                                ""
-                                            }
-                                            name="street"
-                                            label="Discount"
+                                            value={form?.discount ?? ""}
+                                            name="discount"
+                                            label="Discount Amount"
                                             type="number"
+                                            onChange={(e) =>
+                                                setForm({
+                                                    ...form,
+                                                    [e.target.name]:
+                                                        e.target.value,
+                                                })
+                                            }
                                         />
                                     </div>
                                 </div>

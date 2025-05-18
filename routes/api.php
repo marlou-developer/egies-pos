@@ -5,6 +5,7 @@ use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductDiscountController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,7 @@ Route::resource('category', CategoryController::class);
 Route::resource('customer', CustomerController::class);
 Route::resource('cart', CartController::class);
 Route::resource('cart_item', CartItemController::class);
+Route::resource('product_discount', ProductDiscountController::class);
 Route::post('update_product', [ProductController::class, 'update_product']);
 Route::get('search_customer', [CustomerController::class, 'search_customer']);
 

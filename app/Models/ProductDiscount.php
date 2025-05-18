@@ -10,6 +10,6 @@ class ProductDiscount extends Model
     protected $fillable = [
         'customer_id',
         'product_id',
-        'discount',
+        'customer_discount',
     ];
 }

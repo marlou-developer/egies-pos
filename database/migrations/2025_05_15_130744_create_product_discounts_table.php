@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('customer_id')->nullable();
             $table->string('product_id')->nullable();
-            $table->string('discount')->nullable();
+            $table->string('customer_discount')->nullable();
             $table->timestamps();
         });
     }
