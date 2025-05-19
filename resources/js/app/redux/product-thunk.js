@@ -1,5 +1,6 @@
 import { create_product_discount_service, get_product_discount_by_id_service } from "../pages/services/product-discount-service";
 import { create_product_service, delete_product_service, get_product_service, update_product_service } from "../pages/services/product-service";
+import { customerSlice } from "./customer-slice";
 import { productSlice } from "./product-slice";
 
 
@@ -31,7 +32,7 @@ export function get_product_thunk() {
 export function get_product_discount_by_id_thunk(id) {
     return async function (dispatch, getState) {
         const res = await get_product_discount_by_id_service(id)
-        dispatch(productSlice.actions.setProductDiscounts(res.data));
+        dispatch(customerSlice.actions.setCustomer(res));
         return res.data
     };
 }

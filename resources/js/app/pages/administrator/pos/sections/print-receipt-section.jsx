@@ -42,7 +42,7 @@ export default function PrintReceiptSection({
         payment_type: null,
     });
     const dispatch = useDispatch();
-    const discounts = form?.customer?.discount ?? [];
+    const discounts = form?.customer?.discounts ?? [];
 
     const discountMap = discounts.reduce((acc, curr) => {
         acc[curr.product_id] = curr;

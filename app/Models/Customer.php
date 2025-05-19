@@ -27,8 +27,8 @@ class Customer extends Model
         return $this->hasOne(CustomerId::class, 'customer_id', 'id');
     }
 
-    public function discount(): HasMany
+    public function discounts(): HasMany
     {
-        return $this->hasMany(ProductDiscount::class, 'customer_id', 'id');
+        return $this->hasMany(ProductDiscount::class, 'customer_id', 'id')->with(['product']);
     }
 }

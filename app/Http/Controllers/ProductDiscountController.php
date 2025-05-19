@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\ProductDiscount;
 use Illuminate\Http\Request;
 
@@ -33,9 +34,7 @@ class ProductDiscountController extends Controller
 
     public function show($customer_id)
     {
-        $product_discount = ProductDiscount::where('customer_id', $customer_id)->first();
-        return response()->json([
-            'status' => $product_discount,
-        ], 200);
+        $product_discount = Customer::where('id', $customer_id)->with(['discounts'])->first();
+        return response()->json($product_discount, 200);
     }
 }

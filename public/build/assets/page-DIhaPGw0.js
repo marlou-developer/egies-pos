@@ -1,1 +1,0 @@
-import{j as o}from"./app-DK48ZznF.js";import r from"./layout-D5C42aw7.js";import t from"./reports-section-D5Gstc05.js";import"./transition-CHL6oc8H.js";import"./XMarkIcon-BaxpROg-.js";import"./menu-BMD_nR_Z.js";import"./index-A41GZ1Lr.js";import"./portal-BZszkJ_P.js";function u(){return o.jsx(r,{children:o.jsx(t,{})})}export{u as default};

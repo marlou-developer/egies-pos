@@ -22,7 +22,7 @@ import {
 import { message } from "antd";
 import { setCustomer } from "@/app/redux/customer-slice";
 import store from "@/app/store/store";
-import { create_product_discount_thunk } from "@/app/redux/product-thunk";
+import { create_product_discount_thunk, get_product_discount_by_id_thunk } from "@/app/redux/product-thunk";
 import { stringify } from "postcss";
 
 export default function AddProductDiscountSection({ open, setOpenCustomer }) {
@@ -45,7 +45,7 @@ export default function AddProductDiscountSection({ open, setOpenCustomer }) {
 
         try {
             await store.dispatch(create_product_discount_thunk(fd));
-            // await store.dispatch(get_customer_thunk());
+        store.dispatch(get_product_discount_by_id_thunk(customer_id))
             message.success("Customer successfully saved!");
             setOpenCustomer(false);
         } catch (error) {
