@@ -22,4 +22,20 @@ class ProductDiscountController extends Controller
             'discount' => $request->discount,
         ]);
     }
+
+    // public function get_discounted_products_by_id($id)
+    // {
+    //     $product_discount = ProductDiscount::where('customer_id', $id)->orderBy('created_at', 'desc')->paginate();
+    //     return response()->json([
+    //         'result' => $product_discount
+    //     ], 200);
+    // }
+
+    public function show($customer_id)
+    {
+        $product_discount = ProductDiscount::where('customer_id', $customer_id)->first();
+        return response()->json([
+            'status' => $product_discount,
+        ], 200);
+    }
 }

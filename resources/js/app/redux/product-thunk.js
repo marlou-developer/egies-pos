@@ -1,4 +1,4 @@
-import { create_product_discount_service } from "../pages/services/product-discount-service";
+import { create_product_discount_service, get_product_discount_by_id_service } from "../pages/services/product-discount-service";
 import { create_product_service, delete_product_service, get_product_service, update_product_service } from "../pages/services/product-service";
 import { productSlice } from "./product-slice";
 
@@ -28,14 +28,14 @@ export function get_product_thunk() {
     };
 }
 
+export function get_product_discount_by_id_thunk(id) {
+    return async function (dispatch, getState) {
+        const res = await get_product_discount_by_id_service(id)
+        dispatch(productSlice.actions.setProductDiscounts(res.data));
+        return res.data
+    };
+}
 
-// export function get_internet_plan_by_id_thunk(id) {
-//     return async function (dispatch, getState) {
-//         const res = await get_internet_plan_by_id_service(id)
-//         dispatch(internetPlanSlice.actions.setInternetPlan(res.status));
-//         return res.status
-//     };
-// }
 
 
 export function delete_product_thunk(id) {

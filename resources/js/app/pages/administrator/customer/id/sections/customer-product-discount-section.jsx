@@ -1,9 +1,13 @@
 import React, { useState } from 'react'
 import { FaPercent, FaProductHunt } from 'react-icons/fa6'
 import AddProductDiscountSection from './add-product-discount-section'
+import { useSelector } from 'react-redux';
 
 export default function CustomerProductDiscountSection() {
     const [openCustomerProductDiscount, setOpenCustomerProductDiscount] = useState(false)
+    const { customer } = useSelector(
+        (state) => state.customers
+    );
 
     const customers = [
         { name: 'Brilliant Skin Soap', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member', discount: '120' },
@@ -13,6 +17,8 @@ export default function CustomerProductDiscountSection() {
     function classNames(...classes) {
         return classes.filter(Boolean).join(' ')
     }
+
+    console.log('paaaaa', customer)
 
     return (
         <div>

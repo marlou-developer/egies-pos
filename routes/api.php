@@ -22,6 +22,4 @@ Route::resource('cart_item', CartItemController::class);
 Route::resource('product_discount', ProductDiscountController::class);
 Route::post('update_product', [ProductController::class, 'update_product']);
 Route::get('search_customer', [CustomerController::class, 'search_customer']);
-
-
-
+Route::get('/get_discounted_products_by_id/{customer_id}', [ProductDiscountController::class, 'get_discounted_products_by_id']);

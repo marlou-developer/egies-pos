@@ -1,4 +1,5 @@
-import { create_customer_service, get_customer_service, search_customer_service, update_customer_service } from "../pages/services/customer-service";
+import { create_customer_service, delete_customer_service, get_customer_service, search_customer_service, update_customer_service } from "../pages/services/customer-service";
+import { get_product_discount_by_id_service } from "../pages/services/product-discount-service";
 import { customerSlice } from "./customer-slice";
 
 
@@ -27,14 +28,6 @@ export function get_customer_thunk() {
     };
 }
 
-
-// export function get_internet_plan_by_id_thunk(id) {
-//     return async function (dispatch, getState) {
-//         const res = await get_internet_plan_by_id_service(id)
-//         dispatch(internetPlanSlice.actions.setInternetPlan(res.status));
-//         return res.status
-//     };
-// }
 
 
 export function delete_customer_thunk(id) {

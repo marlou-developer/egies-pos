@@ -473,7 +473,7 @@ export default function PrintReceiptSection({
                                 disabled={form.is_credit}
                                 value={form?.customer_amount}
                                 name="amount"
-                                label="Amount"
+                                label="Cash/Amount"
                             />
                             <select
                                 onChange={(e) =>

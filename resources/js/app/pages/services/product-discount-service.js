@@ -18,10 +18,12 @@ export function get_product_discount_service() {
     }
 }
 
-// export async function get_category_by_id_service(id) {
-//     const res = await axios.get('/api/category/' + id)
-//     return res.data
-// }
+export async function get_product_discount_by_id_service(customer_id) {
+    const res = await axios.get('/api/product_discount/' + customer_id)
+    return res.data
+}
+
+
 
 export function delete_product_discount_service(id) {
     try {
@@ -32,7 +34,7 @@ export function delete_product_discount_service(id) {
     }
 }
 
-export function update_product_discount_service(id,data) {
+export function update_product_discount_service(id, data) {
     try {
         const result = axios.post(`/api/update_product_discount`, data)
         return result
