@@ -6,6 +6,8 @@ import {
 } from "@heroicons/react/24/outline";
 import {
     FaCalendarDays,
+    FaMoneyBill,
+    FaPercent,
     FaProductHunt,
     FaUser,
     FaUserPlus,
@@ -99,40 +101,69 @@ export default function AddProductDiscountSection({ open, setOpenCustomer }) {
                             <div className="divide-y divide-gray-200 px-4 sm:px-6">
                                 <div className="space-y-6 pt-6 pb-5">
                                     <div className="sm:col-span-12">
-                                        <FaUser className="float-left size-5 mr-1 mt-3 text-pink-500" />
+                                        <FaPercent className="float-left size-5 mr-1 mt-3 text-pink-500" />
                                         <h3 className="text-base font-medium text-gray-600 pt-3">
                                             Product Discount Information
                                         </h3>
                                         <hr />
                                     </div>
                                     <div className="flex flex-col gap-1.5">
-                                        <div>
-                                            Product Name: {form?.product?.name}
+                                        <div className="mb-4">
+                                            Product Name: <b>{form?.product?.name}</b>
                                         </div>
-                                        <div>
+                                        <div className="flex items-center justify justify-between">
                                             Shopee Price:{" "}
-                                            {form?.product?.shopee}
+                                            <span className="text-xl font-bold">
+                                                ₱
+                                                {parseFloat(form?.product?.shopee || 0).toLocaleString("en-PH", {
+                                                    minimumFractionDigits: 2,
+                                                })}
+                                            </span>
+
                                         </div>
-                                        <div>
-                                            SRP Price: {form?.product?.srp}
+                                        <div className="flex items-center justify justify-between">
+                                            SRP Price:{" "}
+                                            <span className="text-xl font-bold">
+                                                ₱
+                                                {parseFloat(
+                                                    form?.product?.srp || 0
+                                                ).toLocaleString("en-PH", {
+                                                    minimumFractionDigits: 2,
+                                                })}
+                                            </span>
                                         </div>
-                                        <div>
+                                        <div className="flex items-center justify justify-between">
                                             City Distributor Price:{" "}
-                                            {form?.product?.city_distributor}
+                                            <span className="text-xl font-bold">
+                                                ₱
+                                                {parseFloat(
+                                                    form?.product?.city_distributor || 0
+                                                ).toLocaleString("en-PH", {
+                                                    minimumFractionDigits: 2,
+                                                })}
+                                            </span>
                                         </div>
-                                        <div>
+                                        <div className="flex items-center justify justify-between">
                                             District Distributor Price:{" "}
-                                            {
-                                                form?.product
-                                                    ?.district_distributor
-                                            }
+                                            <span className="text-xl font-bold">
+                                                ₱
+                                                {parseFloat(
+                                                    form?.product?.district_distributor || 0
+                                                ).toLocaleString("en-PH", {
+                                                    minimumFractionDigits: 2,
+                                                })}
+                                            </span>
                                         </div>
-                                        <div>
+                                        <div className="flex items-center justify justify-between">
                                             Provincial Distributor Price:{" "}
-                                            {
-                                                form?.product
-                                                    ?.provincial_distributor
-                                            }
+                                            <span className="text-xl font-bold">
+                                                ₱
+                                                {parseFloat(
+                                                    form?.product?.provincial_distributor || 0
+                                                ).toLocaleString("en-PH", {
+                                                    minimumFractionDigits: 2,
+                                                })}
+                                            </span>
                                         </div>
                                     </div>
                                     <div>

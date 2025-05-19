@@ -20,9 +20,9 @@ export default function FilterCustomersComponent({ open, setOpenCFilter }) {
 
     console.log("categories", categories);
 
-    function search_products() {
+    function search_customers() {
         router.visit(
-            `?name=${search?.name}&category_id=${search?.category_id}&quantity=${search?.quantity}&delivery_receipt_no=${search?.delivery_receipt_no}`
+            `?name=${search?.name}&brgy=${search?.brgy}&city=${search?.city}&province=${search?.province}&email=${search?.email}`
         );
     }
     return (
@@ -170,7 +170,7 @@ export default function FilterCustomersComponent({ open, setOpenCFilter }) {
                             Cancel
                         </button>
                         <button
-                            type="submit"
+                            onClick={search_customers}
                             className="ml-4 inline-flex justify-center rounded-md bg-pink-500 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-pink-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pink-600"
                         >
                             Filter

@@ -31,7 +31,11 @@ function classNames(...classes) {
 }
 
 export default function CustomerSection() {
-    const { customers } = useSelector((state) => state.customers)
+    // const { customers } = useSelector((state) => state.customers)
+
+    const { customers } = useSelector((state) => state.customers) || {
+        customers: { data: [], total: 0, last_page: 1 },
+    };
     const [openCustomer, setOpenCustomer] = useState(false);
     const [openCFilter, setOpenCFilter] = useState(false);
 
@@ -110,7 +114,7 @@ export default function CustomerSection() {
                                     >
                                         Email
                                     </th>
-                                    <th
+                                    {/* <th
                                         scope="col"
                                         className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter lg:table-cell"
                                     >
@@ -121,7 +125,7 @@ export default function CustomerSection() {
                                         className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter"
                                     >
                                         Status
-                                    </th>
+                                    </th> */}
                                     <th
                                         scope="col"
                                         className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-4 pl-3 backdrop-blur-sm backdrop-filter sm:pr-6 lg:pr-8"
@@ -131,7 +135,7 @@ export default function CustomerSection() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {customers?.result?.map((customer, customerIdx) => (
+                                {customers?.data?.map((customer, customerIdx) => (
                                     <tr key={customer.email}>
                                         <td
                                             className={classNames(
@@ -173,7 +177,7 @@ export default function CustomerSection() {
                                         >
                                             {customer.email}
                                         </td>
-                                        <td
+                                        {/* <td
                                             className={classNames(
                                                 customerIdx !== customers.length - 1
                                                     ? "border-b border-gray-200"
@@ -192,7 +196,7 @@ export default function CustomerSection() {
                                             )}
                                         >
                                             {customer.role}
-                                        </td>
+                                        </td> */}
                                         <td
                                             className={classNames(
                                                 customerIdx !== customers.length - 1

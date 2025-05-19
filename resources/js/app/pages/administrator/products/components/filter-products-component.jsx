@@ -7,18 +7,6 @@ import { router } from "@inertiajs/react";
 import Input from "@/app/_components/input";
 import DrawerSection from "@/app/_sections/drawer-section";
 
-const category = [
-    {
-        category_name: "Soap",
-    },
-    {
-        category_name: "Make-Up",
-    },
-    {
-        category_name: "Cream",
-    },
-    // More product...
-];
 
 export default function FilterProductsComponent({ open, setOpenFilter }) {
     const [search, setSearch] = useState({});

@@ -20,12 +20,31 @@ class CustomerController extends Controller
         return response()->json($results);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $customers = Customer::with('customer_ids')->get();
-        return response()->json([
-            'result' => $customers
-        ], 200);
+        $query = Customer::with(['customer_ids'])->orderBy('created_at', 'desc');
+
+        if ($request->filled('brgy') && $request->brgy !== 'undefined') {
+            $query->where('brgy', $request->brgy);
+        }
+
+        if ($request->filled('name') && $request->name !== 'undefined') {
+            $query->where('name', $request->name);
+        }
+        if ($request->filled('city') && $request->city !== 'undefined') {
+            $query->where('city', $request->city);
+        }
+        if ($request->filled('province') && $request->province !== 'undefined') {
+            $query->where('province', $request->province);
+        }
+        if ($request->filled('email') && $request->email !== 'undefined') {
+            $query->where('email', $request->email);
+        }
+
+
+        $customers['data'] = $query->get();
+
+        return response()->json($customers, 200);
     }
 
     public function store(Request $request)
