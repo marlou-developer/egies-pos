@@ -57,7 +57,7 @@ export default function AddProductComponent({ open, setOpenProduct }) {
         fd.append("cost", product.cost ?? "");
         fd.append("srp", product.srp ?? "");
         fd.append("shopee", product.shopee ?? "");
-        fd.append("customer", product.customer ?? "");
+        // fd.append("customer", product.customer ?? "");
         fd.append("reseller", product.reseller ?? "");
         fd.append("brand", product.brand ?? "");
         // fd.append("barcode", product.barcode ?? "");
@@ -263,7 +263,7 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                             type="number"
                                         />
                                     </div>
-                                    <div>
+                                    {/* <div>
                                         <Input
                                             onChange={data_handler}
                                             value={product?.customer ?? ""}
@@ -271,7 +271,7 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                             label="Customer Price (optional)"
                                             type="number"
                                         />
-                                    </div>
+                                    </div> */}
                                     <div>
                                         <Input
                                             onChange={data_handler}

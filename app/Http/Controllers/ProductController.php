@@ -56,7 +56,7 @@ class ProductController extends Controller
             'cost' => 'nullable|string',
             'srp' => 'nullable|string',
             'shopee' => 'nullable|string',
-            'customer' => 'nullable|string',
+            // 'customer' => 'nullable|string',
             'reseller' => 'nullable|string',
             'city_distributor' => 'nullable|string',
             'district_distributor' => 'nullable|string',
