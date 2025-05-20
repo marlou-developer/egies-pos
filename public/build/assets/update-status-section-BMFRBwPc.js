@@ -1,1 +1,0 @@
-import{j as t}from"./app-NpKQ55uy.js";function n(){return t.jsx("div",{children:t.jsx("button",{className:"inline-flex items-center justify-center gap-x-1.5 rounded-md bg-pink-100 hover:bg-pink-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset",children:"Update Status"})})}export{n as default};

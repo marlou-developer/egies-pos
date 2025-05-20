@@ -193,7 +193,7 @@ export default function ProductsSection() {
                                         scope="col"
                                         className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter lg:table-cell"
                                     >
-                                        Quantity
+                                        Shopee Price
                                     </th>
                                     <th
                                         scope="col"
@@ -306,7 +306,7 @@ export default function ProductsSection() {
                                                     "hidden px-3 py-4 text-sm font-bold whitespace-nowrap text-gray-500 sm:table-cell"
                                                 )}
                                             >
-                                                <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 mr-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
+                                                <span className="inline-flex items-center rounded-full bg-pink-50 px-2 py-1 mr-1 text-xs font-medium text-pink-800 ring-1 ring-pink-600/20 ring-inset">
                                                     {product?.categories?.name}
                                                 </span>
                                             </td>
@@ -333,9 +333,8 @@ export default function ProductsSection() {
                                                     "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
                                                 )}
                                             >
-                                                <span className={statusClass}>
-                                                    {quantityy}
-                                                </span>
+                                                {/* {quantityy} */}
+                                                ₱ {Number(product.shopee).toFixed(2)}
                                             </td>
                                             <td
                                                 className={classNames(
@@ -474,8 +473,8 @@ export default function ProductsSection() {
                                                     setCurrent(pageNum)
                                                 }
                                                 className={`px-3 py-1 border rounded ${pageNum === current
-                                                        ? "bg-pink-500 text-white"
-                                                        : "bg-white text-pink-500 border-pink-500"
+                                                    ? "bg-pink-500 text-white"
+                                                    : "bg-white text-pink-500 border-pink-500"
                                                     }`}
                                             >
                                                 {pageNum}
