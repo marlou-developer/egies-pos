@@ -11,6 +11,7 @@ export default function PosSection() {
     const dispatch = useDispatch();
     const [overallDiscount, setOverallDiscount] = useState(null);
     const [store, setStore] = useState("Store");
+
     const addPCS = (value) => {
         const data = carts.map((item) =>
             item.id === value.id ? { ...item, pcs: item.pcs + 1 } : item
@@ -76,7 +77,7 @@ export default function PosSection() {
     return (
         <div class="w-full ">
             <div class="flex lg:flex-row flex-col-reverse shadow-lg">
-                <ProductsSection storeName={store}/>
+                <ProductsSection storeName={store} />
                 <div class="w-full lg:w-2/5">
                     <div className="px-5 flex w-full gap-3">
                         {/* <div className="w-full">
@@ -167,21 +168,39 @@ export default function PosSection() {
                                                 autoComplete="pricing"
                                                 className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pl-3 pr-1 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                             >
-                                                <option value="srp" selected>
-                                                    SRP Price
-                                                </option>
-                                                <option value="reseller">
-                                                    Reseller Price
-                                                </option>
-                                                <option value="city_distributor">
-                                                    City Distributor Price
-                                                </option>
-                                                <option value="district_distributor">
-                                                    District Distributor Price
-                                                </option>
-                                                <option value="provincial_distributor">
-                                                    Provincial Distributor Price
-                                                </option>
+                                                {store != "Store" && (
+                                                    <option
+                                                        value="srp"
+                                                        selected
+                                                    >
+                                                        Shopee Price
+                                                    </option>
+                                                )}
+                                                {store == "Store" && (
+                                                    <>
+                                                        <option
+                                                            value="srp"
+                                                            selected
+                                                        >
+                                                            SRP Price
+                                                        </option>
+                                                        <option value="reseller">
+                                                            Reseller Price
+                                                        </option>
+                                                        <option value="city_distributor">
+                                                            City Distributor
+                                                            Price
+                                                        </option>
+                                                        <option value="district_distributor">
+                                                            District Distributor
+                                                            Price
+                                                        </option>
+                                                        <option value="provincial_distributor">
+                                                            Provincial
+                                                            Distributor Price
+                                                        </option>
+                                                    </>
+                                                )}
                                             </select>
                                         </span>
                                     </div>

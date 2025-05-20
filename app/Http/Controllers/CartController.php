@@ -54,6 +54,7 @@ class CartController extends Controller
                 'customer_discount' => $customer_discount,
                 'pricing_type' => $pricing_type,
                 'quantity' => $quantity,
+                'cost' => $item['cost'] * $quantity,
                 'price' => $price,
                 'fixed_price' => $fixed_price,
                 'total' => $total,

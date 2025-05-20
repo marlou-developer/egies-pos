@@ -59,23 +59,21 @@ export default function PrintReceiptSection({
         .filter((item) => item !== null); // remove nulls
 
     const customer_total_discount = list_of_available_discount.reduce(
-        (sum, item) => sum + Number(item.customer_discount),
+        (sum, item) => sum + Number(item.customer_discount) * Number(item.pcs),
         0
     );
     const overall_total = total_price - customer_total_discount;
 
-
-    
-    useEffect(()=>{
-        if(form.is_credit){
+    useEffect(() => {
+        if (form.is_credit) {
             setForm({
                 ...form,
-                customer_amount:overall_total,
-                change:0
-            })
+                customer_amount: overall_total,
+                change: 0,
+            });
         }
-    },[form.is_credit])
-    
+    }, [form.is_credit]);
+
     const handlePrint = async () => {
         try {
             const data = await render(
@@ -128,7 +126,7 @@ export default function PrintReceiptSection({
         }
     };
 
-    console.log('filtered',filtered)
+    console.log("filtered", filtered);
     function reset_data(params) {
         setOverallDiscount(0);
         setLoading(false);
@@ -153,7 +151,7 @@ export default function PrintReceiptSection({
                 create_cart_thunk({
                     customer_amount: form.customer_amount,
                     change: form.change,
-                    payment_type: form.payment_type,
+                    payment_type: !form.is_credit ? form.payment_type : null,
                     cart_items: filtered,
                     total_price: overall_total,
                     customer_total_discount: customer_total_discount ?? 0,
@@ -211,10 +209,16 @@ export default function PrintReceiptSection({
             if (form.change >= 0 && form.payment_type) {
                 return false;
             } else {
-                return true;
+                if (form.is_credit && form.due_date) {
+                    return false;
+                } else {
+                    return true;
+                }
             }
         }
     }
+
+    console.log("list_of_available_discount", list_of_available_discount);
     return (
         <>
             <Button
@@ -242,15 +246,22 @@ export default function PrintReceiptSection({
                                         (res, i) => {
                                             return (
                                                 <div
-                                                    className="flex items-center justify-between"
+                                                    className="flex items-center w-full justify-between"
                                                     key={i}
                                                 >
-                                                    <div>{res.name}</div>
-                                                    <div>
-                                                        Discounted:₱{" "}
-                                                        {Number(
-                                                            res.customer_discount
-                                                        ).toFixed(2)}
+                                                    <div className="flex-1">
+                                                        {res.name}
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        Product Quantity:{" "}
+                                                        {res.pcs}
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        Discounted Price:₱{" "}
+                                                        {Number(res.pcs) *
+                                                            Number(
+                                                                res.customer_discount
+                                                            ).toFixed(2)}
                                                     </div>
                                                 </div>
                                             );
@@ -475,28 +486,30 @@ export default function PrintReceiptSection({
                                 name="amount"
                                 label="Cash/Amount"
                             />
-                            <select
-                                onChange={(e) =>
-                                    setForm({
-                                        ...form,
-                                        payment_type: e.target.value,
-                                    })
-                                }
-                                className="rounded-md text-gray-500"
-                                label="Mode of Payment"
-                            >
-                                <option disabled selected>
-                                    Mode of Payment:
-                                </option>
-                                <option value="Cash">Cash</option>
-                                <option value="E-Wallet">E-Wallet</option>
-                                <option value="Bank Transfer">
-                                    Bank Transfer
-                                </option>
-                                <option value="Credit/Debit Card">
-                                    Credit/Debit Card
-                                </option>
-                            </select>
+                            {!form.is_credit && (
+                                <select
+                                    onChange={(e) =>
+                                        setForm({
+                                            ...form,
+                                            payment_type: e.target.value,
+                                        })
+                                    }
+                                    className="rounded-md text-gray-500"
+                                    label="Mode of Payment"
+                                >
+                                    <option disabled selected>
+                                        Mode of Payment:
+                                    </option>
+                                    <option value="Cash">Cash</option>
+                                    <option value="E-Wallet">E-Wallet</option>
+                                    <option value="Bank Transfer">
+                                        Bank Transfer
+                                    </option>
+                                    <option value="Credit/Debit Card">
+                                        Credit/Debit Card
+                                    </option>
+                                </select>
+                            )}
                         </div>
                     </div>
 
