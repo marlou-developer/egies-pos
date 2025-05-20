@@ -10,6 +10,19 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
+
+    public function get_cart_credit(Request $request)
+    {
+
+        $carts = Cart::where('is_credit', 'true')->with(['customer', 'cart_items'])->paginate(10);
+        return response()->json($carts, 200);
+    }
+
+    public function show($id)
+    {
+        $cart = Cart::where('cart_id', $id)->with(['customer', 'cart_items'])->first();
+        return response()->json($cart, 200);
+    }
     public function store(Request $request)
     {
         $cart_id = Carbon::now()->format('mdyHisv');
@@ -34,6 +47,8 @@ class CartController extends Controller
             $subPrice = $item['sub_price'];
             $pricing_type = match (true) {
                 $subPrice == $item['srp'] => 'SRP',
+                $subPrice == $item['shopee'] => 'Shopee',
+                $subPrice == $item['reseller'] => 'Reseller',
                 $subPrice == $item['city_distributor'] => 'City Distributor',
                 $subPrice == $item['district_distributor'] => 'District Distributor',
                 $subPrice == $item['provincial_distributor'] => 'Provincial Distributor',
@@ -48,7 +63,7 @@ class CartController extends Controller
             $total = ($quantity * $price) - $discount;
 
             CartItem::create([
-                'cart_id' => $cart->id,
+                'cart_id' => $cart->cart_id,
                 'product_id' => $item['id'],
                 'discount' => $discount,
                 'customer_discount' => $customer_discount,

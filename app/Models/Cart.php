@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Cart extends Model
 {
@@ -23,4 +25,13 @@ class Cart extends Model
         'is_credit',
         'due_date',
     ];
+
+    public function customer(): HasOne
+    {
+        return $this->hasOne(Customer::class, 'id', 'customer_id');
+    }
+    public function cart_items(): HasMany
+    {
+        return $this->hasMany(CartItem::class, 'cart_id', 'cart_id')->with(['product']);
+    }
 }

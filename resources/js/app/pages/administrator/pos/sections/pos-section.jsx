@@ -170,7 +170,7 @@ export default function PosSection() {
                                             >
                                                 {store != "Store" && (
                                                     <option
-                                                        value="srp"
+                                                        value="shopee"
                                                         selected
                                                     >
                                                         Shopee Price

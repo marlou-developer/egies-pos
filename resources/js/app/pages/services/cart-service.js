@@ -9,6 +9,17 @@ export function create_cart_service(data) {
     }
 }
 
+
+export function get_cart_credit_service() {
+    try {
+        const result = axios.get('/api/get_cart_credit')
+        return result
+    } catch (error) {
+
+    }
+}
+
+
 export function get_cart_service() {
     try {
         const result = axios.get('/api/cart')
@@ -18,10 +29,10 @@ export function get_cart_service() {
     }
 }
 
-// export async function get_cart_by_id_service(id) {
-//     const res = await axios.get('/api/cart/' + id)
-//     return res.data
-// }
+export async function get_cart_by_id_service(id) {
+    const res = await axios.get('/api/cart/' + id)
+    return res
+}
 
 export function delete_cart_service(id) {
     try {

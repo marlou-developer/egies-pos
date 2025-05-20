@@ -1,3 +1,5 @@
+import { get_cart_credit_service } from "../pages/services/cart-service";
+import { cartSlice } from "./cart-slice";
 
 
 export function get_user_thunk() {
@@ -6,6 +8,14 @@ export function get_user_thunk() {
         // dispatch(appSlice.actions.setUser(res.data));
     };
 }
+
+export function get_cart_credit_thunk() {
+    return async function (dispatch, getState) {
+        const res = await get_cart_credit_service()
+        dispatch(cartSlice.actions.setCarts(res.data));
+    };
+}
+
 
 export function get_users_thunk() {
     return async function (dispatch, getState) {

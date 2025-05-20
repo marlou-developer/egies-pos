@@ -43,6 +43,9 @@ Route::middleware('auth:sanctum')->prefix('administrator')->group(function () {
     Route::get('credits', function () {
         return Inertia::render('administrator/credits/page');
     });
+    Route::get('credits/{id}', function () {
+        return Inertia::render('administrator/credits/id/page');
+    });
     Route::get('reports', function () {
         return Inertia::render('administrator/reports/page');
     });
