@@ -1,1 +1,0 @@
-import{c as r,a as n}from"./cart-service-DiHtUkSv.js";import{b as i}from"./app-DZC2UNCc.js";function o(t){return async function(a,c){await r(t)}}function u(t){return async function(a,c){const e=await n(t);a(i.actions.setCart(e))}}export{o as c,u as g};

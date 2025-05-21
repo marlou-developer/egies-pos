@@ -22,7 +22,10 @@ import {
 import { message } from "antd";
 import { setCustomer } from "@/app/redux/customer-slice";
 import store from "@/app/store/store";
-import { create_product_discount_thunk, get_product_discount_by_id_thunk } from "@/app/redux/product-thunk";
+import {
+    create_product_discount_thunk,
+    get_product_discount_by_id_thunk,
+} from "@/app/redux/product-thunk";
 import { stringify } from "postcss";
 
 export default function AddProductDiscountSection({ open, setOpenCustomer }) {
@@ -45,17 +48,14 @@ export default function AddProductDiscountSection({ open, setOpenCustomer }) {
 
         try {
             await store.dispatch(create_product_discount_thunk(fd));
-        store.dispatch(get_product_discount_by_id_thunk(customer_id))
+            store.dispatch(get_product_discount_by_id_thunk(customer_id));
             message.success("Customer successfully saved!");
             setOpenCustomer(false);
-        } catch (error) {
-            if (error.status == 422) {
-                message.error(error.response.data.message);
-            } else {
-                message.error("Failed to add Customer. Please try again.");
-            }
-        } finally {
             setLoading(false);
+            setForm({});
+        } catch (error) {
+            setLoading(false);
+            message.error("Product is already exist in the customer.");
         }
     }
     return (
@@ -109,17 +109,19 @@ export default function AddProductDiscountSection({ open, setOpenCustomer }) {
                                     </div>
                                     <div className="flex flex-col gap-1.5">
                                         <div className="mb-4">
-                                            Product Name: <b>{form?.product?.name}</b>
+                                            Product Name:{" "}
+                                            <b>{form?.product?.name}</b>
                                         </div>
                                         <div className="flex items-center justify justify-between">
                                             Shopee Price:{" "}
                                             <span className="text-xl font-bold">
                                                 ₱
-                                                {parseFloat(form?.product?.shopee || 0).toLocaleString("en-PH", {
+                                                {parseFloat(
+                                                    form?.product?.shopee || 0
+                                                ).toLocaleString("en-PH", {
                                                     minimumFractionDigits: 2,
                                                 })}
                                             </span>
-
                                         </div>
                                         <div className="flex items-center justify justify-between">
                                             SRP Price:{" "}
@@ -137,7 +139,8 @@ export default function AddProductDiscountSection({ open, setOpenCustomer }) {
                                             <span className="text-xl font-bold">
                                                 ₱
                                                 {parseFloat(
-                                                    form?.product?.city_distributor || 0
+                                                    form?.product
+                                                        ?.city_distributor || 0
                                                 ).toLocaleString("en-PH", {
                                                     minimumFractionDigits: 2,
                                                 })}
@@ -148,7 +151,9 @@ export default function AddProductDiscountSection({ open, setOpenCustomer }) {
                                             <span className="text-xl font-bold">
                                                 ₱
                                                 {parseFloat(
-                                                    form?.product?.district_distributor || 0
+                                                    form?.product
+                                                        ?.district_distributor ||
+                                                        0
                                                 ).toLocaleString("en-PH", {
                                                     minimumFractionDigits: 2,
                                                 })}
@@ -159,7 +164,9 @@ export default function AddProductDiscountSection({ open, setOpenCustomer }) {
                                             <span className="text-xl font-bold">
                                                 ₱
                                                 {parseFloat(
-                                                    form?.product?.provincial_distributor || 0
+                                                    form?.product
+                                                        ?.provincial_distributor ||
+                                                        0
                                                 ).toLocaleString("en-PH", {
                                                     minimumFractionDigits: 2,
                                                 })}
