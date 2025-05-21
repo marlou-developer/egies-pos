@@ -2,6 +2,7 @@ import Button from "@/app/_components/button";
 import Input from "@/app/_components/input";
 import Modal from "@/app/_components/modal";
 import { create_cart_thunk } from "@/app/redux/cart-thunk";
+import { get_category_thunk } from "@/app/redux/category-thunk";
 import { search_customer_thunk } from "@/app/redux/customer-thunk";
 import { setCarts } from "@/app/redux/product-slice";
 import store from "@/app/store/store";
@@ -165,6 +166,8 @@ export default function PrintReceiptSection({
                     customer_id: form?.customer?.id ?? null,
                 })
             );
+
+            await store.dispatch(get_category_thunk());
             await Swal.fire({
                 icon: "success",
                 title: "Your cart has been paid",
