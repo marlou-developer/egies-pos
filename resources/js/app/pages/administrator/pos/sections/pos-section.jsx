@@ -76,8 +76,10 @@ export default function PosSection() {
 
     return (
         <div class="w-full ">
-            <div class="flex lg:flex-row flex-col-reverse shadow-lg">
-                <ProductsSection storeName={store} />
+            <div class="flex lg:flex-row flex-col-reverse">
+                <div className="w-3/5 border-r border-pink-500">
+                    <ProductsSection storeName={store} />
+                </div>
                 <div class="w-full lg:w-2/5">
                     <div className="px-5 flex w-full gap-3">
                         {/* <div className="w-full">

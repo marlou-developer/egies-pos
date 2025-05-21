@@ -15,7 +15,7 @@ export default function ProductsSection({storeName}) {
     }, [categories]);
 
     return (
-        <div className="w-full lg:w-3/5 min-h-screen shadow-lg">
+        <div className="w-full">
             <div className="flex flex-row justify-between items-center px-5 mt-5">
                 <div className="text-gray-800">
                     <div className="font-bold text-xl">
@@ -25,8 +25,8 @@ export default function ProductsSection({storeName}) {
             </div>
 
             {/* TABS */}
-            <div className="mt-5 px-5 max-h-36 overflow-x-auto mb-2 pb-4">
-                <div className="flex space-x-2">
+            <div className="mt-5 px-5 w-full mb-2 pb-4">
+                <div className="flex flex-wrap gap-2 space-x-2">
                     {categories
                         .slice()
                         .sort((a, b) => a.name.localeCompare(b.name))
@@ -46,11 +46,10 @@ export default function ProductsSection({storeName}) {
                 </div>
             </div>
 
-            <hr />
 
             {/* PRODUCT GRID */}
-            <div className="px-5 mt-4 max-h-[600px] overflow-y-auto">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="px-5 mt-4  overflow-y-auto">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
                     {activeProducts && activeProducts.length > 0 ? (
                         activeProducts.map((product, index) => (
                             <ProductComponent 
