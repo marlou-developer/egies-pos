@@ -25,8 +25,8 @@ export default function ProductsSection({storeName}) {
             </div>
 
             {/* TABS */}
-            <div className="mt-5 px-5 w-full mb-2 pb-4">
-                <div className="flex flex-wrap gap-2 space-x-2">
+            <div className="mt-5 w-full mb-2 pb-4">
+                <div className="flex overflow-auto  gap-2 space-x-2">
                     {categories
                         .slice()
                         .sort((a, b) => a.name.localeCompare(b.name))
