@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('change')->nullable();
             $table->string('status')->nullable();
             $table->string('is_credit')->nullable();
+            $table->string('balance')->nullable();
             $table->string('due_date')->nullable();
             $table->timestamps();
         });

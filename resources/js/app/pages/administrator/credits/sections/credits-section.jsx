@@ -9,6 +9,7 @@ import {
 import UpdateStatusSection from "./update-status-section";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import AddPaymentSection from "./add-payment-section";
 
 const customers = [
     {
@@ -101,6 +102,12 @@ export default function CreditsSection() {
                                         scope="col"
                                         className="sticky top-0 z-10  border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter lg:table-cell"
                                     >
+                                        Balance
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="sticky top-0 z-10  border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter lg:table-cell"
+                                    >
                                         Due Date
                                     </th>
                                     <th
@@ -167,6 +174,19 @@ export default function CreditsSection() {
                                                 " px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
                                             )}
                                         >
+                                            <b>
+                                                {Number(res.balance).toFixed(2)}
+                                            </b>
+                                        </td>
+                                        <td
+                                            className={classNames(
+                                                customerIdx !==
+                                                    customers.length - 1
+                                                    ? "border-b border-gray-200"
+                                                    : "",
+                                                " px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
+                                            )}
+                                        >
                                             {res.due_date
                                                 ? moment(res.due_date).format(
                                                       "LL"
@@ -195,11 +215,14 @@ export default function CreditsSection() {
                                         >
                                             <div className="flex items-center justify-center  gap-3">
                                                 <a
-                                                href={`/administrator/credits/${res.cart_id}`}
-                                                target="_blank"
-                                                className='inline-flex items-center justify-center gap-x-1.5 rounded-md bg-pink-100 hover:bg-pink-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset'
-                                                >Invoice</a>
-                                                <UpdateStatusSection />
+                                                    href={`/administrator/credits/${res.cart_id}`}
+                                                    target="_blank"
+                                                    className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-pink-100 hover:bg-pink-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
+                                                >
+                                                    Invoice
+                                                </a>
+                                                <AddPaymentSection data={res} />
+                                                {/* <UpdateStatusSection /> */}
                                             </div>
                                         </td>
                                     </tr>

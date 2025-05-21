@@ -10,6 +10,15 @@ export function create_cart_service(data) {
 }
 
 
+
+export function add_payment_service(data) {
+    try {
+        const result = axios.post('/api/credit_payment', data)
+        return result
+    } catch (error) {
+
+    }
+}
 export function get_cart_credit_service() {
     try {
         const result = axios.get('/api/get_cart_credit')

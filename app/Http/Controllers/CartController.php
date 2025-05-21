@@ -14,7 +14,7 @@ class CartController extends Controller
     public function get_cart_credit(Request $request)
     {
 
-        $carts = Cart::where('is_credit', 'true')->with(['customer', 'cart_items'])->paginate(10);
+        $carts = Cart::where('is_credit', 'true')->with(['customer', 'cart_items','credit_payments'])->paginate(10);
         return response()->json($carts, 200);
     }
 
@@ -41,6 +41,7 @@ class CartController extends Controller
             'change' => $request->change,
             'is_credit' => $request->is_credit,
             'due_date' => $request->due_date,
+            'balance' => $request->is_credit == 'true' ? $request->total_price : '0',
         ]);
 
         foreach ($request->cart_items as $item) {

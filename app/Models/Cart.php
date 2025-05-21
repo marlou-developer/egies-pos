@@ -23,6 +23,7 @@ class Cart extends Model
         'change',
         'status',
         'is_credit',
+        'balance',
         'due_date',
     ];
 
@@ -33,5 +34,9 @@ class Cart extends Model
     public function cart_items(): HasMany
     {
         return $this->hasMany(CartItem::class, 'cart_id', 'cart_id')->with(['product']);
+    }
+      public function credit_payments(): HasMany
+    {
+        return $this->hasMany(CreditPayment::class, 'cart_id', 'cart_id');
     }
 }

@@ -1,4 +1,4 @@
-import { create_cart_service, delete_cart_service, get_cart_by_id_service, get_cart_service, update_cart_service } from "../pages/services/cart-service";
+import { add_payment_service, create_cart_service, delete_cart_service, get_cart_by_id_service, get_cart_service, update_cart_service } from "../pages/services/cart-service";
 import { cartSlice } from "./cart-slice";
 
 export function create_cart_thunk(data) {
@@ -8,6 +8,13 @@ export function create_cart_thunk(data) {
     };
 }
 
+
+export function add_payment_thunk(data) {
+    return async function (dispatch, getState) {
+        const res = await add_payment_service(data)
+
+    };
+}
 export function get_cart_thunk() {
     return async function (dispatch, getState) {
         const res = await get_cart_service()
