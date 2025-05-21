@@ -61,6 +61,7 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
         fd.append("status", form.status ?? "");
         fd.append("cost", form.cost ?? "");
         fd.append("srp", form.srp ?? "");
+        fd.append("shopee", form.shopee ?? "");
         fd.append("reseller", form.reseller ?? "");
         fd.append("brand", form.brand ?? "");
         fd.append("delivery_receipt_no", form.delivery_receipt_no ?? "");
@@ -231,7 +232,7 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                             </select>
                                         </div>
                                     </div>
-                                    <div>
+                                    {/* <div>
                                         <Input
                                             onChange={(e) =>
                                                 setForm({
@@ -244,7 +245,7 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                             label="Quantity"
                                             type="number"
                                         />
-                                    </div>
+                                    </div> */}
 
                                     <div className="sm:col-span-12">
                                         <hr />
@@ -271,89 +272,129 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={(e) =>
-                                                setForm({
-                                                    ...form,
-                                                    cost: e.target.value,
-                                                })
-                                            }
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (/^\d*\.?\d*$/.test(value)) {
+                                                    setForm({
+                                                        ...form,
+                                                        cost: value,
+                                                    });
+                                                }
+                                            }}
                                             value={form?.cost}
                                             name="cost"
                                             label="Cost Per Unit"
-                                            type="number"
+                                            type="text"
+                                            inputMode="decimal"
                                         />
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={(e) =>
-                                                setForm({
-                                                    ...form,
-                                                    srp: e.target.value,
-                                                })
-                                            }
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (/^\d*\.?\d*$/.test(value)) {
+                                                    setForm({
+                                                        ...form,
+                                                        srp: value,
+                                                    });
+                                                }
+                                            }}
                                             value={form?.srp}
                                             name="srp"
                                             label="SRP Price"
-                                            type="number"
+                                            type="text"
+                                            inputMode="decimal"
                                         />
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={(e) =>
-                                                setForm({
-                                                    ...form,
-                                                    reseller: e.target.value,
-                                                })
-                                            }
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (/^\d*\.?\d*$/.test(value)) {
+                                                    setForm({
+                                                        ...form,
+                                                        shopee: value,
+                                                    });
+                                                }
+                                            }}
+                                            value={form?.shopee}
+                                            name="shopee"
+                                            label="Shopee Price"
+                                            type="text"
+                                            inputMode="decimal"
+                                        />
+                                    </div>
+                                    <div>
+                                        <Input
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (/^\d*\.?\d*$/.test(value)) {
+                                                    setForm({
+                                                        ...form,
+                                                        reseller: value,
+                                                    });
+                                                }
+                                            }}
                                             value={form?.reseller}
                                             name="reseller"
                                             label="Reseller Price"
-                                            type="number"
+                                            type="text"
+                                            inputMode="decimal"
                                         />
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={(e) =>
-                                                setForm({
-                                                    ...form,
-                                                    city_distributor:
-                                                        e.target.value,
-                                                })
-                                            }
-                                            value={form?.city_distributor}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (/^\d*\.?\d*$/.test(value)) {
+                                                    setForm({
+                                                        ...form,
+                                                        city_distributor: value,
+                                                    });
+                                                }
+                                            }}
+                                            value={form?.city_distributor || ""}
                                             name="city_distributor"
                                             label="Distributor Price"
-                                            type="number"
+                                            type="text"
+                                            inputMode="decimal"
                                         />
                                     </div>
+
                                     <div>
                                         <Input
-                                            onChange={(e) =>
-                                                setForm({
-                                                    ...form,
-                                                    district_distributor:
-                                                        e.target.value,
-                                                })
-                                            }
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (/^\d*\.?\d*$/.test(value)) {
+                                                    setForm({
+                                                        ...form,
+                                                        district_distributor: value,
+                                                    });
+                                                }
+                                            }}
                                             value={form?.district_distributor}
                                             name="district_distributor"
                                             label="District Distributor Price"
-                                            type="number"
+                                            type="text"
+                                            inputMode="decimal"
                                         />
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={(e) =>
-                                                setForm({
-                                                    ...form,
-                                                    provincial_distributor:
-                                                        e.target.value,
-                                                })
-                                            }
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (/^\d*\.?\d*$/.test(value)) {
+                                                    setForm({
+                                                        ...form,
+                                                        provincial_distributor: value,
+                                                    });
+                                                }
+                                            }}
                                             value={form?.provincial_distributor}
                                             name="provincial_distributor"
                                             label="Provincial Distributor Price"
-                                            type="number"
+                                            type="text"
+                                            inputMode="decimal"
                                         />
                                     </div>
                                 </div>
