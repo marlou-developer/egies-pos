@@ -21,6 +21,7 @@ Route::resource('customer', CustomerController::class);
 Route::resource('cart', CartController::class);
 Route::resource('cart_item', CartItemController::class);
 Route::get('get_cart_credit', [CartController::class, 'get_cart_credit']);
+Route::get('get_over_due', [CartController::class, 'get_over_due']);
 Route::resource('credit_payment', CreditPaymentController::class);
 
 

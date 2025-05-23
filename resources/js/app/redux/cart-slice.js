@@ -5,6 +5,7 @@ export const cartSlice = createSlice({
     initialState: {
         carts: [],
         cart: {},
+        over_dues:[]
     },
     reducers: {
         setCarts: (state, action) => {
@@ -13,8 +14,11 @@ export const cartSlice = createSlice({
         setCart: (state, action) => {
             state.cart = action.payload;
         },
+         setOverDues: (state, action) => {
+            state.over_dues = action.payload;
+        },
     },
 });
-export const { setCarts, setCart } = cartSlice.actions;
+export const { setCarts, setCart,setOverDues } = cartSlice.actions;
 
 export default cartSlice.reducer;

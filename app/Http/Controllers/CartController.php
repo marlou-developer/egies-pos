@@ -11,10 +11,19 @@ use Illuminate\Http\Request;
 class CartController extends Controller
 {
 
+    public function get_over_due(Request $request)
+    {
+        $carts = Cart::where('due_date', '<', Carbon::now())
+            ->whereIn('status', ['Pending', 'Partial'])
+            ->with(['customer'])
+            ->get();
+        return response()->json($carts, 200);
+    }
+
     public function get_cart_credit(Request $request)
     {
 
-        $carts = Cart::where('is_credit', 'true')->with(['customer', 'cart_items','credit_payments'])->paginate(10);
+        $carts = Cart::where('is_credit', 'true')->with(['customer', 'cart_items', 'credit_payments'])->paginate(10);
         return response()->json($carts, 200);
     }
 
