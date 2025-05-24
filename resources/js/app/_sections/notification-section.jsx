@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { BellIcon } from "@heroicons/react/24/outline";
+import { BellIcon, CalendarDateRangeIcon } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
 import { Link } from "@inertiajs/react";
 
@@ -53,8 +53,8 @@ export default function NotificationSection() {
                                     key={index}
                                     className="px-4 py-2 underline hover:bg-gray-50"
                                 >
-                                    <Link href={`/administrator/credits?search=${item.cart_id}`}>
-                                        {item?.customer?.name} has over due
+                                    <Link href={`/administrator/credits?search=${item.cart_id}`} className="flex">
+                                        <CalendarDateRangeIcon className="h-6 mr-1" />{item?.customer?.name} has over due
                                         payment.
                                     </Link>
                                 </div>

@@ -7,6 +7,7 @@ import {
     CalculatorIcon,
     ChartPieIcon,
     HomeIcon,
+    InboxStackIcon,
     PresentationChartBarIcon,
     ShoppingBagIcon,
     ShoppingCartIcon,
@@ -39,6 +40,12 @@ const navigation = [
         name: "Products Section",
         href: "/administrator/products",
         icon: ShoppingBagIcon,
+        current: false,
+    },
+    {
+        name: "Stocks Section",
+        href: "#",
+        icon: InboxStackIcon,
         current: false,
     },
     {
@@ -96,9 +103,8 @@ export default function AdminLayout({ children }) {
 
             {/* Content area */}
             <div
-                className={`flex flex-col flex-1  transition-all duration-300 ease-in-out ${
-                    collapsed ? "lg:pl-20" : "lg:pl-72"
-                }`}
+                className={`flex flex-col flex-1  transition-all duration-300 ease-in-out ${collapsed ? "lg:pl-20" : "lg:pl-72"
+                    }`}
             >
                 <TopbarSection userNavigation={userNavigation} />
 
