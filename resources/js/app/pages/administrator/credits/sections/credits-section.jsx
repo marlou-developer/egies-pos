@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import moment from "moment";
 import AddPaymentSection from "./add-payment-section";
 import HistorySection from "./history-section";
+import SearchSection from "./search-section";
 
 const customers = [
     {
@@ -39,12 +40,10 @@ export default function CreditsSection() {
                     <h1 className="text-base font-semibold text-pink-500">
                         Credits Section
                     </h1>
-             
                 </div>
                 <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                     <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                         <span className="isolate inline-flex rounded-md shadow-xs">
-                        
                             <button
                                 type="button"
                                 // onClick={() => setOpenCFilter(true)}
@@ -54,9 +53,11 @@ export default function CreditsSection() {
                                 Filter Customer Credits
                             </button>
                         </span>
-                  
                     </div>
                 </div>
+            </div>
+            <div className="flex items-start justify-start">
+                <SearchSection />
             </div>
             <div className="mt-8 flow-root">
                 <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
@@ -198,7 +199,7 @@ export default function CreditsSection() {
                                             )}
                                         >
                                             <div className="flex items-center justify-center  gap-3">
-                                                <HistorySection data={res}/>
+                                                <HistorySection data={res} />
                                                 <a
                                                     href={`/administrator/credits/${res.cart_id}`}
                                                     target="_blank"

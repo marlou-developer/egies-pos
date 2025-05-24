@@ -14,11 +14,11 @@ class CartController extends Controller
     public function index(Request $request)
     {
         $query = Cart::where('status', 'Paid')
-            ->with(['customer','cart_items']);
+            ->with(['customer', 'cart_items']);
 
         // Optional search filter by cart ID
         if ($request->filled('search')) {
-            $query->where('cart_id', $request->search);
+            $query->where('cart_id', 'like', '%' . $request->search . '%');
         }
 
         $carts = $query->get();
@@ -46,7 +46,7 @@ class CartController extends Controller
 
         $carts = Cart::where('is_credit', 'true')->with(['customer', 'cart_items', 'credit_payments']);
         if ($request->filled('search')) {
-            $carts->where('cart_id', $request->search);
+            $carts->where('cart_id', 'like', '%' . $request->search . '%');
         }
 
         return response()->json($carts->paginate(10), 200);

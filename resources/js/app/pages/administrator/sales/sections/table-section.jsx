@@ -9,6 +9,7 @@ import {
 import { useSelector } from "react-redux";
 import moment from "moment";
 import ShowItemSection from "./show-items-section";
+import SearchSection from "./search-section";
 // import AddPaymentSection from "./add-payment-section";
 // import HistorySection from "./history-section";
 
@@ -55,6 +56,10 @@ export default function TableSection() {
                     </div>
                 </div>
             </div>
+
+           <div className="flex items-start justify-start">
+             <SearchSection />
+           </div>
             <div className="mt-8 flow-root">
                 <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
                     <div className="inline-block min-w-full py-2 align-middle">
@@ -122,7 +127,7 @@ export default function TableSection() {
                                         </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-gray-700 whitespace-nowrap text-right">
                                             <div className="flex items-center justify-end gap-3">
-                                                <ShowItemSection data={res}/>
+                                                <ShowItemSection data={res} />
                                                 <a
                                                     href={`/administrator/credits/${res.cart_id}`}
                                                     target="_blank"
