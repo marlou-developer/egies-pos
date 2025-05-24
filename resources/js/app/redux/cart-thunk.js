@@ -24,7 +24,7 @@ export function add_payment_thunk(data) {
 export function get_cart_thunk() {
     return async function (dispatch, getState) {
         const res = await get_cart_service()
-        dispatch(cartSlice.actions.setCarts(res.data.result));
+        dispatch(cartSlice.actions.setSales(res));
     };
 }
 

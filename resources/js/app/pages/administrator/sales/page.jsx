@@ -1,11 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import AdminLayout from '../layout'
-import SalesSections from './sections/sales-sections'
+import TableSection from './sections/table-section'
+import store from '@/app/store/store'
+import { get_cart_thunk } from '@/app/redux/cart-thunk'
 
 export default function SalesPage() {
+
+    useEffect(()=>{
+        store.dispatch(get_cart_thunk())
+    },[])
     return (
         <AdminLayout>
-            <SalesSections />
+            <TableSection />
         </AdminLayout>
     )
 }

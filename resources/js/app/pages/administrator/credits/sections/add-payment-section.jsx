@@ -85,7 +85,7 @@ export default function AddPaymentSection({ data }) {
                         </div>
                         <div className="font-xl font-bold">
                             Current Balance:{" "}
-                            {Number(data.balance) - Number(form.amount)}
+                            {Number(data.balance) - Number(form.amount??0)}
                         </div>
                     </div>
                     <div className="flex gap-3">

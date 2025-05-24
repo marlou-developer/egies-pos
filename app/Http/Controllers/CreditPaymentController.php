@@ -19,7 +19,7 @@ class CreditPaymentController extends Controller
         $cart =  Cart::where('cart_id', $cp->cart_id)->first();
         if ($cart) {
             $cart->update([
-                'status' => 'Partial',
+                'status' => ($cart->balance - $request->amount == 0) ? 'Paid' : 'Partial',
                 'balance' => $cart->balance - $request->amount,
                 'due_date' => $request->due_date,
             ]);

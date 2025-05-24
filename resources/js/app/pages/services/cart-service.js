@@ -31,7 +31,7 @@ export function get_cart_credit_service() {
 
 export function get_cart_service() {
     try {
-        const result = axios.get("/api/cart");
+        const result = axios.get("/api/cart" + window.location.search);
         return result;
     } catch (error) {}
 }

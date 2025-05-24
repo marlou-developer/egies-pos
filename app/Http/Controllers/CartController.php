@@ -11,6 +11,20 @@ use Illuminate\Http\Request;
 class CartController extends Controller
 {
 
+    public function index(Request $request)
+    {
+        $query = Cart::where('status', 'Paid')
+            ->with(['customer','cart_items']);
+
+        // Optional search filter by cart ID
+        if ($request->filled('search')) {
+            $query->where('cart_id', $request->search);
+        }
+
+        $carts = $query->get();
+
+        return response()->json($carts, 200);
+    }
     public function get_over_due(Request $request)
     {
         $query = Cart::where('due_date', '<', Carbon::now())
