@@ -22,7 +22,9 @@ export function add_payment_service(data) {
 }
 export function get_cart_credit_service() {
     try {
-        const result = axios.get("/api/get_cart_credit");
+        const result = axios.get(
+            "/api/get_cart_credit" + window.location.search
+        );
         return result;
     } catch (error) {}
 }

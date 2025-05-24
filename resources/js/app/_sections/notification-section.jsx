@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { BellIcon } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
+import { Link } from "@inertiajs/react";
 
 export default function NotificationSection() {
     const { over_dues } = useSelector((store) => store.carts);
@@ -52,10 +53,10 @@ export default function NotificationSection() {
                                     key={index}
                                     className="px-4 py-2 underline hover:bg-gray-50"
                                 >
-                                    <a href="">
+                                    <Link href={`/administrator/credits?search=${item.cart_id}`}>
                                         {item?.customer?.name} has over due
                                         payment.
-                                    </a>
+                                    </Link>
                                 </div>
                             ))
                         )}

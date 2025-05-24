@@ -102,11 +102,7 @@ export default function AdminLayout({ children }) {
             >
                 <TopbarSection userNavigation={userNavigation} />
 
-                <main className="py-4 w-full">
-                    <div className="mx-auto px-4 sm:px-6 lg:px-8">
-                        {children}
-                    </div>
-                </main>
+                <main className="p-4 w-full">{children}</main>
             </div>
         </div>
     );
