@@ -10,6 +10,7 @@ import UpdateStatusSection from "./update-status-section";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import AddPaymentSection from "./add-payment-section";
+import HistorySection from "./history-section";
 
 const customers = [
     {
@@ -214,6 +215,7 @@ export default function CreditsSection() {
                                             )}
                                         >
                                             <div className="flex items-center justify-center  gap-3">
+                                                <HistorySection data={res}/>
                                                 <a
                                                     href={`/administrator/credits/${res.cart_id}`}
                                                     target="_blank"

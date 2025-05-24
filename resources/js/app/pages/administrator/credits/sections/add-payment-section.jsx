@@ -4,12 +4,14 @@ import Modal from "@/app/_components/modal";
 import { get_cart_credit_thunk } from "@/app/redux/app-thunk";
 import { add_payment_thunk } from "@/app/redux/cart-thunk";
 import store from "@/app/store/store";
+import moment from "moment";
 import React, { useState } from "react";
 
 export default function AddPaymentSection({ data }) {
     const [open, setOpen] = useState(false);
     const [form, setForm] = useState({});
     const [loading, setLoading] = useState(false);
+    const [isPartial, setIsPartial] = useState(false);
 
     async function add_payment(params) {
         try {
@@ -21,12 +23,43 @@ export default function AddPaymentSection({ data }) {
                 })
             );
             await store.dispatch(get_cart_credit_thunk());
-            setOpen(false)
+            setOpen(false);
             setLoading(false);
         } catch (error) {
             setLoading(false);
         }
     }
+    console.log("data0", data);
+
+    function isDisabled(params) {
+        // if (isPartial && form.due_date) {
+        //     return true;
+        // }if (form.amount < Number(data.balance)) {
+        //         return true;
+        // }else{
+        //     return true
+        // }
+        if (
+            isPartial &&
+            form.due_date &&
+            form.payment_type &&
+            form.amount &&
+            form.amount <= Number(data.balance)
+        ) {
+            return false;
+        }
+        if (
+            !isPartial &&
+            form.payment_type &&
+            form.amount &&
+            form.amount <= Number(data.balance)
+        ) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    // alert(form.due_date)
     return (
         <>
             <button
@@ -43,6 +76,43 @@ export default function AddPaymentSection({ data }) {
                 width="max-w-lg"
             >
                 <div className=" flex flex-col gap-3">
+                    <div>
+                        <div className="font-xl font-bold">
+                            Customer Name: {data.customer.name}
+                        </div>
+                        <div className="font-xl font-bold">
+                            Balance: {data.balance}
+                        </div>
+                        <div className="font-xl font-bold">
+                            Current Balance:{" "}
+                            {Number(data.balance) - Number(form.amount)}
+                        </div>
+                    </div>
+                    <div className="flex gap-3">
+                        <input
+                            id="is_customer"
+                            name="is_customer"
+                            type="checkbox"
+                            checked={isPartial}
+                            onChange={(e) => setIsPartial(e.target.checked)}
+                            className="h-5 w-5 rounded border-pink-500 text-pink-600 focus:ring-pink-500 checked:bg-pink-600 checked:hover:bg-pink-600"
+                        />
+                        <span>Is Partial?</span>
+                    </div>
+                    {isPartial && (
+                        <Input
+                            onChange={(e) =>
+                                setForm({
+                                    ...form,
+                                    due_date: e.target.value,
+                                })
+                            }
+                            value={form.due_date}
+                            type="date"
+                            label="Due Date"
+                        />
+                    )}
+
                     <div>
                         <Input
                             label="Amount"
@@ -77,7 +147,11 @@ export default function AddPaymentSection({ data }) {
                             Credit/Debit Card
                         </option>
                     </select>
-                    <Button loading={loading} onClick={add_payment}>
+                    <Button
+                        disabled={isDisabled()}
+                        loading={loading}
+                        onClick={add_payment}
+                    >
                         ADD PAYMENT
                     </Button>
                 </div>

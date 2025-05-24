@@ -1,8 +1,15 @@
 import React from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
-export default function Modal({ isOpen, onClose, title, children,width="max-w-4xl " }) {
+export default function Modal({
+    isOpen,
+    onClose,
+    title,
+    children,
+    width = "max-w-4xl ",
+}) {
     return (
         <Transition show={isOpen} as={Fragment}>
             <Dialog as="div" className="relative z-50" onClose={onClose}>
@@ -30,7 +37,9 @@ export default function Modal({ isOpen, onClose, title, children,width="max-w-4x
                         leaveFrom="opacity-100 scale-100 translate-y-0"
                         leaveTo="opacity-0 scale-95 translate-y-2"
                     >
-                        <Dialog.Panel className={`w-full ${width} transform overflow-hidden rounded-xl bg-white p-6 text-left align-middle shadow-xl transition-all`}>
+                        <Dialog.Panel
+                            className={`w-full ${width} transform overflow-hidden rounded-xl bg-white p-6 text-left align-middle shadow-xl transition-all`}
+                        >
                             {/* Title */}
                             {title && (
                                 <Dialog.Title
@@ -47,9 +56,9 @@ export default function Modal({ isOpen, onClose, title, children,width="max-w-4x
                             {/* Close button (optional) */}
                             <button
                                 onClick={onClose}
-                                className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-xl"
+                                className="absolute top-3 right-3 text-gray-900 text-xl"
                             >
-                                &times;
+                                <XMarkIcon className="h-6" />
                             </button>
                         </Dialog.Panel>
                     </Transition.Child>
