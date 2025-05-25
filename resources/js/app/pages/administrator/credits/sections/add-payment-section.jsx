@@ -109,7 +109,7 @@ export default function AddPaymentSection({ data }) {
                             }
                             value={form.due_date}
                             type="date"
-                            label="Due Date"
+                            label="Date"
                         />
                     )}
 

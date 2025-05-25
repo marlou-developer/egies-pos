@@ -34,6 +34,9 @@ Route::middleware('auth:sanctum')->prefix('administrator')->group(function () {
     Route::get('products', function () {
         return Inertia::render('administrator/products/page');
     });
+    Route::get('stocks', function () {
+        return Inertia::render('administrator/stocks/page');
+    });
     Route::get('shopee', function () {
         return Inertia::render('administrator/shopee/page');
     });

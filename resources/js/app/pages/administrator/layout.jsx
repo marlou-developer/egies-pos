@@ -44,7 +44,7 @@ const navigation = [
     },
     {
         name: "Stocks Section",
-        href: "#",
+        href: "/administrator/stocks",
         icon: InboxStackIcon,
         current: false,
     },
