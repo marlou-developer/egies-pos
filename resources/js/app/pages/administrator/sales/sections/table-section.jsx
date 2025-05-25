@@ -57,9 +57,9 @@ export default function TableSection() {
                 </div>
             </div>
 
-           <div className="flex items-start justify-start">
-             <SearchSection />
-           </div>
+            <div className="flex items-start justify-start">
+                <SearchSection />
+            </div>
             <div className="mt-8 flow-root">
                 <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
                     <div className="inline-block min-w-full py-2 align-middle">
@@ -69,8 +69,9 @@ export default function TableSection() {
                                     {[
                                         "Invoice",
                                         "Total",
-                                        "Balance",
-                                        // "Due Date",
+                                        "Customer Name",
+                                        "Customer Discount",
+                                        "Product Discount",
                                         "Status",
                                         "",
                                     ].map((title, idx) => (
@@ -110,23 +111,20 @@ export default function TableSection() {
                                                 ).toFixed(2)}
                                             </b>
                                         </td>
-                                        <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap lg:table-cell">
-                                            <b>
-                                                {Number(res.balance).toFixed(2)}
-                                            </b>
+                                        <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
+                                            {res.status}
                                         </td>
-                                        {/* <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap lg:table-cell">
-                                            {res.due_date
-                                                ? moment(res.due_date).format(
-                                                      "LL"
-                                                  )
-                                                : "No due date"}
-                                        </td> */}
+                                        <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
+                                            {res.status}
+                                        </td>
+                                        <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
+                                            {res.status}
+                                        </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
                                             {res.status}
                                         </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-gray-700 whitespace-nowrap text-right">
-                                            <div className="flex items-center justify-end gap-3">
+                                            <div className="flex items-center justify-center gap-3">
                                                 <ShowItemSection data={res} />
                                                 <a
                                                     href={`/administrator/credits/${res.cart_id}`}
