@@ -6,7 +6,8 @@ import {
     FaSquarePlus,
 } from "react-icons/fa6";
 import store from "@/app/store/store";
-import StocksMenuSection from "./stocks-menu-section";
+import AddStocksSection from "./add-stocks-section";
+import StocksHistorySection from "./stocks-history-section";
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
@@ -143,7 +144,7 @@ export default function StocksSection() {
                                     </th>
                                     <th
                                         scope="col"
-                                        className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-4 pl-3 backdrop-blur-sm backdrop-filter sm:pr-6 lg:pr-8"
+                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
                                     >
                                         <span className="sr-only">Action</span>
                                     </th>
@@ -174,7 +175,7 @@ export default function StocksSection() {
                                                         products.length - 1
                                                         ? "border-b border-gray-200"
                                                         : "",
-                                                    "py-4 pr-3 pl-4 text-sm font-bold text-pink-500"
+                                                    "py-4 px-3 pl-4 text-sm font-bold text-pink-500"
                                                 )}
                                             >
                                                 {product.name}
@@ -241,10 +242,13 @@ export default function StocksSection() {
                                                         product.length - 1
                                                         ? "border-b border-gray-200"
                                                         : "",
-                                                    "py-4 text-sm text-gray-700 "
+                                                    "text-sm text-gray-700 "
                                                 )}
                                             >
-                                                <StocksMenuSection data={product} />
+                                                <div className="inline-flex items-center font-bold px-2 py-1 gap-4 ">
+                                                    <AddStocksSection data={product} />
+                                                    <StocksHistorySection data={product} />
+                                                </div>
                                             </td>
                                         </tr>
                                     );

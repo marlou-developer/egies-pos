@@ -43,7 +43,7 @@ export default function DeleteProductSection({ data }) {
                     <b>Remove Product</b>
                 </button>
             </Tooltip>
-            <Modal open={isModalOpen} setOpen={setIsModalOpen} width="w-1/4">
+            <Modal open={isModalOpen} setOpen={setIsModalOpen} onClose={() => setIsModalOpen(false)} width="w-1/4">
                 <h2 className="text-xl font-semibold mb-4">
                     Are you sure you want to remove this product?
                 </h2>
