@@ -13,7 +13,7 @@ class ProductController extends Controller
     {
         $perPage = $request->input('per_page', 10);
 
-        $query = Product::with(['categories', 'uploads'])->orderBy('created_at', 'desc');
+        $query = Product::with(['categories', 'uploads', 'stocks'])->orderBy('created_at', 'desc');
 
         if ($request->filled('category_id') && $request->category_id !== 'undefined') {
             $query->where('category_id', $request->category_id);
@@ -95,18 +95,18 @@ class ProductController extends Controller
 
     public function update_product(Request $request)
     {
-        $product = Product::where('id',$request->product_id)->first();
+        $product = Product::where('id', $request->product_id)->first();
 
         // Update product data excluding uploads
-        if($product){
+        if ($product) {
             $product->update($request->all());
             $this->handleUpdateUploads($request, 'uploads', $product);
         }
-       
+
 
         // Handle file updates
 
-        return response()->json(['message' =>'succes']);
+        return response()->json(['message' => 'succes']);
     }
 
     private function handleUpdateUploads(Request $request, string $fileKey, Product $product)

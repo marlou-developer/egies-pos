@@ -33,6 +33,10 @@ class Product extends Model
     {
         return $this->hasMany(Upload::class, 'product_id', 'id');
     }
+    public function stocks(): HasMany
+    {
+        return $this->hasMany(Stock::class, 'product_id', 'id');
+    }
     public function categories(): HasOne
     {
         return $this->hasOne(Category::class, 'id', 'category_id');

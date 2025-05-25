@@ -5,6 +5,7 @@ import { FaClockRotateLeft } from "react-icons/fa6";
 
 export default function StocksHistorySection({ data }) {
     const [open, setOpen] = useState(false);
+    console.log('datass', data)
     return (
         <>
             <button
@@ -28,8 +29,8 @@ export default function StocksHistorySection({ data }) {
                             <thead class="bg-gray-100 text-gray-700">
                                 <tr>
                                     <th class="px-4 py-2 border-b">Delivery Receipt</th>
-                                    <th class="px-4 py-2 border-b">Date</th>
                                     <th class="px-4 py-2 border-b">Quantity</th>
+                                    <th class="px-4 py-2 border-b">Date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -37,13 +38,13 @@ export default function StocksHistorySection({ data }) {
                                     return (
                                         <tr class="hover:bg-gray-50">
                                             <td class="px-4 py-2 border-b">
-                                                {res.delivery_receipt}
+                                                {res.delivery_id}
+                                            </td>
+                                            <td class="px-4 py-2 border-b">
+                                                {res.quantity}
                                             </td>
                                             <td class="px-4 py-2 border-b">
                                                 {res.date}
-                                            </td>
-                                            <td class="px-4 py-2 border-b">
-                                                {res.qty}
                                             </td>
                                         </tr>
                                     );
