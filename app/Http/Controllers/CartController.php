@@ -49,7 +49,7 @@ class CartController extends Controller
             });
 
         $current_sales = CartItem::whereDate('created_at', $today)
-            ->sum(DB::raw('quantity'));
+            ->sum(DB::raw('total'));
 
         $current_profit = CartItem::whereDate('created_at', $today)
             ->sum(DB::raw('profit'));
@@ -94,7 +94,7 @@ class CartController extends Controller
                 'total_credit' => $total_credit,
                 'due_date_today' => $due_date_today,
                 'over_due' => $over_due,
-                
+
                 'low_stock' => $low_stock,
                 'out_of_stock' => $out_of_stock,
             ]
