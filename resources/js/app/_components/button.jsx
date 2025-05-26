@@ -38,7 +38,7 @@ export default function Button({
         <button
             type={type}
             className={finalClass}
-            disabled={disabled}
+            disabled={disabled || loading}
             onClick={onClick}
         >
             {loading ? (

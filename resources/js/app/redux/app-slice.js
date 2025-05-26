@@ -6,8 +6,14 @@ export const appSlice = createSlice({
         user: {},
         sidebarOpen: false,
         sidebarCollapsed: false,
+        dashboard: {
+            result:[]
+        },
     },
     reducers: {
+        setDashboard: (state, action) => {
+            state.dashboard = action.payload;
+        },
         setUser: (state, action) => {
             state.user = action.payload;
         },
@@ -22,7 +28,12 @@ export const appSlice = createSlice({
         },
     },
 });
-export const { setUser, setSidebarOpen, toggleSidebarCollapsed, setSidebarCollapsed, } =
-    appSlice.actions;
+export const {
+    setUser,
+    setSidebarOpen,
+    toggleSidebarCollapsed,
+    setSidebarCollapsed,
+    setDashboard,
+} = appSlice.actions;
 
 export default appSlice.reducer;

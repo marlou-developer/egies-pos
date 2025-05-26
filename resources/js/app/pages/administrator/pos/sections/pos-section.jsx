@@ -75,7 +75,7 @@ export default function PosSection() {
         ) - parseFloat(overallDiscount || 0);
 
     return (
-        <div class="flex w-screen lg:w-[78vw]">
+        <div class="flex w-screen lg:w-[78vw] xl:w-[78vw]">
             <div className="  max-w-[60%] overflow-auto border-r border-pink-500">
                 <ProductsSection storeName={store} />
             </div>

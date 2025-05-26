@@ -90,23 +90,24 @@ class CartController extends Controller
                 default => 'SRP',
             };
 
-            $discount = $item['discount'] ?? 0;
             $quantity = $item['pcs'];
+            $discounted = ($item['discount'] ?? 0) + (($item['customer_discount'] ?? 0) * $quantity);
+            $discount = $item['discount'] ?? 0;
             $customer_discount = $item['customer_discount'] ?? 0;
             $price = $subPrice;
-            $fixed_price = $price - $discount;
-            $total = ($quantity * $price) - $discount;
+            $total = ($quantity * $price) - $discounted;
 
             CartItem::create([
                 'cart_id' => $cart->cart_id,
                 'product_id' => $item['id'],
                 'discount' => $discount,
-                'customer_discount' => $customer_discount,
+                'customer_discount' => $customer_discount * $quantity,
                 'pricing_type' => $pricing_type,
                 'quantity' => $quantity,
                 'cost' => $item['cost'] * $quantity,
+                'profit' =>  $total - ($item['cost'] * $quantity),
                 'price' => $price,
-                'fixed_price' => $fixed_price,
+                'fixed_price' => number_format($total / $quantity, 2),
                 'total' => $total,
             ]);
 

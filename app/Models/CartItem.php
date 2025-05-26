@@ -13,6 +13,7 @@ class CartItem extends Model
         'discount',
         'customer_discount',
         'cost',
+        'profit',
         'pricing_type',
         'quantity',
         'price',

@@ -5,6 +5,7 @@ use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CreditPaymentController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductDiscountController;
 use App\Http\Controllers\StockController;
@@ -25,6 +26,7 @@ Route::resource('cart_item', CartItemController::class);
 Route::get('get_cart_credit', [CartController::class, 'get_cart_credit']);
 Route::get('get_over_due', [CartController::class, 'get_over_due']);
 Route::resource('credit_payment', CreditPaymentController::class);
+Route::resource('dashboard', DashboardController::class);
 
 
 Route::resource('product_discount', ProductDiscountController::class);

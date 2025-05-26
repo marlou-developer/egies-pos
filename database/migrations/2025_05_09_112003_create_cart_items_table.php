@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('discount')->nullable();
             $table->string('customer_discount')->nullable();
             $table->string('cost')->nullable();
+            $table->string('profit')->nullable();
             $table->string('pricing_type')->nullable();
             $table->string('quantity')->nullable();
             $table->string('price')->nullable();
