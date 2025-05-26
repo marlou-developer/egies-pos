@@ -51,7 +51,7 @@ export default function SidebarMobileSection({
                                                 />
                                                 <div className="flex gap-3 items-start justify-between w-full">
                                                     <div>{item.name}</div>
-                                                    <div>
+                                                    {/* <div>
                                                         {item.notification && (
                                                             <button className="bg-red-600 px-2 rounded-md p-1 text-white">
                                                                 LS{" "}
@@ -62,7 +62,7 @@ export default function SidebarMobileSection({
                                                                 }
                                                             </button>
                                                         )}
-                                                    </div>
+                                                    </div> */}
                                                 </div>
                                             </Link>
                                         </li>

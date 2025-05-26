@@ -46,13 +46,13 @@ export default function SidebarDesktopSection({
                                         />
                                         <div className="flex gap-3 items-start justify-between w-full">
                                             <div>{!collapsed && item.name}</div>
-                                            <div>
+                                            {/* <div>
                                                 {(over_dues?.stocks?.length != 0 && item.notification) && (
                                                     <button className="bg-red-600 px-2 rounded-md p-1 text-white">
                                                        LS {over_dues?.stocks?.length}
                                                     </button>
                                                 )}
-                                            </div>
+                                            </div> */}
                                         </div>
                                     </Link>
                                 </li>

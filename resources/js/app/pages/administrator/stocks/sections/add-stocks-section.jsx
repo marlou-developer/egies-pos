@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { FaSquarePlus } from 'react-icons/fa6';
-import Modal from '@/Components/Modal';
-import Input from '@/app/_components/input';
-import store from '@/app/store/store';
-import { create_stock_thunk } from '@/app/redux/stock-thunk';
-import { message } from 'antd';
-import { get_product_thunk } from '@/app/redux/product-thunk';
+import React, { useState } from "react";
+import { FaSquarePlus } from "react-icons/fa6";
+import Modal from "@/Components/Modal";
+import Input from "@/app/_components/input";
+import store from "@/app/store/store";
+import { create_stock_thunk } from "@/app/redux/stock-thunk";
+import { message } from "antd";
+import { get_product_thunk } from "@/app/redux/product-thunk";
+import { get_over_due_thunk } from "@/app/redux/cart-thunk";
 
 export default function AddStocksSection({ data }) {
     const [modalOpen, setModalOpen] = useState(false);
@@ -24,8 +25,9 @@ export default function AddStocksSection({ data }) {
                     price: costOption === "same" ? data?.cost : null,
                 })
             );
-            message.success("Successfully added!");
+            await store.dispatch(get_over_due_thunk());
             await store.dispatch(get_product_thunk());
+            message.success("Successfully added!");
             setModalOpen(false);
             setForm({});
             setCostOption("same");
@@ -35,7 +37,6 @@ export default function AddStocksSection({ data }) {
             setLoading(false);
         }
     };
-
 
     return (
         <div>
@@ -48,10 +49,12 @@ export default function AddStocksSection({ data }) {
                 Add Stocks
             </button>
 
-            <Modal open={modalOpen} setOpen={setModalOpen} >
+            <Modal open={modalOpen} setOpen={setModalOpen}>
                 <form onSubmit={addStock}>
-                    <div className='mt-6 flex flex-col gap-5'>
-                        <h1 className='font-bold text-xl text-pink-500'>Add Stock(s)</h1>
+                    <div className="mt-6 flex flex-col gap-5">
+                        <h1 className="font-bold text-xl text-pink-500">
+                            Add Stock(s)
+                        </h1>
                         <div>
                             <Input
                                 onChange={(e) =>
@@ -100,29 +103,47 @@ export default function AddStocksSection({ data }) {
                                 onChange={(e) => setCostOption(e.target.value)}
                                 className="w-full rounded-md border-gray-500 text-sm h-11"
                             >
-                                <option disabled selected>Pricing</option>
-                                <option value="same">Same cost price =    ₱
-                                    {parseFloat(data?.cost).toLocaleString("en-PH", { minimumFractionDigits: 2, })}</option>
-                                <option value="different">Different cost price</option>
+                                <option disabled selected>
+                                    Pricing
+                                </option>
+                                <option value="same">
+                                    Same cost price = ₱
+                                    {parseFloat(data?.cost).toLocaleString(
+                                        "en-PH",
+                                        { minimumFractionDigits: 2 }
+                                    )}
+                                </option>
+                                <option value="different">
+                                    Different cost price
+                                </option>
                             </select>
                         </div>
 
                         {costOption === "different" && (
                             <p className="text-sm text-gray-600">
-                                If cost price is different from the current cost price,&nbsp;
-                                <a href="/administrator/products" className="text-pink-500 underline">Add Product</a> instead.
+                                If cost price is different from the current cost
+                                price,&nbsp;
+                                <a
+                                    href="/administrator/products"
+                                    className="text-pink-500 underline"
+                                >
+                                    Add Product
+                                </a>{" "}
+                                instead.
                             </p>
                         )}
                     </div>
-                    <div className='mt-3 w-full'>
-                        <div className='flex items-center justify-end'>
+                    <div className="mt-3 w-full">
+                        <div className="flex items-center justify-end">
                             <button
-                                type='submit'
+                                type="submit"
                                 disabled={costOption === "different"}
                                 className={`rounded-md p-2 text-white transition 
-        ${costOption === "different"
-                                        ? "bg-gray-300 cursor-not-allowed"
-                                        : "bg-pink-400 hover:bg-pink-500"}
+        ${
+            costOption === "different"
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-pink-400 hover:bg-pink-500"
+        }
     `}
                             >
                                 Add Stock

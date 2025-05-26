@@ -55,7 +55,6 @@ export default function AdminLayout({ children }) {
             href: "/administrator/stocks",
             icon: InboxStackIcon,
             current: path == "stocks",
-            notification:true,
         },
         {
             name: "Shopee Section",

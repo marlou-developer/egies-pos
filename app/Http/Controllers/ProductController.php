@@ -15,6 +15,9 @@ class ProductController extends Controller
 
         $query = Product::with(['categories', 'uploads', 'stocks'])->orderBy('created_at', 'desc');
 
+        if ($request->search) {
+            $query->where('id', '=', $request->search);
+        }
         if ($request->filled('category_id') && $request->category_id !== 'undefined') {
             $query->where('category_id', $request->category_id);
         }
@@ -36,6 +39,7 @@ class ProductController extends Controller
                 $query->where('quantity', '>=', 11);
             }
         }
+
 
         $products['data'] = $query->get();
 
