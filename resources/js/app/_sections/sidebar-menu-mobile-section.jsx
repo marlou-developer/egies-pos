@@ -80,8 +80,8 @@ export default function SidebarMobileSection({
                             </ul>
                         </li>
                         <li className="mt-auto">
-                            <a
-                                href="#"
+                            <Link
+                                href="/administrator/settings"
                                 className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-black"
                             >
                                 <Cog6ToothIcon
@@ -89,7 +89,7 @@ export default function SidebarMobileSection({
                                     className="size-6 shrink-0 text-white  hover:bg-blue-700"
                                 />
                                 Settings
-                            </a>
+                            </Link>
                         </li>
                     </ul>
                 </nav>

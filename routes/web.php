@@ -55,6 +55,9 @@ Route::middleware('auth:sanctum')->prefix('administrator')->group(function () {
     Route::get('users', function () {
         return Inertia::render('administrator/users/page');
     });
+       Route::get('settings', function () {
+        return Inertia::render('administrator/settings/page');
+    });
 });
 
 Route::prefix('administrator')->group(function () {

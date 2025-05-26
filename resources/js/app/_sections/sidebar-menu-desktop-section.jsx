@@ -71,8 +71,8 @@ export default function SidebarDesktopSection({
                     </ul>
                 </li>
                 <li className="mt-auto px-2">
-                    <a
-                        href="#"
+                    <Link
+                        href="/administrator/settings"
                         className="group flex items-center gap-x-3 rounded-md p-2 text-sm font-semibold text-black hover:text-pink-500"
                     >
                         <Cog6ToothIcon
@@ -80,7 +80,7 @@ export default function SidebarDesktopSection({
                             className="h-6 w-6 shrink-0"
                         />
                         {!collapsed && "Settings"}
-                    </a>
+                    </Link>
                 </li>
             </ul>
         </nav>
