@@ -12,6 +12,8 @@ class Cart extends Model
     protected $fillable = [
         'cart_id',
         'customer_id',
+        'order_id',
+        'customer',
         'sub_total',
         'customer_total_discount',
         'discount_per_item',
@@ -23,6 +25,7 @@ class Cart extends Model
         'change',
         'status',
         'is_credit',
+        'shop',
         'balance',
         'due_date',
     ];

@@ -13,6 +13,26 @@ use Illuminate\Support\Facades\DB;
 class CartController extends Controller
 {
 
+    public function update_status(Request $request)
+    {
+        $cart = Cart::where('id', $request->id)->first();
+        if ($cart) {
+            $cart->update([
+                'status' => $request->status
+            ]);
+            if ($request->status == 'Returned') {
+                foreach ($request->cart_items as $key => $value) {
+                    $product = Product::where('id', $value['product_id'])->first();
+                    if ($product) {
+                        $product->update([
+                            'quantity' => $value['quantity'] +  $product->quantity
+                        ]);
+                    }
+                }
+            }
+        }
+         return response()->json($cart, 200);
+    }
     public function index(Request $request)
     {
         $query = Cart::where('status', 'Paid')
@@ -99,6 +119,22 @@ class CartController extends Controller
         ], 200);
     }
 
+
+
+    public function get_shopee(Request $request)
+    {
+
+        $carts = Cart::where('shop', 'Shopee')->with(['cart_items', 'credit_payments']);
+        if ($request->filled('search')) {
+            $carts->where('order_id', 'like', '%' . $request->search . '%');
+            $carts->orWhere('customer', 'like', '%' . $request->search . '%');
+        }
+
+
+        return response()->json($carts->paginate(10), 200);
+    }
+
+
     public function get_cart_credit(Request $request)
     {
 
@@ -122,17 +158,20 @@ class CartController extends Controller
         $cart = Cart::create([
             'cart_id' => $cart_id,
             'customer_id' => $request->customer_id,
+            'order_id' => $request->order_id ?? null,
+            'customer' => $request->customer ?? null,
             'sub_total' => $request->sub_total,
             'customer_total_discount' => $request->customer_total_discount,
             'discount_per_item' => $request->total_item_discount,
             'discount_per_order' => $request->discount_per_order,
             'total_price' => $request->total_price,
             'payment_type' => $request->payment_type,
-            'status' => $request->is_credit == 'true' ? 'Pending' : 'Paid',
+            'status' => $request->is_credit == 'true' || $request->shop == 'Shopee' ? 'Pending' : 'Paid',
             'customer_amount' => $request->customer_amount,
             'change' => $request->change,
-            'is_credit' => $request->is_credit,
+            'is_credit' => $request->is_credit ?? null,
             'due_date' => $request->due_date,
+            'shop' => $request->shop,
             'balance' => $request->is_credit == 'true' ? $request->total_price : '0',
         ]);
 

@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('cart_id')->nullable();
             $table->string('customer_id')->nullable();
+            $table->string('order_id')->nullable();
+            $table->string('customer')->nullable();
             $table->string('sub_total')->nullable();
             $table->string('customer_total_discount')->nullable();
             $table->string('discount_per_item')->nullable();
@@ -26,6 +28,7 @@ return new class extends Migration
             $table->string('change')->nullable();
             $table->string('status')->nullable();
             $table->string('is_credit')->nullable();
+            $table->string('shop')->nullable();
             $table->string('balance')->nullable();
             $table->string('due_date')->nullable();
             $table->timestamps();

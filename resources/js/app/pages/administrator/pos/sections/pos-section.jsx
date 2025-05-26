@@ -90,7 +90,10 @@ export default function PosSection() {
 
                 {/* Right column */}
                 <div className="grid grid-cols-1 lg:col-span-4 gap-4">
-                    <section className="flex flex-col items-center justify-between mt-6 w-full xl:h-[82vh] xxl:h-[87vh]" aria-labelledby="section-2-title">
+                    <section
+                        className="flex flex-col items-center justify-between mt-6 w-full xl:h-[82vh] xxl:h-[87vh]"
+                        aria-labelledby="section-2-title"
+                    >
                         <div className="overflow-hidden rounded-lg bg-white shadow-sm  w-full ">
                             <div className="px-5 flex w-full gap-3">
                                 <div className="w-full">
@@ -333,20 +336,21 @@ export default function PosSection() {
                             </div>
                         </div>
                         <div class="px-5 mt-5 w-full">
-                                <PrintReceiptSection
-                                    data={carts}
-                                    subtotal={subtotal}
-                                    totalItemDiscount={totalItemDiscount}
-                                    totalDiscount={totalDiscount}
-                                    total_price={total_price}
-                                    setOverallDiscount={setOverallDiscount}
-                                    discount_per_order={
-                                        isNaN(parseFloat(overallDiscount))
-                                            ? "0"
-                                            : overallDiscount
-                                    }
-                                />
-                            </div>
+                            <PrintReceiptSection
+                                shop={store}
+                                data={carts}
+                                subtotal={subtotal}
+                                totalItemDiscount={totalItemDiscount}
+                                totalDiscount={totalDiscount}
+                                total_price={total_price}
+                                setOverallDiscount={setOverallDiscount}
+                                discount_per_order={
+                                    isNaN(parseFloat(overallDiscount))
+                                        ? "0"
+                                        : overallDiscount
+                                }
+                            />
+                        </div>
                     </section>
                 </div>
             </div>

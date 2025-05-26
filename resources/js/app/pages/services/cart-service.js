@@ -14,9 +14,26 @@ export function get_over_due_service() {
     } catch (error) {}
 }
 
+export function update_status_service(data) {
+    try {
+        const result = axios.post("/api/update_status", data);
+        
+        return result;
+    } catch (error) {}
+}
+
 export function add_payment_service(data) {
     try {
         const result = axios.post("/api/credit_payment", data);
+        return result;
+    } catch (error) {}
+}
+
+export function get_shopee_service() {
+    try {
+        const result = axios.get(
+            "/api/get_shopee" + window.location.search
+        );
         return result;
     } catch (error) {}
 }

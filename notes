@@ -1,3 +1,13 @@
+POS
+
+kung shopee nga store ang gi select ang makita sa form kay
+
+-   customer name
+-   order ID sa shoppee
+-   status default kay pending, paid,returned, refunded.
+
+-invoice,order ID, customer Name, total, status.
+
 Pending Task:
 
 <!-- - POS Section: Butangi rag function na if 10 stocks below monotify sa system na low stock n ang specific product. Then if 0 is out of stock mo notify sd. -->

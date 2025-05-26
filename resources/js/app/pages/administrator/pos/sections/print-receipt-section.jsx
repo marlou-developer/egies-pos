@@ -12,6 +12,7 @@ import {
     CreditCardIcon,
 } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
+import { FaCartShopping } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import {
     render,
@@ -32,6 +33,7 @@ export default function PrintReceiptSection({
     discount_per_order,
     data,
     setOverallDiscount,
+    shop,
 }) {
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -144,7 +146,6 @@ export default function PrintReceiptSection({
             reset_data();
         }
     }, [isOpen]);
-
     async function submit_payment(params) {
         try {
             setLoading(true);
@@ -164,6 +165,9 @@ export default function PrintReceiptSection({
                     is_credit: `${form?.is_credit}` ?? null,
                     due_date: form?.due_date ?? null,
                     customer_id: form?.customer?.id ?? null,
+                    shop: shop,
+                    order_id: form.order_id ?? null,
+                    customer: form.customer ?? null,
                 })
             );
 
@@ -176,13 +180,15 @@ export default function PrintReceiptSection({
             });
             dispatch(setCarts([]));
             reset_data();
+            setLoading(false);
         } catch (error) {
-            Swal.fire({
+            await Swal.fire({
                 icon: "error",
                 title: "Payment Unsuccessful",
                 showConfirmButton: false,
                 timer: 1500,
             });
+            setLoading(false);
         }
     }
     async function search_customer(e) {
@@ -194,29 +200,37 @@ export default function PrintReceiptSection({
         setIsSearchLoading(false);
     }
     function isFunctionDisable() {
-        if (form.is_customer && form.change >= 0 && form.payment_type) {
-            if (form.customer && form.is_credit && form.change >= 0) {
-                if (form.due_date) {
-                    return false;
+        if (shop == "Store") {
+            if (form.is_customer && form.change >= 0 && form.payment_type) {
+                if (form.customer && form.is_credit && form.change >= 0) {
+                    if (form.due_date) {
+                        return false;
+                    } else {
+                        return true;
+                    }
                 } else {
-                    return true;
+                    if (form.customer && form.change >= 0) {
+                        return false;
+                    } else {
+                        return true;
+                    }
                 }
             } else {
-                if (form.customer && form.change >= 0) {
+                if (form.change >= 0 && form.payment_type) {
                     return false;
                 } else {
-                    return true;
+                    if (form.is_credit && form.due_date) {
+                        return false;
+                    } else {
+                        return true;
+                    }
                 }
             }
         } else {
-            if (form.change >= 0 && form.payment_type) {
+            if (form.customer && form.order_id) {
                 return false;
             } else {
-                if (form.is_credit && form.due_date) {
-                    return false;
-                } else {
-                    return true;
-                }
+                return true;
             }
         }
     }
@@ -343,181 +357,219 @@ export default function PrintReceiptSection({
                             </div>
                         </div>
                         <div className="border-pink-600 border-r border-2"></div>
-                        {/* sss */}
-                        <div className="flex-1 flex flex-col gap-3">
-                            <div className="flex gap-3">
-                                <input
-                                    id="is_customer"
-                                    name="is_customer"
-                                    type="checkbox"
-                                    checked={form.is_customer}
+                        {shop == "Shopee" && (
+                            <div className="flex-1 flex flex-col gap-3">
+                                <Input
                                     onChange={(e) =>
                                         setForm({
                                             ...form,
-                                            customer: null,
-                                            [e.target.name]: e.target.checked,
+                                            customer: e.target.value,
                                         })
                                     }
-                                    className="h-5 w-5 rounded border-pink-500 text-pink-600 focus:ring-pink-500 checked:bg-pink-600 checked:hover:bg-pink-600"
+                                    type="text"
+                                    value={form?.customer}
+                                    name="customer"
+                                    label="Customer Name"
                                 />
-                                <span>Is Regular Customer?</span>
+                                <Input
+                                    onChange={(e) =>
+                                        setForm({
+                                            ...form,
+                                            order_id: e.target.value,
+                                        })
+                                    }
+                                    type="text"
+                                    value={form?.order_id}
+                                    name="order_id"
+                                    label="Shopee Order ID"
+                                />
                             </div>
-
-                            {form.is_customer && (
+                        )}
+                        {shop == "Store" && (
+                            <div className="flex-1 flex flex-col gap-3">
                                 <div className="flex gap-3">
                                     <input
-                                        id="is_credit"
-                                        name="is_credit"
+                                        id="is_customer"
+                                        name="is_customer"
                                         type="checkbox"
-                                        checked={form.is_credit}
+                                        checked={form.is_customer}
                                         onChange={(e) =>
                                             setForm({
                                                 ...form,
-                                                due_date: null,
+                                                customer: null,
                                                 [e.target.name]:
                                                     e.target.checked,
                                             })
                                         }
                                         className="h-5 w-5 rounded border-pink-500 text-pink-600 focus:ring-pink-500 checked:bg-pink-600 checked:hover:bg-pink-600"
                                     />
-                                    <span>Is Credit?</span>
+                                    <span>Is Regular Customer?</span>
                                 </div>
-                            )}
 
-                            {form.is_customer && (
-                                <Input
-                                    onChange={(e) => search_customer(e)}
-                                    name="customer"
-                                    label="Search Customer"
-                                />
-                            )}
-                            {!isSearchLoading && customer?.length == 0 && (
-                                <div className="text-red-600">
-                                    Customer not found!
-                                </div>
-                            )}
-                            {isSearchLoading && customer?.length == 0 && (
-                                <div className="text-gray-600">Loading...</div>
-                            )}
-                            {form?.is_customer && customer?.length != 0 && (
-                                <table className="min-w-full divide-y divide-gray-300">
-                                    <tbody className="divide-y divide-gray-200">
-                                        {customer?.map((customer, i) => (
-                                            <tr key={i}>
-                                                <td className="capitalize pr-3 py-2 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">
-                                                    {customer.name}
-                                                </td>
-                                                <td className="relative pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
-                                                    {form?.customer?.id ==
-                                                        customer.id && (
-                                                        <div className="flex items-end justify-end gap-6 w-full">
-                                                            <button className="flex gap-1">
-                                                                <CheckIcon className="h-4 w-4 text-green-500" />
-                                                                <div className=" text-green-500">
-                                                                    SELECTED
-                                                                </div>{" "}
-                                                            </button>
-                                                            <button
-                                                                onClick={() =>
-                                                                    setForm({
-                                                                        ...form,
-                                                                        customer:
-                                                                            null,
-                                                                    })
-                                                                }
-                                                                className="text-pink-600 hover:text-pink-900"
-                                                            >
-                                                                REMOVE
-                                                            </button>
-                                                        </div>
-                                                    )}
-
-                                                    {form?.customer?.id !=
-                                                        customer.id && (
-                                                        <>
-                                                            <button
-                                                                onClick={() =>
-                                                                    setForm({
-                                                                        ...form,
-                                                                        customer:
-                                                                            customer,
-                                                                    })
-                                                                }
-                                                                className="text-pink-600 hover:text-pink-900"
-                                                            >
-                                                                SELECT
-                                                            </button>
-                                                        </>
-                                                    )}
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            )}
-                            {form?.is_credit &&
-                                form?.is_customer &&
-                                customer?.length != 0 && (
-                                    <Input
-                                        onChange={(e) =>
-                                            setForm({
-                                                ...form,
-                                                due_date: e.target.value,
-                                            })
-                                        }
-                                        value={form.due_date}
-                                        type="date"
-                                        label="Due Date"
-                                    />
+                                {form.is_customer && (
+                                    <div className="flex gap-3">
+                                        <input
+                                            id="is_credit"
+                                            name="is_credit"
+                                            type="checkbox"
+                                            checked={form.is_credit}
+                                            onChange={(e) =>
+                                                setForm({
+                                                    ...form,
+                                                    due_date: null,
+                                                    [e.target.name]:
+                                                        e.target.checked,
+                                                })
+                                            }
+                                            className="h-5 w-5 rounded border-pink-500 text-pink-600 focus:ring-pink-500 checked:bg-pink-600 checked:hover:bg-pink-600"
+                                        />
+                                        <span>Is Credit?</span>
+                                    </div>
                                 )}
 
-                            <Input
-                                onChange={(e) =>
-                                    setForm({
-                                        ...form,
-                                        customer_amount: e.target.value,
-                                        change:
-                                            parseFloat(
-                                                e.target.value == ""
-                                                    ? 0
-                                                    : e.target.value
-                                            ) - overall_total,
-                                    })
-                                }
-                                disabled={form.is_credit}
-                                value={form?.customer_amount}
-                                name="amount"
-                                label="Cash/Amount"
-                            />
-                            {!form.is_credit && (
-                                <select
+                                {form.is_customer && (
+                                    <Input
+                                        onChange={(e) => search_customer(e)}
+                                        name="customer"
+                                        label="Search Customer"
+                                    />
+                                )}
+                                {!isSearchLoading && customer?.length == 0 && (
+                                    <div className="text-red-600">
+                                        Customer not found!
+                                    </div>
+                                )}
+                                {isSearchLoading && customer?.length == 0 && (
+                                    <div className="text-gray-600">
+                                        Loading...
+                                    </div>
+                                )}
+                                {form?.is_customer && customer?.length != 0 && (
+                                    <table className="min-w-full divide-y divide-gray-300">
+                                        <tbody className="divide-y divide-gray-200">
+                                            {customer?.map((customer, i) => (
+                                                <tr key={i}>
+                                                    <td className="capitalize pr-3 py-2 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">
+                                                        {customer.name}
+                                                    </td>
+                                                    <td className="relative pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
+                                                        {form?.customer?.id ==
+                                                            customer.id && (
+                                                            <div className="flex items-end justify-end gap-6 w-full">
+                                                                <button className="flex gap-1">
+                                                                    <CheckIcon className="h-4 w-4 text-green-500" />
+                                                                    <div className=" text-green-500">
+                                                                        SELECTED
+                                                                    </div>{" "}
+                                                                </button>
+                                                                <button
+                                                                    onClick={() =>
+                                                                        setForm(
+                                                                            {
+                                                                                ...form,
+                                                                                customer:
+                                                                                    null,
+                                                                            }
+                                                                        )
+                                                                    }
+                                                                    className="text-pink-600 hover:text-pink-900"
+                                                                >
+                                                                    REMOVE
+                                                                </button>
+                                                            </div>
+                                                        )}
+
+                                                        {form?.customer?.id !=
+                                                            customer.id && (
+                                                            <>
+                                                                <button
+                                                                    onClick={() =>
+                                                                        setForm(
+                                                                            {
+                                                                                ...form,
+                                                                                customer:
+                                                                                    customer,
+                                                                            }
+                                                                        )
+                                                                    }
+                                                                    className="text-pink-600 hover:text-pink-900"
+                                                                >
+                                                                    SELECT
+                                                                </button>
+                                                            </>
+                                                        )}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                )}
+                                {form?.is_credit &&
+                                    form?.is_customer &&
+                                    customer?.length != 0 && (
+                                        <Input
+                                            onChange={(e) =>
+                                                setForm({
+                                                    ...form,
+                                                    due_date: e.target.value,
+                                                })
+                                            }
+                                            value={form.due_date}
+                                            type="date"
+                                            label="Due Date"
+                                        />
+                                    )}
+
+                                <Input
                                     onChange={(e) =>
                                         setForm({
                                             ...form,
-                                            payment_type: e.target.value,
+                                            customer_amount: e.target.value,
+                                            change:
+                                                parseFloat(
+                                                    e.target.value == ""
+                                                        ? 0
+                                                        : e.target.value
+                                                ) - overall_total,
                                         })
                                     }
-                                    className="rounded-md text-gray-500"
-                                    label="Mode of Payment"
-                                >
-                                    <option disabled selected>
-                                        Mode of Payment:
-                                    </option>
-                                    <option value="Cash">Cash</option>
-                                    <option value="E-Wallet">E-Wallet</option>
-                                    <option value="Bank Transfer">
-                                        Bank Transfer
-                                    </option>
-                                    <option value="Credit/Debit Card">
-                                        Credit/Debit Card
-                                    </option>
-                                </select>
-                            )}
-                        </div>
+                                    disabled={form.is_credit}
+                                    value={form?.customer_amount}
+                                    name="amount"
+                                    label="Cash/Amount"
+                                />
+                                {!form.is_credit && (
+                                    <select
+                                        onChange={(e) =>
+                                            setForm({
+                                                ...form,
+                                                payment_type: e.target.value,
+                                            })
+                                        }
+                                        className="rounded-md text-gray-500"
+                                        label="Mode of Payment"
+                                    >
+                                        <option disabled selected>
+                                            Mode of Payment:
+                                        </option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="E-Wallet">
+                                            E-Wallet
+                                        </option>
+                                        <option value="Bank Transfer">
+                                            Bank Transfer
+                                        </option>
+                                        <option value="Credit/Debit Card">
+                                            Credit/Debit Card
+                                        </option>
+                                    </select>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     <div className="mt-12">
-                        {!form?.is_credit && (
+                        {shop == "Store" && !form?.is_credit && (
                             <Button
                                 disabled={isFunctionDisable()}
                                 loading={loading}
@@ -531,7 +583,7 @@ export default function PrintReceiptSection({
                             </Button>
                         )}
 
-                        {form?.is_credit && (
+                        {shop == "Store" && form?.is_credit && (
                             <Button
                                 disabled={isFunctionDisable()}
                                 loading={loading}
@@ -541,6 +593,20 @@ export default function PrintReceiptSection({
                                 <div className="flex gap-3">
                                     <CreditCardIcon className="h-5 w-5" />
                                     <div>CREDIT</div>
+                                </div>
+                            </Button>
+                        )}
+
+                        {shop == "Shopee" && (
+                            <Button
+                                disabled={isFunctionDisable()}
+                                loading={loading}
+                                onClick={submit_payment}
+                                className="w-full bg-orange-700 hover:bg-orange-800"
+                            >
+                                <div className="flex gap-3">
+                                    <FaCartShopping className="h-5 w-5" />
+                                    <div>PROCEED SHOPEE</div>
                                 </div>
                             </Button>
                         )}
