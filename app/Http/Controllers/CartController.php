@@ -58,11 +58,9 @@ class CartController extends Controller
         $total_profit = CartItem::sum(DB::raw('profit'));
 
 
-        $current_credit = Cart::where([
-            ['created_at', '=', $today],
-            ['is_credit', '=', 'true'],
-        ])
-            ->sum(DB::raw('total_price'));
+        $current_credit = Cart::whereDate('created_at', $today)
+            ->where('is_credit', 'true')  // boolean true, or use 1 if stored as integer
+            ->sum('total_price');
 
         $total_credit = Cart::where('is_credit', '=', 'true')
             ->sum(DB::raw('total_price'));
