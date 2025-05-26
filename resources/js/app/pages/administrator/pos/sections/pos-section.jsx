@@ -90,8 +90,8 @@ export default function PosSection() {
 
                 {/* Right column */}
                 <div className="grid grid-cols-1 lg:col-span-4 gap-4">
-                    <section aria-labelledby="section-2-title">
-                        <div className="overflow-hidden rounded-lg bg-white shadow-sm">
+                    <section className="flex flex-col items-center justify-between mt-6 w-full h-[87vh]" aria-labelledby="section-2-title">
+                        <div className="overflow-hidden rounded-lg bg-white shadow-sm  w-full ">
                             <div className="px-5 flex w-full gap-3">
                                 <div className="w-full">
                                     <select
@@ -111,10 +111,6 @@ export default function PosSection() {
                                 <div class="font-bold text-xl">
                                     Current Order
                                 </div>
-                                {/* <div class="font-semibold">
-                            <span class="px-4 py-2 rounded-md bg-red-100 text-red-500">Clear All</span>
-                            <span class="px-4 py-2 rounded-md bg-gray-100 text-gray-800">Setting</span>
-                        </div> */}
                             </div>
                             <div class="px-5 py-4 overflow-y-auto h-64">
                                 {carts.map((res) => {
@@ -335,8 +331,8 @@ export default function PosSection() {
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="px-5 mt-5">
+                        </div>
+                        <div class="px-5 mt-5 w-full">
                                 <PrintReceiptSection
                                     data={carts}
                                     subtotal={subtotal}
@@ -351,7 +347,6 @@ export default function PosSection() {
                                     }
                                 />
                             </div>
-                        </div>
                     </section>
                 </div>
             </div>
