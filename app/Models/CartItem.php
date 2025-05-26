@@ -25,4 +25,8 @@ class CartItem extends Model
     {
         return $this->hasOne(Product::class, 'id', 'product_id');
     }
+     public function cart(): HasOne
+    {
+        return $this->hasOne(Cart::class, 'cart_id', 'cart_id');
+    }
 }
