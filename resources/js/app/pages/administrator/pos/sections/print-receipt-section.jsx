@@ -174,7 +174,7 @@ export default function PrintReceiptSection({
             await store.dispatch(get_category_thunk());
             await Swal.fire({
                 icon: "success",
-                title: "Your cart has been paid",
+                title: "Your cart has been saved",
                 showConfirmButton: false,
                 timer: 1500,
             });
