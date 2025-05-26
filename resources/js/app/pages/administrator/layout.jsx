@@ -16,10 +16,10 @@ import {
 import { FaBook } from "react-icons/fa6";
 import store from "@/app/store/store";
 import { get_over_due_thunk } from "@/app/redux/cart-thunk";
+import { useSelector } from "react-redux";
 
 export default function AdminLayout({ children }) {
-    const [collapsed, setCollapsed] = useState(false); // manage collapsed state here
-
+    const [collapsed, setCollapsed] = useState(false); 
     useEffect(() => {
         store.dispatch(get_over_due_thunk());
     }, []);
@@ -55,7 +55,7 @@ export default function AdminLayout({ children }) {
             href: "/administrator/stocks",
             icon: InboxStackIcon,
             current: path == "stocks",
-            notification: true,
+            notification:true,
         },
         {
             name: "Shopee Section",
