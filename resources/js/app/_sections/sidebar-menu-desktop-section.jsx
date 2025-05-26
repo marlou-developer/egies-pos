@@ -2,6 +2,7 @@ import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 import React from "react";
 import DisclosureComponent from "../_components/disclosure";
 import { Link } from "@inertiajs/react";
+import { useSelector } from "react-redux";
 
 export default function SidebarDesktopSection({
     navigation,
@@ -13,6 +14,10 @@ export default function SidebarDesktopSection({
         return classes.filter(Boolean).join(" ");
     }
 
+    
+    const { over_dues } = useSelector((store) => store.carts);
+
+    console.log('over_dues',over_dues)
     return (
         <nav className="flex flex-1 flex-col">
             <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -39,7 +44,16 @@ export default function SidebarDesktopSection({
                                                 "h-6 w-6 shrink-0"
                                             )}
                                         />
-                                        {!collapsed && item.name}
+                                        <div className="flex gap-3 items-start justify-between w-full">
+                                            <div>{!collapsed && item.name}</div>
+                                            <div>
+                                                {item.notification && (
+                                                    <button className="bg-red-600 px-2 rounded-md p-1 text-white">
+                                                       LS {over_dues?.stocks?.length}
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
                                     </Link>
                                 </li>
                             ) : (

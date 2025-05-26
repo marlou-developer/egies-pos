@@ -13,25 +13,13 @@ import AddPaymentSection from "./add-payment-section";
 import HistorySection from "./history-section";
 import SearchSection from "./search-section";
 
-const customers = [
-    {
-        name: "Lindsay Walton",
-        title: "Front-end Developer",
-        email: "2000",
-        role: "Member",
-        due: "10/20/2025",
-        status: "Paid",
-    },
-    // More people...
-];
-
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
 export default function CreditsSection() {
     const { carts } = useSelector((store) => store.carts);
-    console.log("cartscarts", carts);
+
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">
@@ -42,173 +30,103 @@ export default function CreditsSection() {
                     </h1>
                 </div>
                 <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                    <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                        <span className="isolate inline-flex rounded-md shadow-xs">
-                            <button
-                                type="button"
-                                // onClick={() => setOpenCFilter(true)}
-                                className="relative -ml-px inline-flex items-center rounded-r-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-50 focus:z-10"
-                            >
-                                <FaFilter className="mr-1 text-pink-500" />
-                                Filter Customer Credits
-                            </button>
-                        </span>
-                    </div>
+                    <span className="isolate inline-flex rounded-md shadow-sm">
+                        <button
+                            type="button"
+                            className="relative inline-flex items-center rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-pink-50 focus:z-10"
+                        >
+                            <FaFilter className="mr-1 text-pink-500" />
+                            Filter Customer Credits
+                        </button>
+                    </span>
                 </div>
             </div>
-            <div className="flex items-start justify-start">
+
+            <div className="mt-4 flex items-start justify-start">
                 <SearchSection />
             </div>
+
             <div className="mt-8 flow-root">
                 <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
                     <div className="inline-block min-w-full py-2 align-middle">
                         <table className="min-w-full border-separate border-spacing-0">
                             <thead>
                                 <tr>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter sm:pl-6 lg:pl-8"
-                                    >
-                                        Customer Name
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10  border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter sm:table-cell"
-                                    >
-                                        Invoice
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10  border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter lg:table-cell"
-                                    >
-                                        Total
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10  border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter lg:table-cell"
-                                    >
-                                        Balance
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10  border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter lg:table-cell"
-                                    >
-                                        Due Date
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter"
-                                    >
-                                        Status
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-4 pl-3 backdrop-blur-sm backdrop-filter sm:pr-6 lg:pr-8"
-                                    >
-                                        <span className="sr-only">Edit</span>
-                                    </th>
+                                    {[
+                                        "Customer Name",
+                                        "Invoice",
+                                        "Total",
+                                        "Balance",
+                                        "Due Date",
+                                        "Status",
+                                        "",
+                                    ].map((header, idx) => (
+                                        <th
+                                            key={idx}
+                                            scope="col"
+                                            className={classNames(
+                                                "sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 px-3 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter",
+                                                idx === 0 &&
+                                                    "pl-4 sm:pl-6 lg:pl-8",
+                                                idx === 6 &&
+                                                    "pr-4 sm:pr-6 lg:pr-8"
+                                            )}
+                                        >
+                                            {header || (
+                                                <span className="sr-only">
+                                                    Actions
+                                                </span>
+                                            )}
+                                        </th>
+                                    ))}
                                 </tr>
                             </thead>
                             <tbody>
-                                {carts?.data?.map((res, customerIdx) => (
-                                    <tr key={customerIdx}>
-                                        <td
-                                            className={classNames(
-                                                customerIdx !==
-                                                    customers.length - 1
-                                                    ? "border-b border-gray-200"
-                                                    : "",
-                                                "py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6 lg:pl-8"
-                                            )}
-                                        >
-                                            {res.customer.name}
+                                {carts?.data?.map((res, idx) => (
+                                    <tr key={idx}>
+                                        <td className="whitespace-nowrap border-b border-gray-200 py-4 pr-3 pl-4 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
+                                            {res.customer?.name}
                                         </td>
-                                        <td
-                                            className={classNames(
-                                                customerIdx !==
-                                                    customers.length - 1
-                                                    ? "border-b border-gray-200"
-                                                    : "",
-                                                " px-3 py-4 text-sm whitespace-nowrap text-gray-500 sm:table-cell"
-                                            )}
-                                        >
+                                        <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
                                             {res.cart_id}
                                         </td>
-
-                                        <td
-                                            className={classNames(
-                                                customerIdx !==
-                                                    customers.length - 1
-                                                    ? "border-b border-gray-200"
-                                                    : "",
-                                                " px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
-                                            )}
-                                        >
+                                        <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
                                             <b>
                                                 {Number(
                                                     res.total_price
                                                 ).toFixed(2)}
                                             </b>
                                         </td>
-                                        <td
-                                            className={classNames(
-                                                customerIdx !==
-                                                    customers.length - 1
-                                                    ? "border-b border-gray-200"
-                                                    : "",
-                                                " px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
-                                            )}
-                                        >
+                                        <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
                                             <b>
                                                 {Number(res.balance).toFixed(2)}
                                             </b>
                                         </td>
-                                        <td
-                                            className={classNames(
-                                                customerIdx !==
-                                                    customers.length - 1
-                                                    ? "border-b border-gray-200"
-                                                    : "",
-                                                " px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
-                                            )}
-                                        >
+                                        <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
                                             {res.due_date
                                                 ? moment(res.due_date).format(
                                                       "LL"
                                                   )
                                                 : "No due date"}
                                         </td>
-                                        <td
-                                            className={classNames(
-                                                customerIdx !==
-                                                    customers.length - 1
-                                                    ? "border-b border-gray-200"
-                                                    : "",
-                                                "px-3 py-4 text-sm whitespace-nowrap text-gray-500"
-                                            )}
-                                        >
+                                        <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
                                             {res.status}
                                         </td>
-                                        <td
-                                            className={classNames(
-                                                customerIdx !==
-                                                    customers.length - 1
-                                                    ? "border-b border-gray-200"
-                                                    : "",
-                                                "px-3 py-4 text-sm text-gray-700"
-                                            )}
-                                        >
-                                            <div className="flex items-center justify-center  gap-3">
+                                        <td className="border-b border-gray-200 px-3 py-4 text-sm text-gray-700">
+                                            <div className="flex items-center justify-center gap-3">
                                                 <HistorySection data={res} />
                                                 <a
                                                     href={`/administrator/credits/${res.cart_id}`}
                                                     target="_blank"
-                                                    className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-pink-100 hover:bg-pink-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
+                                                    className="inline-flex items-center gap-x-1.5 rounded-md bg-pink-100 hover:bg-pink-200 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300"
                                                 >
                                                     Invoice
                                                 </a>
-                                                <AddPaymentSection data={res} />
-                                                {/* <UpdateStatusSection /> */}
+                                                {res.status !== "Paid" && (
+                                                    <AddPaymentSection
+                                                        data={res}
+                                                    />
+                                                )}
                                             </div>
                                         </td>
                                     </tr>

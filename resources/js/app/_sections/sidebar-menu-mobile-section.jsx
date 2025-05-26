@@ -2,6 +2,7 @@ import React from "react";
 import DisclosureComponent from "../_components/disclosure";
 import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 import { Link } from "@inertiajs/react";
+import { useSelector } from "react-redux";
 
 export default function SidebarMobileSection({
     navigation,
@@ -11,6 +12,8 @@ export default function SidebarMobileSection({
     function classNames(...classes) {
         return classes.filter(Boolean).join(" ");
     }
+
+    const { over_dues } = useSelector((store) => store.carts);
     return (
         <>
             <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-3 pb-4">
@@ -46,7 +49,21 @@ export default function SidebarMobileSection({
                                                         "size-6 shrink-0"
                                                     )}
                                                 />
-                                                {item.name}
+                                                <div className="flex gap-3 items-start justify-between w-full">
+                                                    <div>{item.name}</div>
+                                                    <div>
+                                                        {item.notification && (
+                                                            <button className="bg-red-600 px-2 rounded-md p-1 text-white">
+                                                                LS{" "}
+                                                                {
+                                                                    over_dues
+                                                                        ?.stocks
+                                                                        ?.length
+                                                                }
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                </div>
                                             </Link>
                                         </li>
                                     ) : (

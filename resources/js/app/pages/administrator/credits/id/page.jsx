@@ -26,8 +26,8 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     logo: {
-        width: '60%',
-        height: '100px',
+        width: "60%",
+        height: "100px",
     },
     companyInfo: {
         textAlign: "right",
@@ -190,13 +190,20 @@ const InvoicePDF = () => {
                     {/* Totals */}
                     <View style={styles.totalSection}>
                         <View style={styles.totalRow}>
+                            <Text>Payment Status: {cart.data?.status}</Text>
+                        </View>
+                        <View style={styles.totalRow}>
                             <Text>
-                                Subtotal Price: {Number(cart.data?.sub_total).toFixed(2)}
+                                Subtotal Price:{" "}
+                                {Number(cart.data?.sub_total).toFixed(2)}
                             </Text>
                         </View>
                         <View style={styles.totalRow}>
                             <Text>
-                                Discount Price: {Number(cart.data?.customer_total_discount).toFixed(2)}
+                                Discount Price:{" "}
+                                {Number(
+                                    cart.data?.customer_total_discount
+                                ).toFixed(2)}
                             </Text>
                         </View>
                         {/* <View style={styles.totalRow}>
@@ -204,7 +211,8 @@ const InvoicePDF = () => {
                         </View> */}
                         <View style={styles.totalRow}>
                             <Text style={styles.bold}>
-                                Total: {(Number(cart.data?.total_price)).toFixed(2)}
+                                Total:{" "}
+                                {Number(cart.data?.total_price).toFixed(2)}
                             </Text>
                         </View>
                         {/* <View style={styles.totalRow}>

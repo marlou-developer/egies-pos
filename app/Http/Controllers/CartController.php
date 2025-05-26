@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Models\Stock;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -38,7 +39,18 @@ class CartController extends Controller
 
         $carts = $query->get();
 
-        return response()->json($carts, 200);
+        $stocks = Product::whereBetween('quantity', [1, 10])
+            ->get()
+            ->map(function ($product) {
+                $product->stock_status = 'Low Stock';
+                return $product;
+            });
+
+
+        return response()->json([
+            ...$carts,
+            'stocks'=>$stocks
+        ], 200);
     }
 
     public function get_cart_credit(Request $request)
