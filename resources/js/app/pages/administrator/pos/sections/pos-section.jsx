@@ -76,7 +76,7 @@ export default function PosSection() {
 
     return (
         <div class="flex w-screen lg:w-[78vw] xl:w-[78vw]">
-            <div className="  max-w-[60%] overflow-auto border-r border-pink-500">
+            <div className="max-w-[60%] w-full overflow-auto border-r border-pink-500">
                 <ProductsSection storeName={store} />
             </div>
             <div class="w-full  max-w-[40%]">
