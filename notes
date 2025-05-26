@@ -1,10 +1,10 @@
 Pending Task:
 
-- POS Section: Butangi rag function na if 10 stocks below monotify sa system na low stock n ang specific product. Then if 0 is out of stock mo notify sd.
+<!-- - POS Section: Butangi rag function na if 10 stocks below monotify sa system na low stock n ang specific product. Then if 0 is out of stock mo notify sd. -->
 
-- Dashboard:
-Sales Section:
-Daily Sales, Daily Profit, Daily Expense, Total Income, Total Profit, Total Expense
+-   Dashboard:
+    Sales Section:
+    Daily Sales, Daily Profit, Daily Expense, Total Income, Total Profit, Total Expense
 
 Credit Section:
 Daily Credits, Total Amount Credits, No. of Due Today, No. Of Over Due
@@ -15,10 +15,10 @@ Daily Sales, Daily Profit, Pending Order, Returned Order, Refunded Order, Paid O
 Stocks Section:
 No. Of Low Stock Product, No. Of Out of Stock Product, Total Stocks in Capital, Total Stocks in Profit.
 
-- Sales Section: add ta ug Customer Name, Customer Discount, Product Discount. tangtangon nato ang balance ky cash mn jd ni tnan. add sd tag print Receipt na button after sa invoice.
+-   Sales Section: add ta ug Customer Name, Customer Discount, Product Discount. tangtangon nato ang balance ky cash mn jd ni tnan. add sd tag print Receipt na button after sa invoice.
 
-- Stocks Section: tangtangon nato ang brand and category ani quicks. ang iadd nato is after sa status, total inventory retail price, total inventory capital.
+-   Stocks Section: tangtangon nato ang brand and category ani quicks. ang iadd nato is after sa status, total inventory retail price, total inventory capital.
 
-- Stocks Section Stock History Modal: add ta ug Stocks Left before quantity then total quantity
+-   Stocks Section Stock History Modal: add ta ug Stocks Left before quantity then total quantity
 
-- Credit Section: Email Notification sa Customer if Due na nya or Overdue.
+-   Credit Section: Email Notification sa Customer if Due na nya or Overdue.

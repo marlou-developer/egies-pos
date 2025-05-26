@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Stock;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
@@ -28,6 +29,7 @@ class CartController extends Controller
     }
     public function get_over_due(Request $request)
     {
+        $today = Carbon::today();
         $query = Cart::where('due_date', '<', Carbon::now())
             ->whereIn('status', ['Pending', 'Partial'])
             ->with(['customer']);
@@ -46,10 +48,56 @@ class CartController extends Controller
                 return $product;
             });
 
+        $current_sales = CartItem::whereDate('created_at', $today)
+            ->sum(DB::raw('quantity'));
+
+        $current_profit = CartItem::whereDate('created_at', $today)
+            ->sum(DB::raw('profit'));
+
+        $total_sales = CartItem::sum(DB::raw('total'));
+        $total_profit = CartItem::sum(DB::raw('profit'));
+
+
+        $current_credit = Cart::where([
+            ['created_at', '=', $today],
+            ['is_credit', '=', 'true'],
+        ])
+            ->sum(DB::raw('total_price'));
+
+        $total_credit = Cart::where('is_credit', '=', 'true')
+            ->sum(DB::raw('total_price'));
+
+        $due_date_today = Cart::whereDate('due_date', $today)
+            ->whereIn('status', ['Pending', 'Partial'])
+            ->with('customer')
+            ->count();
+
+        $over_due = Cart::whereDate('due_date', '<', Carbon::today())
+            ->whereIn('status', ['Pending', 'Partial'])
+            ->with('customer')->count();
+
+        $low_stock = Product::whereBetween('quantity', [1, 10])
+            ->count();
+
+        $out_of_stock = Product::where('quantity', 0)->count();
 
         return response()->json([
             ...$carts,
-            'stocks'=>$stocks
+            'stocks' => $stocks,
+            'dashboard' => [
+                'current_sales' => $current_sales,
+                'current_profit' => $current_profit,
+                'total_sales' => $total_sales,
+                'total_profit' => $total_profit,
+
+                'current_credit' => $current_credit,
+                'total_credit' => $total_credit,
+                'due_date_today' => $due_date_today,
+                'over_due' => $over_due,
+                
+                'low_stock' => $low_stock,
+                'out_of_stock' => $out_of_stock,
+            ]
         ], 200);
     }
 

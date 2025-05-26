@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -59,6 +60,9 @@ class DashboardController extends Controller
             default:
                 return response()->json(['error' => 'Invalid search parameter.'], 400);
         }
+
+
+        
 
         return response()->json([
             'range' => $search,
