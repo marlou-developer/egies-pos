@@ -75,7 +75,7 @@ export default function PosSection() {
         ) - parseFloat(overallDiscount || 0);
 
     return (
-        <div className="mx-auto max-w-3xl lg:max-w-7xl ">
+        <div className="mx-auto max-w-3xl lg:max-w-7xl xl:max-w-8xl">
             <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-10 lg:gap-8">
                 {/* Left column */}
                 <div className="grid grid-cols-1 gap-4 lg:col-span-6">
