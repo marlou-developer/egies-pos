@@ -1,0 +1,1 @@
+import{h as s,n as c,l as n}from"./app-BitTwLwH.js";import{f as o}from"./cart-service-CFHt5N8B.js";function i(t){try{return s.get("/api/dashboard?search="+t)}catch{}}function _(t){return async function(a,r){const e=await i(t);a(c.actions.setDashboard(e.data))}}function h(){return async function(t,a){const r=await o();t(n.actions.setCarts(r.data))}}export{_ as a,h as g};
