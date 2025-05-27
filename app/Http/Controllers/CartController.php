@@ -171,7 +171,7 @@ class CartController extends Controller
             'cart_id' => $cart_id,
             'customer_id' => $request->customer_id,
             'order_id' => $request->order_id ?? null,
-            'customer' => $request->customer ?? null,
+            'customer' => $request->customer_name ?? null,
             'sub_total' => $request->sub_total,
             'customer_total_discount' => $request->customer_total_discount,
             'discount_per_item' => $request->total_item_discount,

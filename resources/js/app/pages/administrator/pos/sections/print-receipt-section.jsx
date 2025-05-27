@@ -167,7 +167,7 @@ export default function PrintReceiptSection({
                     customer_id: form?.customer?.id ?? null,
                     shop: shop,
                     order_id: form.order_id ?? null,
-                    customer: form.customer?.name ?? null,
+                    customer_name: form.customer_name ?? null,
                 })
             );
 
@@ -227,7 +227,7 @@ export default function PrintReceiptSection({
                 }
             }
         } else {
-            if (form.customer && form.order_id) {
+            if (form.customer_name && form.order_id) {
                 return false;
             } else {
                 return true;
@@ -363,12 +363,12 @@ export default function PrintReceiptSection({
                                     onChange={(e) =>
                                         setForm({
                                             ...form,
-                                            customer: e.target.value,
+                                            customer_name: e.target.value,
                                         })
                                     }
                                     type="text"
-                                    value={form?.customer}
-                                    name="customer"
+                                    value={form?.customer_name}
+                                    name="customer_name"
                                     label="Customer Name"
                                 />
                                 <Input
