@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setSidebarOpen } from "../redux/app-slice";
 import {
@@ -10,6 +10,7 @@ import { Link } from "@inertiajs/react";
 import NotificationSection from "./notification-section";
 import SearchSection from "./search-section";
 import HeaderMenuSection from "./header-menu-section";
+import store from "../store/store";
 
 export default function TopbarSection({ userNavigation }) {
     const dispatch = useDispatch();
@@ -26,6 +27,7 @@ export default function TopbarSection({ userNavigation }) {
             }
         }
     };
+
 
     return (
         <div className="sticky top-0 z-40 lg:mx-auto w-full lg:px-0">

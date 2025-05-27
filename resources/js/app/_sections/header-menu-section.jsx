@@ -7,9 +7,20 @@ import {
 } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { Link } from "@inertiajs/react";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
+import { useSelector } from "react-redux";
+import store from "../store/store";
+import { get_user_login_thunk } from "../redux/app-thunk";
 
 export default function HeaderMenuSection({ userNavigation }) {
+    
+    const { user } = useSelector((state) => state.app);
+
+    useEffect(() => {
+        store.dispatch(get_user_login_thunk())
+    }, [])
+
+    console.log('úser', user)
     return (
         <Menu as="div" className="relative">
             <MenuButton className="-m-1.5 flex items-center p-1.5">
@@ -25,6 +36,7 @@ export default function HeaderMenuSection({ userNavigation }) {
                         className="ml-4 text-sm/6 font-semibold text-gray-900"
                     >
                         Egie's Beauty
+                        {/* {user?.name} */}
                     </span>
                     <ChevronDownIcon
                         aria-hidden="true"

@@ -8,3 +8,21 @@ export function create_user_service(data) {
 
     }
 }
+
+export function get_users_service() {
+    try {
+        const result = axios.get('/api/account')
+        return result
+    } catch (error) {
+
+    }
+}
+
+export async function get_user_login_service() {
+    try {
+        const res = await axios.get("/api/user");
+        return res.data;
+    } catch (error) {
+        return error;
+    }
+}

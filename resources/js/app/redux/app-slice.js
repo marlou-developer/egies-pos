@@ -3,11 +3,12 @@ import { createSlice } from "@reduxjs/toolkit";
 export const appSlice = createSlice({
     name: "app",
     initialState: {
+        users: [],
         user: {},
         sidebarOpen: false,
         sidebarCollapsed: false,
         dashboard: {
-            result:[]
+            result: []
         },
     },
     reducers: {
@@ -16,6 +17,9 @@ export const appSlice = createSlice({
         },
         setUser: (state, action) => {
             state.user = action.payload;
+        },
+        setUsers: (state, action) => {
+            state.users = action.payload
         },
         setSidebarOpen: (state, action) => {
             state.sidebarOpen = action.payload;

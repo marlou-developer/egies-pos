@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import AddUserSection from './add-user-section'
+import { useSelector } from 'react-redux'
 
 const people = [
     { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member' },
@@ -11,8 +12,11 @@ function classNames(...classes) {
 }
 
 export default function UsersSection() {
+    const { users } = useSelector((state) => state.users)
 
     const [openUser, setOpenUser] = useState(false);
+
+    console.log('adsasd', users)
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">
@@ -75,7 +79,7 @@ export default function UsersSection() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {people.map((person, personIdx) => (
+                                {users.map((person, personIdx) => (
                                     <tr key={person.email}>
                                         <td
                                             className={classNames(
@@ -107,7 +111,7 @@ export default function UsersSection() {
                                                 'px-3 py-4 text-sm whitespace-nowrap text-gray-500',
                                             )}
                                         >
-                                            {person.role}
+                                            {person.user_type}
                                         </td>
                                         <td
                                             className={classNames(
