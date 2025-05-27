@@ -47,4 +47,12 @@ class AccountController extends Controller
             'user' => $user
         ], 200);
     }
+
+    public function update(Request $request,  $id)
+    {
+        $user = User::where('id', $id)->first();
+        if ($user) {
+            $user->update($request->all());
+        }
+    }
 }

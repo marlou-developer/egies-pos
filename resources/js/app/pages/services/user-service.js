@@ -26,3 +26,12 @@ export async function get_user_login_service() {
         return error;
     }
 }
+
+export function update_user_service(data) {
+    try {
+        const result = axios.put(`/api/account/${data.id}`, data)
+        return result
+    } catch (error) {
+
+    }
+}

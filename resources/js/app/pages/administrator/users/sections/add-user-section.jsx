@@ -8,8 +8,7 @@ import { message } from "antd";
 import { useSelector } from "react-redux";
 import Input from "@/app/_components/input";
 import DrawerSection from "@/app/_sections/drawer-section";
-import { create_user_thunk } from "@/app/redux/user-thunk";
-import { get_users_thunk } from "@/app/redux/app-thunk";
+import { create_user_thunk, get_users_thunk } from "@/app/redux/user-thunk";
 
 export default function AddUserSection({ open, setOpenUser }) {
     const { users } = useSelector((state) => state.users);
@@ -186,7 +185,7 @@ export default function AddUserSection({ open, setOpenUser }) {
                                                 name="user_type"
                                                 type="text"
                                                 className="block w-full rounded-md bg-white px-3 py-2.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6">
-                                                <option selected disabled>Select User Type</option>
+                                                <option value="">Select User Type</option>
                                                 <option value="Admin">Admin</option>
                                                 <option value="Staff">Staff</option>
                                             </select>

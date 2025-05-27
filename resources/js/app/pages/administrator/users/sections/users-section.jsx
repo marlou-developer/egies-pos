@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import AddUserSection from './add-user-section'
 import { useSelector } from 'react-redux'
+import EditUserSection from './edit-user-section'
+import DeleteUserSection from './delete-user-section'
 
 const people = [
     { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member' },
@@ -116,12 +118,13 @@ export default function UsersSection() {
                                         <td
                                             className={classNames(
                                                 personIdx !== people.length - 1 ? 'border-b border-gray-200' : '',
-                                                'relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-8 lg:pr-8',
+                                                'relative py-2 text-center text-sm font-medium  ',
                                             )}
                                         >
-                                            <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                                                Edit<span className="sr-only">, {person.name}</span>
-                                            </a>
+                                            <div className="inline-flex items-center font-bold px-2 py-1 gap-4 ">
+                                                <EditUserSection data={person} />
+                                                <DeleteUserSection data={person} />
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}
