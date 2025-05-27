@@ -167,7 +167,7 @@ export default function PrintReceiptSection({
                     customer_id: form?.customer?.id ?? null,
                     shop: shop,
                     order_id: form.order_id ?? null,
-                    customer: form.customer ?? null,
+                    customer: form.customer?.name ?? null,
                 })
             );
 
@@ -325,8 +325,8 @@ export default function PrintReceiptSection({
                                     {isNaN(parseFloat(discount_per_order))
                                         ? "0.00"
                                         : parseFloat(
-                                              discount_per_order
-                                          ).toFixed(2)}
+                                            discount_per_order
+                                        ).toFixed(2)}
                                 </span>
                             </div>
 
@@ -455,49 +455,49 @@ export default function PrintReceiptSection({
                                                     <td className="relative pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
                                                         {form?.customer?.id ==
                                                             customer.id && (
-                                                            <div className="flex items-end justify-end gap-6 w-full">
-                                                                <button className="flex gap-1">
-                                                                    <CheckIcon className="h-4 w-4 text-green-500" />
-                                                                    <div className=" text-green-500">
-                                                                        SELECTED
-                                                                    </div>{" "}
-                                                                </button>
-                                                                <button
-                                                                    onClick={() =>
-                                                                        setForm(
-                                                                            {
-                                                                                ...form,
-                                                                                customer:
-                                                                                    null,
-                                                                            }
-                                                                        )
-                                                                    }
-                                                                    className="text-pink-600 hover:text-pink-900"
-                                                                >
-                                                                    REMOVE
-                                                                </button>
-                                                            </div>
-                                                        )}
+                                                                <div className="flex items-end justify-end gap-6 w-full">
+                                                                    <button className="flex gap-1">
+                                                                        <CheckIcon className="h-4 w-4 text-green-500" />
+                                                                        <div className=" text-green-500">
+                                                                            SELECTED
+                                                                        </div>{" "}
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() =>
+                                                                            setForm(
+                                                                                {
+                                                                                    ...form,
+                                                                                    customer:
+                                                                                        null,
+                                                                                }
+                                                                            )
+                                                                        }
+                                                                        className="text-pink-600 hover:text-pink-900"
+                                                                    >
+                                                                        REMOVE
+                                                                    </button>
+                                                                </div>
+                                                            )}
 
                                                         {form?.customer?.id !=
                                                             customer.id && (
-                                                            <>
-                                                                <button
-                                                                    onClick={() =>
-                                                                        setForm(
-                                                                            {
-                                                                                ...form,
-                                                                                customer:
-                                                                                    customer,
-                                                                            }
-                                                                        )
-                                                                    }
-                                                                    className="text-pink-600 hover:text-pink-900"
-                                                                >
-                                                                    SELECT
-                                                                </button>
-                                                            </>
-                                                        )}
+                                                                <>
+                                                                    <button
+                                                                        onClick={() =>
+                                                                            setForm(
+                                                                                {
+                                                                                    ...form,
+                                                                                    customer:
+                                                                                        customer,
+                                                                                }
+                                                                            )
+                                                                        }
+                                                                        className="text-pink-600 hover:text-pink-900"
+                                                                    >
+                                                                        SELECT
+                                                                    </button>
+                                                                </>
+                                                            )}
                                                     </td>
                                                 </tr>
                                             ))}
