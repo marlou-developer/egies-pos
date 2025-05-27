@@ -27,7 +27,7 @@ export default function ProductsSection({ storeName }) {
             </div>
 
             <div className="mt-5 lg:w-full px-3  overflow-auto mb-2 pb-4">
-                <div className="flex overflow-auto  gap-2 space-x-2">
+                <div className="flex overflow-auto  gap-1.5 space-x-2">
                     {categories
                         .slice()
                         .sort((a, b) => a.name.localeCompare(b.name))
@@ -35,11 +35,11 @@ export default function ProductsSection({ storeName }) {
                             <div
                                 key={category.name}
                                 onClick={() => setActiveCategory(category.name)}
-                                className={`cursor-pointer flex-shrink-0 bg-pink-300 justify-center px-5 py-2 rounded-lg text-sm 
+                                className={`cursor-pointer flex-shrink-0 bg-pink-400 justify-center px-5 py-2 rounded-lg text-sm mb-4 
                     ${
                         activeCategory === category.name
                             ? "bg-pink-400 text-white"
-                            : "font-semibold text-gray-700 hover:bg-pink-200"
+                            : "font-semibold text-white hover:bg-pink-200 hover:text-gray-500"
                     }`}
                             >
                                 {category.name}
