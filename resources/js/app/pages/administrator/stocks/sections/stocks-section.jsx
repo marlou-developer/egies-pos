@@ -219,7 +219,7 @@ export default function StocksSection() {
                                                 )}
                                             >
                                                 <span className="inline-flex items-center font-bold px-2 py-1">
-                                                    {product.quantity}
+                                                    ₱{(Number(product.quantity) * Number(product.cost)).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                 </span>
                                             </td>
                                             <td
@@ -232,7 +232,7 @@ export default function StocksSection() {
                                                 )}
                                             >
                                                 <span className="inline-flex items-center font-bold px-2 py-1">
-                                                    {product.quantity}
+                                                    ₱{((Number(product.srp) - Number(product.cost)) * Number(product.quantity)).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                                 </span>
                                             </td>
                                             <td
