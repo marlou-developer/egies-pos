@@ -80,8 +80,12 @@ class CartController extends Controller
             })
             ->sum(DB::raw('profit'));
 
-        $total_sales = CartItem::sum(DB::raw('total'));
-        $total_profit = CartItem::sum(DB::raw('profit'));
+        $total_sales = CartItem::whereHas('cart', function ($query) {
+            $query->where('status', 'Paid');
+        })->sum(DB::raw('total'));
+        $total_profit = CartItem::whereHas('cart', function ($query) {
+            $query->where('status', 'Paid');
+        })->sum(DB::raw('profit'));
 
 
         $current_credit = Cart::whereDate('created_at', $today)
