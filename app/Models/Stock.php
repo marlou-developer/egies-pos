@@ -14,6 +14,7 @@ class Stock extends Model
         'date',
         'delivery_id',
         'quantity',
+        'remaining',
         'price',
     ];
 

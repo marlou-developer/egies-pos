@@ -21,8 +21,9 @@ export default function AddStocksSection({ data }) {
             await store.dispatch(
                 create_stock_thunk({
                     ...form,
-                    product_id: String(data?.id), // Convert to string
+                    product_id: String(data?.id),
                     price: costOption === "same" ? data?.cost : null,
+                    remaining: String(data?.quantity),
                 })
             );
             await store.dispatch(get_over_due_thunk());
@@ -139,11 +140,10 @@ export default function AddStocksSection({ data }) {
                                 type="submit"
                                 disabled={costOption === "different"}
                                 className={`rounded-md p-2 text-white transition 
-        ${
-            costOption === "different"
-                ? "bg-gray-300 cursor-not-allowed"
-                : "bg-pink-400 hover:bg-pink-500"
-        }
+        ${costOption === "different"
+                                        ? "bg-gray-300 cursor-not-allowed"
+                                        : "bg-pink-400 hover:bg-pink-500"
+                                    }
     `}
                             >
                                 Add Stock

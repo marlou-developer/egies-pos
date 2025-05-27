@@ -15,6 +15,7 @@ class StockController extends Controller
             'date' => 'nullable|string',
             'delivery_id' => 'nullable|string',
             'quantity' => 'nullable|integer',
+            'remaining' => 'nullable|integer',
             'price' => 'nullable',
         ]);
 

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('date')->nullable();
             $table->string('delivery_id')->nullable();
             $table->string('quantity')->nullable();
+            $table->string('remaining')->nullable();
             $table->string('price')->nullable();
             $table->timestamps();
         });
