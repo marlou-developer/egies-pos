@@ -1,5 +1,6 @@
 
 import { delete_product_thunk, get_product_thunk } from "@/app/redux/product-thunk";
+import { delete_user_thunk, get_users_thunk } from "@/app/redux/user-thunk";
 import store from "@/app/store/store";
 import Modal from "@/Components/Modal";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/20/solid";
@@ -12,18 +13,18 @@ export default function DeleteUserSection({ data }) {
     const openModal = () => setIsModalOpen(true);
     const [loading, setLoading] = useState(false);
 
-    const deleteProduct = async (e) => {
+    const deleteUser = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
             await store.dispatch(
-                delete_product_thunk(data.id)
+                delete_user_thunk(data.id)
             );
-            store.dispatch(get_product_thunk())
+            store.dispatch(get_users_thunk())
             message.success("Deleted Successfully!");
             setIsModalOpen(false);
         } catch (error) {
-            message.error("Failed to Delete Product. Please try again."); // Show error message
+            message.error("Failed to Delete User. Please try again."); // Show error message
         } finally {
             setLoading(false); // Always reset loading state
         }
@@ -48,7 +49,7 @@ export default function DeleteUserSection({ data }) {
                 <h2 className="text-xl font-semibold mb-4">
                     Are you sure you want to remove this user?
                 </h2>
-                <form action="" onSubmit={deleteProduct}>
+                <form action="" onSubmit={deleteUser}>
                     <div className="flex w-full gap-5">
                         <button
                             type="button"

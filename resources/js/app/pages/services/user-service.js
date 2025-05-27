@@ -35,3 +35,12 @@ export function update_user_service(data) {
 
     }
 }
+
+export function delete_user_service(id) {
+    try {
+        const result = axios.delete(`/api/account/${id}`)
+        return result
+    } catch (error) {
+
+    }
+}

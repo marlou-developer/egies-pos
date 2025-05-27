@@ -55,4 +55,10 @@ class AccountController extends Controller
             $user->update($request->all());
         }
     }
+
+    public function destroy(User $user)
+    {
+        $user->delete();
+        return response()->json(['message' => 'User deleted successfully']);
+    }
 }
