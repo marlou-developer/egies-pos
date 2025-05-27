@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import {
     BellIcon,
     CalendarDateRangeIcon,
+    ExclamationCircleIcon,
     NoSymbolIcon,
 } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
@@ -38,7 +39,7 @@ export default function NotificationSection() {
             >
                 {(over_dues?.stocks?.length > 0 || over_dues?.over_due?.length > 0) && (
                     <span className="absolute -top-1 -right-1 inline-flex items-center justify-center h-4 w-4 rounded-full bg-red-500 text-white text-xs font-semibold">
-                        {Number(over_dues?.over_due?.length??0) + Number(over_dues?.stocks?.length??0)}{}
+                        {Number(over_dues?.over_due?.length ?? 0) + Number(over_dues?.stocks?.length ?? 0) + Number(over_dues?.out_stocks?.length ?? 0)}{ }
                     </span>
                 )}
                 <BellIcon aria-hidden="true" className="size-6" />
@@ -80,8 +81,23 @@ export default function NotificationSection() {
                                         href={`/administrator/stocks?search=${item.id}`}
                                         className="flex"
                                     >
-                                        <NoSymbolIcon className="h-6 mr-1" />
+                                        <ExclamationCircleIcon className="h-6 mr-1" />
                                         {item?.name} has low stocks.
+                                    </Link>
+                                </div>
+                            ))}
+                        {over_dues?.out_stocks?.length != 0 &&
+                            over_dues?.out_stocks?.map((item, index) => (
+                                <div
+                                    key={index}
+                                    className="px-4 py-2 underline hover:bg-gray-50"
+                                >
+                                    <Link
+                                        href={`/administrator/stocks?search=${item.id}`}
+                                        className="flex"
+                                    >
+                                        <NoSymbolIcon className="h-6 mr-1" />
+                                        {item?.name} is out stocks.
                                     </Link>
                                 </div>
                             ))}

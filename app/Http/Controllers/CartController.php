@@ -68,6 +68,16 @@ class CartController extends Controller
                 return $product;
             });
 
+
+
+        $out_stocks = Product::where('quantity', 0)
+            ->get()
+            ->map(function ($product) {
+                $product->stock_status = 'Out of Stock';
+                return $product;
+            });
+
+
         $current_sales = CartItem::whereDate('created_at', $today)
             ->whereHas('cart', function ($query) {
                 $query->where('status', 'Paid');
@@ -114,6 +124,7 @@ class CartController extends Controller
         return response()->json([
             'over_due' => $carts,
             'stocks' => $stocks,
+            'out_stocks' => $out_stocks,
             'dashboard' => [
                 'current_sales' => $current_sales,
                 'current_profit' => $current_profit,
