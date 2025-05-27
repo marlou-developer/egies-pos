@@ -112,18 +112,6 @@ export default function StocksSection() {
                                     >
                                         Product
                                     </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
-                                    >
-                                        Brand
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
-                                    >
-                                        Category
-                                    </th>
                                     {/* <th
                                         scope="col"
                                         className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
@@ -141,6 +129,18 @@ export default function StocksSection() {
                                         className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
                                     >
                                         Status
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
+                                    >
+                                        Total Inventory Retail Price
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
+                                    >
+                                        Total Inventory Capital
                                     </th>
                                     <th
                                         scope="col"
@@ -186,32 +186,6 @@ export default function StocksSection() {
                                                         product.length - 1
                                                         ? "border-b border-gray-200"
                                                         : "",
-                                                    "hidden px-3 py-4 text-sm font-bold whitespace-nowrap text-gray-500 sm:table-cell"
-                                                )}
-                                            >
-                                                <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 mr-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
-                                                    {product?.brand}
-                                                </span>
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "hidden px-3 py-4 text-sm font-bold whitespace-nowrap text-gray-500 sm:table-cell"
-                                                )}
-                                            >
-                                                <span className="inline-flex items-center rounded-full bg-pink-50 px-2 py-1 mr-1 text-xs font-medium text-pink-800 ring-1 ring-pink-600/20 ring-inset">
-                                                    {product?.categories?.name}
-                                                </span>
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
                                                     "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
                                                 )}
                                             >
@@ -235,7 +209,32 @@ export default function StocksSection() {
                                                             : "In Stock"}
                                                 </span>
                                             </td>
-
+                                            <td
+                                                className={classNames(
+                                                    productIdx !==
+                                                        product.length - 1
+                                                        ? "border-b border-gray-200"
+                                                        : "",
+                                                    "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
+                                                )}
+                                            >
+                                                <span className="inline-flex items-center font-bold px-2 py-1">
+                                                    {product.quantity}
+                                                </span>
+                                            </td>
+                                            <td
+                                                className={classNames(
+                                                    productIdx !==
+                                                        product.length - 1
+                                                        ? "border-b border-gray-200"
+                                                        : "",
+                                                    "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
+                                                )}
+                                            >
+                                                <span className="inline-flex items-center font-bold px-2 py-1">
+                                                    {product.quantity}
+                                                </span>
+                                            </td>
                                             <td
                                                 className={classNames(
                                                     productIdx !==
