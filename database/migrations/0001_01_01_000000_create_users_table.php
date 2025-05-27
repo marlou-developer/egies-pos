@@ -18,13 +18,11 @@ return new class extends Migration
             $table->string('mname')->nullable();
             $table->string('lname')->nullable();
             $table->string('suffix')->nullable();
-            $table->string('address')->nullable();
-            $table->string('contact')->nullable();
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('user_type')->nullable();
-            $table->string('status')->nullable();
+            $table->string('title')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

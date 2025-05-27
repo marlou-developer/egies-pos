@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
@@ -17,6 +18,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
+Route::resource('account', AccountController::class);
 Route::resource('product', ProductController::class);
 Route::resource('stock', StockController::class);
 Route::resource('category', CategoryController::class);

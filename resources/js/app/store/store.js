@@ -5,6 +5,7 @@ import productSlice from "../redux/product-slice";
 import customerSlice from "../redux/customer-slice";
 import cartSlice from "../redux/cart-slice";
 import stockSlice from "../redux/stock-slice";
+import userSlice from "../redux/user-slice";
 
 const store = configureStore({
     reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
         customers: customerSlice,
         carts: cartSlice,
         stocks: stockSlice,
+        users: userSlice,
     },
 });
 

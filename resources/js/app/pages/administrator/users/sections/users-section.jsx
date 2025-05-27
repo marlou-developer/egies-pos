@@ -1,15 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
+import AddUserSection from './add-user-section'
 
 const people = [
     { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member' },
     // More people...
-  ]
-  
-  function classNames(...classes) {
+]
+
+function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
-  }
+}
 
 export default function UsersSection() {
+
+    const [openUser, setOpenUser] = useState(false);
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">
@@ -22,10 +25,15 @@ export default function UsersSection() {
                 <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                     <button
                         type="button"
+                        onClick={() => setOpenUser(true)}
                         className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     >
                         Add user
                     </button>
+                    <AddUserSection
+                        open={openUser}
+                        setOpenUser={setOpenUser}
+                    />
                 </div>
             </div>
             <div className="mt-8 flow-root">
@@ -118,6 +126,6 @@ export default function UsersSection() {
                     </div>
                 </div>
             </div>
-        </div>  
+        </div>
     )
 }
