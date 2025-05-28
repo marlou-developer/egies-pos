@@ -56,9 +56,13 @@ class AccountController extends Controller
         }
     }
 
-    public function destroy(User $user)
+    public function destroy($id)
     {
-        $user->delete();
+        $user = User::where('id', $id)->first();
+        if ($user) {
+            $user->delete();
+        }
+
         return response()->json(['message' => 'User deleted successfully']);
     }
 }
