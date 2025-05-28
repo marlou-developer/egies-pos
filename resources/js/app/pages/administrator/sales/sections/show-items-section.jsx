@@ -1,4 +1,5 @@
 import Modal from "@/app/_components/modal";
+import { peso_value } from "@/app/lib/peso";
 import moment from "moment";
 import React, { useState } from "react";
 
@@ -42,7 +43,7 @@ export default function ShowItemSection({ data }) {
                                                 {res?.product?.name}
                                             </td>
                                             <td class="px-4 py-2 border-b">
-                                                {res.price}
+                                                {peso_value(Number(res.price))}
                                             </td>
                                             <td class="px-4 py-2 border-b">
                                                 {res.quantity}
@@ -51,7 +52,7 @@ export default function ShowItemSection({ data }) {
                                                 Paid
                                             </td>
                                             <td class="px-4 py-2 border-b">
-                                                {res.total}
+                                                {peso_value(Number(res.total))}
                                             </td>
                                         </tr>
                                     );
@@ -62,7 +63,7 @@ export default function ShowItemSection({ data }) {
                     <div className="px-2 py-3">
                       <div className="w-full flex items-center justify-end">
                           <div className="text-xl font-black">
-                            Total: {Number(data.total_price).toFixed(2)}
+                            Total: {peso_value(Number(data.total_price))}
                           </div>
                       </div>
                     </div>

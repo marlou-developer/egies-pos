@@ -12,6 +12,7 @@ import moment from "moment";
 import AddPaymentSection from "./add-payment-section";
 import HistorySection from "./history-section";
 import SearchSection from "./search-section";
+import { peso_value } from "@/app/lib/peso";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -92,14 +93,14 @@ export default function CreditsSection() {
                                         </td>
                                         <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
                                             <b>
-                                                {Number(
+                                                {peso_value(Number(
                                                     res.total_price
-                                                ).toFixed(2)}
+                                                ))}
                                             </b>
                                         </td>
                                         <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
                                             <b>
-                                                {Number(res.balance).toFixed(2)}
+                                                {peso_value(Number(res.balance))}
                                             </b>
                                         </td>
                                         <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">

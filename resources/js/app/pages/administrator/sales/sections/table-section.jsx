@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import moment from "moment";
 import ShowItemSection from "./show-items-section";
 import SearchSection from "./search-section";
+import { peso_value } from "@/app/lib/peso";
 // import AddPaymentSection from "./add-payment-section";
 // import HistorySection from "./history-section";
 
@@ -106,9 +107,9 @@ export default function TableSection() {
                                         </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap lg:table-cell">
                                             <b>
-                                                {Number(
+                                                {peso_value(Number(
                                                     res.total_price
-                                                ).toFixed(2)}
+                                                ))}
                                             </b>
                                         </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">

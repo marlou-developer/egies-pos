@@ -12,7 +12,7 @@ import store from "@/app/store/store";
 import { get_cart_by_id_thunk } from "@/app/redux/cart-thunk";
 import { useSelector } from "react-redux";
 import moment from "moment";
-
+import { peso_value } from "@/app/lib/peso";
 // Styles
 const styles = StyleSheet.create({
     page: {
@@ -178,10 +178,10 @@ const InvoicePDF = () => {
                                     {item.quantity}
                                 </Text>
                                 <Text style={[styles.tableCol, { flex: 0.8 }]}>
-                                    {Number(item.price).toFixed(2)}
+                                    {peso_value(Number(item.price))}
                                 </Text>
                                 <Text style={[styles.tableCol, { flex: 1 }]}>
-                                    {Number(item.total).toFixed(2)}
+                                    {peso_value(Number(item.total))}
                                 </Text>
                             </View>
                         );
@@ -195,15 +195,15 @@ const InvoicePDF = () => {
                         <View style={styles.totalRow}>
                             <Text>
                                 Subtotal Price:{" "}
-                                {Number(cart.data?.sub_total).toFixed(2)}
+                                {peso_value(Number(cart.data?.sub_total))}
                             </Text>
                         </View>
                         <View style={styles.totalRow}>
                             <Text>
                                 Discount Price:{" "}
-                                {Number(
+                                {peso_value(Number(
                                     cart.data?.customer_total_discount
-                                ).toFixed(2)}
+                                ))}
                             </Text>
                         </View>
                         {/* <View style={styles.totalRow}>
@@ -212,7 +212,7 @@ const InvoicePDF = () => {
                         <View style={styles.totalRow}>
                             <Text style={styles.bold}>
                                 Total:{" "}
-                                {Number(cart.data?.total_price).toFixed(2)}
+                                {peso_value(Number(cart.data?.total_price))}
                             </Text>
                         </View>
                         {/* <View style={styles.totalRow}>

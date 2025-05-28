@@ -12,6 +12,7 @@ import Modal from "@/Components/Modal";
 import AdminLayout from "../layout";
 import DashboardCardSections from "./sections/dashboard-card-sections";
 import { useSelector } from "react-redux";
+import { peso_value } from "@/app/lib/peso";
 
 export default function Page() {
     const { over_dues } = useSelector((store) => store.carts);
@@ -26,28 +27,28 @@ export default function Page() {
                     icon={
                         <ComputerDesktopIcon className="h-14 text-pink-600" />
                     }
-                    count={<>₱ {Number(over_dues?.dashboard?.current_sales).toFixed(2)}</>}
+                    count={<> {peso_value(Number(over_dues?.dashboard?.current_sales))}</>}
                 />
                 <DashboardCardSections
                     title="Current Profit"
                     icon={
                         <ComputerDesktopIcon className="h-14 text-pink-600" />
                     }
-                    count={<>₱ {Number(over_dues?.dashboard?.current_profit).toFixed(2)}</>}
+                    count={<> {peso_value(Number(over_dues?.dashboard?.current_profit))}</>}
                 />
                 <DashboardCardSections
                     title="Total Sales"
                     icon={
                         <ComputerDesktopIcon className="h-14 text-pink-600" />
                     }
-                    count={<>₱ {Number(over_dues?.dashboard?.total_sales).toFixed(2)}</>}
+                    count={<> {peso_value(Number(over_dues?.dashboard?.total_sales))}</>}
                 />
                 <DashboardCardSections
                     title="Total Profit"
                     icon={
                         <ComputerDesktopIcon className="h-14 text-pink-600" />
                     }
-                    count={<>₱ {Number(over_dues?.dashboard?.total_profit).toFixed(2)}</>}
+                    count={<> {peso_value(Number(over_dues?.dashboard?.total_profit))}</>}
                 />
             </div>
             <div className="p-1 text-2xl font-black">Credit Section</div>
@@ -58,14 +59,14 @@ export default function Page() {
                         <ComputerDesktopIcon className="h-14 text-pink-600" />
                     }
                     
-                    count={<>₱ {Number(over_dues?.dashboard?.current_credit).toFixed(2)}</>}
+                    count={<> {peso_value(Number(over_dues?.dashboard?.current_credit))}</>}
                 />
                 <DashboardCardSections
                     title="Total Amount Credits"
                     icon={
                         <ComputerDesktopIcon className="h-14 text-pink-600" />
                     }
-                    count={<>₱ {Number(over_dues?.dashboard?.total_credit).toFixed(2)}</>}
+                    count={<> {peso_value(Number(over_dues?.dashboard?.total_credit))}</>}
                 />
                 <DashboardCardSections
                     title="No. of Due Date"

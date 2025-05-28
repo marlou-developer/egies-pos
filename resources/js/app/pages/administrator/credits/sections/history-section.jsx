@@ -1,4 +1,5 @@
 import Modal from "@/app/_components/modal";
+import { peso_value } from "@/app/lib/peso";
 import moment from "moment";
 import React, { useState } from "react";
 
@@ -42,7 +43,7 @@ export default function HistorySection({ data }) {
                                                 )}
                                             </td>
                                             <td class="px-4 py-2 border-b">
-                                                {Number(res.amount).toFixed(2)}
+                                                {peso_value(Number(res.amount))}
                                             </td>
                                             <td class="px-4 py-2 border-b text-green-600">
                                                 Paid

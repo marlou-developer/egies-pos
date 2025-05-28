@@ -8,6 +8,7 @@ import {
 import store from "@/app/store/store";
 import AddStocksSection from "./add-stocks-section";
 import StocksHistorySection from "./stocks-history-section";
+import { peso_value } from "@/app/lib/peso";
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
@@ -219,7 +220,7 @@ export default function StocksSection() {
                                                 )}
                                             >
                                                 <span className="inline-flex items-center font-bold px-2 py-1">
-                                                    ₱{(Number(product.quantity) * Number(product.cost)).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                   {peso_value((Number(product.quantity) * Number(product.cost)))}
                                                 </span>
                                             </td>
                                             <td
@@ -232,7 +233,7 @@ export default function StocksSection() {
                                                 )}
                                             >
                                                 <span className="inline-flex items-center font-bold px-2 py-1">
-                                                    ₱{((Number(product.srp) - Number(product.cost)) * Number(product.quantity)).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                                   {peso_value(((Number(product.srp) - Number(product.cost)) * Number(product.quantity)))}
                                                 </span>
                                             </td>
                                             <td

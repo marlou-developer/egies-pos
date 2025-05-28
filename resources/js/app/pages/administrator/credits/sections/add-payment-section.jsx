@@ -1,6 +1,7 @@
 import Button from "@/app/_components/button";
 import Input from "@/app/_components/input";
 import Modal from "@/app/_components/modal";
+import { peso_value } from "@/app/lib/peso";
 import { get_cart_credit_thunk } from "@/app/redux/app-thunk";
 import { add_payment_thunk } from "@/app/redux/cart-thunk";
 import store from "@/app/store/store";
@@ -81,11 +82,11 @@ export default function AddPaymentSection({ data }) {
                             Customer Name: {data.customer.name}
                         </div>
                         <div className="font-xl font-bold">
-                            Balance: {data.balance}
+                            Balance: {peso_value(Number(data.balance))}
                         </div>
                         <div className="font-xl font-bold">
                             Current Balance:{" "}
-                            {Number(data.balance) - Number(form.amount??0)}
+                            {peso_value(Number(data.balance) - Number(form.amount??0))}
                         </div>
                     </div>
                     <div className="flex gap-3">
