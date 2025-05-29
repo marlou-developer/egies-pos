@@ -240,7 +240,7 @@ export default function StocksSection() {
                                                             month: "short",
                                                             day: "numeric",
                                                         })
-                                                        : "No Stocks"}
+                                                        : "No Stocks Added"}
                                                 </span>
                                             </td>
 

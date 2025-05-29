@@ -113,13 +113,17 @@ export default function TableSection() {
                                             </b>
                                         </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
-                                            {res.status}
+                                            {res?.customer?.name}
                                         </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
-                                            {res.status}
+                                            {peso_value(Number(
+                                                res?.customer_total_discount
+                                            ))}
                                         </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
-                                            {res.status}
+                                            {peso_value(Number(
+                                                res?.discount_per_item
+                                            ))}
                                         </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
                                             {res.status}

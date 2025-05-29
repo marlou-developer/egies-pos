@@ -3,6 +3,8 @@ import { FaFilter, FaMoneyBill } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import SearchSection from "./search-section";
 import UpdateStatusSection from "./update-status-section";
+import moment from "moment";
+import { peso_value } from "@/app/lib/peso";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -44,10 +46,11 @@ export default function ShopeeSection() {
                             <thead>
                                 <tr>
                                     {[
-                                        "Customer Name",
+                                        "Invoice No.",
                                         "Order ID",
                                         "Total",
                                         "Status",
+                                        "Date",
                                         "",
                                     ].map((header, idx) => (
                                         <th
@@ -56,9 +59,9 @@ export default function ShopeeSection() {
                                             className={classNames(
                                                 "sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 px-3 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter",
                                                 idx === 0 &&
-                                                    "pl-4 sm:pl-6 lg:pl-8",
+                                                "pl-4 sm:pl-6 lg:pl-8",
                                                 idx === 6 &&
-                                                    "pr-4 sm:pr-6 lg:pr-8"
+                                                "pr-4 sm:pr-6 lg:pr-8"
                                             )}
                                         >
                                             {header || (
@@ -74,20 +77,23 @@ export default function ShopeeSection() {
                                 {shopees?.data?.map((res, idx) => (
                                     <tr key={idx}>
                                         <td className="whitespace-nowrap border-b border-gray-200 py-4 pr-3 pl-4 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
-                                            {res.customer}
+                                            {res.cart_id}
                                         </td>
                                         <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
                                             {res.order_id}
                                         </td>
                                         <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
                                             <b>
-                                                {Number(
+                                                {peso_value(Number(
                                                     res.total_price
-                                                ).toFixed(2)}
+                                                ))}
                                             </b>
                                         </td>
                                         <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
                                             {res.status}
+                                        </td>
+                                        <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
+                                            {moment(res.created_at).format("LL")}
                                         </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-sm text-gray-700">
                                             <div className="flex items-center justify-center gap-3">
