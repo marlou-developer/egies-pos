@@ -9,6 +9,7 @@ import store from "@/app/store/store";
 import AddStocksSection from "./add-stocks-section";
 import StocksHistorySection from "./stocks-history-section";
 import { peso_value } from "@/app/lib/peso";
+import SearchSection from "./search-section";
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
@@ -85,6 +86,8 @@ export default function StocksSection() {
         printWindow.print();
     };
 
+    console.log('productsss', products.data.stocks)
+
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             {/* Header Section */}
@@ -96,7 +99,9 @@ export default function StocksSection() {
                     </h1>
                 </div>
             </div>
-
+            <div className="mt-4 flex items-start justify-start">
+                <SearchSection />
+            </div>
             {/* Product Table */}
             <div className="mt-8 flow-root">
                 <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
@@ -130,6 +135,12 @@ export default function StocksSection() {
                                         className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
                                     >
                                         Status
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
+                                    >
+                                        Date last stock(s) added
                                     </th>
                                     <th
                                         scope="col"
@@ -212,6 +223,29 @@ export default function StocksSection() {
                                             </td>
                                             <td
                                                 className={classNames(
+                                                    productIdx !== products.data.length - 1
+                                                        ? "border-b border-gray-200"
+                                                        : "",
+                                                    "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
+                                                )}
+                                            >
+                                                <span className="inline-flex items-center font-bold px-2 py-1">
+                                                    {product.stocks?.length > 0
+                                                        ? new Date(
+                                                            [...product.stocks]
+                                                                .sort((a, b) => new Date(b.date) - new Date(a.date))[0]
+                                                                .date
+                                                        ).toLocaleDateString("en-US", {
+                                                            year: "numeric",
+                                                            month: "short",
+                                                            day: "numeric",
+                                                        })
+                                                        : "No Stocks"}
+                                                </span>
+                                            </td>
+
+                                            <td
+                                                className={classNames(
                                                     productIdx !==
                                                         product.length - 1
                                                         ? "border-b border-gray-200"
@@ -220,7 +254,7 @@ export default function StocksSection() {
                                                 )}
                                             >
                                                 <span className="inline-flex items-center font-bold px-2 py-1">
-                                                   {peso_value((Number(product.quantity) * Number(product.cost)))}
+                                                    {peso_value((Number(product.quantity) * Number(product.srp)))}
                                                 </span>
                                             </td>
                                             <td
@@ -233,7 +267,8 @@ export default function StocksSection() {
                                                 )}
                                             >
                                                 <span className="inline-flex items-center font-bold px-2 py-1">
-                                                   {peso_value(((Number(product.srp) - Number(product.cost)) * Number(product.quantity)))}
+                                                    {peso_value((Number(product.quantity) * Number(product.cost)))}
+                                                    {/* {peso_value(((Number(product.srp) - Number(product.cost)) * Number(product.quantity)))} */}
                                                 </span>
                                             </td>
                                             <td

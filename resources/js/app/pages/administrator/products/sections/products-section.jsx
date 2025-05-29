@@ -14,6 +14,7 @@ import FilterProductsComponent from "../components/filter-products-component";
 import store from "@/app/store/store";
 import { get_category_thunk } from "@/app/redux/category-thunk";
 import ProductOptionMenuSection from "./product-option-menu-section";
+import SearchSection from "./search-section";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -154,7 +155,9 @@ export default function ProductsSection() {
                     />
                 </div>
             </div>
-
+            <div className="mt-4 flex items-start justify-start">
+                <SearchSection />
+            </div>
             {/* Product Table */}
             <div className="mt-8 flow-root">
                 <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">

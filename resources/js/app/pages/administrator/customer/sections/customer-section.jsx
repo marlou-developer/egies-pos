@@ -15,6 +15,7 @@ import AddCustomerComponent from "../components/add-customer-component";
 import FilterCustomersComponent from "../components/filter-customers-component";
 import CustomerMenuSection from "./customer-menu-section";
 import { useSelector } from "react-redux";
+import SearchSection from "./search-section";
 
 const people = [
     {
@@ -83,6 +84,9 @@ export default function CustomerSection() {
                         />
                     </div>
                 </div>
+            </div>
+            <div className="mt-4 flex items-start justify-start">
+                <SearchSection />
             </div>
             <div className="mt-8 flow-root">
                 <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">

@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import AdminLayout from "../layout";
-import CreditsSection from "./sections/credits-section";
 import store from "@/app/store/store";
 import { get_shopee_thunk } from "@/app/redux/cart-thunk";
+import ShopeeSection from "./sections/shopee-section";
 
 export default function CreditsPage() {
     useEffect(() => {
@@ -10,7 +10,7 @@ export default function CreditsPage() {
     }, []);
     return (
         <AdminLayout>
-            <CreditsSection />
+            < ShopeeSection />
         </AdminLayout>
     );
 }

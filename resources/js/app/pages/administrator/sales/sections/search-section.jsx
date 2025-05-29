@@ -44,7 +44,7 @@ export default function SearchSection() {
                     type="search"
                     id="default-search"
                     className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-pink-500 focus:border-pink-500"
-                    placeholder="Search Mockups, Logos..."
+                    placeholder="Search..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
