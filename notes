@@ -1,3 +1,61 @@
+New Tasks
+
+
+Dashboard Section:
+
+- adjusment sa widgets ng sales section, dili mao ang gagawas na result. update formula into:
+
+Sales Total = SUM(total_price (carts Table))
+Profit Total = SUM(profit (cart_items Table)) - discount_per_order (carts Table)
+
+- Dashboard sa Stock Section add ta ug:
+
+Total Inventory in Retail Price = SUM(SRP * quantity)
+Total Inventory in Capital = SUM(COST * quantity)
+
+
+Stocks Section:
+
+- add column sa table for the date sa last na add stock.
+- search field sa stock section na table.
+- Print Function: my checkbox tnang product na pwde ra iselect ang gnahan iprint na stocks. may search field para dali ang pag select sa stocks na iprint. add rpud checkbox na moselect all.
+- adjustment sa stock section:
+
+Total Inventory in Retail Price = SRP * quantity
+Total Inventory in Capital = cost * quantity
+
+Products Section:
+
+- adjust Print Function: my checkbox tnang product na pwde ra iselect ang gnahan iprint na products. may search field para dali ang pag select sa products na iprint. add rpud checkbox na moselect all.
+
+
+Customer Product Discount Section:
+
+- sa add product na drawer, add ta ug search field sa dropdown para dali ang pag search nla sa products if dghan na.
+
+POS Section:
+
+- sa Pay na modal, ang total discount dpat iadd nya tnan discount gkan sa customer discount, discount per item and discount per order.
+
+Credits Section:
+
+- add ta ug Show Items button aside sa invoice button sa table.
+
+Shopee Section:
+
+- ang label sa section nahimo ng Credits Section haha
+- adjustment sa table, iuna ang Cost Price then Shopee Price
+- add ug show items na button.
+- remove na nato ang customer name sa shopee.
+- replace customer name into Invoice No. sa table ng shopee section. (Invoice No., Order ID, Total, Status, Date)
+- Mass Update Function: add ta button before the table na "Mass Update". May checkboxes ang mga order id, mag select cla ug order id na need nla iupdate ang status. para kausa ra cla mag update, dili na tagsa tagsaon.
+
+Sales Section:
+
+- add ta ug column sa table Order Discount and Total Profit.(Invoice, Customer Name, Customer Discount, Product Discount, Order Discount, Profit, Status)
+
+- print receipt button.
+
 
 
 

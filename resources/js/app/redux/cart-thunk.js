@@ -4,7 +4,7 @@ import { cartSlice } from "./cart-slice";
 export function create_cart_thunk(data) {
     return async function (dispatch, getState) {
         const res = await create_cart_service(data)
-
+        return res
     };
 }
 

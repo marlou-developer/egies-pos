@@ -239,6 +239,6 @@ class CartController extends Controller
             }
         }
 
-        return 'success';
+        return $cart;
     }
 }
