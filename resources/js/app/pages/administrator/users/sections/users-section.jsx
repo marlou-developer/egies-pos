@@ -3,6 +3,7 @@ import AddUserSection from './add-user-section'
 import { useSelector } from 'react-redux'
 import EditUserSection from './edit-user-section'
 import DeleteUserSection from './delete-user-section'
+import { FaUserGroup, FaUserPlus, FaUsers } from 'react-icons/fa6'
 
 const people = [
     { name: 'Lindsay Walton', title: 'Front-end Developer', email: 'lindsay.walton@example.com', role: 'Member' },
@@ -23,7 +24,8 @@ export default function UsersSection() {
         <div className="px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto">
-                    <h1 className="text-base font-semibold text-gray-900">Users</h1>
+                    <FaUserGroup className="float-left mt-1 mr-1 text-pink-500" />
+                    <h1 className="text-base font-semibold text-pink-500">User Management</h1>
                     <p className="mt-2 text-sm text-gray-700">
                         A list of all the users in your account including their name, title, email and role.
                     </p>
@@ -32,9 +34,11 @@ export default function UsersSection() {
                     <button
                         type="button"
                         onClick={() => setOpenUser(true)}
-                        className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        className="relative inline-flex items-center rounded-l-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
                     >
-                        Add user
+
+                        <FaUserPlus className="mr-1 text-pink-500" />
+                        Add User
                     </button>
                     <AddUserSection
                         open={openUser}

@@ -1,15 +1,4 @@
 import { FaBook, FaFilter, FaPercent, FaUserPlus, FaUsers } from "react-icons/fa6";
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import {
-    ArchiveBoxIcon,
-    ArrowRightCircleIcon,
-    ChevronDownIcon,
-    DocumentDuplicateIcon,
-    HeartIcon,
-    PencilSquareIcon,
-    TrashIcon,
-    UserPlusIcon,
-} from '@heroicons/react/20/solid'
 import { useState } from "react";
 import AddCustomerComponent from "../components/add-customer-component";
 import FilterCustomersComponent from "../components/filter-customers-component";

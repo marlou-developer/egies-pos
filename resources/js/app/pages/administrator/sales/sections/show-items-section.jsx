@@ -2,6 +2,7 @@ import Modal from "@/app/_components/modal";
 import { peso_value } from "@/app/lib/peso";
 import moment from "moment";
 import React, { useState } from "react";
+import { FaEye } from "react-icons/fa6";
 
 export default function ShowItemSection({ data }) {
     console.log("datadata", data);
@@ -12,6 +13,7 @@ export default function ShowItemSection({ data }) {
                 onClick={() => setOpen(true)}
                 className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-green-100 hover:bg-green-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
             >
+                <FaEye className=" text-green-500" />
                 Show Item
             </button>
             <Modal
@@ -61,11 +63,11 @@ export default function ShowItemSection({ data }) {
                         </table>
                     </div>
                     <div className="px-2 py-3">
-                      <div className="w-full flex items-center justify-end">
-                          <div className="text-xl font-black">
-                            Total: {peso_value(Number(data.total_price))}
-                          </div>
-                      </div>
+                        <div className="w-full flex items-center justify-end">
+                            <div className="text-xl font-black">
+                                Total: {peso_value(Number(data.total_price))}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </Modal>

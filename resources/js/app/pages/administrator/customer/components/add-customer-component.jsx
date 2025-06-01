@@ -182,7 +182,7 @@ export default function AddCustomerComponent({ open, setOpenCustomer }) {
                                             value={customer?.mobile_no ?? ""}
                                             name="mobile_no"
                                             label="Mobile No."
-                                            type="text"
+                                            type="number"
                                         />
                                     </div>
                                     <div>

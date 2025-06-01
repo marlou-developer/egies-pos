@@ -31,6 +31,10 @@ Route::middleware('auth:sanctum')->prefix('administrator')->group(function () {
         });
     });
 
+
+    Route::get('supplier', function () {
+        return Inertia::render('administrator/supplier/page');
+    });
     Route::get('products', function () {
         return Inertia::render('administrator/products/page');
     });

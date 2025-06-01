@@ -1,27 +1,30 @@
-import { delete_category_thunk, get_category_thunk } from "@/app/redux/category-thunk";
+
+import { delete_product_thunk, get_product_thunk } from "@/app/redux/product-thunk";
+import { delete_user_thunk, get_users_thunk } from "@/app/redux/user-thunk";
 import store from "@/app/store/store";
 import Modal from "@/Components/Modal";
-import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { message, Tooltip } from "antd";
 import React, { useState } from "react";
+import { FaTrashCan } from "react-icons/fa6";
 
-export default function DeleteCategorySection({ data }) {
+export default function DeleteSupplierSection({ data }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => setIsModalOpen(true);
     const [loading, setLoading] = useState(false);
 
-    const deleteCategory = async (e) => {
+    const deleteUser = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
             await store.dispatch(
-                delete_category_thunk(data.id)
+                delete_user_thunk(data.id)
             );
-            store.dispatch(get_category_thunk())
+            store.dispatch(get_users_thunk())
             message.success("Deleted Successfully!");
             setIsModalOpen(false);
         } catch (error) {
-            message.error("Failed to Delete Category. Please try again."); // Show error message
+            message.error("Failed to Delete Supplier. Please try again."); // Show error message
         } finally {
             setLoading(false); // Always reset loading state
         }
@@ -33,19 +36,20 @@ export default function DeleteCategorySection({ data }) {
 
     return (
         <>
-            <Tooltip title="Remove Category">
+            <Tooltip title="Remove User">
                 <button
-                    className="text-white font-bold ml-1 rounded"
+                    className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-red-100 hover:bg-red-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
                     onClick={openModal}
                 >
-                    <TrashIcon className="h-3.5 w-3 inline-block text-red-600" />
+                    <FaTrashCan className="size-3.5 text-red-500" />
+                    <b>Remove Supplier</b>
                 </button>
             </Tooltip>
-            <Modal open={isModalOpen} setOpen={setIsModalOpen} width="w-1/4">
+            <Modal open={isModalOpen} setOpen={setIsModalOpen} onClose={() => setIsModalOpen(false)} width="w-1/4">
                 <h2 className="text-xl font-semibold mb-4">
-                    Are you sure you want to delete this category?
+                    Are you sure you want to remove this supplier?
                 </h2>
-                <form action="" onSubmit={deleteCategory}>
+                <form action="" onSubmit={deleteUser}>
                     <div className="flex w-full gap-5">
                         <button
                             type="button"

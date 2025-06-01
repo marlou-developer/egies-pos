@@ -3,6 +3,7 @@ import Modal from "@/app/_components/modal";
 import { update_status_thunk } from "@/app/redux/cart-thunk";
 import store from "@/app/store/store";
 import React, { useEffect, useState } from "react";
+import { FaCheckToSlot } from "react-icons/fa6";
 import Swal from "sweetalert2";
 
 export default function UpdateStatusSection({ data }) {
@@ -40,6 +41,7 @@ export default function UpdateStatusSection({ data }) {
                 onClick={() => setOpen(true)}
                 className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-yellow-100 hover:bg-yellow-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
             >
+                <FaCheckToSlot className=" text-yellow-500" />
                 Update Status
             </button>
 

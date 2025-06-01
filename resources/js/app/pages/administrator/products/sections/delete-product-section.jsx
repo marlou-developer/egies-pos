@@ -59,7 +59,7 @@ export default function DeleteProductSection({ data }) {
                         <button
                             disabled={loading}
                             type="submit"
-                            className="bg-pink-400 p-2 w-full rounded-md text-white hover:bg-pink-300"
+                            className="bg-green-400 p-2 w-full rounded-md text-white hover:bg-green-300"
                         >
 
                             {

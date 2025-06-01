@@ -2,6 +2,7 @@ import Modal from "@/app/_components/modal";
 import { peso_value } from "@/app/lib/peso";
 import moment from "moment";
 import React, { useState } from "react";
+import { FaClockRotateLeft } from "react-icons/fa6";
 
 export default function HistorySection({ data }) {
     const [open, setOpen] = useState(false);
@@ -11,7 +12,8 @@ export default function HistorySection({ data }) {
                 onClick={() => setOpen(true)}
                 className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-green-100 hover:bg-green-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
             >
-                History
+                <FaClockRotateLeft className=" text-green-500" />
+                Payments
             </button>
             <Modal
                 isOpen={open}

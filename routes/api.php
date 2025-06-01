@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductDiscountController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,7 +32,7 @@ Route::get('get_over_due', [CartController::class, 'get_over_due']);
 Route::post('update_status', [CartController::class, 'update_status']);
 Route::resource('credit_payment', CreditPaymentController::class);
 Route::resource('dashboard', DashboardController::class);
-
+Route::resource('supplier', SupplierController::class);
 
 Route::resource('product_discount', ProductDiscountController::class);
 Route::post('update_product', [ProductController::class, 'update_product']);

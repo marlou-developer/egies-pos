@@ -5,11 +5,10 @@ import store from '@/app/store/store'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { message, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { FaUser, FaUserPen, FaUserPlus } from 'react-icons/fa6'
+import { FaPen, FaPenClip, FaSquarePen, FaTruck, FaTruckDroplet, FaUser, FaUserPen, FaUserPlus } from 'react-icons/fa6'
 import { useSelector } from 'react-redux'
 
-export default function EditUserSection({ data }) {
-    const { users } = useSelector((state) => state.users);
+export default function EditSupplierSection({ data }) {
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({});
     const [open, setOpen] = useState(false);
@@ -41,7 +40,7 @@ export default function EditUserSection({ data }) {
             await store.dispatch(get_users_thunk());
             setOpen(false);
         } catch (error) {
-            message.error("Failed to update User. Please try again.");
+            message.error("Failed to update Supplier. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -52,8 +51,8 @@ export default function EditUserSection({ data }) {
         <>
             <Tooltip title="Edit User">
                 <button type='button' onClick={() => setOpen(true)} className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-blue-100 hover:bg-blue-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset">
-                    <FaUserPen className="size-4 text-blue-500" />
-                    Edit User
+                    <FaPen className="size-3 text-blue-500" />
+                    Edit Supplier
                 </button>
             </Tooltip>
             <DrawerSection
@@ -67,8 +66,8 @@ export default function EditUserSection({ data }) {
                             <div className="bg-pink-200 px-4 py-6 sm:px-6">
                                 <div className="flex items-center justify-between">
                                     <div className="text-base font-semibold text-pink-600">
-                                        <FaUserPen className="inline-block mr-1" />
-                                        Edit User
+                                        <FaTruckDroplet className="inline-block mr-1 " />
+                                        Edit Supplier
                                     </div>
                                     <button
                                         type="button"
@@ -85,9 +84,9 @@ export default function EditUserSection({ data }) {
                             <div className="px-4 sm:px-6">
                                 <div className="space-y-6 pt-6 pb-5">
                                     <div className="flex items-center">
-                                        <FaUser className="inline-block mr-1 text-pink-500" />
+                                        <FaTruck className="inline-block mr-1 text-pink-500" />
                                         <h3 className="text-base font-medium text-gray-600">
-                                            User Information
+                                            Supplier Information
                                         </h3>
                                         <hr className="my-2" />
                                     </div>

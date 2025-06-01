@@ -7,6 +7,7 @@ import { add_payment_thunk } from "@/app/redux/cart-thunk";
 import store from "@/app/store/store";
 import moment from "moment";
 import React, { useState } from "react";
+import { FaMoneyBillTransfer } from "react-icons/fa6";
 
 export default function AddPaymentSection({ data }) {
     const [open, setOpen] = useState(false);
@@ -67,6 +68,7 @@ export default function AddPaymentSection({ data }) {
                 onClick={() => setOpen(true)}
                 className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-yellow-100 hover:bg-yellow-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
             >
+                <FaMoneyBillTransfer className=" text-yellow-500" />
                 Pay Credit
             </button>
 
@@ -86,7 +88,7 @@ export default function AddPaymentSection({ data }) {
                         </div>
                         <div className="font-xl font-bold">
                             Current Balance:{" "}
-                            {peso_value(Number(data.balance) - Number(form.amount??0))}
+                            {peso_value(Number(data.balance) - Number(form.amount ?? 0))}
                         </div>
                     </div>
                     <div className="flex gap-3">

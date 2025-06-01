@@ -41,7 +41,7 @@ export default function DeleteUserSection({ data }) {
                     className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-red-100 hover:bg-red-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
                     onClick={openModal}
                 >
-                    <FaTrashCan className="size-5 text-gray-400" />
+                    <FaTrashCan className="size-3.5 text-red-500" />
                     <b>Remove User</b>
                 </button>
             </Tooltip>
@@ -61,7 +61,7 @@ export default function DeleteUserSection({ data }) {
                         <button
                             disabled={loading}
                             type="submit"
-                            className="bg-pink-400 p-2 w-full rounded-md text-white hover:bg-pink-300"
+                            className="bg-green-400 p-2 w-full rounded-md text-white hover:bg-green-300"
                         >
 
                             {

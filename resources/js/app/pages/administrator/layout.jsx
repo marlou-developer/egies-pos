@@ -11,6 +11,8 @@ import {
     PresentationChartBarIcon,
     ShoppingBagIcon,
     ShoppingCartIcon,
+    TruckIcon,
+    UserGroupIcon,
     UsersIcon,
 } from "@heroicons/react/24/outline";
 import { FaBook } from "react-icons/fa6";
@@ -19,7 +21,7 @@ import { get_over_due_thunk } from "@/app/redux/cart-thunk";
 import { useSelector } from "react-redux";
 
 export default function AdminLayout({ children }) {
-    const [collapsed, setCollapsed] = useState(false); 
+    const [collapsed, setCollapsed] = useState(false);
     useEffect(() => {
         store.dispatch(get_over_due_thunk());
     }, []);
@@ -39,47 +41,53 @@ export default function AdminLayout({ children }) {
             current: path == "pos",
         },
         {
-            name: "Customer Section",
-            href: "/administrator/customer",
-            icon: UsersIcon,
-            current: path == "customer",
-        },
-        {
-            name: "Products Section",
+            name: "Products",
             href: "/administrator/products",
             icon: ShoppingBagIcon,
             current: path == "products",
         },
         {
-            name: "Stocks Section",
+            name: "Stocks",
             href: "/administrator/stocks",
             icon: InboxStackIcon,
             current: path == "stocks",
         },
         {
-            name: "Shopee Section",
+            name: "Shopee",
             href: "/administrator/shopee",
             icon: ShoppingCartIcon,
             current: path == "shopee",
         },
         {
-            name: "Credits Section",
+            name: "Credits",
             href: "/administrator/credits",
             icon: BanknotesIcon,
             current: path == "credits",
         },
 
         {
-            name: "Sales Section",
+            name: "Sales",
             href: "/administrator/sales",
             icon: PresentationChartBarIcon,
             current: path == "sales",
         },
         {
-            name: "Report Section",
+            name: "Report",
             href: "/administrator/reports",
             icon: ChartPieIcon,
             current: path == "reports",
+        },
+        {
+            name: "Supplier",
+            href: "/administrator/supplier",
+            icon: TruckIcon,
+            current: path == "supplier",
+        },
+        {
+            name: "Customer",
+            href: "/administrator/customer",
+            icon: UserGroupIcon,
+            current: path == "customer",
         },
         {
             name: "User Management",
@@ -105,9 +113,8 @@ export default function AdminLayout({ children }) {
 
             {/* Content area */}
             <div
-                className={`flex flex-col flex-1  transition-all duration-300 ease-in-out ${
-                    collapsed ? "lg:pl-20" : "lg:pl-72"
-                }`}
+                className={`flex flex-col flex-1  transition-all duration-300 ease-in-out ${collapsed ? "lg:pl-20" : "lg:pl-72"
+                    }`}
             >
                 <TopbarSection userNavigation={userNavigation} />
 

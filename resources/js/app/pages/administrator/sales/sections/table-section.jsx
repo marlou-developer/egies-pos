@@ -3,6 +3,7 @@ import {
     FaCashRegister,
     FaFilter,
     FaMoneyBill,
+    FaReceipt,
     FaUserPlus,
     FaUsers,
 } from "react-icons/fa6";
@@ -136,6 +137,7 @@ export default function TableSection() {
                                                     target="_blank"
                                                     className="inline-flex items-center gap-x-1.5 rounded-md bg-pink-100 hover:bg-pink-200 px-3 py-2 font-semibold text-gray-900 ring-1 ring-inset ring-gray-300"
                                                 >
+                                                    <FaReceipt className=" text-pink-500" />
                                                     Invoice
                                                 </a>
                                             </div>

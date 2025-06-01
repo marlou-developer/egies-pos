@@ -3,6 +3,7 @@ import {
     FaCashRegister,
     FaFilter,
     FaMoneyBill,
+    FaReceipt,
     FaUserPlus,
     FaUsers,
 } from "react-icons/fa6";
@@ -68,9 +69,9 @@ export default function CreditsSection() {
                                             className={classNames(
                                                 "sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 px-3 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter",
                                                 idx === 0 &&
-                                                    "pl-4 sm:pl-6 lg:pl-8",
+                                                "pl-4 sm:pl-6 lg:pl-8",
                                                 idx === 6 &&
-                                                    "pr-4 sm:pr-6 lg:pr-8"
+                                                "pr-4 sm:pr-6 lg:pr-8"
                                             )}
                                         >
                                             {header || (
@@ -106,21 +107,22 @@ export default function CreditsSection() {
                                         <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
                                             {res.due_date
                                                 ? moment(res.due_date).format(
-                                                      "LL"
-                                                  )
+                                                    "LL"
+                                                )
                                                 : "No due date"}
                                         </td>
                                         <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
                                             {res.status}
                                         </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-sm text-gray-700">
-                                            <div className="flex items-center justify-center gap-3">
+                                            <div className="flex items-center justify-center gap-2">
                                                 <HistorySection data={res} />
                                                 <a
                                                     href={`/administrator/credits/${res.cart_id}`}
                                                     target="_blank"
                                                     className="inline-flex items-center gap-x-1.5 rounded-md bg-pink-100 hover:bg-pink-200 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300"
                                                 >
+                                                    <FaReceipt className=" text-pink-500" />
                                                     Invoice
                                                 </a>
                                                 {res.status !== "Paid" && (
