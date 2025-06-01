@@ -23,6 +23,14 @@ class SupplierController extends Controller
         ], 200);
     }
 
+    public function update(Request $request,  $id)
+    {
+        $supplier = Supplier::where('id', $id)->first();
+        if ($supplier) {
+            $supplier->update($request->all());
+        }
+    }
+
     public function destroy($id)
     {
         $supplier = Supplier::where('id', $id)->first();

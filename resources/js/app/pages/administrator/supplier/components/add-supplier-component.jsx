@@ -12,7 +12,7 @@ import { message } from "antd";
 import { setCustomer } from "@/app/redux/customer-slice";
 import store from "@/app/store/store";
 import { setSupplier } from "@/app/redux/supplier-slice";
-import { create_supplier_thunk } from "@/app/redux/supplier-thunk";
+import { create_supplier_thunk, get_supplier_thunk } from "@/app/redux/supplier-thunk";
 
 export default function AddSupplierComponent({ open, setOpenSupplier }) {
     const [loading, setLoading] = useState(false);
@@ -60,7 +60,7 @@ export default function AddSupplierComponent({ open, setOpenSupplier }) {
 
         try {
             await store.dispatch(create_supplier_thunk(fd));
-            // await store.dispatch(get_customer_thunk());
+            await store.dispatch(get_supplier_thunk());
             message.success("Supplier successfully saved!");
             setOpenSupplier(false);
             dispatch(setCustomer({}));

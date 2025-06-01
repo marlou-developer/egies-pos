@@ -1,5 +1,6 @@
 
 import { delete_product_thunk, get_product_thunk } from "@/app/redux/product-thunk";
+import { delete_supplier_thunk, get_supplier_thunk } from "@/app/redux/supplier-thunk";
 import { delete_user_thunk, get_users_thunk } from "@/app/redux/user-thunk";
 import store from "@/app/store/store";
 import Modal from "@/Components/Modal";
@@ -18,10 +19,10 @@ export default function DeleteSupplierSection({ data }) {
         setLoading(true);
         try {
             await store.dispatch(
-                delete_user_thunk(data.id)
+                delete_supplier_thunk(data.id)
             );
-            store.dispatch(get_users_thunk())
-            message.success("Deleted Successfully!");
+            store.dispatch(get_supplier_thunk())
+            message.success("Removed Successfully!");
             setIsModalOpen(false);
         } catch (error) {
             message.error("Failed to Delete Supplier. Please try again."); // Show error message

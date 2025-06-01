@@ -1,5 +1,6 @@
 import Input from '@/app/_components/input'
 import DrawerSection from '@/app/_sections/drawer-section'
+import { get_supplier_thunk, update_supplier_thunk } from '@/app/redux/supplier-thunk'
 import { get_users_thunk, update_user_thunk } from '@/app/redux/user-thunk'
 import store from '@/app/store/store'
 import { XMarkIcon } from '@heroicons/react/24/outline'
@@ -21,23 +22,13 @@ export default function EditSupplierSection({ data }) {
         e.preventDefault();
         setLoading(true);
         try {
-            const fullName = [
-                form.fname,
-                form.mname ? form.mname[0] + "." : null,
-                form.lname,
-                form.suffix,
-            ]
-                .filter(Boolean)
-                .join(" ");
-
             await store.dispatch(
-                update_user_thunk({
+                update_supplier_thunk({
                     ...form,
-                    name: fullName,
                 })
             );
             message.success("Successfully updated!");
-            await store.dispatch(get_users_thunk());
+            await store.dispatch(get_supplier_thunk());
             setOpen(false);
         } catch (error) {
             message.error("Failed to update Supplier. Please try again.");
@@ -92,18 +83,18 @@ export default function EditSupplierSection({ data }) {
                                     </div>
 
                                     <form onSubmit={editUser} >
-                                        <div className="flex flex-col gap-4">
+                                        <div className="flex flex-col gap-5">
                                             <div>
                                                 <Input
                                                     onChange={(e) =>
                                                         setForm({
                                                             ...form,
-                                                            fname: e.target.value,
+                                                            name: e.target.value,
                                                         })
                                                     }
-                                                    value={form?.fname}
-                                                    name="fname"
-                                                    label="First name"
+                                                    value={form?.name}
+                                                    name="name"
+                                                    label="Name"
                                                     type="text"
                                                 />
                                             </div>
@@ -112,12 +103,12 @@ export default function EditSupplierSection({ data }) {
                                                     onChange={(e) =>
                                                         setForm({
                                                             ...form,
-                                                            mname: e.target.value,
+                                                            address: e.target.value,
                                                         })
                                                     }
-                                                    value={form.mname || ""}
-                                                    name="mname"
-                                                    label="Middle name"
+                                                    value={form.address || ""}
+                                                    name="address"
+                                                    label="Address"
                                                     type="text"
                                                 />
                                             </div>
@@ -126,12 +117,12 @@ export default function EditSupplierSection({ data }) {
                                                     onChange={(e) =>
                                                         setForm({
                                                             ...form,
-                                                            lname: e.target.value,
+                                                            contact_person: e.target.value,
                                                         })
                                                     }
-                                                    value={form.lname || ""}
-                                                    name="lname"
-                                                    label="Last name"
+                                                    value={form.contact_person || ""}
+                                                    name="contact_person"
+                                                    label="Contact Person"
                                                     type="text"
                                                 />
                                             </div>
@@ -140,26 +131,12 @@ export default function EditSupplierSection({ data }) {
                                                     onChange={(e) =>
                                                         setForm({
                                                             ...form,
-                                                            suffix: e.target.value,
+                                                            contact_no: e.target.value,
                                                         })
                                                     }
-                                                    value={form.suffix || ""}
-                                                    name="suffix"
-                                                    label="Suffix"
-                                                    type="text"
-                                                />
-                                            </div>
-                                            <div>
-                                                <Input
-                                                    onChange={(e) =>
-                                                        setForm({
-                                                            ...form,
-                                                            title: e.target.value,
-                                                        })
-                                                    }
-                                                    value={form.title || ""}
-                                                    name="title"
-                                                    label="Position"
+                                                    value={form.contact_no || ""}
+                                                    name="contact_no"
+                                                    label="Contact No."
                                                     type="text"
                                                 />
                                             </div>
@@ -177,24 +154,6 @@ export default function EditSupplierSection({ data }) {
                                                     type="email"
                                                 />
                                             </div>
-                                            <div>
-                                                <select
-                                                    onChange={(e) =>
-                                                        setForm({
-                                                            ...form,
-                                                            user_type: e.target.value,
-                                                        })
-                                                    }
-                                                    value={form.user_type || ""}
-                                                    name="user_type"
-                                                    type="text"
-                                                    className="block w-full rounded-md bg-white px-3 py-2.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6">
-                                                    <option value="">Select User Type</option>
-                                                    <option value="Admin">Admin</option>
-                                                    <option value="Staff">Staff</option>
-                                                </select>
-                                            </div>
-
                                         </div>
 
                                         <div className="flex justify-end mt-6">

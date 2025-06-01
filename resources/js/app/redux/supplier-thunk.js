@@ -1,4 +1,4 @@
-import { create_supplier_service, get_supplier_service } from "../pages/services/supplier-service";
+import { create_supplier_service, delete_supplier_service, get_supplier_service, update_supplier_service } from "../pages/services/supplier-service";
 import { supplierSlice } from "./supplier-slice";
 
 export function create_supplier_thunk(data) {
@@ -16,15 +16,15 @@ export function get_supplier_thunk() {
 }
 
 
-// export function delete_category_thunk(id) {
-//     return async function (dispatch, getState) {
-//         const res = await delete_category_service(id)
-//     };
-// }
+export function delete_supplier_thunk(id) {
+    return async function (dispatch, getState) {
+        const res = await delete_supplier_service(id)
+    };
+}
 
 
-// export function update_category_thunk(data) {
-//     return async function (dispatch, getState) {
-//         const res = await update_category_service(data)
-//     };
-// }
+export function update_supplier_thunk(data) {
+    return async function (dispatch, getState) {
+        const res = await update_supplier_service(data)
+    };
+}
