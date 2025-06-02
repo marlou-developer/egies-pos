@@ -1,6 +1,6 @@
 import Button from "@/app/_components/button";
 import Modal from "@/app/_components/modal";
-import { update_status_thunk } from "@/app/redux/cart-thunk";
+import { get_shopee_thunk, update_status_thunk } from "@/app/redux/cart-thunk";
 import store from "@/app/store/store";
 import React, { useEffect, useState } from "react";
 import { FaCheckToSlot } from "react-icons/fa6";
@@ -23,6 +23,7 @@ export default function UpdateStatusSection({ data }) {
                     ...form,
                 })
             );
+            await store.dispatch(get_shopee_thunk());
             await Swal.fire({
                 icon: "success",
                 title: "Your Shopee has been updated",

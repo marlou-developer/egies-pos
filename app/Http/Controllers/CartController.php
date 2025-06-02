@@ -12,6 +12,28 @@ use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
+    public function update_all_status(Request $request)
+    {
+        foreach ($request->data as $key => $data_value) {
+            $cart = Cart::where('cart_id',  $data_value['cart_id'])->first();
+            if ($cart) {
+                $cart->update([
+                    'status' => $request->status
+                ]);
+                if ($request->status == 'Returned') {
+                    foreach ($request->cart_items as $key => $value) {
+                        $product = Product::where('id', $value['product_id'])->first();
+                        if ($product) {
+                            $product->update([
+                                'quantity' => $value['quantity'] +  $product->quantity
+                            ]);
+                        }
+                    }
+                }
+            }
+        }
+           return response()->json('success', 200);
+    }
 
     public function update_status(Request $request)
     {
@@ -149,7 +171,7 @@ class CartController extends Controller
 
         $carts = Cart::where('shop', 'Shopee')->with(['cart_items', 'credit_payments']);
         if ($request->filled('search')) {
-            $carts->where('order_id', 'like', '%' . $request->search . '%');
+            $carts->where('cart_id', 'like', '%' . $request->search . '%');
             $carts->orWhere('customer', 'like', '%' . $request->search . '%');
         }
 

@@ -30,6 +30,7 @@ Route::get('get_cart_credit', [CartController::class, 'get_cart_credit']);
 Route::get('get_shopee', [CartController::class, 'get_shopee']);
 Route::get('get_over_due', [CartController::class, 'get_over_due']);
 Route::post('update_status', [CartController::class, 'update_status']);
+Route::post('update_all_status', [CartController::class, 'update_all_status']);
 Route::resource('credit_payment', CreditPaymentController::class);
 Route::resource('dashboard', DashboardController::class);
 Route::resource('supplier', SupplierController::class);

@@ -14,6 +14,13 @@ export function get_over_due_service() {
     } catch (error) {}
 }
 
+export function update_all_status_service(data) {
+    try {
+        const result = axios.post("/api/update_all_status", data);
+        
+        return result;
+    } catch (error) {}
+}
 export function update_status_service(data) {
     try {
         const result = axios.post("/api/update_status", data);
