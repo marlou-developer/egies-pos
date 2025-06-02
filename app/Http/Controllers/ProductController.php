@@ -11,8 +11,6 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $perPage = $request->input('per_page', 10);
-
         $query = Product::with(['categories', 'uploads', 'stocks'])->orderBy('created_at', 'desc');
 
         if ($request->search) {
@@ -41,9 +39,11 @@ class ProductController extends Controller
         }
 
 
-        $products['data'] = $query->get();
 
-        return response()->json($products, 200);
+        return response()->json([
+            'all' => $query->get(),
+            'data' => $query->paginate(10),
+        ], 200);
     }
 
 

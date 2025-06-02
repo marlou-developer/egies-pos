@@ -1,17 +1,4 @@
-New Tasks
 
-
-Dashboard Section:
-
-- adjusment sa widgets ng sales section, dili mao ang gagawas na result. update formula into:
-
-Sales Total = SUM(total_price (carts Table))
-Profit Total = SUM(profit (cart_items Table)) - discount_per_order (carts Table)
-
-- Dashboard sa Stock Section add ta ug:
-
-Total Inventory in Retail Price = SUM(SRP * quantity)
-Total Inventory in Capital = SUM(COST * quantity)
 
 
 Stocks Section:

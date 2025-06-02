@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-    FaBoxesStacked,
-    FaClipboardList,
-    FaSquarePlus,
-} from "react-icons/fa6";
+import { FaBoxesStacked, FaClipboardList, FaSquarePlus } from "react-icons/fa6";
 import store from "@/app/store/store";
 import AddStocksSection from "./add-stocks-section";
 import StocksHistorySection from "./stocks-history-section";
 import { peso_value } from "@/app/lib/peso";
 import SearchSection from "./search-section";
+import { Link } from "@inertiajs/react";
+import PaginationSection from "./pagination-section";
+import { setSelectAll, setSelectedProducts } from "@/app/redux/product-slice";
+import PrintSection from "./print-section";
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
@@ -33,12 +33,13 @@ function classNames(...classes) {
 // }
 
 export default function StocksSection() {
-    const [current, setCurrent] = useState(1);
-    const [pageSize] = useState(10);
-
-    const { products } = useSelector((state) => state.products) || {
+    const { products, selectedProducts,selectAll } = useSelector(
+        (state) => state.products
+    ) || {
         products: { data: [], total: 0, last_page: 1 },
     };
+
+    const dispatch = useDispatch();
 
     const [openProduct, setOpenProduct] = useState(false);
     const [openCategory, setOpenCategory] = useState(false);
@@ -86,7 +87,6 @@ export default function StocksSection() {
         printWindow.print();
     };
 
-    console.log('productsss', products.data.stocks)
 
     return (
         <div className="px-4 sm:px-6 lg:px-8">
@@ -99,8 +99,10 @@ export default function StocksSection() {
                     </h1>
                 </div>
             </div>
-            <div className="mt-4 flex items-start justify-start">
+            <div className="mt-4 flex items-start justify-between">
                 <SearchSection />
+
+                <PrintSection />
             </div>
             {/* Product Table */}
             <div className="mt-8 flow-root">
@@ -112,6 +114,29 @@ export default function StocksSection() {
                         >
                             <thead>
                                 <tr>
+                                    <th
+                                        scope="col"
+                                        className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:pl-6 lg:pl-8"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked={selectAll}
+                                            onChange={(e) => {
+                                                const isChecked =
+                                                    e.target.checked;
+                                                dispatch(setSelectAll(isChecked));
+
+                                                dispatch(
+                                                    setSelectedProducts(
+                                                        isChecked
+                                                            ? [...products.all]
+                                                            : []
+                                                    )
+                                                );
+                                            }}
+                                        />
+                                    </th>
+
                                     <th
                                         scope="col"
                                         className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:pl-6 lg:pl-8"
@@ -163,7 +188,7 @@ export default function StocksSection() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {products?.data?.map((product, productIdx) => {
+                                {products?.data?.data?.map((product, productIdx) => {
                                     let quantityy = product?.quantity; // Default status
                                     let statusClass =
                                         "inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20";
@@ -180,7 +205,47 @@ export default function StocksSection() {
                                     }
 
                                     return (
-                                        <tr key={product.id || product.name}>
+                                        <tr key={productIdx}>
+                                            <td
+                                                className={classNames(
+                                                    productIdx !==
+                                                        products.length - 1
+                                                        ? "border-b border-gray-200"
+                                                        : "",
+                                                    "py-4 pl-4 pr-3 text-sm sm:pl-6 lg:pl-8"
+                                                )}
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedProducts.some(
+                                                        (p) =>
+                                                            p.id === product.id
+                                                    )}
+                                                    onChange={(e) => {
+                                                        const isChecked =
+                                                            e.target.checked;
+
+                                                        const updatedSelected =
+                                                            isChecked
+                                                                ? [
+                                                                      ...selectedProducts,
+                                                                      product,
+                                                                  ]
+                                                                : selectedProducts.filter(
+                                                                      (p) =>
+                                                                          p.id !==
+                                                                          product.id
+                                                                  ); // Correctly compare by object.id
+
+                                                        dispatch(
+                                                            setSelectedProducts(
+                                                                updatedSelected
+                                                            )
+                                                        );
+                                                    }}
+                                                />
+                                            </td>
+
                                             <td
                                                 className={classNames(
                                                     productIdx !==
@@ -207,7 +272,8 @@ export default function StocksSection() {
                                             </td>
                                             <td
                                                 className={classNames(
-                                                    productIdx !== product.length - 1
+                                                    productIdx !==
+                                                        product.length - 1
                                                         ? "border-b border-gray-200"
                                                         : "",
                                                     "hidden px-3 py-4 text-sm font-bold whitespace-nowrap text-gray-500 sm:table-cell"
@@ -217,13 +283,14 @@ export default function StocksSection() {
                                                     {product.quantity == 0
                                                         ? "Out of Stock"
                                                         : product.quantity <= 10
-                                                            ? "Low Stock"
-                                                            : "In Stock"}
+                                                        ? "Low Stock"
+                                                        : "In Stock"}
                                                 </span>
                                             </td>
                                             <td
                                                 className={classNames(
-                                                    productIdx !== products.data.length - 1
+                                                    productIdx !==
+                                                        products.data.data.length - 1
                                                         ? "border-b border-gray-200"
                                                         : "",
                                                     "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
@@ -232,14 +299,25 @@ export default function StocksSection() {
                                                 <span className="inline-flex items-center font-bold px-2 py-1">
                                                     {product.stocks?.length > 0
                                                         ? new Date(
-                                                            [...product.stocks]
-                                                                .sort((a, b) => new Date(b.date) - new Date(a.date))[0]
-                                                                .date
-                                                        ).toLocaleDateString("en-US", {
-                                                            year: "numeric",
-                                                            month: "short",
-                                                            day: "numeric",
-                                                        })
+                                                              [
+                                                                  ...product.stocks,
+                                                              ].sort(
+                                                                  (a, b) =>
+                                                                      new Date(
+                                                                          b.date
+                                                                      ) -
+                                                                      new Date(
+                                                                          a.date
+                                                                      )
+                                                              )[0].date
+                                                          ).toLocaleDateString(
+                                                              "en-US",
+                                                              {
+                                                                  year: "numeric",
+                                                                  month: "short",
+                                                                  day: "numeric",
+                                                              }
+                                                          )
                                                         : "No Stocks Added"}
                                                 </span>
                                             </td>
@@ -254,7 +332,11 @@ export default function StocksSection() {
                                                 )}
                                             >
                                                 <span className="inline-flex items-center font-bold px-2 py-1">
-                                                    {peso_value((Number(product.quantity) * Number(product.srp)))}
+                                                    {peso_value(
+                                                        Number(
+                                                            product.quantity
+                                                        ) * Number(product.srp)
+                                                    )}
                                                 </span>
                                             </td>
                                             <td
@@ -267,7 +349,11 @@ export default function StocksSection() {
                                                 )}
                                             >
                                                 <span className="inline-flex items-center font-bold px-2 py-1">
-                                                    {peso_value((Number(product.quantity) * Number(product.cost)))}
+                                                    {peso_value(
+                                                        Number(
+                                                            product.quantity
+                                                        ) * Number(product.cost)
+                                                    )}
                                                     {/* {peso_value(((Number(product.srp) - Number(product.cost)) * Number(product.quantity)))} */}
                                                 </span>
                                             </td>
@@ -281,8 +367,12 @@ export default function StocksSection() {
                                                 )}
                                             >
                                                 <div className="inline-flex items-center font-bold px-2 py-1 gap-4 ">
-                                                    <AddStocksSection data={product} />
-                                                    <StocksHistorySection data={product} />
+                                                    <AddStocksSection
+                                                        data={product}
+                                                    />
+                                                    <StocksHistorySection
+                                                        data={product}
+                                                    />
                                                 </div>
                                             </td>
                                         </tr>
@@ -292,40 +382,7 @@ export default function StocksSection() {
                         </table>
 
                         {/* Pagination */}
-                        <div className="w-full mt-4">
-                            {products?.last_page > 1 && (
-                                <div className="flex justify-between items-center">
-                                    <div>
-                                        Showing {(current - 1) * pageSize + 1}{" "}
-                                        to{" "}
-                                        {Math.min(
-                                            current * pageSize,
-                                            products.total
-                                        )}{" "}
-                                        of {products.total} entries
-                                    </div>
-                                    <div className="flex space-x-2">
-                                        {Array.from(
-                                            { length: products.last_page },
-                                            (_, i) => i + 1
-                                        ).map((pageNum) => (
-                                            <button
-                                                key={pageNum}
-                                                onClick={() =>
-                                                    setCurrent(pageNum)
-                                                }
-                                                className={`px-3 py-1 border rounded ${pageNum === current
-                                                    ? "bg-pink-500 text-white"
-                                                    : "bg-white text-pink-500 border-pink-500"
-                                                    }`}
-                                            >
-                                                {pageNum}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
+                        <PaginationSection />
                     </div>
                 </div>
             </div>

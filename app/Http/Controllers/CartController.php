@@ -43,7 +43,7 @@ class CartController extends Controller
             $query->where('cart_id', 'like', '%' . $request->search . '%');
         }
 
-        $carts = $query->get();
+        $carts = $query->paginate(10);
 
         return response()->json($carts, 200);
     }

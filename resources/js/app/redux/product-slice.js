@@ -9,10 +9,12 @@ export const productSlice = createSlice({
             current_page: 1,
             last_page: 1,
         },
-        carts:[],
+        carts: [],
         product: {},
-        product_discount:{},
-         product_discounts:[]
+        product_discount: {},
+        product_discounts: [],
+        selectedProducts: [],
+        selectAll: false,
     },
     reducers: {
         setProducts: (state, action) => {
@@ -30,9 +32,23 @@ export const productSlice = createSlice({
         setCarts: (state, action) => {
             state.carts = action.payload;
         },
+        setSelectedProducts: (state, action) => {
+            state.selectedProducts = action.payload;
+        },
+        setSelectAll: (state, action) => {
+            state.selectAll = action.payload;
+        },
     },
 });
 
-export const { setProducts, setProduct,setCarts,setProductDiscount,setProductDiscounts } = productSlice.actions;
+export const {
+    setProducts,
+    setProduct,
+    setCarts,
+    setProductDiscount,
+    setProductDiscounts,
+    setSelectedProducts,
+    setSelectAll
+} = productSlice.actions;
 
 export default productSlice.reducer;

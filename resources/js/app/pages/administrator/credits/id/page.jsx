@@ -72,35 +72,10 @@ const styles = StyleSheet.create({
     },
 });
 
-// Invoice Data
-const items = [
-    {
-        description: "Perfect Skin Twinpack Tinted With Free Wipes",
-        qty: 60,
-        rate: 135,
-    },
-    {
-        description: "Perfect Skin Twinpack Melasma With Free Wipes",
-        qty: 20,
-        rate: 135,
-    },
-    {
-        description: "Perfect Skin Melasma Sunblock",
-        qty: 10,
-        rate: 125,
-    },
-    {
-        description: "PS Vitamin C Set",
-        qty: 50,
-        rate: 200,
-    },
-];
 
-const shippingFee = 375;
 
 const InvoicePDF = () => {
-    const subtotal = items.reduce((sum, item) => sum + item.qty * item.rate, 0);
-    const total = subtotal + shippingFee;
+ 
     const cart_id = window.location.pathname.split("/")[3];
     const { cart } = useSelector((store) => store.carts);
     useEffect(() => {

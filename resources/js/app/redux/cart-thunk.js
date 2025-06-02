@@ -41,7 +41,7 @@ export function get_shopee_thunk() {
 export function get_cart_thunk() {
     return async function (dispatch, getState) {
         const res = await get_cart_service()
-        dispatch(cartSlice.actions.setSales(res));
+        dispatch(cartSlice.actions.setSales(res.data));
     };
 }
 

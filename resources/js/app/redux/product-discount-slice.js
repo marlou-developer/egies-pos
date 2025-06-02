@@ -1,22 +1,24 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 export const finalRateSlice = createSlice({
-  name: 'final_rate',
-  initialState: {
-    applicant: {},
-    finalRate:{
-      guideqss:[]
-    }
-  },
-  reducers: {
-    setApplicant: (state, action) => {
-      state.applicant = action.payload
+    name: "final_rate",
+    initialState: {
+        applicant: {},
+        finalRate: {
+            guideqss: [],
+        },
     },
-    setFinalRate: (state, action) => {
-      state.finalRate = action.payload
-    }
-  },
-})
-export const { setApplicant,setFinalRate } = finalRateSlice.actions
+    reducers: {
+        setApplicant: (state, action) => {
+            state.applicant = action.payload;
+        },
+        setFinalRate: (state, action) => {
+            state.finalRate = action.payload;
+        },
+        
+    },
+});
+export const { setApplicant, setFinalRate } =
+    finalRateSlice.actions;
 
-export default finalRateSlice.reducer
+export default finalRateSlice.reducer;
