@@ -19,7 +19,7 @@ import {
     create_customer_thunk,
     get_customer_thunk,
 } from "@/app/redux/customer-thunk";
-import { message } from "antd";
+import { message, Select } from "antd";
 import { setCustomer } from "@/app/redux/customer-slice";
 import store from "@/app/store/store";
 import {
@@ -58,6 +58,8 @@ export default function AddProductDiscountSection({ open, setOpenCustomer }) {
             message.error("Product is already exist in the customer.");
         }
     }
+
+    console.log('dadwadwaa', form)
     return (
         <>
             <DrawerSection open={open} setOpen={setOpenCustomer}>
@@ -153,7 +155,7 @@ export default function AddProductDiscountSection({ open, setOpenCustomer }) {
                                                 {parseFloat(
                                                     form?.product
                                                         ?.district_distributor ||
-                                                        0
+                                                    0
                                                 ).toLocaleString("en-PH", {
                                                     minimumFractionDigits: 2,
                                                 })}
@@ -166,7 +168,7 @@ export default function AddProductDiscountSection({ open, setOpenCustomer }) {
                                                 {parseFloat(
                                                     form?.product
                                                         ?.provincial_distributor ||
-                                                        0
+                                                    0
                                                 ).toLocaleString("en-PH", {
                                                     minimumFractionDigits: 2,
                                                 })}
@@ -181,38 +183,43 @@ export default function AddProductDiscountSection({ open, setOpenCustomer }) {
                                             Product
                                         </label>
                                         <div className="mt-2 grid grid-cols-1">
-                                            <select
-                                                id="product"
-                                                name="product"
-                                                onChange={(e) =>
+                                            <Select
+                                                size="large"
+                                                onChange={(value) =>
                                                     setForm({
                                                         ...form,
-                                                        [e.target.name]:
+                                                        product:
                                                             JSON.parse(
-                                                                e.target.value
+                                                                value
                                                             ),
                                                     })
                                                 }
-                                                className="col-start-1 py-2.5 row-start-1 w-full appearance-none rounded-md bg-white pr-8 pl-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                            >
-                                                <option selected disabled>
-                                                    Select Product
-                                                </option>
-                                                {products.data?.map(
-                                                    (res, i) => {
-                                                        return (
-                                                            <option
-                                                                value={JSON.stringify(
-                                                                    res
-                                                                )}
-                                                                key={i}
-                                                            >
-                                                                {res.name}
-                                                            </option>
+                                                showSearch
+                                                className="w-full border-gray-800 border rounded-lg"
+                                                placeholder="Search to Select"
+                                                optionFilterProp="label"
+                                                filterSort={(optionA, optionB) => {
+                                                    var _a, _b;
+                                                    return (
+                                                        (_a = optionA === null || optionA === void 0 ? void 0 : optionA.label) !== null &&
+                                                            _a !== void 0
+                                                            ? _a
+                                                            : ''
+                                                    )
+                                                        .toLowerCase()
+                                                        .localeCompare(
+                                                            ((_b = optionB === null || optionB === void 0 ? void 0 : optionB.label) !== null &&
+                                                                _b !== void 0
+                                                                ? _b
+                                                                : ''
+                                                            ).toLowerCase(),
                                                         );
-                                                    }
-                                                )}
-                                            </select>
+                                                }}
+                                                options={products?.all?.map((res, i) => ({
+                                                    label: res.name,
+                                                    value: JSON.stringify(res),
+                                                }))}
+                                            />
                                         </div>
                                     </div>
                                     <div>
