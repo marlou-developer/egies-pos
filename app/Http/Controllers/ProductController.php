@@ -15,7 +15,9 @@ class ProductController extends Controller
 
         if ($request->search) {
             $query->where('id', '=', $request->search);
+            $query->orWhere('name', 'like', '%' . $request->search . '%');
         }
+
         if ($request->filled('category_id') && $request->category_id !== 'undefined') {
             $query->where('category_id', $request->category_id);
         }

@@ -92,6 +92,7 @@ export default function ProductsSection() {
         printWindow.print();
     };
 
+    console.log('products',products)
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             {/* Header Section */}
@@ -243,7 +244,7 @@ export default function ProductsSection() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {products?.data?.map((product, productIdx) => {
+                                {products?.data?.data?.map((product, productIdx) => {
                                     let quantityy = product?.quantity; // Default status
                                     let statusClass =
                                         "inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20";
