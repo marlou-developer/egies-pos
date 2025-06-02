@@ -35,8 +35,7 @@ export default function HeaderMenuSection({ userNavigation }) {
                         aria-hidden="true"
                         className="ml-4 text-sm/6 font-semibold text-gray-900"
                     >
-                        Egie's Beauty
-                        {/* {user?.name} */}
+                        {user?.name}
                     </span>
                     <ChevronDownIcon
                         aria-hidden="true"
