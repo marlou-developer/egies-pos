@@ -288,7 +288,7 @@ export default function PosSection() {
                                         <input
                                             placeholder="Overall Product Discount"
                                             type="number"
-                                            value={overallDiscount}
+                                            // value={overallDiscount}
                                             onChange={(e) =>
                                                 setOverallDiscount(
                                                     e.target.value == ""
@@ -357,6 +357,7 @@ export default function PosSection() {
                             </div>
                         </div>
                         <div class="px-5 mt-5 w-full">
+                            
                             <PaySection
                                 shop={store}
                                 data={carts}
@@ -364,7 +365,7 @@ export default function PosSection() {
                                 totalItemDiscount={totalItemDiscount}
                                 totalDiscount={totalDiscount}
                                 total_price={total_price}
-                                setOverallDiscount={setOverallDiscount}
+                                // setOverallDiscount={setOverallDiscount}
                                 discount_per_order={
                                     isNaN(parseFloat(overallDiscount))
                                         ? "0"

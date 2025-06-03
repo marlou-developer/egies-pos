@@ -33,7 +33,6 @@ export default function PaySection({
     totalDiscount,
     discount_per_order,
     data,
-    setOverallDiscount,
     shop,
 }) {
     const [loading, setLoading] = useState(false);
@@ -46,7 +45,7 @@ export default function PaySection({
         change: 0,
         payment_type: null,
     });
-    const [productId,setProductId]=useState(null)
+    const [productId, setProductId] = useState(null);
     const dispatch = useDispatch();
     const discounts = form?.customer?.discounts ?? [];
 
@@ -81,7 +80,6 @@ export default function PaySection({
     }, [form.is_credit]);
 
     function reset_data(params) {
-        setOverallDiscount(0);
         setLoading(false);
         setIsOpen(false);
         setForm({
@@ -119,7 +117,7 @@ export default function PaySection({
         try {
             setLoading(true);
             const result = await store.dispatch(create_cart_thunk(form_data));
-            setProductId(result?.data?.cart_id??'')
+            setProductId(result?.data?.cart_id ?? "");
             await store.dispatch(get_category_thunk());
 
             Swal.fire({
@@ -214,7 +212,7 @@ export default function PaySection({
             </Button>
             {shouldPrint && (
                 <PrintReceiptSection
-                productId={productId}
+                    productId={productId}
                     reset1={() => dispatch(setCarts([]))}
                     reset2={() => reset_data()}
                     data={form_data}
@@ -311,7 +309,11 @@ export default function PaySection({
                                     Total Discount
                                 </span>
                                 <span class="font-bold">
-                                    ₱{totalDiscount?.toFixed(2)}
+                                    ₱
+                                    {(
+                                        totalDiscount +
+                                        (customer_total_discount ?? 0)
+                                    )?.toFixed(2)}
                                 </span>
                             </div>
 

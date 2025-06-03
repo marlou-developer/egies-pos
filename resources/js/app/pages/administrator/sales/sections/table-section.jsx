@@ -131,7 +131,7 @@ export default function TableSection() {
                                         </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-gray-700 whitespace-nowrap text-right">
                                             <div className="flex items-center justify-center gap-3">
-                                                <ShowItemSection data={res} />
+                                                {/* <ShowItemSection data={res} /> */}
                                                 <a
                                                     href={`/administrator/credits/${res.cart_id}`}
                                                     target="_blank"
