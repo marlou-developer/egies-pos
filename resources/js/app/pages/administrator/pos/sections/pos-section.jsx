@@ -44,6 +44,19 @@ export default function PosSection() {
         dispatch(setCarts(updated));
     }
 
+    function update_pcs(result, valueKey) {
+        const updated = carts.map((item) =>
+            item.id === result.id
+                ? {
+                      ...item,
+                      pcs: valueKey,
+                  }
+                : item
+        );
+
+        dispatch(setCarts(updated));
+    }
+
     const updateDiscount = (value, discountValue) => {
         const updated = carts.map((item) =>
             item.id === value.id
@@ -158,7 +171,14 @@ export default function PosSection() {
                                                         <input
                                                             id="pcs"
                                                             name="pcs"
-                                                            type="text"
+                                                            type="number"
+                                                            onChange={(e) =>
+                                                                update_pcs(
+                                                                    res,
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
                                                             value={res?.pcs}
                                                             className="block text-center w-full rounded-md bg-white py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
                                                         />

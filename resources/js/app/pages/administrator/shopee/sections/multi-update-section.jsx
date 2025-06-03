@@ -103,16 +103,17 @@ export default function MultiUpdateSection() {
                         }
                         value={form.status}
                         className="rounded-md w-full text-gray-500"
-                        label="Mode of Payment"
+                        label="Status"
                     >
                         <option disabled selected>
-                            Mode of Payment:
+                            Status:
                         </option>
                         <option value="Paid">Paid</option>
                         <option value="Pending">Pending</option>
                         <option value="Refunded">Refunded</option>
                         <option value="Returned">Returned</option>
                     </select>
+
                     <Button
                         className="bg-pink-500 "
                         loading={loading}

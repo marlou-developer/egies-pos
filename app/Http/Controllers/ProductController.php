@@ -14,9 +14,17 @@ class ProductController extends Controller
         $query = Product::with(['categories', 'uploads', 'stocks'])->orderBy('created_at', 'desc');
 
         if ($request->search) {
-            $query->where('id', '=', $request->search);
-            $query->orWhere('name', 'like', '%' . $request->search . '%');
+            $query->where(function ($q) use ($request) {
+                $q->where('id', $request->search)
+                    ->orWhere('name', 'like', '%' . $request->search . '%')
+                    ->orWhere('brand', 'like', '%' . $request->search . '%')
+                    ->orWhere('delivery_receipt_no', 'like', '%' . $request->search . '%')
+                    ->orWhereHas('categories', function ($catQuery) use ($request) {
+                        $catQuery->where('name', 'like', '%' . $request->search . '%');
+                    });
+            });
         }
+
 
         if ($request->filled('category_id') && $request->category_id !== 'undefined') {
             $query->where('category_id', $request->category_id);

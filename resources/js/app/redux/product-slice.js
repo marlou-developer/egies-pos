@@ -15,6 +15,8 @@ export const productSlice = createSlice({
         product_discounts: [],
         selectedProducts: [],
         selectAll: false,
+        selectAllStock: false,
+        selectedStocks: [],
     },
     reducers: {
         setProducts: (state, action) => {
@@ -38,6 +40,12 @@ export const productSlice = createSlice({
         setSelectAll: (state, action) => {
             state.selectAll = action.payload;
         },
+        setSelectedStocks: (state, action) => {
+            state.selectedStocks = action.payload;
+        },
+        setSelectAllStock: (state, action) => {
+            state.selectAllStock = action.payload;
+        },
     },
 });
 
@@ -48,7 +56,9 @@ export const {
     setProductDiscount,
     setProductDiscounts,
     setSelectedProducts,
-    setSelectAll
+    setSelectAll,
+    setSelectedStocks,
+    setSelectAllStock,
 } = productSlice.actions;
 
 export default productSlice.reducer;

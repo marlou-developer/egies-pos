@@ -8,7 +8,7 @@ import { peso_value } from "@/app/lib/peso";
 import SearchSection from "./search-section";
 import { Link } from "@inertiajs/react";
 import PaginationSection from "./pagination-section";
-import { setSelectAll, setSelectedProducts } from "@/app/redux/product-slice";
+import { setSelectAllStock, setSelectedStocks } from "@/app/redux/product-slice";
 import PrintSection from "./print-section";
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -33,7 +33,7 @@ function classNames(...classes) {
 // }
 
 export default function StocksSection() {
-    const { products, selectedProducts,selectAll } = useSelector(
+    const { products, selectedStocks,selectAllStock } = useSelector(
         (state) => state.products
     ) || {
         products: { data: [], total: 0, last_page: 1 },
@@ -120,14 +120,14 @@ export default function StocksSection() {
                                     >
                                         <input
                                             type="checkbox"
-                                            checked={selectAll}
+                                            checked={selectAllStock}
                                             onChange={(e) => {
                                                 const isChecked =
                                                     e.target.checked;
-                                                dispatch(setSelectAll(isChecked));
+                                                dispatch(setSelectAllStock(isChecked));
 
                                                 dispatch(
-                                                    setSelectedProducts(
+                                                    setSelectedStocks(
                                                         isChecked
                                                             ? [...products.all]
                                                             : []
@@ -217,7 +217,7 @@ export default function StocksSection() {
                                             >
                                                 <input
                                                     type="checkbox"
-                                                    checked={selectedProducts.some(
+                                                    checked={selectedStocks.some(
                                                         (p) =>
                                                             p.id === product.id
                                                     )}
@@ -228,17 +228,17 @@ export default function StocksSection() {
                                                         const updatedSelected =
                                                             isChecked
                                                                 ? [
-                                                                      ...selectedProducts,
+                                                                      ...selectedStocks,
                                                                       product,
                                                                   ]
-                                                                : selectedProducts.filter(
+                                                                : selectedStocks.filter(
                                                                       (p) =>
                                                                           p.id !==
                                                                           product.id
                                                                   ); // Correctly compare by object.id
 
                                                         dispatch(
-                                                            setSelectedProducts(
+                                                            setSelectedStocks(
                                                                 updatedSelected
                                                             )
                                                         );

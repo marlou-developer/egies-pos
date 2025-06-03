@@ -15,6 +15,8 @@ import store from "@/app/store/store";
 import { get_category_thunk } from "@/app/redux/category-thunk";
 import ProductOptionMenuSection from "./product-option-menu-section";
 import SearchSection from "./search-section";
+import PrintSection from "./print-section";
+import { setSelectAll, setSelectedProducts } from "@/app/redux/product-slice";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -41,8 +43,10 @@ function getStatusLabelAndClass(quantity) {
 export default function ProductsSection() {
     const [current, setCurrent] = useState(1);
     const [pageSize] = useState(10);
-
-    const { products } = useSelector((state) => state.products) || {
+    const dispatch = useDispatch();
+    const { products, selectedProducts, selectAll } = useSelector(
+        (state) => state.products
+    ) || {
         products: { data: [], total: 0, last_page: 1 },
     };
 
@@ -92,7 +96,7 @@ export default function ProductsSection() {
         printWindow.print();
     };
 
-    console.log('products', products)
+    console.log("products", products);
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             {/* Header Section */}
@@ -156,9 +160,11 @@ export default function ProductsSection() {
                     />
                 </div>
             </div>
-            <div className="mt-4 flex items-start justify-start">
+            <div className="mt-4 flex items-start justify-between">
                 <SearchSection />
+                <PrintSection />
             </div>
+
             {/* Product Table */}
             <div className="mt-8 flow-root">
                 <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
@@ -169,6 +175,30 @@ export default function ProductsSection() {
                         >
                             <thead>
                                 <tr>
+                                    <th
+                                        scope="col"
+                                        className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:pl-6 lg:pl-8"
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked={selectAll}
+                                            onChange={(e) => {
+                                                const isChecked =
+                                                    e.target.checked;
+                                                dispatch(
+                                                    setSelectAll(isChecked)
+                                                );
+
+                                                dispatch(
+                                                    setSelectedProducts(
+                                                        isChecked
+                                                            ? [...products.all]
+                                                            : []
+                                                    )
+                                                );
+                                            }}
+                                        />
+                                    </th>
                                     <th
                                         scope="col"
                                         className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:pl-6 lg:pl-8"
@@ -244,77 +274,125 @@ export default function ProductsSection() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {products?.data?.data?.map((product, productIdx) => {
-                                    let quantityy = product?.quantity; // Default status
-                                    let statusClass =
-                                        "inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20";
+                                {products?.data?.data?.map(
+                                    (product, productIdx) => {
+                                        let quantityy = product?.quantity; // Default status
+                                        let statusClass =
+                                            "inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20";
 
-                                    if (product.quantity == 0) {
-                                        statusClass =
-                                            "inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20";
-                                    } else if (
-                                        product.quantity >= 1 &&
-                                        product.quantity <= 10
-                                    ) {
-                                        statusClass =
-                                            "inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20";
-                                    }
+                                        if (product.quantity == 0) {
+                                            statusClass =
+                                                "inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20";
+                                        } else if (
+                                            product.quantity >= 1 &&
+                                            product.quantity <= 10
+                                        ) {
+                                            statusClass =
+                                                "inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20";
+                                        }
 
-                                    return (
-                                        <tr key={product.id || product.name}>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        products.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "py-4 pr-3 pl-4 text-sm font-bold text-pink-500"
-                                                )}
+                                        return (
+                                            <tr
+                                                key={product.id || product.name}
                                             >
-                                                {product.name}
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "hidden px-3 py-4 text-sm font-bold whitespace-nowrap text-gray-500 sm:table-cell"
-                                                )}
-                                            >
-                                                <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 mr-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
-                                                    {product?.brand}
-                                                </span>
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "hidden px-3 py-4 text-sm font-bold whitespace-nowrap text-gray-500 sm:table-cell"
-                                                )}
-                                            >
-                                                <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 mr-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
-                                                    {
-                                                        product?.delivery_receipt_no
-                                                    }
-                                                </span>
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "hidden px-3 py-4 text-sm font-bold whitespace-nowrap text-gray-500 sm:table-cell"
-                                                )}
-                                            >
-                                                <span className="inline-flex items-center rounded-full bg-pink-50 px-2 py-1 mr-1 text-xs font-medium text-pink-800 ring-1 ring-pink-600/20 ring-inset">
-                                                    {product?.categories?.name}
-                                                </span>
-                                            </td>
-                                            {/* <td
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !==
+                                                            products.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "py-4 pl-4 pr-3 text-sm sm:pl-6 lg:pl-8"
+                                                    )}
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedProducts.some(
+                                                            (p) =>
+                                                                p.id ===
+                                                                product.id
+                                                        )}
+                                                        onChange={(e) => {
+                                                            const isChecked =
+                                                                e.target
+                                                                    .checked;
+
+                                                            const updatedSelected =
+                                                                isChecked
+                                                                    ? [
+                                                                          ...selectedProducts,
+                                                                          product,
+                                                                      ]
+                                                                    : selectedProducts.filter(
+                                                                          (p) =>
+                                                                              p.id !==
+                                                                              product.id
+                                                                      ); // Correctly compare by object.id
+
+                                                            dispatch(
+                                                                setSelectedProducts(
+                                                                    updatedSelected
+                                                                )
+                                                            );
+                                                        }}
+                                                    />
+                                                </td>
+
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !==
+                                                            products.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "py-4 pr-3 pl-4 text-sm font-bold text-pink-500"
+                                                    )}
+                                                >
+                                                    {product.name}
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !==
+                                                            product.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "hidden px-3 py-4 text-sm font-bold whitespace-nowrap text-gray-500 sm:table-cell"
+                                                    )}
+                                                >
+                                                    <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 mr-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
+                                                        {product?.brand}
+                                                    </span>
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !==
+                                                            product.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "hidden px-3 py-4 text-sm font-bold whitespace-nowrap text-gray-500 sm:table-cell"
+                                                    )}
+                                                >
+                                                    <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 mr-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
+                                                        {
+                                                            product?.delivery_receipt_no
+                                                        }
+                                                    </span>
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !==
+                                                            product.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "hidden px-3 py-4 text-sm font-bold whitespace-nowrap text-gray-500 sm:table-cell"
+                                                    )}
+                                                >
+                                                    <span className="inline-flex items-center rounded-full bg-pink-50 px-2 py-1 mr-1 text-xs font-medium text-pink-800 ring-1 ring-pink-600/20 ring-inset">
+                                                        {
+                                                            product?.categories
+                                                                ?.name
+                                                        }
+                                                    </span>
+                                                </td>
+                                                {/* <td
                                                 className={classNames(
                                                     productIdx !==
                                                         product.length - 1
@@ -328,128 +406,133 @@ export default function ProductsSection() {
                                                 </span>
 
                                             </td> */}
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
-                                                )}
-                                            >
-                                                ₱
-                                                {parseFloat(
-                                                    product.cost
-                                                ).toLocaleString("en-PH", {
-                                                    minimumFractionDigits: 2,
-                                                })}
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
-                                                )}
-                                            >
-                                                {/* {quantityy} */}
-                                                ₱ {Number(product.shopee).toFixed(2)}
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
-                                                )}
-                                            >
-                                                ₱
-                                                {parseFloat(
-                                                    product.srp
-                                                ).toLocaleString("en-PH", {
-                                                    minimumFractionDigits: 2,
-                                                })}
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
-                                                )}
-                                            >
-                                                ₱
-                                                {parseFloat(
-                                                    product.reseller
-                                                ).toLocaleString("en-PH", {
-                                                    minimumFractionDigits: 2,
-                                                })}
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
-                                                )}
-                                            >
-                                                ₱
-                                                {parseFloat(
-                                                    product.city_distributor
-                                                ).toLocaleString("en-PH", {
-                                                    minimumFractionDigits: 2,
-                                                })}
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
-                                                )}
-                                            >
-                                                ₱
-                                                {parseFloat(
-                                                    product.district_distributor
-                                                ).toLocaleString("en-PH", {
-                                                    minimumFractionDigits: 2,
-                                                })}
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
-                                                )}
-                                            >
-                                                ₱
-                                                {parseFloat(
-                                                    product.provincial_distributor
-                                                ).toLocaleString("en-PH", {
-                                                    minimumFractionDigits: 2,
-                                                })}
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "px-3 py-4 text-sm text-gray-700 "
-                                                )}
-                                            >
-                                                <ProductOptionMenuSection data={product} />
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !==
+                                                            product.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
+                                                    )}
+                                                >
+                                                    ₱
+                                                    {parseFloat(
+                                                        product.cost
+                                                    ).toLocaleString("en-PH", {
+                                                        minimumFractionDigits: 2,
+                                                    })}
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !==
+                                                            product.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
+                                                    )}
+                                                >
+                                                    {/* {quantityy} */}₱{" "}
+                                                    {Number(
+                                                        product.shopee
+                                                    ).toFixed(2)}
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !==
+                                                            product.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
+                                                    )}
+                                                >
+                                                    ₱
+                                                    {parseFloat(
+                                                        product.srp
+                                                    ).toLocaleString("en-PH", {
+                                                        minimumFractionDigits: 2,
+                                                    })}
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !==
+                                                            product.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
+                                                    )}
+                                                >
+                                                    ₱
+                                                    {parseFloat(
+                                                        product.reseller
+                                                    ).toLocaleString("en-PH", {
+                                                        minimumFractionDigits: 2,
+                                                    })}
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !==
+                                                            product.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
+                                                    )}
+                                                >
+                                                    ₱
+                                                    {parseFloat(
+                                                        product.city_distributor
+                                                    ).toLocaleString("en-PH", {
+                                                        minimumFractionDigits: 2,
+                                                    })}
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !==
+                                                            product.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
+                                                    )}
+                                                >
+                                                    ₱
+                                                    {parseFloat(
+                                                        product.district_distributor
+                                                    ).toLocaleString("en-PH", {
+                                                        minimumFractionDigits: 2,
+                                                    })}
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !==
+                                                            product.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
+                                                    )}
+                                                >
+                                                    ₱
+                                                    {parseFloat(
+                                                        product.provincial_distributor
+                                                    ).toLocaleString("en-PH", {
+                                                        minimumFractionDigits: 2,
+                                                    })}
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !==
+                                                            product.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "px-3 py-4 text-sm text-gray-700 "
+                                                    )}
+                                                >
+                                                    <ProductOptionMenuSection
+                                                        data={product}
+                                                    />
+                                                </td>
+                                            </tr>
+                                        );
+                                    }
+                                )}
                             </tbody>
                         </table>
 
@@ -476,10 +559,11 @@ export default function ProductsSection() {
                                                 onClick={() =>
                                                     setCurrent(pageNum)
                                                 }
-                                                className={`px-3 py-1 border rounded ${pageNum === current
-                                                    ? "bg-pink-500 text-white"
-                                                    : "bg-white text-pink-500 border-pink-500"
-                                                    }`}
+                                                className={`px-3 py-1 border rounded ${
+                                                    pageNum === current
+                                                        ? "bg-pink-500 text-white"
+                                                        : "bg-white text-pink-500 border-pink-500"
+                                                }`}
                                             >
                                                 {pageNum}
                                             </button>

@@ -108,18 +108,16 @@ export default function ShopeeSection() {
                                     return (
                                         <tr key={idx}>
                                             <td className="whitespace-nowrap border-b border-gray-200 py-4 pr-3 pl-4 sm:pl-6 lg:pl-8">
-                                                {res.status === "Pending" && (
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={isChecked}
-                                                        onChange={(e) =>
-                                                            toggleSelect(
-                                                                res,
-                                                                e.target.checked
-                                                            )
-                                                        }
-                                                    />
-                                                )}
+                                                <input
+                                                    type="checkbox"
+                                                    checked={isChecked}
+                                                    onChange={(e) =>
+                                                        toggleSelect(
+                                                            res,
+                                                            e.target.checked
+                                                        )
+                                                    }
+                                                />
                                             </td>
                                             <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">
                                                 {res.cart_id}
@@ -152,12 +150,9 @@ export default function ShopeeSection() {
                                                         <FaReceipt className=" text-pink-500" />
                                                         Invoice
                                                     </a>
-                                                    {res.status ===
-                                                        "Pending" && (
-                                                        <UpdateStatusSection
-                                                            data={res}
-                                                        />
-                                                    )}
+                                                    <UpdateStatusSection
+                                                        data={res}
+                                                    />
                                                 </div>
                                             </td>
                                         </tr>

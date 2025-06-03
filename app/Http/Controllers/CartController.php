@@ -32,7 +32,7 @@ class CartController extends Controller
                 }
             }
         }
-           return response()->json('success', 200);
+        return response()->json('success', 200);
     }
 
     public function update_status(Request $request)
@@ -100,16 +100,18 @@ class CartController extends Controller
             });
 
 
-        $current_sales = CartItem::whereDate('created_at', $today)
-            ->whereHas('cart', function ($query) {
-                $query->where('status', 'Paid');
-            })
+        $current_sales = CartItem::whereHas('cart', function ($query) {
+            $today = Carbon::today();
+            $query->whereDate('updated_at', $today);
+            $query->where('status', 'Paid');
+        })
             ->sum(DB::raw('total'));
 
-        $current_profit = CartItem::whereDate('created_at', $today)
-            ->whereHas('cart', function ($query) {
-                $query->where('status', 'Paid');
-            })
+        $current_profit = CartItem::whereHas('cart', function ($query) {
+            $today = Carbon::today();
+            $query->whereDate('updated_at', $today);
+            $query->where('status', 'Paid');
+        })
             ->sum(DB::raw('profit'));
 
         $total_sales = CartItem::whereHas('cart', function ($query) {

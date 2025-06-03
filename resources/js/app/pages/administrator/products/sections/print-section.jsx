@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
 });
 export default function PrintSection() {
     const [isOpen, setIsOpen] = useState(false);
-    const { products, selectedStocks } = useSelector(
+    const { products, selectedProducts } = useSelector(
         (state) => state.products
     ) || {
         products: { data: [], total: 0, last_page: 1 },
@@ -79,18 +79,20 @@ export default function PrintSection() {
 
     return (
         <>
-            {selectedStocks.length != 0 && (
+            {selectedProducts.length != 0 && (
                 <button
                     onClick={() => setIsOpen(true)}
                     className="p-2 bg-pink-700 rounded-lg hover:bg-pink-600 text-white"
                 >
-                    {selectedStocks.length} Print
+                    {selectedProducts.length} Print
                 </button>
             )}
 
             <Modal
-            width="max-w-7xl"
-            isOpen={isOpen} onClose={() => setIsOpen(false)}>
+                width="max-w-7xl"
+                isOpen={isOpen}
+                onClose={() => setIsOpen(false)}
+            >
                 <div className="p-3">
                     <PDFViewer style={{ width: "100%", height: "85vh" }}>
                         <Document>
@@ -103,7 +105,7 @@ export default function PrintSection() {
                                     />
                                     <View style={styles.companyInfo}>
                                         <Text style={styles.invoiceTitle}>
-                                            STOCKS REPORT
+                                            PRODUCTS REPORT
                                         </Text>
                                         {/* <Text># INVOICE-{cart_id}</Text> */}
                                     </View>
@@ -141,31 +143,60 @@ export default function PrintSection() {
                                     >
                                         Product
                                     </Text>
-                                    <Text style={styles.tableCol}>Stocks</Text>
                                     <Text
                                         style={[styles.tableCol, { flex: 1 }]}
                                     >
-                                        Status
+                                        Brand
                                     </Text>
                                     <Text
                                         style={[styles.tableCol, { flex: 1 }]}
                                     >
-                                        Date last stock(s) added
+                                        Delivery Receipt
                                     </Text>
                                     <Text
                                         style={[styles.tableCol, { flex: 1 }]}
                                     >
-                                        Total Inventory Retail Price
+                                        Category
                                     </Text>
                                     <Text
                                         style={[styles.tableCol, { flex: 1 }]}
                                     >
-                                        Total Inventory Capital
+                                        Cost Per Unit
+                                    </Text>
+                                    <Text
+                                        style={[styles.tableCol, { flex: 1 }]}
+                                    >
+                                        Shopee Price
+                                    </Text>
+                                    <Text
+                                        style={[styles.tableCol, { flex: 1 }]}
+                                    >
+                                        SRP
+                                    </Text>
+                                    <Text
+                                        style={[styles.tableCol, { flex: 1 }]}
+                                    >
+                                        Reseller
+                                    </Text>
+                                    <Text
+                                        style={[styles.tableCol, { flex: 1 }]}
+                                    >
+                                        City
+                                    </Text>
+                                    <Text
+                                        style={[styles.tableCol, { flex: 1 }]}
+                                    >
+                                        District
+                                    </Text>
+                                    <Text
+                                        style={[styles.tableCol, { flex: 1 }]}
+                                    >
+                                        Provincial
                                     </Text>
                                 </View>
 
                                 {/* Table Rows */}
-                                {selectedStocks?.map((item, index) => {
+                                {selectedProducts?.map((product, index) => {
                                     return (
                                         <View
                                             style={styles.tableRow}
@@ -177,10 +208,10 @@ export default function PrintSection() {
                                                     { flex: 1 },
                                                 ]}
                                             >
-                                                {item.name}
+                                                {product.name}
                                             </Text>
                                             <Text style={styles.tableCol}>
-                                                {item.quantity}
+                                                {product.brand}
                                             </Text>
                                             <Text
                                                 style={[
@@ -188,11 +219,7 @@ export default function PrintSection() {
                                                     { flex: 1 },
                                                 ]}
                                             >
-                                                {item.quantity == 0
-                                                    ? "Out of Stock"
-                                                    : item.quantity <= 10
-                                                    ? "Low Stock"
-                                                    : "In Stock"}
+                                                {product?.delivery_receipt_no}
                                             </Text>
                                             <Text
                                                 style={[
@@ -200,26 +227,7 @@ export default function PrintSection() {
                                                     { flex: 1 },
                                                 ]}
                                             >
-                                                {item.stocks?.length > 0
-                                                    ? new Date(
-                                                          [...item.stocks].sort(
-                                                              (a, b) =>
-                                                                  new Date(
-                                                                      b.date
-                                                                  ) -
-                                                                  new Date(
-                                                                      a.date
-                                                                  )
-                                                          )[0].date
-                                                      ).toLocaleDateString(
-                                                          "en-US",
-                                                          {
-                                                              year: "numeric",
-                                                              month: "short",
-                                                              day: "numeric",
-                                                          }
-                                                      )
-                                                    : "No Stocks Added"}
+                                                {product?.categories?.name}
                                             </Text>
                                             <Text
                                                 style={[
@@ -227,9 +235,21 @@ export default function PrintSection() {
                                                     { flex: 1 },
                                                 ]}
                                             >
-                                                {peso_value(
-                                                    Number(item.quantity) *
-                                                        Number(item.srp)
+                                                {" "}
+                                                {Number(
+                                                    product.cost
+                                                ).toLocaleString("en-PH", {
+                                                    minimumFractionDigits: 2,
+                                                })}
+                                            </Text>
+                                            <Text
+                                                style={[
+                                                    styles.tableCol,
+                                                    { flex: 1 },
+                                                ]}
+                                            >
+                                                {Number(product.shopee).toFixed(
+                                                    2
                                                 )}
                                             </Text>
                                             <Text
@@ -238,10 +258,59 @@ export default function PrintSection() {
                                                     { flex: 1 },
                                                 ]}
                                             >
-                                                {peso_value(
-                                                    Number(item.quantity) *
-                                                        Number(item.cost)
-                                                )}
+                                                {Number(
+                                                    product.srp
+                                                ).toLocaleString("en-PH", {
+                                                    minimumFractionDigits: 2,
+                                                })}
+                                            </Text>
+                                            <Text
+                                                style={[
+                                                    styles.tableCol,
+                                                    { flex: 1 },
+                                                ]}
+                                            >
+                                                {Number(
+                                                    product.reseller
+                                                ).toLocaleString("en-PH", {
+                                                    minimumFractionDigits: 2,
+                                                })}
+                                            </Text>
+                                            <Text
+                                                style={[
+                                                    styles.tableCol,
+                                                    { flex: 1 },
+                                                ]}
+                                            >
+                                                {Number(
+                                                    product.city_distributor
+                                                ).toLocaleString("en-PH", {
+                                                    minimumFractionDigits: 2,
+                                                })}
+                                            </Text>
+                                            <Text
+                                                style={[
+                                                    styles.tableCol,
+                                                    { flex: 1 },
+                                                ]}
+                                            >
+                                                {Number(
+                                                    product.district_distributor
+                                                ).toLocaleString("en-PH", {
+                                                    minimumFractionDigits: 2,
+                                                })}
+                                            </Text>
+                                            <Text
+                                                style={[
+                                                    styles.tableCol,
+                                                    { flex: 1 },
+                                                ]}
+                                            >
+                                                {Number(
+                                                    product.provincial_distributor
+                                                ).toLocaleString("en-PH", {
+                                                    minimumFractionDigits: 2,
+                                                })}
                                             </Text>
                                         </View>
                                     );
