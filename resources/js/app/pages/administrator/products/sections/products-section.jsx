@@ -92,7 +92,7 @@ export default function ProductsSection() {
         printWindow.print();
     };
 
-    console.log('products',products)
+    console.log('products', products)
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             {/* Header Section */}
@@ -195,15 +195,15 @@ export default function ProductsSection() {
                                     </th>
                                     <th
                                         scope="col"
-                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter lg:table-cell"
-                                    >
-                                        Shopee Price
-                                    </th>
-                                    <th
-                                        scope="col"
                                         className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter"
                                     >
                                         Cost Per Unit
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter lg:table-cell"
+                                    >
+                                        Shopee Price
                                     </th>
                                     <th
                                         scope="col"
@@ -337,8 +337,12 @@ export default function ProductsSection() {
                                                     "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
                                                 )}
                                             >
-                                                {/* {quantityy} */}
-                                                ₱ {Number(product.shopee).toFixed(2)}
+                                                ₱
+                                                {parseFloat(
+                                                    product.cost
+                                                ).toLocaleString("en-PH", {
+                                                    minimumFractionDigits: 2,
+                                                })}
                                             </td>
                                             <td
                                                 className={classNames(
@@ -349,12 +353,8 @@ export default function ProductsSection() {
                                                     "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
                                                 )}
                                             >
-                                                ₱
-                                                {parseFloat(
-                                                    product.cost
-                                                ).toLocaleString("en-PH", {
-                                                    minimumFractionDigits: 2,
-                                                })}
+                                                {/* {quantityy} */}
+                                                ₱ {Number(product.shopee).toFixed(2)}
                                             </td>
                                             <td
                                                 className={classNames(
