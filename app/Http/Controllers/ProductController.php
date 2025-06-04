@@ -11,19 +11,29 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Product::with(['categories', 'uploads', 'stocks'])->orderBy('created_at', 'desc');
+        $query = Product::with(['categories', 'uploads', 'stocks'])
+            ->orderBy('created_at', 'desc');
 
         if ($request->search) {
-            $query->where(function ($q) use ($request) {
-                $q->where('id', $request->search)
-                    ->orWhere('name', 'like', '%' . $request->search . '%')
-                    ->orWhere('brand', 'like', '%' . $request->search . '%')
-                    ->orWhere('delivery_receipt_no', 'like', '%' . $request->search . '%')
-                    ->orWhereHas('categories', function ($catQuery) use ($request) {
-                        $catQuery->where('name', 'like', '%' . $request->search . '%');
-                    });
-            });
+            if ($request->search === 'In Stock') {
+                $query->where('quantity', '>=', 10);
+            } elseif ($request->search === 'Low Stock') {
+                $query->whereBetween('quantity', [1, 9]);
+            } elseif ($request->search === 'Out of Stock') {
+                $query->where('quantity', '<=', 0);
+            } else {
+                $query->where(function ($q) use ($request) {
+                    $q->where('id', $request->search)
+                        ->orWhere('name', 'like', '%' . $request->search . '%')
+                        ->orWhere('brand', 'like', '%' . $request->search . '%')
+                        ->orWhere('delivery_receipt_no', 'like', '%' . $request->search . '%')
+                        ->orWhereHas('categories', function ($catQuery) use ($request) {
+                            $catQuery->where('name', 'like', '%' . $request->search . '%');
+                        });
+                });
+            }
         }
+
 
 
         if ($request->filled('category_id') && $request->category_id !== 'undefined') {
