@@ -1,4 +1,4 @@
-import { create_product_discount_service, get_product_discount_by_id_service } from "../pages/services/product-discount-service";
+import { create_product_discount_service, delete_product_discount_service, get_product_discount_by_id_service, update_product_discount_service } from "../pages/services/product-discount-service";
 import { create_product_service, delete_product_service, get_product_service, update_product_service } from "../pages/services/product-service";
 import { customerSlice } from "./customer-slice";
 import { productSlice } from "./product-slice";
@@ -46,8 +46,20 @@ export function delete_product_thunk(id) {
 }
 
 
-export function update_product_thunk(id,data) {
+export function update_product_thunk(id, data) {
     return async function (dispatch, getState) {
-        const res = await update_product_service(id,data)
+        const res = await update_product_service(id, data)
+    };
+}
+
+export function update_product_discount_thunk(id, data) {
+    return async function (dispatch, getState) {
+        const res = await update_product_discount_service(id, data)
+    };
+}
+
+export function delete_product_discount_thunk(id) {
+    return async function (dispatch, getState) {
+        const res = await delete_product_discount_service(id)
     };
 }

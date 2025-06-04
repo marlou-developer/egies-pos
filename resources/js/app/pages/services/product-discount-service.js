@@ -34,9 +34,10 @@ export function delete_product_discount_service(id) {
     }
 }
 
-export function update_product_discount_service(id, data) {
+
+export function update_product_discount_service(data) {
     try {
-        const result = axios.post(`/api/update_product_discount`, data)
+        const result = axios.put(`/api/product_discount/${data.id}`, data)
         return result
     } catch (error) {
 

@@ -32,13 +32,23 @@ class ProductDiscountController extends Controller
         }
     }
 
-    // public function get_discounted_products_by_id($id)
-    // {
-    //     $product_discount = ProductDiscount::where('customer_id', $id)->orderBy('created_at', 'desc')->paginate();
-    //     return response()->json([
-    //         'result' => $product_discount
-    //     ], 200);
-    // }
+    public function destroy($id)
+    {
+        $product_discount = ProductDiscount::where('id', $id)->first();
+        if ($product_discount) {
+            $product_discount->delete();
+        }
+
+        return response()->json(['message' => 'Product Discount deleted successfully']);
+    }
+
+    public function update(Request $request,  $id)
+    {
+        $product_discount = ProductDiscount::where('id', $id)->first();
+        if ($product_discount) {
+            $product_discount->update($request->all());
+        }
+    }
 
     public function show($customer_id)
     {

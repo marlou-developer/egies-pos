@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { FaPercent, FaProductHunt } from "react-icons/fa6";
 import AddProductDiscountSection from "./add-product-discount-section";
 import { useSelector } from "react-redux";
+import UpdateProductDiscountSection from "./update-product-discount-section";
+import DeleteProductDiscountSection from "./delete-product-discount-section";
 
 export default function CustomerProductDiscountSection() {
     const [openCustomerProductDiscount, setOpenCustomerProductDiscount] =
@@ -53,6 +55,12 @@ export default function CustomerProductDiscountSection() {
                             <th className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-4 py-3.5 text-sm font-semibold text-gray-900 backdrop-blur-sm text-left sm:table-cell">
                                 Discount
                             </th>
+                            <th
+                                scope="col"
+                                className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-4 pl-3 backdrop-blur-sm backdrop-filter sm:pr-6 lg:pr-8"
+                            >
+                                <span className="sr-only">Edit</span>
+                            </th>
                         </tr>
                     </thead>
                     <tbody className="bg-white text-sm">
@@ -78,6 +86,23 @@ export default function CustomerProductDiscountSection() {
                                     )}
                                 >
                                     ₱{Number(res?.customer_discount).toFixed(2)}
+                                </td>
+                                <td
+                                    className={classNames(
+                                        i !== customer.discounts.length - 1
+                                            ? "border-b border-gray-200"
+                                            : "",
+                                        "hidden px-4 py-4 text-gray-500 whitespace-nowrap sm:table-cell"
+                                    )}
+                                >
+                                    <div className="inline-flex items-center font-bold px-2 py-1 gap-2 ">
+                                        <UpdateProductDiscountSection
+                                            data={res}
+                                        />
+                                        <DeleteProductDiscountSection
+                                            data={res}
+                                        />
+                                    </div>
                                 </td>
                             </tr>
                         ))}
