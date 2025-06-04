@@ -145,6 +145,13 @@ class CartController extends Controller
 
         $out_of_stock = Product::where('quantity', 0)->count();
 
+
+        $total_overall_inventory_retail_price = Product::selectRaw('SUM(quantity * srp) as total')
+            ->value('total');
+
+        $total_overall_inventory_capital = Product::selectRaw('SUM(quantity * cost) as total')
+            ->value('total');
+
         return response()->json([
             'over_due' => $carts,
             'stocks' => $stocks,
@@ -162,6 +169,9 @@ class CartController extends Controller
 
                 'low_stock' => $low_stock,
                 'out_of_stock' => $out_of_stock,
+
+                'total_overall_inventory_retail_price' => $total_overall_inventory_retail_price,
+                'total_overall_inventory_capital' => $total_overall_inventory_capital,
             ]
         ], 200);
     }

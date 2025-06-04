@@ -41,14 +41,14 @@ export default function SupplierSection() {
                                 <FaPlus className="mr-1 text-pink-500" />
                                 Add New Supplier
                             </button>
-                            <button
+                            {/* <button
                                 type="button"
                                 onClick={() => setOpenSFilter(true)}
                                 className="relative -ml-px inline-flex items-center rounded-r-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-50 focus:z-10"
                             >
                                 <FaFilter className="mr-1 text-pink-500" />
                                 Filter Supplier
-                            </button>
+                            </button> */}
                         </span>
                         <AddSupplierComponent
                             open={openSupplier}

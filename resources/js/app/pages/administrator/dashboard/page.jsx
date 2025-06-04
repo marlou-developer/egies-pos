@@ -17,7 +17,7 @@ import { peso_value } from "@/app/lib/peso";
 export default function Page() {
     const { over_dues } = useSelector((store) => store.carts);
     const [open, setOpen] = useState(false);
-    console.log('over_duesssss',over_dues.dashboard)
+    console.log('over_duesssss', over_dues.dashboard)
     return (
         <AdminLayout>
             <div className="p-1 text-2xl font-black">Sales Section</div>
@@ -58,7 +58,7 @@ export default function Page() {
                     icon={
                         <ComputerDesktopIcon className="h-14 text-pink-600" />
                     }
-                    
+
                     count={<> {peso_value(Number(over_dues?.dashboard?.current_credit))}</>}
                 />
                 <DashboardCardSections
@@ -99,18 +99,20 @@ export default function Page() {
                     }
                     count={<>{Number(over_dues?.dashboard?.out_of_stock)}</>}
                 />
-                {/* <DashboardCardSections
-                    title="Total Stocks in Capital"
+                <DashboardCardSections
+                    title="Total Overall Inventory Retail Price"
                     icon={
                         <ComputerDesktopIcon className="h-14 text-pink-600" />
                     }
+                    count={<>{peso_value(Number(over_dues?.dashboard?.total_overall_inventory_retail_price))}</>}
                 />
                 <DashboardCardSections
-                    title="Total Stocks in Profit"
+                    title="Total Overall Inventory Capital"
                     icon={
                         <ComputerDesktopIcon className="h-14 text-pink-600" />
                     }
-                /> */}
+                    count={<>{peso_value(Number(over_dues?.dashboard?.total_overall_inventory_capital))}</>}
+                />
             </div>
         </AdminLayout>
     );

@@ -7,6 +7,7 @@ import {
     StyleSheet,
     PDFViewer,
     Image,
+    Font,
 } from "@react-pdf/renderer";
 import store from "@/app/store/store";
 import { get_cart_by_id_thunk } from "@/app/redux/cart-thunk";
@@ -14,11 +15,22 @@ import { useSelector } from "react-redux";
 import moment from "moment";
 import { peso_value } from "@/app/lib/peso";
 // Styles
+
+Font.register({
+    family: 'NotoSans',
+    fonts: [
+        { src: '/fonts/Noto_Sans/static/NotoSans-Regular.ttf', fontWeight: 'normal', fontStyle: 'normal' },
+        { src: '/fonts/Noto_Sans/static/NotoSans-Italic.ttf', fontWeight: 'normal', fontStyle: 'italic' },
+        { src: '/fonts/Noto_Sans/static/NotoSans-ExtraBold.ttf', fontWeight: 'normal', fontStyle: 'bold' },
+    ],
+});
+
 const styles = StyleSheet.create({
     page: {
         padding: 30,
         fontSize: 11,
-        fontFamily: "Helvetica",
+        fontFamily: "NotoSans",
+        // fontFamily: "Helvetica",
     },
     header: {
         flexDirection: "row",
@@ -64,6 +76,7 @@ const styles = StyleSheet.create({
         alignItems: "flex-end",
     },
     totalRow: {
+        marginTop: 5,
         flexDirection: "row",
         justifyContent: "flex-end",
     },
@@ -75,7 +88,7 @@ const styles = StyleSheet.create({
 
 
 const InvoicePDF = () => {
- 
+
     const cart_id = window.location.pathname.split("/")[3];
     const { cart } = useSelector((store) => store.carts);
     useEffect(() => {
@@ -127,7 +140,7 @@ const InvoicePDF = () => {
                     {/* Table Header */}
                     <View style={styles.tableHeader}>
                         <Text style={[styles.tableCol, { flex: 0.5 }]}>#</Text>
-                        <Text style={styles.tableCol}>Item & Description</Text>
+                        <Text style={[styles.tableCol, { fontWeight: 'bold' }]}>Item & Description</Text>
                         <Text style={[styles.tableCol, { flex: 0.8 }]}>
                             Qty
                         </Text>
@@ -165,7 +178,7 @@ const InvoicePDF = () => {
                     {/* Totals */}
                     <View style={styles.totalSection}>
                         <View style={styles.totalRow}>
-                            <Text>Payment Status: {cart.data?.status}</Text>
+                            <Text>Payment Status: &nbsp;{cart.data?.status}</Text>
                         </View>
                         <View style={styles.totalRow}>
                             <Text>
@@ -184,6 +197,18 @@ const InvoicePDF = () => {
                         {/* <View style={styles.totalRow}>
                             <Text>Sf: PHP{shippingFee.toLocaleString()}</Text>
                         </View> */}
+
+
+                        <View
+                            style={{
+                                height: 1,
+                                backgroundColor: "#000",
+                                width: "27%",
+                                marginTop: 5,
+                                marginBottom: 5,
+                            }}
+                        />
+
                         <View style={styles.totalRow}>
                             <Text style={styles.bold}>
                                 Total:{" "}

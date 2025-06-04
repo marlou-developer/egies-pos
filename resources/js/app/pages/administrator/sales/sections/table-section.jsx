@@ -37,13 +37,13 @@ export default function TableSection() {
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">
-                <div className="sm:flex-auto">
+                <div className="sm:flex-auto mb-4">
                     <FaMoneyBill className="float-left mt-1 mr-1 text-pink-500" />
                     <h1 className="text-base font-semibold text-pink-500">
                         Sales Section
                     </h1>
                 </div>
-                <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+                {/* <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                     <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                         <span className="isolate inline-flex rounded-md shadow-xs">
                             <button
@@ -56,7 +56,7 @@ export default function TableSection() {
                             </button>
                         </span>
                     </div>
-                </div>
+                </div> */}
             </div>
 
             <div className="flex items-start justify-start">
@@ -74,6 +74,8 @@ export default function TableSection() {
                                         "Customer Name",
                                         "Customer Discount",
                                         "Product Discount",
+                                        "Order Discount",
+                                        "Total Profit",
                                         "Status",
                                         "",
                                     ].map((title, idx) => (
@@ -85,7 +87,7 @@ export default function TableSection() {
                                                 idx === 0
                                                     ? "pl-4 sm:pl-6 lg:pl-8 text-left"
                                                     : "",
-                                                idx === 6
+                                                idx === 8
                                                     ? "pr-4 sm:pr-6 lg:pr-8 text-right"
                                                     : "text-left"
                                             )}
@@ -125,6 +127,16 @@ export default function TableSection() {
                                             {peso_value(Number(
                                                 res?.discount_per_item
                                             ))}
+                                        </td>
+                                        <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
+                                            {peso_value(Number(
+                                                res?.discount_per_order
+                                            ))}
+                                        </td>
+                                        <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
+                                            {peso_value(
+                                                res?.cart_items?.reduce((acc, item) => acc + Number(item.profit || 0), 0)
+                                            )}
                                         </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
                                             {res.status}

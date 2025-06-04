@@ -31,7 +31,7 @@ export default function CreditsSection() {
                         Credits Section
                     </h1>
                 </div>
-                <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+                {/* <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                     <span className="isolate inline-flex rounded-md shadow-sm">
                         <button
                             type="button"
@@ -41,7 +41,7 @@ export default function CreditsSection() {
                             Filter Customer Credits
                         </button>
                     </span>
-                </div>
+                </div> */}
             </div>
 
             <div className="mt-4 flex items-start justify-start">

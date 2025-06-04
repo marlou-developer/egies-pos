@@ -129,14 +129,14 @@ export default function ProductsSection() {
                             <FaList className="mr-1 text-pink-500" />
                             Add Category
                         </button>
-                        <button
+                        {/* <button
                             type="button"
                             onClick={handlePrint}
                             className="relative -ml-px inline-flex items-center bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
                         >
                             <FaPrint className="mr-1 text-pink-500" />
                             Print
-                        </button>
+                        </button> */}
                         <button
                             type="button"
                             onClick={() => setOpenFilter(true)}
