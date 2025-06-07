@@ -254,11 +254,19 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                         </h3>
                                         <div className="mt-2 flex justify-center rounded-lg border border-dashed border-pink-300 px-6 py-10">
                                             <div className="text-center">
-                                                <ProductImageSection
-                                                    files={uploadedFile1}
-                                                    setFiles={setUploadedFile1}
-                                                    data={data}
-                                                />
+                                                {(data?.uploads?.length > 0) ? (
+                                                    <ProductImageSection
+                                                        files={uploadedFile1}
+                                                        setFiles={setUploadedFile1}
+                                                        data={data}
+                                                    />
+                                                ) : (
+                                                    <UploadProductSection
+                                                        files={uploadedFile1}
+                                                        setFiles={setUploadedFile1}
+                                                    />
+                                                )}
+
                                             </div>
                                         </div>
                                     </div>

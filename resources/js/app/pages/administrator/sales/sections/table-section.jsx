@@ -103,59 +103,61 @@ export default function TableSection() {
                             </thead>
 
                             <tbody>
-                                {sales?.data?.map((res, idx) => (
-                                    <tr key={idx} className="hover:bg-gray-50">
-                                        <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
-                                            {res.cart_id}
-                                        </td>
-                                        <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap lg:table-cell">
-                                            <b>
+                                {[...sales?.data]
+                                    ?.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                                    .map((res, idx) => (
+                                        <tr key={idx} className="hover:bg-gray-50">
+                                            <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
+                                                {res.cart_id}
+                                            </td>
+                                            <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap lg:table-cell">
+                                                <b>
+                                                    {peso_value(Number(
+                                                        res.total_price
+                                                    ))}
+                                                </b>
+                                            </td>
+                                            <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
+                                                {res?.customer?.name}
+                                            </td>
+                                            <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
                                                 {peso_value(Number(
-                                                    res.total_price
+                                                    res?.customer_total_discount
                                                 ))}
-                                            </b>
-                                        </td>
-                                        <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
-                                            {res?.customer?.name}
-                                        </td>
-                                        <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
-                                            {peso_value(Number(
-                                                res?.customer_total_discount
-                                            ))}
-                                        </td>
-                                        <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
-                                            {peso_value(Number(
-                                                res?.discount_per_item
-                                            ))}
-                                        </td>
-                                        <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
-                                            {peso_value(Number(
-                                                res?.discount_per_order
-                                            ))}
-                                        </td>
-                                        <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
-                                            {peso_value(
-                                                res?.cart_items?.reduce((acc, item) => acc + Number(item.profit || 0), 0)
-                                            )}
-                                        </td>
-                                        <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
-                                            {res.status}
-                                        </td>
-                                        <td className="border-b border-gray-200 px-3 py-4 text-gray-700 whitespace-nowrap text-right">
-                                            <div className="flex items-center justify-center gap-3">
-                                                {/* <ShowItemSection data={res} /> */}
-                                                <a
-                                                    href={`/administrator/credits/${res.cart_id}`}
-                                                    target="_blank"
-                                                    className="inline-flex items-center gap-x-1.5 rounded-md bg-pink-100 hover:bg-pink-200 px-3 py-2 font-semibold text-gray-900 ring-1 ring-inset ring-gray-300"
-                                                >
-                                                    <FaReceipt className=" text-pink-500" />
-                                                    Invoice
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
+                                            </td>
+                                            <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
+                                                {peso_value(Number(
+                                                    res?.discount_per_item
+                                                ))}
+                                            </td>
+                                            <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
+                                                {peso_value(Number(
+                                                    res?.discount_per_order
+                                                ))}
+                                            </td>
+                                            <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
+                                                {peso_value(
+                                                    res?.cart_items?.reduce((acc, item) => acc + Number(item.profit || 0), 0)
+                                                )}
+                                            </td>
+                                            <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
+                                                {res.status}
+                                            </td>
+                                            <td className="border-b border-gray-200 px-3 py-4 text-gray-700 whitespace-nowrap text-right">
+                                                <div className="flex items-center justify-center gap-3">
+                                                    {/* <ShowItemSection data={res} /> */}
+                                                    <a
+                                                        href={`/administrator/credits/${res.cart_id}`}
+                                                        target="_blank"
+                                                        className="inline-flex items-center gap-x-1.5 rounded-md bg-pink-100 hover:bg-pink-200 px-3 py-2 font-semibold text-gray-900 ring-1 ring-inset ring-gray-300"
+                                                    >
+                                                        <FaReceipt className=" text-pink-500" />
+                                                        Invoice
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
                             </tbody>
                         </table>
                     </div>

@@ -136,7 +136,6 @@ class ProductController extends Controller
     private function handleUpdateUploads(Request $request, string $fileKey, Product $product)
     {
         if ($request->hasFile($fileKey)) {
-
             $files = $request->file($fileKey);
 
             foreach ($files as $file) {
@@ -144,15 +143,22 @@ class ProductController extends Controller
                 $url = Storage::disk('s3')->url($path);
 
                 $upload = Upload::where('product_id', $product->id)->first();
-                // Create new upload record
+
                 if ($upload) {
                     $upload->update([
                         'file' => $url
+                    ]);
+                } else {
+                    // Create a new upload if no existing one
+                    Upload::create([
+                        'product_id' => $product->id,
+                        'file' => $url,
                     ]);
                 }
             }
         }
     }
+
 
 
 

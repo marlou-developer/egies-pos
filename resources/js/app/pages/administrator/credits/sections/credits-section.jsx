@@ -12,8 +12,8 @@ import { useSelector } from "react-redux";
 import moment from "moment";
 import AddPaymentSection from "./add-payment-section";
 import HistorySection from "./history-section";
-    import SearchSection from "./search-section";
-    import { peso_value } from "@/app/lib/peso";
+import SearchSection from "./search-section";
+import { peso_value } from "@/app/lib/peso";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -84,56 +84,58 @@ export default function CreditsSection() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {carts?.data?.map((res, idx) => (
-                                    <tr key={idx}>
-                                        <td className="whitespace-nowrap border-b border-gray-200 py-4 pr-3 pl-4 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
-                                            {res.customer?.name}
-                                        </td>
-                                        <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
-                                            {res.cart_id}
-                                        </td>
-                                        <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
-                                            <b>
-                                                {peso_value(Number(
-                                                    res.total_price
-                                                ))}
-                                            </b>
-                                        </td>
-                                        <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
-                                            <b>
-                                                {peso_value(Number(res.balance))}
-                                            </b>
-                                        </td>
-                                        <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
-                                            {res.due_date
-                                                ? moment(res.due_date).format(
-                                                    "LL"
-                                                )
-                                                : "No due date"}
-                                        </td>
-                                        <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
-                                            {res.status}
-                                        </td>
-                                        <td className="border-b border-gray-200 px-3 py-4 text-sm text-gray-700">
-                                            <div className="flex items-center justify-center gap-2">
-                                                <HistorySection data={res} />
-                                                <a
-                                                    href={`/administrator/credits/${res.cart_id}`}
-                                                    target="_blank"
-                                                    className="inline-flex items-center gap-x-1.5 rounded-md bg-pink-100 hover:bg-pink-200 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300"
-                                                >
-                                                    <FaReceipt className=" text-pink-500" />
-                                                    Invoice
-                                                </a>
-                                                {res.status !== "Paid" && (
-                                                    <AddPaymentSection
-                                                        data={res}
-                                                    />
-                                                )}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {[...carts?.data]
+                                    ?.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                                    .map((res, idx) => (
+                                        <tr key={idx}>
+                                            <td className="whitespace-nowrap border-b border-gray-200 py-4 pr-3 pl-4 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
+                                                {res.customer?.name}
+                                            </td>
+                                            <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
+                                                {res.cart_id}
+                                            </td>
+                                            <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
+                                                <b>
+                                                    {peso_value(Number(
+                                                        res.total_price
+                                                    ))}
+                                                </b>
+                                            </td>
+                                            <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
+                                                <b>
+                                                    {peso_value(Number(res.balance))}
+                                                </b>
+                                            </td>
+                                            <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
+                                                {res.due_date
+                                                    ? moment(res.due_date).format(
+                                                        "LL"
+                                                    )
+                                                    : "No due date"}
+                                            </td>
+                                            <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
+                                                {res.status}
+                                            </td>
+                                            <td className="border-b border-gray-200 px-3 py-4 text-sm text-gray-700">
+                                                <div className="flex items-center justify-center gap-2">
+                                                    <HistorySection data={res} />
+                                                    <a
+                                                        href={`/administrator/credits/${res.cart_id}`}
+                                                        target="_blank"
+                                                        className="inline-flex items-center gap-x-1.5 rounded-md bg-pink-100 hover:bg-pink-200 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300"
+                                                    >
+                                                        <FaReceipt className=" text-pink-500" />
+                                                        Invoice
+                                                    </a>
+                                                    {res.status !== "Paid" && (
+                                                        <AddPaymentSection
+                                                            data={res}
+                                                        />
+                                                    )}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
                             </tbody>
                         </table>
                     </div>
