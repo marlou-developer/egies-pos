@@ -68,6 +68,7 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
         fd.append("city_distributor", form.city_distributor ?? "");
         fd.append("district_distributor", form.district_distributor ?? "");
         fd.append("provincial_distributor", form.provincial_distributor ?? "");
+        fd.append("qty", form.qty ?? "");
 
         if (uploadedFile1 && uploadedFile1.length > 0) {
             Array.from(uploadedFile1).forEach((file) => {
@@ -403,6 +404,21 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                             label="Provincial Distributor Price"
                                             type="text"
                                             inputMode="decimal"
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <Input
+                                            onChange={(e) =>
+                                                setForm({
+                                                    ...form,
+                                                    quantity: e.target.value,
+                                                })
+                                            }
+                                            value={form?.quantity}
+                                            name="quantity"
+                                            label="Update Stock(s)"
+                                            type="text"
                                         />
                                     </div>
                                 </div>

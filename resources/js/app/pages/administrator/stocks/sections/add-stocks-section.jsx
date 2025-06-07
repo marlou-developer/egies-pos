@@ -68,6 +68,7 @@ export default function AddStocksSection({ data }) {
                                 name="date"
                                 label="Delivery Date"
                                 type="date"
+                                required
                             />
                         </div>
                         <div>
@@ -82,6 +83,7 @@ export default function AddStocksSection({ data }) {
                                 name="delivery_id"
                                 label="Delivery ID"
                                 type="text"
+                                required
                             />
                         </div>
                         <div>
@@ -96,6 +98,7 @@ export default function AddStocksSection({ data }) {
                                 name="quantity"
                                 label="Quantity"
                                 type="number"
+                                required
                             />
                         </div>
                         <div>
