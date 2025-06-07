@@ -319,14 +319,14 @@ export default function ProductsSection() {
                                                             const updatedSelected =
                                                                 isChecked
                                                                     ? [
-                                                                          ...selectedProducts,
-                                                                          product,
-                                                                      ]
+                                                                        ...selectedProducts,
+                                                                        product,
+                                                                    ]
                                                                     : selectedProducts.filter(
-                                                                          (p) =>
-                                                                              p.id !==
-                                                                              product.id
-                                                                      ); // Correctly compare by object.id
+                                                                        (p) =>
+                                                                            p.id !==
+                                                                            product.id
+                                                                    ); // Correctly compare by object.id
 
                                                             dispatch(
                                                                 setSelectedProducts(
@@ -415,12 +415,9 @@ export default function ProductsSection() {
                                                         "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
                                                     )}
                                                 >
-                                                    ₱
-                                                    {parseFloat(
-                                                        product.cost
-                                                    ).toLocaleString("en-PH", {
-                                                        minimumFractionDigits: 2,
-                                                    })}
+                                                    {(product.cost == null || Number(product.cost) === 0)
+                                                        ? "₱N/a"
+                                                        : `₱${Number(product.cost).toFixed(2)}`}
                                                 </td>
                                                 <td
                                                     className={classNames(
@@ -431,10 +428,9 @@ export default function ProductsSection() {
                                                         "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
                                                     )}
                                                 >
-                                                    {/* {quantityy} */}₱{" "}
-                                                    {Number(
-                                                        product.shopee
-                                                    ).toFixed(2)}
+                                                    {(product.shopee == null || Number(product.shopee) === 0)
+                                                        ? "₱ N/a"
+                                                        : `₱${Number(product.shopee).toFixed(2)}`}
                                                 </td>
                                                 <td
                                                     className={classNames(
@@ -445,12 +441,9 @@ export default function ProductsSection() {
                                                         "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
                                                     )}
                                                 >
-                                                    ₱
-                                                    {parseFloat(
-                                                        product.srp
-                                                    ).toLocaleString("en-PH", {
-                                                        minimumFractionDigits: 2,
-                                                    })}
+                                                    {(product.srp == null || Number(product.srp) === 0)
+                                                        ? "₱ N/a"
+                                                        : `₱${Number(product.srp).toFixed(2)}`}
                                                 </td>
                                                 <td
                                                     className={classNames(
@@ -461,12 +454,9 @@ export default function ProductsSection() {
                                                         "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
                                                     )}
                                                 >
-                                                    ₱
-                                                    {parseFloat(
-                                                        product.reseller
-                                                    ).toLocaleString("en-PH", {
-                                                        minimumFractionDigits: 2,
-                                                    })}
+                                                    {(product.reseller == null || Number(product.reseller) === 0)
+                                                        ? "₱ N/a"
+                                                        : `₱${Number(product.reseller).toFixed(2)}`}
                                                 </td>
                                                 <td
                                                     className={classNames(
@@ -477,12 +467,10 @@ export default function ProductsSection() {
                                                         "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
                                                     )}
                                                 >
-                                                    ₱
-                                                    {parseFloat(
-                                                        product.city_distributor
-                                                    ).toLocaleString("en-PH", {
-                                                        minimumFractionDigits: 2,
-                                                    })}
+                                                    {(product.city_distributor == null || Number(product.city_distributor) === 0)
+                                                        ? "₱ N/a"
+                                                        : `₱${Number(product.city_distributor).toFixed(2)}`}
+
                                                 </td>
                                                 <td
                                                     className={classNames(
@@ -493,12 +481,9 @@ export default function ProductsSection() {
                                                         "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
                                                     )}
                                                 >
-                                                    ₱
-                                                    {parseFloat(
-                                                        product.district_distributor
-                                                    ).toLocaleString("en-PH", {
-                                                        minimumFractionDigits: 2,
-                                                    })}
+                                                    {(product.district_distributor == null || Number(product.district_distributor) === 0)
+                                                        ? "₱ N/a"
+                                                        : `₱${Number(product.district_distributor).toFixed(2)}`}
                                                 </td>
                                                 <td
                                                     className={classNames(
@@ -509,12 +494,9 @@ export default function ProductsSection() {
                                                         "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
                                                     )}
                                                 >
-                                                    ₱
-                                                    {parseFloat(
-                                                        product.provincial_distributor
-                                                    ).toLocaleString("en-PH", {
-                                                        minimumFractionDigits: 2,
-                                                    })}
+                                                    {(product.provincial_distributor == null || Number(product.provincial_distributor) === 0)
+                                                        ? "₱ N/a"
+                                                        : `₱${Number(product.provincial_distributor).toFixed(2)}`}
                                                 </td>
                                                 <td
                                                     className={classNames(
@@ -559,11 +541,10 @@ export default function ProductsSection() {
                                                 onClick={() =>
                                                     setCurrent(pageNum)
                                                 }
-                                                className={`px-3 py-1 border rounded ${
-                                                    pageNum === current
-                                                        ? "bg-pink-500 text-white"
-                                                        : "bg-white text-pink-500 border-pink-500"
-                                                }`}
+                                                className={`px-3 py-1 border rounded ${pageNum === current
+                                                    ? "bg-pink-500 text-white"
+                                                    : "bg-white text-pink-500 border-pink-500"
+                                                    }`}
                                             >
                                                 {pageNum}
                                             </button>

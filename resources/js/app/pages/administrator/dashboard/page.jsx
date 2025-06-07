@@ -1,14 +1,7 @@
 import React, { useState } from "react";
-import Button from "@/app/_components/button";
-import Input from "@/app/_components/input";
 import {
     ComputerDesktopIcon,
-    H1Icon,
-    UserCircleIcon,
 } from "@heroicons/react/24/outline";
-import TextArea from "@/app/_components/textarea";
-import Radio from "@/app/_components/radio";
-import Modal from "@/Components/Modal";
 import AdminLayout from "../layout";
 import DashboardCardSections from "./sections/dashboard-card-sections";
 import { useSelector } from "react-redux";
@@ -16,103 +9,94 @@ import { peso_value } from "@/app/lib/peso";
 
 export default function Page() {
     const { over_dues } = useSelector((store) => store.carts);
-    const [open, setOpen] = useState(false);
-    console.log('over_duesssss', over_dues.dashboard)
+    const dashboard = over_dues?.dashboard;
+
+    const formatValue = (value, isCurrency = true) => {
+        if (value == null || isNaN(value)) {
+            return isCurrency ? peso_value(0) : "0";
+        }
+        return isCurrency ? peso_value(Number(value)) : Number(value).toString();
+    };
+
+
     return (
         <AdminLayout>
-            <div className="p-1 text-2xl font-black">Sales Section</div>
-            <div className="flex gap-6 mb-3">
-                <DashboardCardSections
-                    title="Current Sales"
-                    icon={
-                        <ComputerDesktopIcon className="h-14 text-pink-600" />
-                    }
-                    count={<> {peso_value(Number(over_dues?.dashboard?.current_sales))}</>}
-                />
-                <DashboardCardSections
-                    title="Current Profit"
-                    icon={
-                        <ComputerDesktopIcon className="h-14 text-pink-600" />
-                    }
-                    count={<> {peso_value(Number(over_dues?.dashboard?.current_profit))}</>}
-                />
-                <DashboardCardSections
-                    title="Total Sales"
-                    icon={
-                        <ComputerDesktopIcon className="h-14 text-pink-600" />
-                    }
-                    count={<> {peso_value(Number(over_dues?.dashboard?.total_sales))}</>}
-                />
-                <DashboardCardSections
-                    title="Total Profit"
-                    icon={
-                        <ComputerDesktopIcon className="h-14 text-pink-600" />
-                    }
-                    count={<> {peso_value(Number(over_dues?.dashboard?.total_profit))}</>}
-                />
-            </div>
-            <div className="p-1 text-2xl font-black">Credit Section</div>
-            <div className="flex gap-6 mb-3">
-                <DashboardCardSections
-                    title="Current Credits"
-                    icon={
-                        <ComputerDesktopIcon className="h-14 text-pink-600" />
-                    }
-
-                    count={<> {peso_value(Number(over_dues?.dashboard?.current_credit))}</>}
-                />
-                <DashboardCardSections
-                    title="Total Amount Credits"
-                    icon={
-                        <ComputerDesktopIcon className="h-14 text-pink-600" />
-                    }
-                    count={<> {peso_value(Number(over_dues?.dashboard?.total_credit))}</>}
-                />
-                <DashboardCardSections
-                    title="No. of Due Date"
-                    icon={
-                        <ComputerDesktopIcon className="h-14 text-pink-600" />
-                    }
-                    count={<> {Number(over_dues?.dashboard?.due_date_today)}</>}
-                />
-                <DashboardCardSections
-                    title="No. Of Over Due"
-                    icon={
-                        <ComputerDesktopIcon className="h-14 text-pink-600" />
-                    }
-                    count={<>{Number(over_dues?.dashboard?.over_due)}</>}
-                />
-            </div>
-            <div className="p-1 text-2xl font-black">Stocks Section</div>
-            <div className="flex gap-6 mb-3">
-                <DashboardCardSections
-                    title="No. Of Low Stock Product"
-                    icon={
-                        <ComputerDesktopIcon className="h-14 text-pink-600" />
-                    }
-                    count={<>{Number(over_dues?.dashboard?.low_stock)}</>}
-                />
-                <DashboardCardSections
-                    title="No. Of Out of Stock Product"
-                    icon={
-                        <ComputerDesktopIcon className="h-14 text-pink-600" />
-                    }
-                    count={<>{Number(over_dues?.dashboard?.out_of_stock)}</>}
-                />
-                <DashboardCardSections
-                    title="Total Overall Inventory Retail Price"
-                    icon={
-                        <ComputerDesktopIcon className="h-14 text-pink-600" />
-                    }
-                    count={<>{peso_value(Number(over_dues?.dashboard?.total_overall_inventory_retail_price))}</>}
-                />
-                <DashboardCardSections
-                    title="Total Overall Inventory Capital"
-                    icon={
-                        <ComputerDesktopIcon className="h-14 text-pink-600" />
-                    }
-                    count={<>{peso_value(Number(over_dues?.dashboard?.total_overall_inventory_capital))}</>}
-                />
+            <div className="flex flex-col gap-5">
+                <div>
+                    <div className="p-1 mb-2 text-2xl font-black">Sales Section</div>
+                    <div className="flex gap-6 mb-3">
+                        <DashboardCardSections
+                            title="Current Sales"
+                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            count={<>{formatValue(dashboard?.current_sales)}</>}
+                        />
+                        <DashboardCardSections
+                            title="Current Profit"
+                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            count={<>{formatValue(dashboard?.current_profit)}</>}
+                        />
+                        <DashboardCardSections
+                            title="Total Sales"
+                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            count={<>{formatValue(dashboard?.total_sales)}</>}
+                        />
+                        <DashboardCardSections
+                            title="Total Profit"
+                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            count={<>{formatValue(dashboard?.total_profit)}</>}
+                        />
+                    </div>
+                </div>
+                <div>
+                    <div className="p-1 mb-2  text-2xl font-black">Credit Section</div>
+                    <div className="flex gap-6 mb-3">
+                        <DashboardCardSections
+                            title="Current Credits"
+                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            count={<>{formatValue(dashboard?.current_credit)}</>}
+                        />
+                        <DashboardCardSections
+                            title="Total Amount Credits"
+                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            count={<>{formatValue(dashboard?.total_credit)}</>}
+                        />
+                        <DashboardCardSections
+                            title="No. of Due Date"
+                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            count={<>{formatValue(dashboard?.due_date_today, false)}</>}
+                        />
+                        <DashboardCardSections
+                            title="No. Of Over Due"
+                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            count={<>{formatValue(dashboard?.over_due, false)}</>}
+                        />
+                    </div>
+                </div>
+                <div>
+                    <div className="p-1 mb-2  text-2xl font-black">Stocks Section</div>
+                    <div className="flex gap-6 mb-3">
+                        <DashboardCardSections
+                            title="No. Of Low Stock Product"
+                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            count={<>{formatValue(dashboard?.low_stock, false)}</>}
+                        />
+                        <DashboardCardSections
+                            title="No. Of Out of Stock Product"
+                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            count={<>{formatValue(dashboard?.out_of_stock, false)}</>}
+                        />
+                        <DashboardCardSections
+                            title="Total Overall Inventory Retail Price"
+                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            count={<>{formatValue(dashboard?.total_overall_inventory_retail_price)}</>}
+                        />
+                        <DashboardCardSections
+                            title="Total Overall Inventory Capital"
+                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            count={<>{formatValue(dashboard?.total_overall_inventory_capital)}</>}
+                        />
+                    </div>
+                </div>
             </div>
         </AdminLayout>
     );

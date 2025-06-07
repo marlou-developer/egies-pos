@@ -355,7 +355,7 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                             }}
                                             value={form?.city_distributor || ""}
                                             name="city_distributor"
-                                            label="Distributor Price"
+                                            label="City Distributor Price"
                                             type="text"
                                             inputMode="decimal"
                                         />
