@@ -3,7 +3,7 @@ import ProductComponent from "../components/product-component";
 import { useSelector } from "react-redux";
 
 export default function ProductsSection({ storeName }) {
-    const { categories } = useSelector((store) => store.categories); // ⬅️ This must come before using `categories`
+    const { categories } = useSelector((store) => store.categories);
     const [activeCategory, setActiveCategory] = useState("");
 
     const activeProducts = categories.find(
@@ -36,11 +36,10 @@ export default function ProductsSection({ storeName }) {
                                 key={category.name}
                                 onClick={() => setActiveCategory(category.name)}
                                 className={`cursor-pointer flex-shrink-0 bg-pink-400 justify-center px-5 py-2 rounded-lg text-sm mb-4 
-                    ${
-                        activeCategory === category.name
-                            ? "bg-pink-400 text-white"
-                            : "font-semibold text-white hover:bg-pink-200 hover:text-gray-500"
-                    }`}
+                    ${activeCategory === category.name
+                                        ? "bg-pink-600 text-white"
+                                        : "font-semibold text-white hover:bg-pink-200 hover:text-gray-500"
+                                    }`}
                             >
                                 {category.name}
                             </div>
@@ -48,7 +47,7 @@ export default function ProductsSection({ storeName }) {
                 </div>
             </div>
 
-            <div className="px-5 mt-4  overflow-y-auto">
+            <div className="px-5 mt-4 max-h-[590px] overflow-y-auto">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
                     {activeProducts && activeProducts.length > 0 ? (
                         activeProducts.map((product, index) => (

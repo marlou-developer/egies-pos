@@ -17,6 +17,7 @@ import ProductOptionMenuSection from "./product-option-menu-section";
 import SearchSection from "./search-section";
 import PrintSection from "./print-section";
 import { setSelectAll, setSelectedProducts } from "@/app/redux/product-slice";
+import PaginationSection from "./pagination-section";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -429,7 +430,7 @@ export default function ProductsSection() {
                                                     )}
                                                 >
                                                     {(product.shopee == null || Number(product.shopee) === 0)
-                                                        ? "₱ None"
+                                                        ? "₱None"
                                                         : `₱${Number(product.shopee).toFixed(2)}`}
                                                 </td>
                                                 <td
@@ -442,7 +443,7 @@ export default function ProductsSection() {
                                                     )}
                                                 >
                                                     {(product.srp == null || Number(product.srp) === 0)
-                                                        ? "₱ None"
+                                                        ? "₱None"
                                                         : `₱${Number(product.srp).toFixed(2)}`}
                                                 </td>
                                                 <td
@@ -455,7 +456,7 @@ export default function ProductsSection() {
                                                     )}
                                                 >
                                                     {(product.reseller == null || Number(product.reseller) === 0)
-                                                        ? "₱ None"
+                                                        ? "₱None"
                                                         : `₱${Number(product.reseller).toFixed(2)}`}
                                                 </td>
                                                 <td
@@ -468,7 +469,7 @@ export default function ProductsSection() {
                                                     )}
                                                 >
                                                     {(product.city_distributor == null || Number(product.city_distributor) === 0)
-                                                        ? "₱ None"
+                                                        ? "₱None"
                                                         : `₱${Number(product.city_distributor).toFixed(2)}`}
 
                                                 </td>
@@ -482,7 +483,7 @@ export default function ProductsSection() {
                                                     )}
                                                 >
                                                     {(product.district_distributor == null || Number(product.district_distributor) === 0)
-                                                        ? "₱ None"
+                                                        ? "₱None"
                                                         : `₱${Number(product.district_distributor).toFixed(2)}`}
                                                 </td>
                                                 <td
@@ -495,7 +496,7 @@ export default function ProductsSection() {
                                                     )}
                                                 >
                                                     {(product.provincial_distributor == null || Number(product.provincial_distributor) === 0)
-                                                        ? "₱ None"
+                                                        ? "₱None"
                                                         : `₱${Number(product.provincial_distributor).toFixed(2)}`}
                                                 </td>
                                                 <td
@@ -519,40 +520,8 @@ export default function ProductsSection() {
                         </table>
 
                         {/* Pagination */}
-                        <div className="w-full mt-4">
-                            {products?.last_page > 1 && (
-                                <div className="flex justify-between items-center">
-                                    <div>
-                                        Showing {(current - 1) * pageSize + 1}{" "}
-                                        to{" "}
-                                        {Math.min(
-                                            current * pageSize,
-                                            products.total
-                                        )}{" "}
-                                        of {products.total} entries
-                                    </div>
-                                    <div className="flex space-x-2">
-                                        {Array.from(
-                                            { length: products.last_page },
-                                            (_, i) => i + 1
-                                        ).map((pageNum) => (
-                                            <button
-                                                key={pageNum}
-                                                onClick={() =>
-                                                    setCurrent(pageNum)
-                                                }
-                                                className={`px-3 py-1 border rounded ${pageNum === current
-                                                    ? "bg-pink-500 text-white"
-                                                    : "bg-white text-pink-500 border-pink-500"
-                                                    }`}
-                                            >
-                                                {pageNum}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
+
+                        <PaginationSection />
                     </div>
                 </div>
             </div>

@@ -12,8 +12,8 @@ import { useSelector } from "react-redux";
 import moment from "moment";
 import AddPaymentSection from "./add-payment-section";
 import HistorySection from "./history-section";
-import SearchSection from "./search-section";
-import { peso_value } from "@/app/lib/peso";
+    import SearchSection from "./search-section";
+    import { peso_value } from "@/app/lib/peso";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
