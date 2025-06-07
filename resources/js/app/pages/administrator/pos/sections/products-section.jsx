@@ -47,7 +47,7 @@ export default function ProductsSection({ storeName }) {
                 </div>
             </div>
 
-            <div className="px-5 mt-4 max-h-[590px] overflow-y-auto">
+            <div className="px-5 mt-4 max-h-[650px] overflow-y-auto">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
                     {activeProducts && activeProducts.length > 0 ? (
                         activeProducts.map((product, index) => (
