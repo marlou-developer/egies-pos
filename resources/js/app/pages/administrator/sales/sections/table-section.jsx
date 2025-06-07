@@ -103,8 +103,9 @@ export default function TableSection() {
                             </thead>
 
                             <tbody>
-                                {[...sales?.data]
-                                    ?.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                                {(sales?.data ?? [])
+                                    .slice()
+                                    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
                                     .map((res, idx) => (
                                         <tr key={idx} className="hover:bg-gray-50">
                                             <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">

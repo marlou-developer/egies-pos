@@ -84,8 +84,9 @@ export default function CreditsSection() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {[...carts?.data]
-                                    ?.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                                {(carts?.data ?? [])
+                                    .slice()
+                                    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
                                     .map((res, idx) => (
                                         <tr key={idx}>
                                             <td className="whitespace-nowrap border-b border-gray-200 py-4 pr-3 pl-4 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
