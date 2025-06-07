@@ -129,12 +129,16 @@ const InvoicePDF = () => {
                                 {cart?.data?.customer?.name}
                             </Text>
                         </Text>
-                        <Text>Invoice Date: {moment().format("LLL")}</Text>
+                        <Text>Invoice Date:
+                            &nbsp;{moment(cart?.data?.created_at).format("LLL")}</Text>
                         {/* <Text>Terms: Net 15</Text> */}
-                        <Text>
-                            Due Date:{" "}
-                            {moment(cart?.data?.due_date).format("LL")}
-                        </Text>
+                        {
+                            cart?.data?.due_date && <Text>
+                                Due Date:{" "}
+                                {moment(cart?.data?.due_date).format("LL")}
+                            </Text>
+                        }
+
                     </View>
 
                     {/* Table Header */}

@@ -35,10 +35,10 @@ export default function PosSection() {
         const updated = carts.map((item) =>
             item.id === result.id
                 ? {
-                      ...item,
-                      sub_price: result[value],
-                      type_item_discount: value,
-                  }
+                    ...item,
+                    sub_price: result[value],
+                    type_item_discount: value,
+                }
                 : item
         );
         dispatch(setCarts(updated));
@@ -48,9 +48,9 @@ export default function PosSection() {
         const updated = carts.map((item) =>
             item.id === result.id
                 ? {
-                      ...item,
-                      pcs: valueKey,
-                  }
+                    ...item,
+                    pcs: valueKey,
+                }
                 : item
         );
 
@@ -131,6 +131,7 @@ export default function PosSection() {
                             </div>
                             <div class="px-5 py-4 overflow-y-auto h-64">
                                 {carts.map((res) => {
+                                    console.log('resres', res)
                                     return (
                                         <div class="flex flex-row gap-3 border-pink-300 border  p-2 rounded-lg shadow-md justify-between items-center mb-4">
                                             <div class="flex flex-1 flex-col gap-3 items-start  justify-between w-2/5">
@@ -222,25 +223,37 @@ export default function PosSection() {
                                                                 >
                                                                     SRP Price
                                                                 </option>
-                                                                <option value="reseller">
-                                                                    Reseller
-                                                                    Price
-                                                                </option>
-                                                                <option value="city_distributor">
-                                                                    City
-                                                                    Distributor
-                                                                    Price
-                                                                </option>
-                                                                <option value="district_distributor">
-                                                                    District
-                                                                    Distributor
-                                                                    Price
-                                                                </option>
-                                                                <option value="provincial_distributor">
-                                                                    Provincial
-                                                                    Distributor
-                                                                    Price
-                                                                </option>
+
+                                                                {
+                                                                    res.reseller && <option value="reseller">
+                                                                        Reseller
+                                                                        Price
+                                                                    </option>
+                                                                }
+                                                                {
+                                                                    res.city_distributor && <option value="city_distributor">
+                                                                        City
+                                                                        Distributor
+                                                                        Price
+                                                                    </option>
+                                                                }
+                                                                {
+                                                                    res.district_distributor && <option value="district_distributor">
+                                                                        District
+                                                                        Distributor
+                                                                        Price
+                                                                    </option>
+                                                                }
+                                                                {
+                                                                    res.district_distributor && <option value="district_distributor">
+                                                                        Provincial
+                                                                        Distributor
+                                                                        Price
+                                                                    </option>
+                                                                }
+
+
+
                                                             </>
                                                         )}
                                                     </select>
@@ -251,13 +264,13 @@ export default function PosSection() {
                                                     ₱
                                                     {parseFloat(
                                                         Number(res.sub_price) *
-                                                            Number(
-                                                                res.pcs ?? "1"
-                                                            ) -
-                                                            Number(
-                                                                res.discount ??
-                                                                    "0"
-                                                            )
+                                                        Number(
+                                                            res.pcs ?? "1"
+                                                        ) -
+                                                        Number(
+                                                            res.discount ??
+                                                            "0"
+                                                        )
                                                     ).toFixed(2)}
                                                 </div>
                                                 <div className="flex-1">
@@ -326,8 +339,8 @@ export default function PosSection() {
                                             {isNaN(parseFloat(overallDiscount))
                                                 ? "0.00"
                                                 : parseFloat(
-                                                      overallDiscount
-                                                  ).toFixed(2)}
+                                                    overallDiscount
+                                                ).toFixed(2)}
                                         </span>
                                     </div>
 
@@ -357,7 +370,7 @@ export default function PosSection() {
                             </div>
                         </div>
                         <div class="px-5 mt-5 w-full">
-                            
+
                             <PaySection
                                 shop={store}
                                 data={carts}
