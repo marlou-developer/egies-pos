@@ -416,7 +416,7 @@ export default function ProductsSection() {
                                                     )}
                                                 >
                                                     {(product.cost == null || Number(product.cost) === 0)
-                                                        ? "₱N/a"
+                                                        ? "₱None"
                                                         : `₱${Number(product.cost).toFixed(2)}`}
                                                 </td>
                                                 <td
@@ -429,7 +429,7 @@ export default function ProductsSection() {
                                                     )}
                                                 >
                                                     {(product.shopee == null || Number(product.shopee) === 0)
-                                                        ? "₱ N/a"
+                                                        ? "₱ None"
                                                         : `₱${Number(product.shopee).toFixed(2)}`}
                                                 </td>
                                                 <td
@@ -442,7 +442,7 @@ export default function ProductsSection() {
                                                     )}
                                                 >
                                                     {(product.srp == null || Number(product.srp) === 0)
-                                                        ? "₱ N/a"
+                                                        ? "₱ None"
                                                         : `₱${Number(product.srp).toFixed(2)}`}
                                                 </td>
                                                 <td
@@ -455,7 +455,7 @@ export default function ProductsSection() {
                                                     )}
                                                 >
                                                     {(product.reseller == null || Number(product.reseller) === 0)
-                                                        ? "₱ N/a"
+                                                        ? "₱ None"
                                                         : `₱${Number(product.reseller).toFixed(2)}`}
                                                 </td>
                                                 <td
@@ -468,7 +468,7 @@ export default function ProductsSection() {
                                                     )}
                                                 >
                                                     {(product.city_distributor == null || Number(product.city_distributor) === 0)
-                                                        ? "₱ N/a"
+                                                        ? "₱ None"
                                                         : `₱${Number(product.city_distributor).toFixed(2)}`}
 
                                                 </td>
@@ -482,7 +482,7 @@ export default function ProductsSection() {
                                                     )}
                                                 >
                                                     {(product.district_distributor == null || Number(product.district_distributor) === 0)
-                                                        ? "₱ N/a"
+                                                        ? "₱ None"
                                                         : `₱${Number(product.district_distributor).toFixed(2)}`}
                                                 </td>
                                                 <td
@@ -495,7 +495,7 @@ export default function ProductsSection() {
                                                     )}
                                                 >
                                                     {(product.provincial_distributor == null || Number(product.provincial_distributor) === 0)
-                                                        ? "₱ N/a"
+                                                        ? "₱ None"
                                                         : `₱${Number(product.provincial_distributor).toFixed(2)}`}
                                                 </td>
                                                 <td
