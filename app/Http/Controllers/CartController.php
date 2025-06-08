@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Models\Stock;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
@@ -215,6 +216,7 @@ class CartController extends Controller
         $cart = Cart::create([
             'cart_id' => $cart_id,
             'customer_id' => $request->customer_id,
+            'user_id' => Auth::user()->id ?? null,
             'order_id' => $request->order_id ?? null,
             'customer' => $request->customer_name ?? null,
             'sub_total' => $request->sub_total,

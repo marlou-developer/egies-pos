@@ -12,9 +12,7 @@ export default function Page({ status, canResetPassword }) {
     const submit = (e) => {
         e.preventDefault();
 
-        post(route('auth.login'), {
-            onFinish: () => reset('password'),
-        });
+        post(route('auth.login'));
     };
     return (
         <div className="min-h-screen flex fle-col items-center justify-center py-6 px-4 bg-gradient-to-br from-pink-300 via-pink-100 to-pink-300">

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('cart_id')->nullable();
             $table->string('customer_id')->nullable();
+            $table->string('user_id')->nullable();
             $table->string('order_id')->nullable();
             $table->string('customer')->nullable();
             $table->string('sub_total')->nullable();
