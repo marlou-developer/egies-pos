@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { router } from '@inertiajs/react';
 import { DatePicker } from 'antd';
 import dayjs from 'dayjs';
+import moment from 'moment';
 
 
 export default function GenerateReportSection() {
@@ -30,7 +31,7 @@ export default function GenerateReportSection() {
                         size='large'
                         format={dateFormat}
                         // value={form.dateRange.length ? form.dateRange.map(date => dateFormat) : null}
-                        value={[dayjs(form.dateRange[0], dateFormat), dayjs(form.dateRange[1], dateFormat)]}
+                        value={[dayjs(form.dateRange[0] ?? moment().format('YYYY-MM-DD'), dateFormat), dayjs(form.dateRange[1] ?? moment().add(1, 'days').format('YYYY-MM-DD'), dateFormat)]}
                         onChange={(dates, dateStrings) =>
                             setForm(prev => ({ ...prev, dateRange: dateStrings }))
                         }

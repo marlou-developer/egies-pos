@@ -89,6 +89,9 @@ const data = [
 ];
 
 const UnpaidSalesReportSection = () => {
+    const params = new URLSearchParams(window.location.search);
+    const start = params.get("start");
+    const end = params.get("end");
     return (
         <PDFViewer style={{ width: "100%", height: "100vh" }}>
             <Document>
@@ -101,7 +104,7 @@ const UnpaidSalesReportSection = () => {
                             <View style={{ flex: 1 }}>
                                 <View style={{ flexDirection: 'row', marginBottom: 2 }}>
                                     <Text style={{ width: 60 }}>Period:</Text>
-                                    <Text>4/13/2025 - 4/13/2025</Text>
+                                    <Text>{start} - {end}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', marginBottom: 2 }}>
                                     <Text style={{ width: 60 }}>Customer:</Text>
