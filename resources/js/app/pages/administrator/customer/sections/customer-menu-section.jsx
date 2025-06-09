@@ -6,6 +6,7 @@ import {
 } from '@heroicons/react/20/solid';
 import { FaBook, FaPercent } from 'react-icons/fa6';
 import EditCustomerSection from './edit-customer-section';
+import { router } from '@inertiajs/react';
 
 export default function CustomerMenuSection({ data }) {
     const [isEditOpen, setIsEditOpen] = useState(false);
@@ -34,8 +35,9 @@ export default function CustomerMenuSection({ data }) {
 
                             <MenuItem>
                                 {({ active }) => (
-                                    <a
-                                        href="#"
+                                    <button
+                                        type='button'
+                                        onClick={() => router.visit(`/administrator/credits?search=${data.name}`)}
                                         className={`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                                             } group flex items-center px-4 py-2 text-sm`}
                                     >
@@ -44,7 +46,7 @@ export default function CustomerMenuSection({ data }) {
                                             aria-hidden="true"
                                         />
                                         View Credits
-                                    </a>
+                                    </button>
                                 )}
                             </MenuItem>
                             <MenuItem>
