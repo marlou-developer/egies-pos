@@ -35,10 +35,10 @@ export default function PosSection() {
         const updated = carts.map((item) =>
             item.id === result.id
                 ? {
-                    ...item,
-                    sub_price: result[value],
-                    type_item_discount: value,
-                }
+                      ...item,
+                      sub_price: result[value],
+                      type_item_discount: value,
+                  }
                 : item
         );
         dispatch(setCarts(updated));
@@ -48,9 +48,9 @@ export default function PosSection() {
         const updated = carts.map((item) =>
             item.id === result.id
                 ? {
-                    ...item,
-                    pcs: valueKey,
-                }
+                      ...item,
+                      pcs: valueKey,
+                  }
                 : item
         );
 
@@ -128,169 +128,204 @@ export default function PosSection() {
                                 <div class="font-bold text-xl">
                                     Current Order
                                 </div>
+                                <button
+                                    onClick={() => dispatch(setCarts([]))}
+                                    className="bg-red-500 hover:bg-red-600 p-1.5 rounded-md text-white"
+                                >
+                                    Clear All
+                                </button>
                             </div>
                             <div class="px-5 py-4 overflow-y-auto h-64">
                                 {carts.map((res) => {
-                                    console.log('resres', res)
+                                    console.log("resres", res);
                                     return (
-                                        <div class="flex flex-row gap-3 border-pink-300 border  p-2 rounded-lg shadow-md justify-between items-center mb-4">
-                                            <div class="flex flex-1 flex-col gap-3 items-start  justify-between w-2/5">
-                                                <div className="flex text-center w-full gap-3">
-                                                    <img
-                                                        src={
-                                                            res?.uploads[0]
-                                                                ?.file
-                                                        }
-                                                        class="w-10 h-10 object-cover rounded-md"
-                                                        alt=""
-                                                    />
-                                                    <span class="font-semibold text-sm">
-                                                        {res?.name}
-                                                    </span>
-                                                </div>
-                                                <div className="font-bold">
-                                                    ₱{" "}
-                                                    {parseFloat(
-                                                        res.sub_price
-                                                    ).toLocaleString("en-PH", {
-                                                        minimumFractionDigits: 2,
-                                                    })}
-                                                </div>
+                                        <>
+                                            <div className="w-full flex items-center justify-end">
+                                                <button
+                                                    onClick={() => {
+                                                        const updated =
+                                                            carts.filter(
+                                                                (item) =>
+                                                                    item.id !==
+                                                                    res.id
+                                                            ); // Fix: use res.id
+                                                        dispatch(
+                                                            setCarts(updated)
+                                                        );
+                                                    }}
+                                                    className="bg-red-500 p-1 rounded-md hover:bg-red-600 text-white m-1"
+                                                >
+                                                    REMOVE
+                                                </button>
                                             </div>
+                                            <div class="flex flex-row gap-3 border-pink-300 border  p-2 rounded-lg shadow-md justify-between items-center mb-4">
+                                                <div class="flex flex-1 flex-col gap-3 items-start  justify-between w-2/5">
+                                                    <div className="flex text-center w-full gap-3">
+                                                        <img
+                                                            src={
+                                                                res?.uploads[0]
+                                                                    ?.file
+                                                            }
+                                                            class="w-10 h-10 object-cover rounded-md"
+                                                            alt=""
+                                                        />
+                                                        <span class="font-semibold text-sm">
+                                                            {res?.name}
+                                                        </span>
+                                                    </div>
+                                                    <div className="font-bold">
+                                                        ₱{" "}
+                                                        {parseFloat(
+                                                            res.sub_price
+                                                        ).toLocaleString(
+                                                            "en-PH",
+                                                            {
+                                                                minimumFractionDigits: 2,
+                                                            }
+                                                        )}
+                                                    </div>
+                                                </div>
 
-                                            <div class="flex-1 flex flex-col gap-3 justify-between">
-                                                <div className="flex w-full">
-                                                    <button
-                                                        onClick={() =>
-                                                            subtractPCS(res)
-                                                        }
-                                                        class="px-3 py-1 rounded-md bg-gray-300 "
-                                                    >
-                                                        -
-                                                    </button>
-                                                    <span class="font-semibold mx-1">
-                                                        <input
-                                                            id="pcs"
-                                                            name="pcs"
-                                                            type="number"
+                                                <div class="flex-1 flex flex-col gap-3 justify-between">
+                                                    <div className="flex w-full">
+                                                        <button
+                                                            onClick={() =>
+                                                                subtractPCS(res)
+                                                            }
+                                                            class="px-3 py-1 rounded-md bg-gray-300 "
+                                                        >
+                                                            -
+                                                        </button>
+                                                        <span class="font-semibold mx-1">
+                                                            <input
+                                                                id="pcs"
+                                                                name="pcs"
+                                                                type="number"
+                                                                onChange={(e) =>
+                                                                    update_pcs(
+                                                                        res,
+                                                                        e.target
+                                                                            .value
+                                                                    )
+                                                                }
+                                                                value={res?.pcs}
+                                                                className="block text-center w-full rounded-md bg-white py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
+                                                            />
+                                                        </span>
+                                                        <button
+                                                            onClick={() =>
+                                                                addPCS(res)
+                                                            }
+                                                            class="px-3 py-1 rounded-md bg-gray-300 "
+                                                        >
+                                                            +
+                                                        </button>
+                                                    </div>
+
+                                                    <span class=" font-semibold text-sm">
+                                                        <select
                                                             onChange={(e) =>
-                                                                update_pcs(
+                                                                add_sub_price(
                                                                     res,
                                                                     e.target
                                                                         .value
                                                                 )
                                                             }
-                                                            value={res?.pcs}
-                                                            className="block text-center w-full rounded-md bg-white py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
-                                                        />
-                                                    </span>
-                                                    <button
-                                                        onClick={() =>
-                                                            addPCS(res)
-                                                        }
-                                                        class="px-3 py-1 rounded-md bg-gray-300 "
-                                                    >
-                                                        +
-                                                    </button>
-                                                </div>
-
-                                                <span class=" font-semibold text-sm">
-                                                    <select
-                                                        onChange={(e) =>
-                                                            add_sub_price(
-                                                                res,
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                        id="pricing"
-                                                        name="pricing"
-                                                        autoComplete="pricing"
-                                                        className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pl-3 pr-1 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
-                                                    >
-                                                        {store != "Store" && (
-                                                            <option
-                                                                value="shopee"
-                                                                selected
-                                                            >
-                                                                Shopee Price
-                                                            </option>
-                                                        )}
-                                                        {store == "Store" && (
-                                                            <>
+                                                            id="pricing"
+                                                            name="pricing"
+                                                            autoComplete="pricing"
+                                                            className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pl-3 pr-1 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
+                                                        >
+                                                            {store !=
+                                                                "Store" && (
                                                                 <option
-                                                                    value="srp"
+                                                                    value="shopee"
                                                                     selected
                                                                 >
-                                                                    SRP Price
+                                                                    Shopee Price
                                                                 </option>
-
-                                                                {
-                                                                    res.reseller && <option value="reseller">
-                                                                        Reseller
+                                                            )}
+                                                            {store ==
+                                                                "Store" && (
+                                                                <>
+                                                                    <option
+                                                                        value="srp"
+                                                                        selected
+                                                                    >
+                                                                        SRP
                                                                         Price
                                                                     </option>
-                                                                }
-                                                                {
-                                                                    res.city_distributor && <option value="city_distributor">
-                                                                        City
-                                                                        Distributor
-                                                                        Price
-                                                                    </option>
-                                                                }
-                                                                {
-                                                                    res.district_distributor && <option value="district_distributor">
-                                                                        District
-                                                                        Distributor
-                                                                        Price
-                                                                    </option>
-                                                                }
-                                                                {
-                                                                    res.district_distributor && <option value="district_distributor">
-                                                                        Provincial
-                                                                        Distributor
-                                                                        Price
-                                                                    </option>
-                                                                }
 
-
-
-                                                            </>
-                                                        )}
-                                                    </select>
-                                                </span>
-                                            </div>
-                                            <div class="font-semibold text-xl flex-1  flex flex-col gap-3  text-left">
-                                                <div className="flex-1">
-                                                    ₱
-                                                    {parseFloat(
-                                                        Number(res.sub_price) *
-                                                        Number(
-                                                            res.pcs ?? "1"
-                                                        ) -
-                                                        Number(
-                                                            res.discount ??
-                                                            "0"
-                                                        )
-                                                    ).toFixed(2)}
+                                                                    {res.reseller && (
+                                                                        <option value="reseller">
+                                                                            Reseller
+                                                                            Price
+                                                                        </option>
+                                                                    )}
+                                                                    {res.city_distributor && (
+                                                                        <option value="city_distributor">
+                                                                            City
+                                                                            Distributor
+                                                                            Price
+                                                                        </option>
+                                                                    )}
+                                                                    {res.district_distributor && (
+                                                                        <option value="district_distributor">
+                                                                            District
+                                                                            Distributor
+                                                                            Price
+                                                                        </option>
+                                                                    )}
+                                                                    {res.district_distributor && (
+                                                                        <option value="district_distributor">
+                                                                            Provincial
+                                                                            Distributor
+                                                                            Price
+                                                                        </option>
+                                                                    )}
+                                                                </>
+                                                            )}
+                                                        </select>
+                                                    </span>
                                                 </div>
-                                                <div className="flex-1">
-                                                    <input
-                                                        placeholder="Discount"
-                                                        type="number"
-                                                        value={
-                                                            res.discount || ""
-                                                        }
-                                                        onChange={(e) =>
-                                                            updateDiscount(
-                                                                res,
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                        className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pl-3 pr-1 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
-                                                    />
+                                                <div class="font-semibold text-xl flex-1  flex flex-col gap-3  text-left">
+                                                    <div className="flex-1">
+                                                        ₱
+                                                        {parseFloat(
+                                                            Number(
+                                                                res.sub_price
+                                                            ) *
+                                                                Number(
+                                                                    res.pcs ??
+                                                                        "1"
+                                                                ) -
+                                                                Number(
+                                                                    res.discount ??
+                                                                        "0"
+                                                                )
+                                                        ).toFixed(2)}
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <input
+                                                            placeholder="Discount"
+                                                            type="number"
+                                                            value={
+                                                                res.discount ||
+                                                                ""
+                                                            }
+                                                            onChange={(e) =>
+                                                                updateDiscount(
+                                                                    res,
+                                                                    e.target
+                                                                        .value
+                                                                )
+                                                            }
+                                                            className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pl-3 pr-1 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </>
                                     );
                                 })}
                             </div>
@@ -339,8 +374,8 @@ export default function PosSection() {
                                             {isNaN(parseFloat(overallDiscount))
                                                 ? "0.00"
                                                 : parseFloat(
-                                                    overallDiscount
-                                                ).toFixed(2)}
+                                                      overallDiscount
+                                                  ).toFixed(2)}
                                         </span>
                                     </div>
 
@@ -370,7 +405,6 @@ export default function PosSection() {
                             </div>
                         </div>
                         <div class="px-5 mt-5 w-full">
-
                             <PaySection
                                 shop={store}
                                 data={carts}

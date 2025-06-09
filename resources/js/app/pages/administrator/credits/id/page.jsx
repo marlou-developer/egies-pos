@@ -17,11 +17,23 @@ import { peso_value } from "@/app/lib/peso";
 // Styles
 
 Font.register({
-    family: 'NotoSans',
+    family: "NotoSans",
     fonts: [
-        { src: '/fonts/Noto_Sans/static/NotoSans-Regular.ttf', fontWeight: 'normal', fontStyle: 'normal' },
-        { src: '/fonts/Noto_Sans/static/NotoSans-Italic.ttf', fontWeight: 'normal', fontStyle: 'italic' },
-        { src: '/fonts/Noto_Sans/static/NotoSans-ExtraBold.ttf', fontWeight: 'normal', fontStyle: 'bold' },
+        {
+            src: "/fonts/Noto_Sans/static/NotoSans-Regular.ttf",
+            fontWeight: "normal",
+            fontStyle: "normal",
+        },
+        {
+            src: "/fonts/Noto_Sans/static/NotoSans-Italic.ttf",
+            fontWeight: "normal",
+            fontStyle: "italic",
+        },
+        {
+            src: "/fonts/Noto_Sans/static/NotoSans-ExtraBold.ttf",
+            fontWeight: "normal",
+            fontStyle: "bold",
+        },
     ],
 });
 
@@ -85,10 +97,7 @@ const styles = StyleSheet.create({
     },
 });
 
-
-
 const InvoicePDF = () => {
-
     const cart_id = window.location.pathname.split("/")[3];
     const { cart } = useSelector((store) => store.carts);
     useEffect(() => {
@@ -129,22 +138,25 @@ const InvoicePDF = () => {
                                 {cart?.data?.customer?.name}
                             </Text>
                         </Text>
-                        <Text>Invoice Date:
-                            &nbsp;{moment(cart?.data?.created_at).format("LLL")}</Text>
+                        <Text>
+                            Invoice Date: &nbsp;
+                            {moment(cart?.data?.created_at).format("LLL")}
+                        </Text>
                         {/* <Text>Terms: Net 15</Text> */}
-                        {
-                            cart?.data?.due_date && <Text>
+                        {cart?.data?.due_date && (
+                            <Text>
                                 Due Date:{" "}
                                 {moment(cart?.data?.due_date).format("LL")}
                             </Text>
-                        }
-
+                        )}
                     </View>
 
                     {/* Table Header */}
                     <View style={styles.tableHeader}>
                         <Text style={[styles.tableCol, { flex: 0.5 }]}>#</Text>
-                        <Text style={[styles.tableCol, { fontWeight: 'bold' }]}>Item & Description</Text>
+                        <Text style={[styles.tableCol, { fontWeight: "bold" }]}>
+                            Item & Description
+                        </Text>
                         <Text style={[styles.tableCol, { flex: 0.8 }]}>
                             Qty
                         </Text>
@@ -182,7 +194,9 @@ const InvoicePDF = () => {
                     {/* Totals */}
                     <View style={styles.totalSection}>
                         <View style={styles.totalRow}>
-                            <Text>Payment Status: &nbsp;{cart.data?.status}</Text>
+                            <Text>
+                                Payment Status: &nbsp;{cart.data?.status}
+                            </Text>
                         </View>
                         <View style={styles.totalRow}>
                             <Text>
@@ -193,15 +207,22 @@ const InvoicePDF = () => {
                         <View style={styles.totalRow}>
                             <Text>
                                 Discount Price:{" "}
-                                {peso_value(Number(
-                                    cart.data?.customer_total_discount
-                                ))}
+                                {peso_value(
+                                    Number(
+                                        cart.data?.customer_total_discount ?? 0
+                                    ) +
+                                        Number(
+                                            cart?.data?.discount_per_item ?? 0
+                                        ) +
+                                        Number(
+                                            cart?.data?.discount_per_order ?? 0
+                                        )
+                                )}
                             </Text>
                         </View>
                         {/* <View style={styles.totalRow}>
                             <Text>Sf: PHP{shippingFee.toLocaleString()}</Text>
                         </View> */}
-
 
                         <View
                             style={{
