@@ -9,10 +9,12 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
+
+   
     public function index(Request $request)
     {
         $query = Product::with(['categories', 'uploads', 'stocks'])
-            ->orderBy('created_at', 'desc');
+            ->orderBy('created_at', 'asc');
 
         if ($request->search) {
             if ($request->search === 'In Stock') {
@@ -86,6 +88,8 @@ class ProductController extends Controller
             'district_distributor' => 'nullable|string',
             'provincial_distributor' => 'nullable|string',
             'delivery_receipt_no' => 'nullable|string',
+            'supplier_id' => 'nullable|string',
+            
         ]);
 
         $product = Product::create($data);

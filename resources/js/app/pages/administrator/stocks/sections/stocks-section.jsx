@@ -6,7 +6,7 @@ import AddStocksSection from "./add-stocks-section";
 import StocksHistorySection from "./stocks-history-section";
 import { peso_value } from "@/app/lib/peso";
 import SearchSection from "./search-section";
-import { Link } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
 import PaginationSection from "./pagination-section";
 import { setSelectAllStock, setSelectedStocks } from "@/app/redux/product-slice";
 import PrintSection from "./print-section";
@@ -374,6 +374,9 @@ export default function StocksSection() {
                                                     <StocksHistorySection
                                                         data={product}
                                                     />
+                                                    <button onClick={()=>router.visit(`/administrator/stocks/${product.id}`)}>
+                                                        Edit
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>

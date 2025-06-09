@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('account', AccountController::class);
     Route::resource('product', ProductController::class);
     Route::resource('stock', StockController::class);
+    Route::get('get_stock_by_products_id/{id}', [StockController::class, 'get_stock_by_products_id']);
     Route::resource('category', CategoryController::class);
     Route::resource('customer', CustomerController::class);
     Route::resource('cart', CartController::class);
@@ -37,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::resource('product_discount', ProductDiscountController::class);
     Route::post('update_product', [ProductController::class, 'update_product']);
+    
     Route::get('search_customer', [CustomerController::class, 'search_customer']);
     Route::get('/get_discounted_products_by_id/{customer_id}', [ProductDiscountController::class, 'get_discounted_products_by_id']);
 });

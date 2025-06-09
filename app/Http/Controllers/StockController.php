@@ -8,6 +8,35 @@ use Illuminate\Http\Request;
 
 class StockController extends Controller
 {
+
+    public function update(Request $request, $id)
+    {
+
+        $stock = Stock::where('id', $request->id)->first();
+        if ($stock) {
+            $stock->update([
+                'quantity' => $request->new_quantity,
+            ]);
+            $product = Product::where('id', $request->products['id'])->first();
+            if ($product) {
+                if ($request->new_quantity > $request->quantity) {
+                    $product->update([
+                        'quantity' => $product->quantity + ($request->new_quantity - $request->quantity)
+                    ]);
+                } else {
+                    $product->update([
+                        'quantity' => $product->quantity - $request->return
+                    ]);
+                }
+            }
+        }
+        return response()->json('$stocks', 200);
+    }
+    public function get_stock_by_products_id($id)
+    {
+        $stocks = Stock::where('product_id', $id)->with(['products'])->get();
+        return response()->json($stocks, 200);
+    }
     public function store(Request $request)
     {
         $data = $request->validate([

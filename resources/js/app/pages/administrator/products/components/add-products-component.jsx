@@ -19,9 +19,11 @@ export default function AddProductComponent({ open, setOpenProduct }) {
     const [loading, setLoading] = useState(false);
     const [uploadedFile1, setUploadedFile1] = useState(null);
     const { product } = useSelector((state) => state.products);
+    const { suppliers } = useSelector((state) => state.suppliers);
+    
     const dispatch = useDispatch();
 
-    console.log("categories", categories);
+    console.log("categories", product);
 
     function data_handler(eOrKey, value) {
         if (typeof eOrKey === "string") {
@@ -64,6 +66,8 @@ export default function AddProductComponent({ open, setOpenProduct }) {
         fd.append("delivery_receipt_no", product.delivery_receipt_no ?? "");
         fd.append("city_distributor", product.city_distributor ?? "");
         fd.append("district_distributor", product.district_distributor ?? "");
+        fd.append("supplier_id", product.supplier_id ?? "");
+        
         fd.append(
             "provincial_distributor",
             product.provincial_distributor ?? ""
@@ -212,6 +216,28 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                             label="Quantity"
                                             type="number"
                                         />
+                                    </div>
+                                    <div>
+                                        <select
+                                            value={product?.supplier_id}
+                                            onChange={data_handler}
+                                            name="supplier_id"
+                                            className="w-full rounded-md border-gray-500 text-sm h-11"
+                                        >
+                                            <option disabled selected>
+                                                Select Supplier
+                                            </option>
+                                            {suppliers.map((res, i) => {
+                                                return (
+                                                    <option
+                                                        key={i}
+                                                        value={res.id}
+                                                    >
+                                                        {res.name}
+                                                    </option>
+                                                );
+                                            })}
+                                        </select>
                                     </div>
 
                                     <div className="sm:col-span-12">
