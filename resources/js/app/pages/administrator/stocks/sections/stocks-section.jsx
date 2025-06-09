@@ -33,12 +33,13 @@ function classNames(...classes) {
 // }
 
 export default function StocksSection() {
+
     const { products, selectedStocks,selectAllStock } = useSelector(
         (state) => state.products
     ) || {
         products: { data: [], total: 0, last_page: 1 },
     };
-
+    
     const dispatch = useDispatch();
 
     const [openProduct, setOpenProduct] = useState(false);

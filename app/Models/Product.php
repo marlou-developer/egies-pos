@@ -35,10 +35,11 @@ class Product extends Model
     }
     public function stocks(): HasMany
     {
-        return $this->hasMany(Stock::class, 'product_id', 'id');
+        return $this->hasMany(Stock::class, 'product_id', 'id')->with('supplier');
     }
     public function categories(): HasOne
     {
         return $this->hasOne(Category::class, 'id', 'category_id');
     }
+
 }

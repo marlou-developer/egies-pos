@@ -11,6 +11,7 @@ class Stock extends Model
     use HasFactory;
     protected $fillable = [
         'product_id',
+        'supplier_id',
         'date',
         'delivery_id',
         'quantity',
@@ -21,5 +22,10 @@ class Stock extends Model
     public function products(): HasOne
     {
         return $this->hasOne(Product::class, 'id', 'product_id');
+    }
+    
+    public function supplier(): HasOne
+    {
+        return $this->hasOne(Supplier::class, 'id', 'supplier_id');
     }
 }

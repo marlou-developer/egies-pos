@@ -17,6 +17,7 @@ class StockController extends Controller
             'quantity' => 'nullable|integer',
             'remaining' => 'nullable|integer',
             'price' => 'nullable',
+            'supplier_id' => 'nullable',
         ]);
 
         $stocks = Stock::create($data);

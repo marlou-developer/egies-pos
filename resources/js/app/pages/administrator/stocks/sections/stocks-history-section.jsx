@@ -29,6 +29,7 @@ export default function StocksHistorySection({ data }) {
                             <thead class="bg-gray-100 text-gray-700">
                                 <tr>
                                     <th class="px-4 py-2 border-b">Delivery Receipt</th>
+                                    <th class="px-4 py-2 border-b">Supplier</th>
                                     <th class="px-4 py-2 border-b">Quantity</th>
                                     <th class="px-4 py-2 border-b">Remaining Stocks Before Delivery</th>
                                     <th class="px-4 py-2 border-b">Date</th>
@@ -42,6 +43,7 @@ export default function StocksHistorySection({ data }) {
                                         return (
                                             <tr className="hover:bg-gray-50" key={res.delivery_id}>
                                                 <td className="px-4 py-2 border-b">{res.delivery_id}</td>
+                                                <td className="px-4 py-2 border-b">{res?.supplier?.name}</td>
                                                 <td className="px-4 py-2 border-b">{res.quantity}</td>
                                                 <td className="px-4 py-2 border-b">{res.remaining}</td>
                                                 <td className="px-4 py-2 border-b">{res.date}</td>

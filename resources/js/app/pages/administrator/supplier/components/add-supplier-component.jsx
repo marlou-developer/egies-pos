@@ -63,6 +63,7 @@ export default function AddSupplierComponent({ open, setOpenSupplier }) {
             await store.dispatch(get_supplier_thunk());
             message.success("Supplier successfully saved!");
             setOpenSupplier(false);
+            dispatch(setSupplier({}));
             dispatch(setCustomer({}));
         } catch (error) {
             message.error("Failed to add Supplier. Please try again.");

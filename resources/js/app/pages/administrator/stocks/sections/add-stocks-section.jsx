@@ -7,13 +7,14 @@ import { create_stock_thunk } from "@/app/redux/stock-thunk";
 import { message } from "antd";
 import { get_product_thunk } from "@/app/redux/product-thunk";
 import { get_over_due_thunk } from "@/app/redux/cart-thunk";
+import { useSelector } from "react-redux";
 
 export default function AddStocksSection({ data }) {
     const [modalOpen, setModalOpen] = useState(false);
     const [costOption, setCostOption] = useState("same");
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({});
-
+    const { suppliers } = useSelector((store) => store.suppliers)
     const addStock = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -39,6 +40,7 @@ export default function AddStocksSection({ data }) {
         }
     };
 
+    console.log('suppliers', suppliers)
     return (
         <div>
             <button
@@ -120,6 +122,31 @@ export default function AddStocksSection({ data }) {
                                 <option value="different">
                                     Different cost price
                                 </option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <select
+                                value={form?.supplier_id}
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        supplier_id: e.target.value,
+                                    })
+                                }
+                                className="w-full rounded-md border-gray-500 text-sm h-11"
+                            >
+                                <option disabled selected>
+                                    Select Supplier
+                                </option>
+                                {
+                                    suppliers.map((res, i) => {
+                                        return <option key={i} value={res.id}>
+                                            {res.name}
+                                        </option>
+                                    })
+                                }
+
                             </select>
                         </div>
 
