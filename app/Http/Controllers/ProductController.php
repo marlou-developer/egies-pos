@@ -14,7 +14,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $query = Product::with(['categories', 'uploads', 'stocks'])
-            ->orderBy('created_at', 'asc');
+            ->orderBy('name', 'asc');
 
         if ($request->search) {
             if ($request->search === 'In Stock') {
