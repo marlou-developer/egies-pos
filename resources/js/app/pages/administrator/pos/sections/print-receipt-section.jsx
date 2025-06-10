@@ -59,7 +59,7 @@ export default function PrintReceiptSection({
     return (
         <div style={{ display: "none" }}>
             <div ref={receiptRef}>
-                <div className="flex flex-col items-center space-y-4">
+                <div className="flex flex-col items-center space-y-4 pr-5">
                     <div
                         ref={receiptRef}
                         className="w-full max-w-xs text-xs font-mono border-y border-dashed py-4"
