@@ -233,7 +233,7 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                             </select>
                                         </div>
                                     </div>
-                                    {/* <div>
+                                    <div>
                                         <Input
                                             onChange={(e) =>
                                                 setForm({
@@ -246,7 +246,7 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                             label="Quantity"
                                             type="number"
                                         />
-                                    </div> */}
+                                    </div>
 
                                     <div className="sm:col-span-12">
                                         <hr />
