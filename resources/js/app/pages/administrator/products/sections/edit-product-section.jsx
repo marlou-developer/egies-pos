@@ -406,21 +406,6 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                             inputMode="decimal"
                                         />
                                     </div>
-
-                                    <div>
-                                        <Input
-                                            onChange={(e) =>
-                                                setForm({
-                                                    ...form,
-                                                    quantity: e.target.value,
-                                                })
-                                            }
-                                            value={form?.quantity}
-                                            name="quantity"
-                                            label="Update Stock(s)"
-                                            type="text"
-                                        />
-                                    </div>
                                 </div>
                             </div>
                         </div>
