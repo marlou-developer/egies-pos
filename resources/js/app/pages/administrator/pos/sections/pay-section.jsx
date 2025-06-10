@@ -47,6 +47,7 @@ export default function PaySection({
     });
     const [productId, setProductId] = useState(null);
     const dispatch = useDispatch();
+    const [id, setId] = useState(0);
     const discounts = form?.customer?.discounts ?? [];
 
     const discountMap = discounts.reduce((acc, curr) => {
@@ -116,10 +117,10 @@ export default function PaySection({
     async function submit_payment(params) {
         try {
             setLoading(true);
-            const result = await store.dispatch(create_cart_thunk(form_data));
-            setProductId(result?.data?.cart_id ?? "");
+            const results = await store.dispatch(create_cart_thunk(form_data));
+            setProductId(results?.data?.cart_id ?? "");
             await store.dispatch(get_category_thunk());
-
+            setId(results?.data?.id);
             Swal.fire({
                 title: "Print Receipt?",
                 text: "",
@@ -212,6 +213,7 @@ export default function PaySection({
             </Button>
             {shouldPrint && (
                 <PrintReceiptSection
+                    id={id}
                     productId={productId}
                     reset1={() => dispatch(setCarts([]))}
                     reset2={() => reset_data()}

@@ -1,7 +1,9 @@
 import { peso_value } from "@/app/lib/peso";
+import moment from "moment";
 import React, { useEffect, useRef } from "react";
 
 export default function PrintReceiptSection({
+    id,
     onPrinted,
     data,
     reset1,
@@ -74,8 +76,10 @@ export default function PrintReceiptSection({
                         </div>
 
                         <div className="mt-4">
-                            <p>Receipt No: 25-0000101</p>
-                            <p>Date: 05/31/2025 6:39:34 PM</p>
+                            <p>
+                                Receipt No: {moment().format("Y")}-000010{id}
+                            </p>
+                            <p>Date: {moment().format("LLL")}</p>
                         </div>
 
                         <div className="mt-4 border-t border-dashed pt-2">

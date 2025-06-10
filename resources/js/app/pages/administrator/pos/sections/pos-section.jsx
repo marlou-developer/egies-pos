@@ -6,6 +6,7 @@ import PaySection from "./pay-section";
 import CreditPurchaseSection from "./credit-purchase-section";
 import { UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import PrintReceiptSection from "./print-receipt-section";
+import moment from "moment";
 
 export default function PosSection() {
     const { carts } = useSelector((store) => store.products);
