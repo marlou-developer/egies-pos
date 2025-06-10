@@ -10,6 +10,8 @@ import { Link, router } from "@inertiajs/react";
 import PaginationSection from "./pagination-section";
 import { setSelectAllStock, setSelectedStocks } from "@/app/redux/product-slice";
 import PrintSection from "./print-section";
+import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import { Tooltip } from "antd";
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
@@ -34,12 +36,12 @@ function classNames(...classes) {
 
 export default function StocksSection() {
 
-    const { products, selectedStocks,selectAllStock } = useSelector(
+    const { products, selectedStocks, selectAllStock } = useSelector(
         (state) => state.products
     ) || {
         products: { data: [], total: 0, last_page: 1 },
     };
-    
+
     const dispatch = useDispatch();
 
     const [openProduct, setOpenProduct] = useState(false);
@@ -229,14 +231,14 @@ export default function StocksSection() {
                                                         const updatedSelected =
                                                             isChecked
                                                                 ? [
-                                                                      ...selectedStocks,
-                                                                      product,
-                                                                  ]
+                                                                    ...selectedStocks,
+                                                                    product,
+                                                                ]
                                                                 : selectedStocks.filter(
-                                                                      (p) =>
-                                                                          p.id !==
-                                                                          product.id
-                                                                  ); // Correctly compare by object.id
+                                                                    (p) =>
+                                                                        p.id !==
+                                                                        product.id
+                                                                ); // Correctly compare by object.id
 
                                                         dispatch(
                                                             setSelectedStocks(
@@ -284,8 +286,8 @@ export default function StocksSection() {
                                                     {product.quantity == 0
                                                         ? "Out of Stock"
                                                         : product.quantity <= 10
-                                                        ? "Low Stock"
-                                                        : "In Stock"}
+                                                            ? "Low Stock"
+                                                            : "In Stock"}
                                                 </span>
                                             </td>
                                             <td
@@ -300,25 +302,25 @@ export default function StocksSection() {
                                                 <span className="inline-flex items-center font-bold px-2 py-1">
                                                     {product.stocks?.length > 0
                                                         ? new Date(
-                                                              [
-                                                                  ...product.stocks,
-                                                              ].sort(
-                                                                  (a, b) =>
-                                                                      new Date(
-                                                                          b.date
-                                                                      ) -
-                                                                      new Date(
-                                                                          a.date
-                                                                      )
-                                                              )[0].date
-                                                          ).toLocaleDateString(
-                                                              "en-US",
-                                                              {
-                                                                  year: "numeric",
-                                                                  month: "short",
-                                                                  day: "numeric",
-                                                              }
-                                                          )
+                                                            [
+                                                                ...product.stocks,
+                                                            ].sort(
+                                                                (a, b) =>
+                                                                    new Date(
+                                                                        b.date
+                                                                    ) -
+                                                                    new Date(
+                                                                        a.date
+                                                                    )
+                                                            )[0].date
+                                                        ).toLocaleDateString(
+                                                            "en-US",
+                                                            {
+                                                                year: "numeric",
+                                                                month: "short",
+                                                                day: "numeric",
+                                                            }
+                                                        )
                                                         : "No Stocks Added"}
                                                 </span>
                                             </td>
@@ -374,8 +376,13 @@ export default function StocksSection() {
                                                     <StocksHistorySection
                                                         data={product}
                                                     />
-                                                    <button onClick={()=>router.visit(`/administrator/stocks/${product.id}`)}>
-                                                        Edit
+                                                    <button className="bg-yellow-300 rounded-md p-2.5" 
+                                                    onClick={() => router.visit(`/administrator/stocks/${product.id}`)}
+                                                    // onClick={() => window.open(`/administrator/stocks/${product.id}`, '_blank')}
+                                                    >
+                                                        <Tooltip title="Edit Added Stock(s)">
+                                                            <PencilSquareIcon className="h-4" />
+                                                        </Tooltip>
                                                     </button>
                                                 </div>
                                             </td>

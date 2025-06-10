@@ -103,27 +103,6 @@ export default function AddStocksSection({ data }) {
                                 required
                             />
                         </div>
-                        <div>
-                            <select
-                                value={costOption}
-                                onChange={(e) => setCostOption(e.target.value)}
-                                className="w-full rounded-md border-gray-500 text-sm h-11"
-                            >
-                                <option disabled selected>
-                                    Pricing
-                                </option>
-                                <option value="same">
-                                    Same cost price = ₱
-                                    {parseFloat(data?.cost).toLocaleString(
-                                        "en-PH",
-                                        { minimumFractionDigits: 2 }
-                                    )}
-                                </option>
-                                <option value="different">
-                                    Different cost price
-                                </option>
-                            </select>
-                        </div>
 
                         <div>
                             <select
@@ -147,6 +126,27 @@ export default function AddStocksSection({ data }) {
                                     })
                                 }
 
+                            </select>
+                        </div>
+                        <div>
+                            <select
+                                value={costOption}
+                                onChange={(e) => setCostOption(e.target.value)}
+                                className="w-full rounded-md border-gray-500 text-sm h-11"
+                            >
+                                <option disabled selected>
+                                    Pricing
+                                </option>
+                                <option value="same">
+                                    Same cost price = ₱
+                                    {parseFloat(data?.cost).toLocaleString(
+                                        "en-PH",
+                                        { minimumFractionDigits: 2 }
+                                    )}
+                                </option>
+                                <option value="different">
+                                    Different cost price
+                                </option>
                             </select>
                         </div>
 

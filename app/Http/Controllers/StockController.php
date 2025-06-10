@@ -16,6 +16,7 @@ class StockController extends Controller
         if ($stock) {
             $stock->update([
                 'quantity' => $request->new_quantity,
+                'date' => $request->date,
             ]);
             $product = Product::where('id', $request->products['id'])->first();
             if ($product) {

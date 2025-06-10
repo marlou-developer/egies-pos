@@ -18,6 +18,7 @@ export default function EditQuantitySection({ data }) {
             setForm({
                 ...data,
                 new_quantity: data.quantity,
+                date: data.date?.split('T')[0],
             });
         }
     }, [open]);
@@ -37,13 +38,13 @@ export default function EditQuantitySection({ data }) {
             await store.dispatch(get_stock_by_products_id_thunk());
             await Swal.fire({
                 icon: "success",
-                title: "Your work has been saved",
+                title: "Added Stock(s) has been updated",
                 showConfirmButton: false,
                 timer: 1500,
             });
             setOpen(false);
             setLoading(false);
-        } catch (error) {}
+        } catch (error) { }
     }
     console.log("waaaa", data);
     return (
@@ -55,7 +56,7 @@ export default function EditQuantitySection({ data }) {
                 onClose={() => setOpen(false)}
                 title="Edit Quantity"
             >
-                <div className="flex gap-3 flex-col w-full">
+                <div className="flex gap-5 flex-col w-full">
                     <Input
                         label="Quantity"
                         name="new_quantity"
@@ -64,6 +65,18 @@ export default function EditQuantitySection({ data }) {
                             setForm({
                                 ...form,
                                 new_quantity: e.target.value,
+                            })
+                        }
+                    />
+                    <Input
+                        type="date"
+                        label="Date"
+                        name="date"
+                        value={form?.date}
+                        onChange={(e) =>
+                            setForm({
+                                ...form,
+                                date: e.target.value,
                             })
                         }
                     />
