@@ -18,10 +18,10 @@ import {
 import { FaBook } from "react-icons/fa6";
 import store from "@/app/store/store";
 import { get_over_due_thunk } from "@/app/redux/cart-thunk";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function AdminLayout({ children }) {
-    const [collapsed, setCollapsed] = useState(false);
+    const {collapsed}=useSelector((store)=>store.app)
     useEffect(() => {
         store.dispatch(get_over_due_thunk());
     }, []);
@@ -108,7 +108,6 @@ export default function AdminLayout({ children }) {
             <SidebarSection
                 navigation={navigation}
                 collapsed={collapsed}
-                setCollapsed={setCollapsed}
             />
 
             {/* Content area */}

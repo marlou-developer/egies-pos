@@ -1,7 +1,7 @@
 import { Transition } from "@headlessui/react";
 import { Cog6ToothIcon, XMarkIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import React, { useState, Fragment } from "react";
-import { setSidebarOpen } from "../redux/app-slice";
+import { setCollapsed, setSidebarOpen } from "../redux/app-slice";
 import { useDispatch, useSelector } from "react-redux";
 import DisclosureComponent from "./../_components/disclosure";
 import SidebarDesktopSection from "./sidebar-menu-desktop-section";
@@ -11,8 +11,9 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-export default function SidebarSection({ navigation, collapsed, setCollapsed }) {
+export default function SidebarSection({ navigation, collapsed }) {
     const { sidebarOpen } = useSelector((store) => store.app);
+       
     const dispatch = useDispatch();
     const [openIndex, setOpenIndex] = useState(null);
 
@@ -76,7 +77,7 @@ export default function SidebarSection({ navigation, collapsed, setCollapsed }) 
                 <div className="flex grow flex-col gap-y-5 border-r border-gray-300 bg-gradient-to-br from-pink-100 via-pink-200 to-pink-200 px-1.5 pb-4 shadow-md relative">
                     {/* Collapse toggle button */}
                     <button
-                        onClick={() => setCollapsed(!collapsed)}
+                        onClick={() => dispatch(setCollapsed(!collapsed))}
                         className="absolute -right-3 top-4 z-10 bg-white border border-gray-300 rounded-full p-1 shadow"
                     >
                         {collapsed ? (
