@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     },
     totalSection: {
         marginTop: 10,
-        width: "28%",
+        width: "32%",
         alignSelf: "flex-end",
     },
 
