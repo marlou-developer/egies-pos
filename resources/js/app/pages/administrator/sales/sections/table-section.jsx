@@ -138,7 +138,7 @@ export default function TableSection() {
                                             </td>
                                             <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
                                                 {peso_value(
-                                                    res?.cart_items?.reduce((acc, item) => acc + Number(item.profit || 0) - Number(item.discount || 0), 0)
+                                                    res?.cart_items?.reduce((acc, item) => acc + Number(item.profit || 0), 0)
                                                 )}
                                             </td>
                                             <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
