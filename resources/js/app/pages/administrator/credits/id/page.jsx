@@ -85,12 +85,14 @@ const styles = StyleSheet.create({
     },
     totalSection: {
         marginTop: 10,
-        alignItems: "flex-end",
+        width: "28%",
+        alignSelf: "flex-end",
     },
+
     totalRow: {
         marginTop: 5,
         flexDirection: "row",
-        justifyContent: "flex-end",
+        justifyContent: "space-between",
     },
     bold: {
         fontWeight: "bold",
@@ -195,28 +197,35 @@ const InvoicePDF = () => {
                     <View style={styles.totalSection}>
                         <View style={styles.totalRow}>
                             <Text>
-                                Payment Status: &nbsp;{cart.data?.status}
+                                Payment Status:
+                            </Text>
+                            <Text>
+                                &nbsp;{cart.data?.status}
                             </Text>
                         </View>
                         <View style={styles.totalRow}>
                             <Text>
                                 Subtotal Price:{" "}
+                            </Text>
+                            <Text>
                                 {peso_value(Number(cart.data?.sub_total))}
                             </Text>
                         </View>
                         <View style={styles.totalRow}>
                             <Text>
                                 Discount Price:{" "}
+                            </Text>
+                            <Text>
                                 {peso_value(
                                     Number(
                                         cart.data?.customer_total_discount ?? 0
                                     ) +
-                                        Number(
-                                            cart?.data?.discount_per_item ?? 0
-                                        ) +
-                                        Number(
-                                            cart?.data?.discount_per_order ?? 0
-                                        )
+                                    Number(
+                                        cart?.data?.discount_per_item ?? 0
+                                    ) +
+                                    Number(
+                                        cart?.data?.discount_per_order ?? 0
+                                    )
                                 )}
                             </Text>
                         </View>
@@ -228,7 +237,7 @@ const InvoicePDF = () => {
                             style={{
                                 height: 1,
                                 backgroundColor: "#000",
-                                width: "27%",
+                                width: "100%",
                                 marginTop: 5,
                                 marginBottom: 5,
                             }}
@@ -237,6 +246,8 @@ const InvoicePDF = () => {
                         <View style={styles.totalRow}>
                             <Text style={styles.bold}>
                                 Total:{" "}
+                            </Text>
+                            <Text style={styles.bold}>
                                 {peso_value(Number(cart.data?.total_price))}
                             </Text>
                         </View>
