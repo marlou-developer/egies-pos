@@ -59,6 +59,7 @@ class CartController extends Controller
     public function index(Request $request)
     {
         $query = Cart::where('status', 'Paid')
+            ->orderBy('id', 'desc')
             ->with(['customer', 'cart_items']);
 
         // Optional search filter by cart ID

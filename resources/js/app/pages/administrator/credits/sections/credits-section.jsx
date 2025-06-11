@@ -14,6 +14,7 @@ import AddPaymentSection from "./add-payment-section";
 import HistorySection from "./history-section";
 import SearchSection from "./search-section";
 import { peso_value } from "@/app/lib/peso";
+import PaginationSection from "./pagination-section";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -139,6 +140,7 @@ export default function CreditsSection() {
                                     ))}
                             </tbody>
                         </table>
+                        <PaginationSection />
                     </div>
                 </div>
             </div>

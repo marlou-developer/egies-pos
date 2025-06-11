@@ -7,6 +7,7 @@ import moment from "moment";
 import { peso_value } from "@/app/lib/peso";
 import { setSelectedProducts } from "@/app/redux/cart-slice";
 import MultiUpdateSection from "./multi-update-section";
+import PaginationSection from "./pagination-section";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -160,6 +161,7 @@ export default function ShopeeSection() {
                                 })}
                             </tbody>
                         </table>
+                        <PaginationSection />
                     </div>
                 </div>
             </div>
