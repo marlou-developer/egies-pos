@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
+    public function get_report(Request $request){
+  return response()->json('success', 200);
+    }
     public function update_all_status(Request $request)
     {
         foreach ($request->data as $key => $data_value) {

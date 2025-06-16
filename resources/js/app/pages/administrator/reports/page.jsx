@@ -22,13 +22,16 @@ import SalesByCustomerReportSection from "./sections/sales-by-customer-report-se
 import DailySalesReportSection from "./sections/daily-sales-report-section";
 import SalesByProductReportSection from "./sections/sales-by-product-report-section";
 import StockMovementReportSection from "./sections/stock-movement-report-section";
+import { get_report_thunk } from "@/app/redux/cart-thunk";
 
 export default function ReportsPage() {
     const params = new URLSearchParams(window.location.search);
     const type = params.get("type");
     useEffect(() => {
-        store.dispatch(get_dashboard_thunk("Daily"));
-        store.dispatch(get_product_thunk());
+        // store.dispatch(get_dashboard_thunk("Daily"));
+        // store.dispatch(get_product_thunk());
+
+        store.dispatch(get_report_thunk())
     }, []);
     return (
         <AdminLayout>

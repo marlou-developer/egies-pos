@@ -9,6 +9,7 @@ export const cartSlice = createSlice({
         sales: [],
         shopees: [],
         selectedProducts: [],
+        reports:[]
     },
     reducers: {
         setCarts: (state, action) => {
@@ -28,6 +29,9 @@ export const cartSlice = createSlice({
         },
         setSelectedProducts: (state, action) => {
             state.selectedProducts = action.payload;
+        },
+        setReports: (state, action) => {
+            state.reports = action.payload;
         },
     },
 });

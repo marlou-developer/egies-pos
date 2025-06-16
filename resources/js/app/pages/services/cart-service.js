@@ -7,6 +7,14 @@ export function create_cart_service(data) {
     } catch (error) {}
 }
 
+
+export function get_report_service() {
+    try {
+        const result = axios.get("/api/get_report");
+        return result;
+    } catch (error) {}
+}
+
 export function get_over_due_service() {
     try {
         const result = axios.get("/api/get_over_due");
