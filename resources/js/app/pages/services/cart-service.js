@@ -10,7 +10,7 @@ export function create_cart_service(data) {
 
 export function get_report_service() {
     try {
-        const result = axios.get("/api/get_report");
+        const result = axios.get("/api/get_report"+window.location.search);
         return result;
     } catch (error) {}
 }

@@ -10,6 +10,9 @@ import {
   PDFViewer,
   Font,
 } from "@react-pdf/renderer";
+import { useSelector } from "react-redux";
+import moment from "moment";
+import { peso_value } from "@/app/lib/peso";
 
 // Register font (if needed)
 Font.register({
@@ -89,6 +92,17 @@ const data = [
 ];
 
 const SalesByPaymentTypeReportSection = () => {
+
+    const { reports } = useSelector((store) => store.carts);
+    const params = new URLSearchParams(window.location.search);
+    const initialStart = params.get("start");
+    const initialEnd = params.get("end");
+
+    const total_sales = reports.reduce(
+        (sum, item) => sum + Number(item.total_sales),
+        0
+    );
+  
   return (
     <PDFViewer style={{ width: "100%", height: "100vh" }}>
       <Document>
@@ -135,24 +149,24 @@ const SalesByPaymentTypeReportSection = () => {
           {/* Table Header */}
           <View style={styles.tableHeader}>
             <Text style={styles.colSmall}>Date</Text>
-            <Text style={styles.col}>Cash</Text>
+            <Text style={styles.col}>Type</Text>
             <Text style={styles.colSmall}>Total</Text>
           </View>
 
           {/* Table Rows */}
-          {data.map((item, idx) => (
+          {reports.map((item, idx) => (
             <View style={styles.tableRow} key={idx}>
-              <Text style={styles.colSmall}>{item.code}</Text>
-              <Text style={styles.col}>{item.product}</Text>
-              <Text style={styles.colSmall}>{item.qty}</Text>
+              <Text style={styles.colSmall}>{moment(item.date).format('LL')}</Text>
+              <Text style={styles.col}>{item.payment_type??'Undefined'}</Text>
+              <Text style={styles.colSmall}>{peso_value(item.total_sales)}</Text>
             </View>
           ))}
 
           {/* Summary */}
           <View style={styles.summary}>
-            <Text>Total Cost: 42,048.60</Text>
-            <Text>Total Sales: 52,879.00</Text>
-            <Text>Total Profit: 10,830.40</Text>
+            {/* <Text>Total Cost: 42,048.60</Text> */}
+            <Text>Total Sales: {peso_value(total_sales)}</Text>
+            {/* <Text>Total Profit: 10,830.40</Text> */}
           </View>
         </Page>
       </Document>

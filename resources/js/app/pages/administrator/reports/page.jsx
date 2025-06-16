@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AdminLayout from "../layout";
 import LineGraphSection from "./sections/line-graph-section";
 import BarGraphSection from "./sections/bar-graph-section";
@@ -21,17 +21,22 @@ import SalesByPaymentTypeReportSection from "./sections/sales-by-payment-type-re
 import SalesByCustomerReportSection from "./sections/sales-by-customer-report-section";
 import DailySalesReportSection from "./sections/daily-sales-report-section";
 import SalesByProductReportSection from "./sections/sales-by-product-report-section";
-import StockMovementReportSection from "./sections/stock-movement-report-section";
 import { get_report_thunk } from "@/app/redux/cart-thunk";
+import FastStockMovementReportSection from "./sections/fast-stock-movement-report-section";
+import SlowStockMovementReportSection from "./sections/slow-stock-movement-report-section";
 
 export default function ReportsPage() {
     const params = new URLSearchParams(window.location.search);
     const type = params.get("type");
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
         // store.dispatch(get_dashboard_thunk("Daily"));
         // store.dispatch(get_product_thunk());
-
-        store.dispatch(get_report_thunk())
+        async function get_data(params) {
+            await store.dispatch(get_report_thunk());
+            setLoading(false);
+        }
+        get_data();
     }, []);
     return (
         <AdminLayout>
@@ -47,55 +52,51 @@ export default function ReportsPage() {
                         <LineGraphSection />
                     </div>
                 </div> */}
-                {
-                    type == 'Profit' && <ProfitReportSection />
-                }
-                {
-                    type == 'Invoices' && <InvoiceReportSection />
-                }
-                {
-                    type == 'Refunds' && <RefundsReportSection />
-                }
-                {
-                    type == 'Purchase Invoice' && <PurchaseInvoiceReportSection />
-                }
-                {
-                    type == 'Payment Types by Customer' && <PaymentTypesByCustomerReportSection />
-                }
-                {
-                    type == 'Payment Types by User' && <PaymentTypesByUserReportSection />
-                }
-                {
-                    type == 'Purchase by Supplier' && <PurchaseBySupplierReportSection />
-                }
+                {!loading && (
+                    <div>
+                        {type == "Profit" && <ProfitReportSection />}
+                        {type == "Invoices" && <InvoiceReportSection />}
+                        {type == "Refunds" && <RefundsReportSection />}
+                        {type == "Purchase Invoice" && (
+                            <PurchaseInvoiceReportSection />
+                        )}
+                        {type == "Payment Types by Customer" && (
+                            <PaymentTypesByCustomerReportSection />
+                        )}
+                        {type == "Payment Types by User" && (
+                            <PaymentTypesByUserReportSection />
+                        )}
+                        {type == "Purchase by Supplier" && (
+                            <PurchaseBySupplierReportSection />
+                        )}
 
-                {/* {
+                        {/* {
                     type == 'Payment Types by User' && <PaymentTypesByUserReportSection />
                 } */}
-                {
-                    type == 'Purchase by Product' && <PurchaseByProductReportSection />
-                }
+                        {type == "Purchase by Product" && (
+                            <PurchaseByProductReportSection />
+                        )}
 
-                {
-                    type == 'Unpaid Sales' && <UnpaidSalesReportSection />
-                }
-                {
-                    type == 'Sales By Payment Types' && <SalesByPaymentTypeReportSection />
-                }
-                
-                {
-                    type == 'Sales By Product' && <SalesByProductReportSection />
-                }
-                {
-                    type == 'Sales By Customer' && <SalesByCustomerReportSection />
-                }
-                {
-                    type == 'Daily Sales' && <DailySalesReportSection />
-                }
-                {
-                    type == 'Stock Movement' && <StockMovementReportSection />
-                }
-                
+                        {type == "Unpaid Sales" && <UnpaidSalesReportSection />}
+                        {type == "Sales By Payment Types" && (
+                            <SalesByPaymentTypeReportSection />
+                        )}
+
+                        {type == "Sales By Product" && (
+                            <SalesByProductReportSection />
+                        )}
+                        {type == "Sales By Customer" && (
+                            <SalesByCustomerReportSection />
+                        )}
+                        {type == "Daily Sales" && <DailySalesReportSection />}
+                        {type == "Fast Stock Movement" && (
+                            <FastStockMovementReportSection />
+                        )}
+                        {type == "Slow Stock Movement" && (
+                            <SlowStockMovementReportSection />
+                        )}
+                    </div>
+                )}
             </div>
         </AdminLayout>
     );

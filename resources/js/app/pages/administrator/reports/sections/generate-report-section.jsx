@@ -14,25 +14,10 @@ export default function GenerateReportSection() {
     const dateFormat = "YYYY-MM-DD";
     const [form, setForm] = useState({
         type: initialType,
-        dateRange: [initialStart, initialEnd],
+        dateRange: [initialStart??moment().format("YYYY-MM-DD"), initialEnd??moment().add(1, "days").format("YYYY-MM-DD")],
     });
 
-    useEffect(() => {
-        setForm({
-            type: initialType,
-            dateRange: [
-                dayjs(
-                    initialStart ?? moment().format("YYYY-MM-DD"),
-                    dateFormat
-                ),
-                dayjs(
-                    initialEnd ??
-                        moment().add(1, "days").format("YYYY-MM-DD"),
-                    dateFormat
-                ),
-            ],
-        });
-    }, []);
+  
     
     const handleGenerate = () => {
         router.visit(
@@ -85,7 +70,8 @@ export default function GenerateReportSection() {
                         <option value="" disabled>
                             Select Report to Generate
                         </option>
-                        <option value="Stock Movement">Stock Movement</option>
+                        <option value="Fast Stock Movement">Fast Stock Movement</option>
+                        <option value="Slow Stock Movement">Slow Stock Movement</option>
                         <option value="Sales By Customer">
                             Sales By Customer
                         </option>

@@ -31,4 +31,8 @@ class Customer extends Model
     {
         return $this->hasMany(ProductDiscount::class, 'customer_id', 'id')->with(['product']);
     }
+    public function carts(): HasMany
+    {
+        return $this->hasMany(Cart::class, 'customer_id', 'id');
+    }
 }

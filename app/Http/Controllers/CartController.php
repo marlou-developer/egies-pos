@@ -4,17 +4,137 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\CartItem;
+use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Stock;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Collection;
 
 class CartController extends Controller
 {
-    public function get_report(Request $request){
-  return response()->json('success', 200);
+
+    public function get_report(Request $request)
+    {
+
+        $start = Carbon::parse($request->start)->startOfDay();
+        $end = Carbon::parse($request->end)->endOfDay();
+        if ($request->type == "Daily Sales") {
+
+            // Fetch sales grouped by date
+            $sales = DB::table('carts')
+                ->select(DB::raw("DATE(created_at) as date"), DB::raw("SUM(total_price) as total_sales"))
+                ->whereBetween('created_at', [$start, $end])
+                ->groupBy(DB::raw("DATE(created_at)"))
+                ->orderBy('date', 'ASC')
+                ->pluck('total_sales', 'date'); // result: ['2025-06-13' => 2000, ...]
+
+            // Generate full date range
+            $dateRange = new Collection();
+            for ($date = $start->copy(); $date <= $end; $date->addDay()) {
+                $dateStr = $date->toDateString();
+                $dateRange->push([
+                    'date' => $dateStr,
+                    'total_sales' => $sales[$dateStr] ?? 0
+                ]);
+            }
+
+            return response()->json($dateRange, 200);
+        } else if ($request->type == 'Sales By Customer') {
+            $salesByCustomer = DB::table('carts')
+                ->join('customers', 'carts.customer_id', '=', 'customers.id')
+                ->select(
+                    'customers.id as customer_id',
+                    'customers.name as customer_name',
+                    DB::raw('SUM(carts.total_price) as total_sales'),
+                    DB::raw('COUNT(carts.id) as total_transactions')
+                )
+                ->whereBetween('carts.created_at', [$start, $end])
+                ->groupBy('customers.id', 'customers.name')
+                ->orderByDesc('total_sales')
+                ->get();
+
+            return response()->json($salesByCustomer, 200);
+        } else if ($request->type == "Fast Stock Movement") {
+            $fastMoving = DB::table('cart_items')
+                ->join('products', 'cart_items.product_id', '=', 'products.id')
+                ->select(
+                    'products.id as product_id',
+                    'products.name as product_name',
+                    DB::raw('SUM(cart_items.quantity) as total_sold'),
+                    DB::raw('SUM(cart_items.total) as total_sales')
+                )
+                ->whereBetween('cart_items.created_at', [$start, $end])
+                ->groupBy('products.id', 'products.name')
+                ->havingRaw('SUM(cart_items.quantity) >= 10')
+                ->orderByDesc('total_sold')
+                ->get();
+
+            return response()->json($fastMoving, 200);
+        } else if ($request->type == "Slow Stock Movement") {
+            $slowMoving = DB::table('products')
+                ->leftJoin('cart_items', function ($join) use ($start, $end) {
+                    $join->on('products.id', '=', 'cart_items.product_id')
+                        ->whereBetween('cart_items.created_at', [$start, $end]);
+                })
+                ->select(
+                    'products.id as product_id',
+                    'products.name as product_name',
+                    DB::raw('COALESCE(SUM(cart_items.quantity), 0) as total_sold'),
+                    DB::raw('COALESCE(SUM(cart_items.total), 0) as total_sales')
+                )
+                ->groupBy('products.id', 'products.name')
+                ->havingRaw('COALESCE(SUM(cart_items.quantity), 0) < 10')
+                ->orderBy('total_sold', 'desc')
+                ->get();
+            return response()->json($slowMoving, 200);
+        } else if ($request->type == "Sales By Product") {
+            $sales_by_product = DB::table('cart_items')
+                ->join('products', 'cart_items.product_id', '=', 'products.id')
+                ->select(
+                    'products.id as product_id',
+                    'products.name as product_name',
+                    DB::raw('SUM(cart_items.quantity) as total_sold'),
+                    DB::raw('SUM(cart_items.total) as total_sales')
+                )
+                ->whereBetween('cart_items.created_at', [$start, $end])
+                ->groupBy('products.id', 'products.name')
+                ->orderByDesc('total_sold')
+                ->get();
+
+            return response()->json($sales_by_product, 200);
+        } else if ($request->type == "Sales By Payment Types") {
+            $carts = DB::table('carts')
+                ->select(
+                    DB::raw('DATE(created_at) as date'),
+                    'payment_type',
+                    DB::raw('SUM(total_price) as total_sales'),
+                    DB::raw('COUNT(*) as total_transactions')
+                )
+                ->whereBetween('created_at', [$start, $end])
+                // ->whereNotNull('payment_type')
+                ->groupBy(DB::raw('DATE(created_at)'), 'payment_type')
+                ->orderBy('date', 'asc')
+                ->orderByDesc('total_sales')
+                ->get();
+
+            return response()->json($carts, 200);
+        } else if ($request->type == "Unpaid Sales") {
+            $unpaidCarts = Customer::with(['carts' => function ($query) use ($start, $end) {
+                $query->whereBetween('created_at', [$start, $end])
+                    ->where('is_credit', 'true')
+                    ->whereIn('status', ['Partial', 'Pending']);
+            }])->get()
+                ->filter(function ($customer) {
+                    return $customer->carts->isNotEmpty();
+                })
+                ->values();
+            return response()->json($unpaidCarts, 200);
+        }else if($request->type == "Purchase by Product"){
+            return response()->json([], 200);  
+        }
     }
     public function update_all_status(Request $request)
     {
