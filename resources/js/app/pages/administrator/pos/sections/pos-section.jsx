@@ -36,10 +36,10 @@ export default function PosSection() {
         const updated = carts.map((item) =>
             item.id === result.id
                 ? {
-                    ...item,
-                    sub_price: result[value],
-                    type_item_discount: value,
-                }
+                      ...item,
+                      sub_price: result[value],
+                      type_item_discount: value,
+                  }
                 : item
         );
         dispatch(setCarts(updated));
@@ -49,9 +49,9 @@ export default function PosSection() {
         const updated = carts.map((item) =>
             item.id === result.id
                 ? {
-                    ...item,
-                    pcs: valueKey,
-                }
+                      ...item,
+                      pcs: valueKey,
+                  }
                 : item
         );
 
@@ -129,12 +129,18 @@ export default function PosSection() {
                                 <div class="font-bold text-xl">
                                     Current Order
                                 </div>
-                                <button
-                                    onClick={() => dispatch(setCarts([]))}
-                                    className="bg-red-500 hover:bg-red-600 p-1.5 rounded-md text-white"
-                                >
-                                    Clear All
-                                </button>
+                                <div className="flex gap-3 ">
+                                    <div class="font-bold text-3xl text-red-500">
+                                       ({carts.length}) 
+                                    </div>
+
+                                    <button
+                                        onClick={() => dispatch(setCarts([]))}
+                                        className="bg-red-500 hover:bg-red-600 p-1.5 rounded-md text-white"
+                                    >
+                                        Clear All
+                                    </button>
+                                </div>
                             </div>
                             <div class="px-5 py-4 overflow-y-auto h-64">
                                 {carts.map((res) => {
@@ -221,53 +227,53 @@ export default function PosSection() {
                                                         >
                                                             {store !=
                                                                 "Store" && (
-                                                                    <option
-                                                                        value="shopee"
-                                                                        selected
-                                                                    >
-                                                                        Shopee Price
-                                                                    </option>
-                                                                )}
+                                                                <option
+                                                                    value="shopee"
+                                                                    selected
+                                                                >
+                                                                    Shopee Price
+                                                                </option>
+                                                            )}
                                                             {store ==
                                                                 "Store" && (
-                                                                    <>
-                                                                        <option
-                                                                            value="srp"
-                                                                            selected
-                                                                        >
-                                                                            SRP
+                                                                <>
+                                                                    <option
+                                                                        value="srp"
+                                                                        selected
+                                                                    >
+                                                                        SRP
+                                                                        Price
+                                                                    </option>
+
+                                                                    {res.reseller && (
+                                                                        <option value="reseller">
+                                                                            Reseller
                                                                             Price
                                                                         </option>
-
-                                                                        {res.reseller && (
-                                                                            <option value="reseller">
-                                                                                Reseller
-                                                                                Price
-                                                                            </option>
-                                                                        )}
-                                                                        {res.city_distributor && (
-                                                                            <option value="city_distributor">
-                                                                                City
-                                                                                Distributor
-                                                                                Price
-                                                                            </option>
-                                                                        )}
-                                                                        {res.district_distributor && (
-                                                                            <option value="district_distributor">
-                                                                                District
-                                                                                Distributor
-                                                                                Price
-                                                                            </option>
-                                                                        )}
-                                                                        {res.district_distributor && (
-                                                                            <option value="district_distributor">
-                                                                                Provincial
-                                                                                Distributor
-                                                                                Price
-                                                                            </option>
-                                                                        )}
-                                                                    </>
-                                                                )}
+                                                                    )}
+                                                                    {res.city_distributor && (
+                                                                        <option value="city_distributor">
+                                                                            City
+                                                                            Distributor
+                                                                            Price
+                                                                        </option>
+                                                                    )}
+                                                                    {res.district_distributor && (
+                                                                        <option value="district_distributor">
+                                                                            District
+                                                                            Distributor
+                                                                            Price
+                                                                        </option>
+                                                                    )}
+                                                                    {res.district_distributor && (
+                                                                        <option value="district_distributor">
+                                                                            Provincial
+                                                                            Distributor
+                                                                            Price
+                                                                        </option>
+                                                                    )}
+                                                                </>
+                                                            )}
                                                         </select>
                                                     </span>
                                                 </div>
@@ -279,14 +285,14 @@ export default function PosSection() {
                                                                 Number(
                                                                     res.sub_price
                                                                 ) *
-                                                                Number(
-                                                                    res.pcs ??
-                                                                    "1"
-                                                                ) -
-                                                                Number(
-                                                                    res.discount ??
-                                                                    "0"
-                                                                )
+                                                                    Number(
+                                                                        res.pcs ??
+                                                                            "1"
+                                                                    ) -
+                                                                    Number(
+                                                                        res.discount ??
+                                                                            "0"
+                                                                    )
                                                             ).toFixed(2)}
                                                         </div>
                                                         <div className="">
@@ -294,12 +300,16 @@ export default function PosSection() {
                                                                 onClick={() => {
                                                                     const updated =
                                                                         carts.filter(
-                                                                            (item) =>
+                                                                            (
+                                                                                item
+                                                                            ) =>
                                                                                 item.id !==
                                                                                 res.id
                                                                         ); // Fix: use res.id
                                                                     dispatch(
-                                                                        setCarts(updated)
+                                                                        setCarts(
+                                                                            updated
+                                                                        )
                                                                     );
                                                                 }}
                                                                 className=" p-1 rounded-md hover:text-gray-700"
@@ -377,8 +387,8 @@ export default function PosSection() {
                                             {isNaN(parseFloat(overallDiscount))
                                                 ? "0.00"
                                                 : parseFloat(
-                                                    overallDiscount
-                                                ).toFixed(2)}
+                                                      overallDiscount
+                                                  ).toFixed(2)}
                                         </span>
                                     </div>
 

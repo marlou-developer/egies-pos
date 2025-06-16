@@ -70,15 +70,21 @@ export default function ProductsSection({ storeName }) {
             <div className="px-5 mt-4 h-[62vh] overflow-y-auto">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
                     {searchTerm &&
-                        filteredProducts.map((product, index) => {
-                            return (
-                                <ProductComponent
-                                    storeName={storeName}
-                                    key={index}
-                                    product={product}
-                                />
-                            );
-                        })}
+                        filteredProducts
+                            .sort(
+                                (a, b) =>
+                                    new Date(a.created_at) -
+                                    new Date(b.created_at)
+                            ) // Sort by created_at ASC
+                            .map((product, index) => {
+                                return (
+                                    <ProductComponent
+                                        storeName={storeName}
+                                        key={index}
+                                        product={product}
+                                    />
+                                );
+                            })}
                     {!searchTerm &&
                     activeProducts &&
                     activeProducts.length > 0 ? (
