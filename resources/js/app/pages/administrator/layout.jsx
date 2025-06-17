@@ -3,9 +3,9 @@ import SidebarSection from "@/app/_sections/sidebar-section";
 import TopbarSection from "@/app/_sections/topbar-section";
 import {
     BanknotesIcon,
-    BookOpenIcon,
     CalculatorIcon,
     ChartPieIcon,
+    CurrencyDollarIcon,
     HomeIcon,
     InboxStackIcon,
     PresentationChartBarIcon,
@@ -21,7 +21,7 @@ import { get_over_due_thunk } from "@/app/redux/cart-thunk";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function AdminLayout({ children }) {
-    const {collapsed}=useSelector((store)=>store.app)
+    const { collapsed } = useSelector((store) => store.app)
     useEffect(() => {
         store.dispatch(get_over_due_thunk());
     }, []);
@@ -64,7 +64,12 @@ export default function AdminLayout({ children }) {
             icon: BanknotesIcon,
             current: path == "credits",
         },
-
+        {
+            name: "Expenses",
+            href: "/administrator/expenses",
+            icon: CurrencyDollarIcon,
+            current: path == "expenses",
+        },
         {
             name: "Sales",
             href: "/administrator/sales",

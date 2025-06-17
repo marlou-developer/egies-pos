@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CreditPaymentController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductDiscountController;
 use App\Http\Controllers\StockController;
@@ -36,10 +37,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('credit_payment', CreditPaymentController::class);
     Route::resource('dashboard', DashboardController::class);
     Route::resource('supplier', SupplierController::class);
+    Route::resource('expense', ExpenseController::class);
 
     Route::resource('product_discount', ProductDiscountController::class);
     Route::post('update_product', [ProductController::class, 'update_product']);
-    
+
     Route::get('search_customer', [CustomerController::class, 'search_customer']);
     Route::get('/get_discounted_products_by_id/{customer_id}', [ProductDiscountController::class, 'get_discounted_products_by_id']);
 });

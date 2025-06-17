@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react'
 import { FaPen, FaPenClip, FaSquarePen, FaTruck, FaTruckDroplet, FaUser, FaUserPen, FaUserPlus } from 'react-icons/fa6'
 import { useSelector } from 'react-redux'
 
-export default function EditSupplierSection({ data }) {
+export default function EditExpenseSection({ data }) {
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({});
     const [open, setOpen] = useState(false);
@@ -40,10 +40,10 @@ export default function EditSupplierSection({ data }) {
 
     return (
         <>
-            <Tooltip title="Edit Supplier">
+            <Tooltip title="Edit Expense">
                 <button type='button' onClick={() => setOpen(true)} className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-blue-100 hover:bg-blue-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset">
                     <FaPen className="size-3 text-blue-500" />
-                    Edit Supplier
+                    Edit Expense
                 </button>
             </Tooltip>
             <DrawerSection

@@ -45,7 +45,7 @@ Route::middleware('auth:sanctum')->prefix('administrator')->group(function () {
     Route::get('stocks', function () {
         return Inertia::render('administrator/stocks/page');
     });
-     Route::get('stocks/{id}', function () {
+    Route::get('stocks/{id}', function () {
         return Inertia::render('administrator/stocks/id/page');
     });
     Route::get('shopee', function () {
@@ -60,13 +60,16 @@ Route::middleware('auth:sanctum')->prefix('administrator')->group(function () {
     Route::get('credits/{id}', function () {
         return Inertia::render('administrator/credits/id/page');
     });
+    Route::get('expenses', function () {
+        return Inertia::render('administrator/expenses/page');
+    });
     Route::get('reports', function () {
         return Inertia::render('administrator/reports/page');
     });
     Route::get('users', function () {
         return Inertia::render('administrator/users/page');
     });
-       Route::get('settings', function () {
+    Route::get('settings', function () {
         return Inertia::render('administrator/settings/page');
     });
 });
