@@ -33,6 +33,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('get_over_due', [CartController::class, 'get_over_due']);
     Route::post('update_status', [CartController::class, 'update_status']);
     Route::post('update_all_status', [CartController::class, 'update_all_status']);
+    Route::post('edit_payment', [CartController::class, 'edit_payment']);
+    
     Route::get('get_report', [CartController::class, 'get_report']);
     Route::resource('credit_payment', CreditPaymentController::class);
     Route::resource('dashboard', DashboardController::class);

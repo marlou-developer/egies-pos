@@ -15,6 +15,7 @@ import HistorySection from "./history-section";
 import SearchSection from "./search-section";
 import { peso_value } from "@/app/lib/peso";
 import PaginationSection from "./pagination-section";
+import EditPaymentSection from "./edit-payment-section";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -134,6 +135,7 @@ export default function CreditsSection() {
                                                             data={res}
                                                         />
                                                     )}
+                                                    <EditPaymentSection data={res}/>
                                                 </div>
                                             </td>
                                         </tr>

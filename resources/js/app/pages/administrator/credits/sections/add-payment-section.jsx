@@ -8,6 +8,7 @@ import store from "@/app/store/store";
 import moment from "moment";
 import React, { useState } from "react";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
+import Swal from "sweetalert2";
 
 export default function AddPaymentSection({ data }) {
     const [open, setOpen] = useState(false);
@@ -25,6 +26,12 @@ export default function AddPaymentSection({ data }) {
                 })
             );
             await store.dispatch(get_cart_credit_thunk());
+            await Swal.fire({
+                icon: "success",
+                title: "Your work has been saved",
+                showConfirmButton: false,
+                timer: 1500,
+            });
             setOpen(false);
             setLoading(false);
         } catch (error) {
@@ -88,7 +95,9 @@ export default function AddPaymentSection({ data }) {
                         </div>
                         <div className="font-xl font-bold">
                             Current Balance:{" "}
-                            {peso_value(Number(data.balance) - Number(form.amount ?? 0))}
+                            {peso_value(
+                                Number(data.balance) - Number(form.amount ?? 0)
+                            )}
                         </div>
                     </div>
                     <div className="flex gap-3">

@@ -8,7 +8,7 @@ export default function ProductComponent({ product, storeName }) {
 
     function add_to_cart(value) {
         const result = carts.find((res) => res.id == value.id);
-        console.log('result', value)
+        console.log("result", value);
         if (!result) {
             dispatch(
                 setCarts([
@@ -20,6 +20,19 @@ export default function ProductComponent({ product, storeName }) {
                     },
                 ])
             );
+        } else {
+            dispatch(
+                setCarts(
+                    carts.map((item) =>
+                        item.id === value.id
+                            ? {
+                                  ...item,
+                                  pcs: item.pcs + 1,
+                              }
+                            : item
+                    )
+                )
+            );
         }
     }
 
@@ -29,7 +42,7 @@ export default function ProductComponent({ product, storeName }) {
                 setCarts(
                     carts.map((res) => ({
                         ...res,
-                        sub_price: storeName == 'Store' ? res.srp : res.shopee,
+                        sub_price: storeName == "Store" ? res.srp : res.shopee,
                     }))
                 )
             );
@@ -40,23 +53,27 @@ export default function ProductComponent({ product, storeName }) {
             <button
                 onClick={() => add_to_cart(product)}
                 className={`relative px-3 py-3 flex flex-col border rounded-md h-32 justify-between shadow-lg transition
-                    ${product.quantity == 0
-                        ? 'border-gray-300 cursor-not-allowed' // removed bg-gray and opacity
-                        : 'border-gray-200'
+                    ${
+                        product.quantity == 0
+                            ? "border-gray-300 cursor-not-allowed" // removed bg-gray and opacity
+                            : "border-gray-200"
                     }`}
                 disabled={product.quantity == 0}
             >
                 {product.quantity == 0 && (
                     <div
                         className="absolute inset-0 z-10 flex items-center justify-center rounded-md"
-                        style={{ backgroundColor: 'rgba(204,204,204,0.6)' }}
+                        style={{ backgroundColor: "rgba(204,204,204,0.6)" }}
                     >
-                        <h1 className="text-red-600 font-bold text-xl">Out of Stock</h1>
+                        <h1 className="text-red-600 font-bold text-xl">
+                            Out of Stock
+                        </h1>
                     </div>
-
                 )}
                 <div>
-                    <div className="font-bold flex text-gray-800">{product.name}</div>
+                    <div className="font-bold flex text-gray-800">
+                        {product.name}
+                    </div>
                     <span className="font-light text-sm text-gray-400">
                         {product.description}
                     </span>
@@ -68,9 +85,12 @@ export default function ProductComponent({ product, storeName }) {
                                 SRP:&nbsp;
                                 <span className="text-pink-500">
                                     ₱
-                                    {parseFloat(product.srp).toLocaleString("en-PH", {
-                                        minimumFractionDigits: 2,
-                                    })}
+                                    {parseFloat(product.srp).toLocaleString(
+                                        "en-PH",
+                                        {
+                                            minimumFractionDigits: 2,
+                                        }
+                                    )}
                                 </span>
                             </span>
                             <div className="text-gray-800 text-sm flex items-start">
@@ -85,10 +105,6 @@ export default function ProductComponent({ product, storeName }) {
                     />
                 </div>
             </button>
-
-
         </>
-
-
     );
 }

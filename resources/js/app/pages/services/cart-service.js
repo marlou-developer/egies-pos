@@ -1,5 +1,13 @@
 import axios from "axios";
 
+
+export function edit_payment_service(data) {
+    try {
+        const result = axios.post("/api/edit_payment", data);
+        return result;
+    } catch (error) {}
+}
+
 export function create_cart_service(data) {
     try {
         const result = axios.post("/api/cart", data);

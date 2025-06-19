@@ -16,6 +16,15 @@ use Illuminate\Support\Collection;
 class CartController extends Controller
 {
 
+    public function edit_payment(Request $request)
+    {
+        $cart = Cart::where('cart_id', $request->cart_id)->first();
+        if ($cart) {
+            $cart->update([
+                'due_date' => $request->due_date
+            ]);
+        }
+    }
     public function get_report(Request $request)
     {
 
@@ -132,8 +141,8 @@ class CartController extends Controller
                 })
                 ->values();
             return response()->json($unpaidCarts, 200);
-        }else if($request->type == "Purchase by Product"){
-            return response()->json([], 200);  
+        } else if ($request->type == "Purchase by Product") {
+            return response()->json([], 200);
         }
     }
     public function update_all_status(Request $request)
