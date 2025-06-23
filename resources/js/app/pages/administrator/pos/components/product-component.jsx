@@ -21,18 +21,21 @@ export default function ProductComponent({ product, storeName }) {
                 ])
             );
         } else {
-            dispatch(
-                setCarts(
-                    carts.map((item) =>
-                        item.id === value.id
-                            ? {
-                                  ...item,
-                                  pcs: item.pcs + 1,
-                              }
-                            : item
-                    )
-                )
-            );
+            const new_data = carts.map((item) => {
+                if (item.id === value.id) {
+                    if (item.quantity >= item.pcs + 1) {
+                        return {
+                            ...item,
+                            pcs: item.pcs + 1,
+                        };
+                    } else {
+                        alert("Insufficient Supply");
+                        return item; // return item without changing pcs
+                    }
+                }
+                return item;
+            });
+            dispatch(setCarts(new_data));
         }
     }
 

@@ -15,11 +15,24 @@ export default function PosSection() {
     const [store, setStore] = useState("Store");
 
     const addPCS = (value) => {
-        const data = carts.map((item) =>
-            item.id === value.id ? { ...item, pcs: item.pcs + 1 } : item
-        );
+        const data = carts.map((item) => {
+            if (item.id === value.id) {
+                if (item.quantity >= item.pcs + 1) {
+                    return {
+                        ...item,
+                        pcs: item.pcs + 1,
+                    };
+                } else {
+                    alert("Insufficient Supply");
+                    return item; // return item without changing pcs
+                }
+            }
+            return item;
+        });
+
         dispatch(setCarts(data));
     };
+
     console.log("sdfdadwad", carts);
 
     const subtractPCS = (value) => {
@@ -46,16 +59,23 @@ export default function PosSection() {
     }
 
     function update_pcs(result, valueKey) {
-        const updated = carts.map((item) =>
-            item.id === result.id
-                ? {
-                      ...item,
-                      pcs: valueKey,
-                  }
-                : item
-        );
-
-        dispatch(setCarts(updated));
+     
+        const new_data = carts.map((item) => {
+            if (item.id === result.id) {
+                if (item.quantity >= Number(valueKey)) {
+                    return {
+                        ...item,
+                        pcs: Number(valueKey),
+                    };
+                } else {
+                    alert("Insufficient Supply");
+                    return item; 
+                }
+            } else {
+                return item;
+            }
+        });
+        dispatch(setCarts(new_data));
     }
 
     const updateDiscount = (value, discountValue) => {
@@ -131,7 +151,7 @@ export default function PosSection() {
                                 </div>
                                 <div className="flex gap-3 ">
                                     <div class="font-bold text-3xl text-red-500">
-                                       ({carts.length}) 
+                                        ({carts.length})
                                     </div>
 
                                     <button
@@ -193,8 +213,11 @@ export default function PosSection() {
                                                                 onChange={(e) =>
                                                                     update_pcs(
                                                                         res,
-                                                                        e.target
-                                                                            .value
+                                                                        Number(
+                                                                            e
+                                                                                .target
+                                                                                .value
+                                                                        )
                                                                     )
                                                                 }
                                                                 value={res?.pcs}
