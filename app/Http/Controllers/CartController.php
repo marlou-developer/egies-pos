@@ -7,6 +7,7 @@ use App\Models\CartItem;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Stock;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -176,7 +177,52 @@ class CartController extends Controller
                 ->values();
             return response()->json($unpaidCarts, 200);
         } else if ($request->type == "Purchase by Product") {
-            return response()->json([], 200);
+            $productSales = CartItem::with(['product'])
+                ->get()
+                ->groupBy('product_id')
+                ->map(function ($items) {
+                    $totalQuantity = $items->sum('quantity');
+                    $totalSales = $items->sum(function ($item) {
+                        return $item->quantity * $item->price;
+                    });
+
+                    return [
+                        'product_id' => $items->first()->product_id,
+                        'product_name' => $items->first()->product->name ?? 'Unknown',
+                        'total_quantity' => $totalQuantity,
+                        'total_sales' => $totalSales,
+                    ];
+                })
+                ->values();
+
+            return response()->json($productSales, 200);
+        } else if ($request->type == "Payment Types by User") {
+            $paymentTypes = User::with(['carts' => function ($query) use ($start, $end) {
+                $query->whereBetween('created_at', [$start, $end])
+                    ->whereNotNull('payment_type'); // adjust based on your schema
+            }])->get()
+                ->map(function ($user) {
+                    $byPaymentType = $user->carts
+                        ->groupBy('payment_type')
+                        ->map(function ($group, $type) {
+                            return [
+                                'type' => $type,
+                                'count' => $group->count(),
+                                'total_amount' => $group->sum('total_price' ?? '0'),
+                            ];
+                        })
+                        ->values();
+
+                    return [
+                        'user_id' => $user->id,
+                        'user_name' => $user->name,
+                        'payment_types' => $byPaymentType
+                    ];
+                })
+                ->filter(fn($u) => $u['payment_types']->isNotEmpty())
+                ->values();
+
+            return response()->json($paymentTypes, 200);
         }
     }
     public function update_all_status(Request $request)
