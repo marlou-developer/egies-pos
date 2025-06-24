@@ -8,6 +8,15 @@ export function edit_payment_service(data) {
     } catch (error) {}
 }
 
+
+export function edit_quantity_service(data) {
+    try {
+        const result = axios.post("/api/edit_quantity", data);
+        return result;
+    } catch (error) {}
+}
+
+
 export function create_cart_service(data) {
     try {
         const result = axios.post("/api/cart", data);

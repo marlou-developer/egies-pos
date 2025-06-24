@@ -56,7 +56,7 @@ export function get_cart_thunk() {
 export function get_cart_by_id_thunk(id) {
     return async function (dispatch, getState) {
         const res = await get_cart_by_id_service(id)
-        dispatch(cartSlice.actions.setCart(res));
+        dispatch(cartSlice.actions.setCart(res.data));
     };
 }
 

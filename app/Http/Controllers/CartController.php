@@ -15,6 +15,40 @@ use Illuminate\Support\Collection;
 
 class CartController extends Controller
 {
+    public function edit_quantity(Request $request)
+    {
+        $cart = Cart::where('cart_id', $request->cart_id)->first();
+        $cart_item = CartItem::where('id', $request->id)->first();
+        $product = Product::where('id', $request->product_id)->first();
+        if ($cart && $cart_item) {
+            if ($product) {
+                if ($request->quantity > $cart_item->quantity) {
+                    $product->update([
+                        'quantity' => $product->quantity - ($request->quantity - $cart_item->quantity)
+                    ]);
+                } else {
+                    $product->update([
+                        'quantity' => $product->quantity +  ($cart_item->quantity - $request->quantity)
+                    ]);
+                }
+            }
+            $cart_item->update([
+                'quantity' => $request->quantity,
+                'total' => $request->quantity * $request->price
+            ]);
+            $cart_items = CartItem::where('cart_id', $request->cart_id)->get();
+
+            $total = $cart_items->sum(function ($item) {
+                return $item->price * $item->quantity;
+            });
+
+            $cart->update([
+                'sub_total' => $total,
+                'total_price' => $total - $cart->discount_per_order + $cart->discount_per_item + $cart->customer_total_discount,
+            ]);
+        }
+        return response()->json($cart, 200);
+    }
 
     public function edit_payment(Request $request)
     {

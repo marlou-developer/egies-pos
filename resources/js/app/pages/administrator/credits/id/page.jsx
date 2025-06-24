@@ -106,7 +106,7 @@ const InvoicePDF = () => {
         store.dispatch(get_cart_by_id_thunk(cart_id));
     }, []);
 
-    console.log("cartcart", cart?.data);
+    console.log("cartcart", cart);
     return (
         <PDFViewer style={{ width: "100%", height: "100vh" }}>
             <Document>
@@ -137,18 +137,18 @@ const InvoicePDF = () => {
                         <Text>
                             Bill To:{" "}
                             <Text style={styles.bold}>
-                                {cart?.data?.customer?.name}
+                                {cart?.customer?.name}
                             </Text>
                         </Text>
                         <Text>
                             Invoice Date: &nbsp;
-                            {moment(cart?.data?.created_at).format("LLL")}
+                            {moment(cart?.created_at).format("LLL")}
                         </Text>
                         {/* <Text>Terms: Net 15</Text> */}
-                        {cart?.data?.due_date && (
+                        {cart?.due_date && (
                             <Text>
                                 Due Date:{" "}
-                                {moment(cart?.data?.due_date).format("LL")}
+                                {moment(cart?.due_date).format("LL")}
                             </Text>
                         )}
                     </View>
@@ -171,7 +171,7 @@ const InvoicePDF = () => {
                     </View>
 
                     {/* Table Rows */}
-                    {cart?.data?.cart_items?.map((item, index) => {
+                    {cart?.cart_items?.map((item, index) => {
                         return (
                             <View style={styles.tableRow} key={index}>
                                 <Text style={[styles.tableCol, { flex: 0.5 }]}>
@@ -200,7 +200,7 @@ const InvoicePDF = () => {
                                 Payment Status:
                             </Text>
                             <Text>
-                                &nbsp;{cart.data?.status}
+                                &nbsp;{cart?.status}
                             </Text>
                         </View>
                         <View style={styles.totalRow}>
@@ -208,7 +208,7 @@ const InvoicePDF = () => {
                                 Subtotal Price:{" "}
                             </Text>
                             <Text>
-                                {peso_value(Number(cart.data?.sub_total))}
+                                {peso_value(Number(cart?.sub_total))}
                             </Text>
                         </View>
                         <View style={styles.totalRow}>
@@ -218,13 +218,13 @@ const InvoicePDF = () => {
                             <Text>
                                 {peso_value(
                                     Number(
-                                        cart.data?.customer_total_discount ?? 0
+                                        cart?.customer_total_discount ?? 0
                                     ) +
                                     Number(
-                                        cart?.data?.discount_per_item ?? 0
+                                        cart?.discount_per_item ?? 0
                                     ) +
                                     Number(
-                                        cart?.data?.discount_per_order ?? 0
+                                        cart?.discount_per_order ?? 0
                                     )
                                 )}
                             </Text>
@@ -248,7 +248,7 @@ const InvoicePDF = () => {
                                 Total:{" "}
                             </Text>
                             <Text style={styles.bold}>
-                                {peso_value(Number(cart.data?.total_price))}
+                                {peso_value(Number(cart?.total_price))}
                             </Text>
                         </View>
                         {/* <View style={styles.totalRow}>

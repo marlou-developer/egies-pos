@@ -165,6 +165,13 @@ export default function TableSection() {
                                                     <FaReceipt className=" text-pink-500" />
                                                     Invoice
                                                 </a>
+                                                  <a
+                                                    href={`/administrator/sales/${res.cart_id}`}
+                                                    target="_blank"
+                                                    className="inline-flex items-center gap-x-1.5 rounded-md bg-blue-100 hover:bg-blue-200 px-3 py-2 font-semibold text-gray-900 ring-1 ring-inset ring-gray-300"
+                                                >
+                                                  EDIT
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>
