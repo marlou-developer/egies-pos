@@ -338,13 +338,13 @@ class CartController extends Controller
 
 
         $current_credit = Cart::whereDate('created_at', $today)
-            ->where('status', 'Paid')
+            ->whereIn('status', ['Pending', 'Partial'])
             ->where('is_credit', 'true')  // boolean true, or use 1 if stored as integer
             ->sum('total_price');
 
         $total_credit = Cart::where('is_credit', '=', 'true')
-            ->where('status', 'Paid')
-            ->sum(DB::raw('total_price'));
+            ->whereIn('status', ['Pending', 'Partial'])
+            ->sum('total_price');
 
         $due_date_today = Cart::whereDate('due_date', $today)
             ->whereIn('status', ['Pending', 'Partial'])
