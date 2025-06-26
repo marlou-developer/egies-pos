@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import moment from "moment";
 import { peso_value } from "@/app/lib/peso";
 import SalesEditQuantitySection from "./sales-edit-quantity-section";
+import AddProductSection from "./add-product-section";
+import RemoveProductSection from "./remove-product-section";
 
 const people = [
     {
@@ -28,6 +30,9 @@ export default function SalesIdTableSection() {
                     <p className="mt-2 text-sm text-gray-700">
                         A list of all the Carts in your account.
                     </p>
+                </div>
+                <div>
+                    <AddProductSection />
                 </div>
             </div>
             <div className="mt-8 flow-root">
@@ -69,8 +74,8 @@ export default function SalesIdTableSection() {
                                             {res.product.name}
                                         </td>
                                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                                            <SalesEditQuantitySection  data={res}/>
-                                           
+                                            <SalesEditQuantitySection data={res} />
+
                                         </td>
                                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                                             {res?.price}
@@ -78,7 +83,9 @@ export default function SalesIdTableSection() {
                                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                                             {res?.total}
                                         </td>
-                                       
+                                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                                            <RemoveProductSection data={res} />
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -93,8 +100,8 @@ export default function SalesIdTableSection() {
                                 Discount Price:
                                 {peso_value(
                                     Number(cart?.customer_total_discount ?? 0) +
-                                        Number(cart?.discount_per_item ?? 0) +
-                                        Number(cart?.discount_per_order ?? 0)
+                                    Number(cart?.discount_per_item ?? 0) +
+                                    Number(cart?.discount_per_order ?? 0)
                                 )}{" "}
                             </div>
 

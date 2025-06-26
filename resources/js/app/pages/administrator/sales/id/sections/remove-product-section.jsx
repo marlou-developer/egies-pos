@@ -9,7 +9,7 @@ import { message, Tooltip } from "antd";
 import React, { useState } from "react";
 import { FaTrashCan } from "react-icons/fa6";
 
-export default function DeleteSupplierSection({ data }) {
+export default function RemoveProductSection({ data }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => setIsModalOpen(true);
     const [loading, setLoading] = useState(false);
@@ -37,18 +37,18 @@ export default function DeleteSupplierSection({ data }) {
 
     return (
         <>
-            <Tooltip title="Remove Supplier">
+            <Tooltip title="Remove Product on Sales">
                 <button
                     className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-red-100 hover:bg-red-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
                     onClick={openModal}
                 >
                     <FaTrashCan className="size-3.5 text-red-500" />
-                    <b>Remove Supplier</b>
+                    <b>Remove Product</b>
                 </button>
             </Tooltip>
             <Modal open={isModalOpen} setOpen={setIsModalOpen} onClose={() => setIsModalOpen(false)} width="w-1/4">
                 <h2 className="text-xl font-semibold mb-4">
-                    Are you sure you want to remove this supplier?
+                    Are you sure you want to remove {data?.product?.name}?
                 </h2>
                 <form action="" onSubmit={deleteUser}>
                     <div className="flex w-full gap-5">
