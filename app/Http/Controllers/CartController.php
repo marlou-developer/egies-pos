@@ -423,8 +423,12 @@ class CartController extends Controller
 
         $carts = Cart::where('is_credit', 'true')->with(['customer', 'cart_items', 'credit_payments']);
         if ($request->filled('search')) {
-            $carts->where('cart_id', 'like', '%' . $request->search . '%');
-            $carts->orWhere('customer.name', 'like', '%' . $request->search . '%');
+            $carts->where(function ($query) use ($request) {
+                $query->where('cart_id', 'like', '%' . $request->search . '%')
+                      ->orWhereHas('customer', function ($q) use ($request) {
+                          $q->where('name', 'like', '%' . $request->search . '%');
+                      });
+            });
         }
 
         return response()->json($carts->paginate(10), 200);
