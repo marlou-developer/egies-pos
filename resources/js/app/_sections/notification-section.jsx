@@ -66,8 +66,11 @@ export default function NotificationSection() {
                                         className="flex"
                                     >
                                         <CalendarDateRangeIcon className="h-6 mr-1" />
-                                        {item?.customer?.name} has over due
-                                        payment.
+                                        <span>
+                                            <b>{item?.customer?.name}</b> has over due
+                                            payment.
+                                        </span>
+
                                     </Link>
                                 </div>
                             ))}
@@ -82,7 +85,9 @@ export default function NotificationSection() {
                                         className="flex"
                                     >
                                         <ExclamationCircleIcon className="h-6 mr-1" />
-                                        {item?.name} has low stocks.
+                                        <span>
+                                            <b>{item?.name}</b> has low stocks.
+                                        </span>
                                     </Link>
                                 </div>
                             ))}
@@ -97,7 +102,9 @@ export default function NotificationSection() {
                                         className="flex"
                                     >
                                         <NoSymbolIcon className="h-6 mr-1" />
-                                        {item?.name} is out stocks.
+                                        <span>
+                                            <b>{item?.name}</b> is out stocks.
+                                        </span>
                                     </Link>
                                 </div>
                             ))}
