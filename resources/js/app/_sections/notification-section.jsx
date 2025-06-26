@@ -56,24 +56,28 @@ export default function NotificationSection() {
                             )}
 
                         {over_dues?.over_due?.length != 0 &&
-                            over_dues?.over_due?.map((item, index) => (
-                                <div
-                                    key={index}
-                                    className="px-4 py-2 underline hover:bg-gray-50"
-                                >
-                                    <Link
-                                        href={`/administrator/credits?search=${item.cart_id}`}
-                                        className="flex"
+                            over_dues?.over_due?.map((item, index) => {
+                                const today = new Date().toISOString().split('T')[0];
+                                const dueDate = item.due_date?.split(' ')[0]; // Extract date part if datetime
+                                const isToday = dueDate === today;
+                                
+                                return (
+                                    <div
+                                        key={index}
+                                        className="px-4 py-2 underline hover:bg-gray-50"
                                     >
-                                        <CalendarDateRangeIcon className="h-6 mr-1" />
-                                        <span>
-                                            <b>{item?.customer?.name}</b> has over due
-                                            payment.
-                                        </span>
-
-                                    </Link>
-                                </div>
-                            ))}
+                                        <Link
+                                            href={`/administrator/credits?search=${item.cart_id}`}
+                                            className="flex"
+                                        >
+                                            <CalendarDateRangeIcon className="h-6 mr-1" />
+                                            <span>
+                                                <b>{item?.customer?.name}</b> has {isToday ? 'due today' : 'over due payment'} .
+                                            </span>
+                                        </Link>
+                                    </div>
+                                );
+                            })}
                         {over_dues?.stocks?.length != 0 &&
                             over_dues?.stocks?.map((item, index) => (
                                 <div
