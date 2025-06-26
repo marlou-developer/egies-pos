@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Customer;
+use App\Models\Expense;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\User;
@@ -366,6 +367,13 @@ class CartController extends Controller
         $total_overall_inventory_capital = Product::selectRaw('SUM(quantity * cost) as total')
             ->value('total');
 
+        $current_expenses = Expense::whereDate('created_at', $today)
+            ->selectRaw('SUM(cost * qty) as total')
+            ->value('total');
+
+        $total_expenses = Expense::selectRaw('SUM(cost * qty) as total')
+            ->value('total');
+
         return response()->json([
             'over_due' => $carts,
             'stocks' => $stocks,
@@ -386,6 +394,9 @@ class CartController extends Controller
 
                 'total_overall_inventory_retail_price' => $total_overall_inventory_retail_price,
                 'total_overall_inventory_capital' => $total_overall_inventory_capital,
+
+                'current_expenses' => $current_expenses,
+                'total_expenses' => $total_expenses,
             ]
         ], 200);
     }
@@ -412,12 +423,8 @@ class CartController extends Controller
 
         $carts = Cart::where('is_credit', 'true')->with(['customer', 'cart_items', 'credit_payments']);
         if ($request->filled('search')) {
-            $carts->where(function ($query) use ($request) {
-                $query->where('cart_id', 'like', '%' . $request->search . '%')
-                      ->orWhereHas('customer', function ($q) use ($request) {
-                          $q->where('name', 'like', '%' . $request->search . '%');
-                      });
-            });
+            $carts->where('cart_id', 'like', '%' . $request->search . '%');
+            $carts->orWhere('customer.name', 'like', '%' . $request->search . '%');
         }
 
         return response()->json($carts->paginate(10), 200);

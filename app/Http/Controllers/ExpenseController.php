@@ -8,14 +8,19 @@ use Illuminate\Http\Request;
 class ExpenseController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $expenses = Expense::get();
+        $expenses = Expense::orderBy('id', 'desc');
+        
+        if ($request->filled('search')) {
+            $expenses->where('item', 'like', '%' . $request->search . '%');
+        }
+        
         return response()->json([
-            'result' => $expenses
+            'result' => $expenses->get()
         ], 200);
     }
- 
+
     public function search_customer(Request $request)
     {
         $search = $request->input('search');

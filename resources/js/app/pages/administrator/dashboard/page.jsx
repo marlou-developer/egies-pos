@@ -18,6 +18,8 @@ export default function Page() {
         return isCurrency ? peso_value(Number(value)) : Number(value).toString();
     };
 
+    console.log("Dashboard Data:", dashboard);
+
 
     return (
         <AdminLayout>
@@ -94,6 +96,31 @@ export default function Page() {
                             title="Total Overall Inventory Capital"
                             icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
                             count={<>{formatValue(dashboard?.total_overall_inventory_capital)}</>}
+                        />
+                    </div>
+                </div>
+                <div>
+                    <div className="p-1 mb-2  text-2xl font-black">Expenses Section</div>
+                    <div className="flex gap-6 mb-3">
+                        <DashboardCardSections
+                            title="Current Expenses"
+                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            count={<>{formatValue(dashboard?.current_expenses)}</>}
+                        />
+                        {/* <DashboardCardSections
+                            title="No. Of Out of Stock Product"
+                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            count={<>{formatValue(dashboard?.out_of_stock, false)}</>}
+                        />
+                        <DashboardCardSections
+                            title="Total Overall Inventory Retail Price"
+                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            count={<>{formatValue(dashboard?.total_overall_inventory_retail_price)}</>}
+                        /> */}
+                        <DashboardCardSections
+                            title="Total Expenses"
+                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            count={<>{formatValue(dashboard?.total_expenses)}</>}
                         />
                     </div>
                 </div>

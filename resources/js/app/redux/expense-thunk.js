@@ -1,4 +1,4 @@
-import { create_expense_service, get_expense_service, search_expense_service } from "../pages/services/expense-service";
+import { create_expense_service, get_expense_service, search_expense_service, update_expense_service } from "../pages/services/expense-service";
 import { expenseSlice } from "./expense-slice";
 
 
@@ -36,8 +36,8 @@ export function delete_customer_thunk(id) {
 }
 
 
-export function update_customer_thunk(data) {
+export function update_expense_thunk(data) {
     return async function (dispatch, getState) {
-        const res = await update_customer_service(data)
+        const res = await update_expense_service(data)
     };
 }

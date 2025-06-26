@@ -41,9 +41,9 @@ export function delete_customer_service(id) {
     }
 }
 
-export function update_customer_service(data) {
+export function update_expense_service(data) {
     try {
-        const result = axios.put(`/api/customer/${data.id}`, data)
+        const result = axios.put(`/api/expense/${data.id}`, data)
         return result
     } catch (error) {
 

@@ -1,12 +1,13 @@
 import Input from '@/app/_components/input'
 import DrawerSection from '@/app/_sections/drawer-section'
+import { get_expense_thunk, update_expense_thunk } from '@/app/redux/expense-thunk'
 import { get_supplier_thunk, update_supplier_thunk } from '@/app/redux/supplier-thunk'
 import { get_users_thunk, update_user_thunk } from '@/app/redux/user-thunk'
 import store from '@/app/store/store'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { message, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { FaPen, FaPenClip, FaSquarePen, FaTruck, FaTruckDroplet, FaUser, FaUserPen, FaUserPlus } from 'react-icons/fa6'
+import { FaDollarSign, FaPen, FaPenClip, FaSquarePen, FaTruck, FaTruckDroplet, FaUser, FaUserPen, FaUserPlus } from 'react-icons/fa6'
 import { useSelector } from 'react-redux'
 
 export default function EditExpenseSection({ data }) {
@@ -23,15 +24,15 @@ export default function EditExpenseSection({ data }) {
         setLoading(true);
         try {
             await store.dispatch(
-                update_supplier_thunk({
+                update_expense_thunk({
                     ...form,
                 })
             );
             message.success("Successfully updated!");
-            await store.dispatch(get_supplier_thunk());
+            await store.dispatch(get_expense_thunk());
             setOpen(false);
         } catch (error) {
-            message.error("Failed to update Supplier. Please try again.");
+            message.error("Failed to update Expense. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -57,8 +58,8 @@ export default function EditExpenseSection({ data }) {
                             <div className="bg-pink-200 px-4 py-6 sm:px-6">
                                 <div className="flex items-center justify-between">
                                     <div className="text-base font-semibold text-pink-600">
-                                        <FaTruckDroplet className="inline-block mr-1 " />
-                                        Edit Supplier
+                                        <FaPen className="inline-block mr-1 " />
+                                        Edit Expense
                                     </div>
                                     <button
                                         type="button"
@@ -68,16 +69,16 @@ export default function EditExpenseSection({ data }) {
                                         <XMarkIcon className="w-6 h-6" />
                                     </button>
                                 </div>
-                                <p className="mt-1 text-sm text-gray-600 flex">Edit the information below to update the user.
+                                <p className="mt-1 text-sm text-gray-600 flex">Edit the information below to update the expense.
                                 </p>
                             </div>
 
                             <div className="px-4 sm:px-6">
                                 <div className="space-y-6 pt-6 pb-5">
                                     <div className="flex items-center">
-                                        <FaTruck className="inline-block mr-1 text-pink-500" />
+                                        <FaDollarSign className="inline-block mr-1 text-pink-500" />
                                         <h3 className="text-base font-medium text-gray-600">
-                                            Supplier Information
+                                            Expense Information
                                         </h3>
                                         <hr className="my-2" />
                                     </div>
@@ -89,12 +90,12 @@ export default function EditExpenseSection({ data }) {
                                                     onChange={(e) =>
                                                         setForm({
                                                             ...form,
-                                                            name: e.target.value,
+                                                            item: e.target.value,
                                                         })
                                                     }
-                                                    value={form?.name}
-                                                    name="name"
-                                                    label="Name"
+                                                    value={form?.item || ""}
+                                                    name="item"
+                                                    label="Purchased Item"
                                                     type="text"
                                                 />
                                             </div>
@@ -103,12 +104,12 @@ export default function EditExpenseSection({ data }) {
                                                     onChange={(e) =>
                                                         setForm({
                                                             ...form,
-                                                            address: e.target.value,
+                                                            cost: e.target.value,
                                                         })
                                                     }
-                                                    value={form.address || ""}
-                                                    name="address"
-                                                    label="Address"
+                                                    value={form.cost || ""}
+                                                    name="cost"
+                                                    label="Cost"
                                                     type="text"
                                                 />
                                             </div>
@@ -117,13 +118,13 @@ export default function EditExpenseSection({ data }) {
                                                     onChange={(e) =>
                                                         setForm({
                                                             ...form,
-                                                            contact_person: e.target.value,
+                                                            qty: e.target.value,
                                                         })
                                                     }
-                                                    value={form.contact_person || ""}
-                                                    name="contact_person"
-                                                    label="Contact Person"
-                                                    type="text"
+                                                    value={form.qty || ""}
+                                                    name="qty"
+                                                    label="Quantity"
+                                                    type="number"
                                                 />
                                             </div>
                                             <div>
@@ -131,27 +132,13 @@ export default function EditExpenseSection({ data }) {
                                                     onChange={(e) =>
                                                         setForm({
                                                             ...form,
-                                                            contact_no: e.target.value,
+                                                            date: e.target.value,
                                                         })
                                                     }
-                                                    value={form.contact_no || ""}
-                                                    name="contact_no"
-                                                    label="Contact No."
-                                                    type="text"
-                                                />
-                                            </div>
-                                            <div>
-                                                <Input
-                                                    onChange={(e) =>
-                                                        setForm({
-                                                            ...form,
-                                                            email: e.target.value,
-                                                        })
-                                                    }
-                                                    value={form.email || ""}
-                                                    name="email"
-                                                    label="Email"
-                                                    type="email"
+                                                    value={form.date || ""}
+                                                    name="date"
+                                                    label="Purchased Date"
+                                                    type="date"
                                                 />
                                             </div>
                                         </div>

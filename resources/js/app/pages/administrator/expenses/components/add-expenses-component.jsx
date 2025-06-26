@@ -11,7 +11,7 @@ import {
 import { message } from "antd";
 import store from "@/app/store/store";
 import { setExpense } from "@/app/redux/expense-slice";
-import { create_expense_thunk } from "@/app/redux/expense-thunk";
+import { create_expense_thunk, get_expense_thunk } from "@/app/redux/expense-thunk";
 
 export default function AddExpensesComponent({ open, setOpenExpenses }) {
     const [loading, setLoading] = useState(false);
@@ -51,7 +51,7 @@ export default function AddExpensesComponent({ open, setOpenExpenses }) {
 
         try {
             await store.dispatch(create_expense_thunk(fd));
-            // await store.dispatch(get_expense_thunk());
+            await store.dispatch(get_expense_thunk());
             message.success("Expense successfully saved!");
             setOpenExpenses(false);
             dispatch(setExpense({}));
