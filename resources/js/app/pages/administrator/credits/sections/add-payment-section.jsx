@@ -5,6 +5,7 @@ import { peso_value } from "@/app/lib/peso";
 import { get_cart_credit_thunk } from "@/app/redux/app-thunk";
 import { add_payment_thunk } from "@/app/redux/cart-thunk";
 import store from "@/app/store/store";
+import { Tooltip } from "antd";
 import moment from "moment";
 import React, { useState } from "react";
 import { FaMoneyBillTransfer } from "react-icons/fa6";
@@ -71,13 +72,15 @@ export default function AddPaymentSection({ data }) {
     // alert(form.due_date)
     return (
         <>
-            <button
-                onClick={() => setOpen(true)}
-                className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-yellow-100 hover:bg-yellow-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
-            >
-                <FaMoneyBillTransfer className=" text-yellow-500" />
-                Pay Credit
-            </button>
+            <Tooltip title="Pay Credit">
+                <button
+                    onClick={() => setOpen(true)}
+                    className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-yellow-300 hover:bg-yellow-400 p-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
+                >
+                    <FaMoneyBillTransfer className=" text-gray-500" />
+                </button>
+            </Tooltip>
+
 
             <Modal
                 isOpen={open}

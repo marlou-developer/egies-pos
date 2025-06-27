@@ -125,7 +125,7 @@ export default function UsersSection() {
                                                 'relative py-2 text-center text-sm font-medium  ',
                                             )}
                                         >
-                                            <div className="inline-flex items-center font-bold px-2 py-1 gap-4 ">
+                                            <div className="inline-flex items-center font-bold px-2 py-1 gap-2 ">
                                                 <EditUserSection data={person} />
                                                 <DeleteUserSection data={person} />
                                             </div>

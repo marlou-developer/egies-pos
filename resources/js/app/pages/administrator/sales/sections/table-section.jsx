@@ -3,6 +3,7 @@ import {
     FaCashRegister,
     FaFilter,
     FaMoneyBill,
+    FaPenToSquare,
     FaReceipt,
     FaUserPlus,
     FaUsers,
@@ -13,6 +14,7 @@ import ShowItemSection from "./show-items-section";
 import SearchSection from "./search-section";
 import { peso_value } from "@/app/lib/peso";
 import PaginationSection from "./pagination-section";
+import { Tooltip } from "antd";
 // import AddPaymentSection from "./add-payment-section";
 // import HistorySection from "./history-section";
 
@@ -146,32 +148,36 @@ export default function TableSection() {
                                                         ),
                                                     0
                                                 ) -
-                                                    Number(
-                                                        res.discount_per_order
-                                                    )
+                                                Number(
+                                                    res.discount_per_order
+                                                )
                                             )}
                                         </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
                                             {res.status}
                                         </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-gray-700 whitespace-nowrap text-right">
-                                            <div className="flex items-center justify-center gap-3">
+                                            <div className="flex items-center justify-center gap-2">
                                                 {/* <ShowItemSection data={res} /> */}
-                                                <a
-                                                    href={`/administrator/credits/${res.cart_id}`}
-                                                    target="_blank"
-                                                    className="inline-flex items-center gap-x-1.5 rounded-md bg-pink-100 hover:bg-pink-200 px-3 py-2 font-semibold text-gray-900 ring-1 ring-inset ring-gray-300"
-                                                >
-                                                    <FaReceipt className=" text-pink-500" />
-                                                    Invoice
-                                                </a>
-                                                  <a
-                                                    href={`/administrator/sales/${res.cart_id}`}
-                                                    target="_blank"
-                                                    className="inline-flex items-center gap-x-1.5 rounded-md bg-blue-100 hover:bg-blue-200 px-3 py-2 font-semibold text-gray-900 ring-1 ring-inset ring-gray-300"
-                                                >
-                                                  EDIT
-                                                </a>
+                                                <Tooltip title="Invoice Details">
+                                                    <a
+                                                        href={`/administrator/credits/${res.cart_id}`}
+                                                        target="_blank"
+                                                        className="inline-flex items-center gap-x-1.5 rounded-md bg-pink-400 hover:bg-pink-600 p-3 font-semibold text-gray-900 ring-1 ring-inset ring-gray-300"
+                                                    >
+                                                        <FaReceipt className=" text-white" />
+                                                    </a>
+                                                </Tooltip>
+                                                <Tooltip title="Edit Sales Invoice">
+                                                    <a
+                                                        href={`/administrator/sales/${res.cart_id}`}
+                                                        target="_blank"
+                                                        className="inline-flex items-center gap-x-1.5 rounded-md bg-blue-400 hover:bg-blue-500 p-3 font-semibold text-gray-900 ring-1 ring-inset ring-gray-300"
+                                                    >
+                                                        <FaPenToSquare className=" text-white" />
+                                                    </a>
+                                                </Tooltip>
+
                                             </div>
                                         </td>
                                     </tr>

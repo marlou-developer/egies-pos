@@ -7,7 +7,7 @@ import store from '@/app/store/store'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { message, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
-import { FaDollarSign, FaPen, FaPenClip, FaSquarePen, FaTruck, FaTruckDroplet, FaUser, FaUserPen, FaUserPlus } from 'react-icons/fa6'
+import { FaDollarSign, FaPen, FaPenClip, FaPenToSquare, FaSquarePen, FaTruck, FaTruckDroplet, FaUser, FaUserPen, FaUserPlus } from 'react-icons/fa6'
 import { useSelector } from 'react-redux'
 
 export default function EditExpenseSection({ data }) {
@@ -42,9 +42,8 @@ export default function EditExpenseSection({ data }) {
     return (
         <>
             <Tooltip title="Edit Expense">
-                <button type='button' onClick={() => setOpen(true)} className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-blue-100 hover:bg-blue-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset">
-                    <FaPen className="size-3 text-blue-500" />
-                    Edit Expense
+                <button type='button' onClick={() => setOpen(true)} className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-blue-400 hover:bg-blue-500 p-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset">
+                    <FaPenToSquare className="size-3.5 text-white" />
                 </button>
             </Tooltip>
             <DrawerSection

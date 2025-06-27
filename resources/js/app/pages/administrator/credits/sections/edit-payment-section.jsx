@@ -5,9 +5,10 @@ import { peso_value } from "@/app/lib/peso";
 import { edit_payment_service } from "@/app/pages/services/cart-service";
 import { get_cart_credit_thunk } from "@/app/redux/app-thunk";
 import store from "@/app/store/store";
+import { Tooltip } from "antd";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { FaMoneyBillTransfer } from "react-icons/fa6";
+import { FaCalendarCheck, FaMoneyBillTransfer } from "react-icons/fa6";
 import Swal from "sweetalert2";
 
 export default function EditPaymentSection({ data }) {
@@ -74,13 +75,15 @@ export default function EditPaymentSection({ data }) {
     // alert(form.due_date)
     return (
         <>
-            <button
-                onClick={() => setOpen(true)}
-                className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-blue-100 hover:bg-blue-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
-            >
-                <FaMoneyBillTransfer className=" text-blue-500" />
-                Edit Due Date
-            </button>
+            <Tooltip title="Edit Due Date">
+                <button
+                    onClick={() => setOpen(true)}
+                    className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-blue-400 hover:bg-blue-500 p-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
+                >
+                    <FaCalendarCheck className=" text-white" />
+                </button>
+            </Tooltip>
+
 
             <Modal
                 isOpen={open}

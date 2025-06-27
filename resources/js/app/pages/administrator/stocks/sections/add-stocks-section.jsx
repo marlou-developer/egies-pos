@@ -4,7 +4,7 @@ import Modal from "@/Components/Modal";
 import Input from "@/app/_components/input";
 import store from "@/app/store/store";
 import { create_stock_thunk } from "@/app/redux/stock-thunk";
-import { message } from "antd";
+import { message, Tooltip } from "antd";
 import { get_product_thunk } from "@/app/redux/product-thunk";
 import { get_over_due_thunk } from "@/app/redux/cart-thunk";
 import { useSelector } from "react-redux";
@@ -43,14 +43,17 @@ export default function AddStocksSection({ data }) {
     console.log('suppliers', suppliers)
     return (
         <div>
-            <button
-                type="button"
-                onClick={() => setModalOpen(true)}
-                className="relative inline-flex items-center rounded-md bg-pink-100 w-full px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 "
-            >
-                <FaSquarePlus className="mr-1 text-pink-500" />
-                Add Stocks
-            </button>
+            <Tooltip title="Add Stock">
+                <button
+                    type="button"
+                    onClick={() => setModalOpen(true)}
+                    className="relative inline-flex items-center rounded-md bg-pink-400 w-full p-3 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-600 "
+                >
+                    <FaSquarePlus className=" text-pink-100" />
+                    {/* Add Stocks */}
+                </button>
+            </Tooltip>
+
 
             <Modal open={modalOpen} setOpen={setModalOpen}>
                 <form onSubmit={addStock}>

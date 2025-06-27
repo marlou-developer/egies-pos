@@ -36,7 +36,7 @@ export default function ExpensesTableSection() {
                             <button
                                 type="button"
                                 onClick={() => setOpenExpenses(true)}
-                                className="relative inline-flex items-center rounded-l-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
+                                className="relative inline-flex items-center rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
                             >
                                 <FaDollarSign className="mr-1 text-pink-500" />
                                 Add Expense
@@ -115,7 +115,7 @@ export default function ExpensesTableSection() {
                                             <td
                                                 className={classNames(
                                                     expenseIdx !== expenses.length - 1 ? "border-b border-gray-200" : "",
-                                                    "py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6 lg:pl-8"
+                                                    "py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6 lg:pl-8"
                                                 )}
                                             >
                                                 {expense.item}
@@ -123,7 +123,7 @@ export default function ExpensesTableSection() {
                                             <td
                                                 className={classNames(
                                                     expenseIdx !== expenses.length - 1 ? "border-b border-gray-200" : "",
-                                                    "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 sm:table-cell"
+                                                    "hidden px-3 py-3 text-sm whitespace-nowrap text-gray-500 sm:table-cell"
                                                 )}
                                             >
                                                 ₱{Number(expense?.cost).toFixed(2)}
@@ -131,7 +131,7 @@ export default function ExpensesTableSection() {
                                             <td
                                                 className={classNames(
                                                     expenseIdx !== expenses.length - 1 ? "border-b border-gray-200" : "",
-                                                    "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
+                                                    "hidden px-3 py-3 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
                                                 )}
                                             >
                                                 {expense.qty}
@@ -139,7 +139,7 @@ export default function ExpensesTableSection() {
                                             <td
                                                 className={classNames(
                                                     expenseIdx !== expenses.length - 1 ? "border-b border-gray-200" : "",
-                                                    "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
+                                                    "hidden px-3 py-3 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
                                                 )}
                                             >
                                                 ₱{Number(expense.qty * expense.cost).toFixed(2)}
@@ -147,7 +147,7 @@ export default function ExpensesTableSection() {
                                             <td
                                                 className={classNames(
                                                     expenseIdx !== expenses.length - 1 ? "border-b border-gray-200" : "",
-                                                    "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
+                                                    "hidden px-3 py-3 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
                                                 )}
                                             >
                                                 {moment(expense.date).format('LL')}
@@ -155,7 +155,7 @@ export default function ExpensesTableSection() {
                                             <td
                                                 className={classNames(
                                                     expenseIdx !== expenses.length - 1 ? "border-b border-gray-200" : "",
-                                                    "px-3 py-4 text-sm text-gray-700"
+                                                    "px-3 py-3 text-sm text-gray-700"
                                                 )}
                                             >
                                                 <div className="inline-flex items-center font-bold px-2 py-1 gap-4">

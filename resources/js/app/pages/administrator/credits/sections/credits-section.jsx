@@ -16,6 +16,7 @@ import SearchSection from "./search-section";
 import { peso_value } from "@/app/lib/peso";
 import PaginationSection from "./pagination-section";
 import EditPaymentSection from "./edit-payment-section";
+import { Tooltip } from "antd";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -121,21 +122,22 @@ export default function CreditsSection() {
                                             </td>
                                             <td className="border-b border-gray-200 px-3 py-4 text-sm text-gray-700">
                                                 <div className="flex items-center justify-center gap-2">
-                                                    <HistorySection data={res} />
-                                                    <a
-                                                        href={`/administrator/credits/${res.cart_id}`}
-                                                        target="_blank"
-                                                        className="inline-flex items-center gap-x-1.5 rounded-md bg-pink-100 hover:bg-pink-200 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300"
-                                                    >
-                                                        <FaReceipt className=" text-pink-500" />
-                                                        Invoice
-                                                    </a>
+                                                    <Tooltip title="Invoice Details">
+                                                        <a
+                                                            href={`/administrator/credits/${res.cart_id}`}
+                                                            target="_blank"
+                                                            className="inline-flex items-center gap-x-1.5 rounded-md bg-pink-400 hover:bg-pink-600 p-3 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300"
+                                                        >
+                                                            <FaReceipt className=" text-white" />
+                                                        </a>
+                                                    </Tooltip>
                                                     {res.status !== "Paid" && (
                                                         <AddPaymentSection
                                                             data={res}
                                                         />
                                                     )}
-                                                    <EditPaymentSection data={res}/>
+                                                    <HistorySection data={res} />
+                                                    <EditPaymentSection data={res} />
                                                 </div>
                                             </td>
                                         </tr>

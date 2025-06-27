@@ -1,4 +1,5 @@
 import Modal from "@/app/_components/modal";
+import { Tooltip } from "antd";
 import moment from "moment";
 import React, { useState } from "react";
 import { FaClockRotateLeft } from "react-icons/fa6";
@@ -8,13 +9,16 @@ export default function StocksHistorySection({ data }) {
     console.log('datass', data)
     return (
         <>
-            <button
-                onClick={() => setOpen(true)}
-                className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-green-100 hover:bg-green-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
-            >
-                <FaClockRotateLeft />
-                Stock History
-            </button>
+            <Tooltip title="View Stock History">
+                <button
+                    onClick={() => setOpen(true)}
+                    className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-green-500 hover:bg-green-700 p-3 text-sm font-semibold text-white shadow-xs ring-1 ring-gray-300 ring-inset"
+                >
+                    <FaClockRotateLeft />
+                    {/* Stock History */}
+                </button>
+            </Tooltip>
+
             <Modal
                 isOpen={open}
                 onClose={() => setOpen(false)}

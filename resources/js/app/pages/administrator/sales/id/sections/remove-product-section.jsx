@@ -39,11 +39,10 @@ export default function RemoveProductSection({ data }) {
         <>
             <Tooltip title="Remove Product on Sales">
                 <button
-                    className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-red-100 hover:bg-red-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
+                    className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-red-400 hover:bg-red-500 p-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
                     onClick={openModal}
                 >
-                    <FaTrashCan className="size-3.5 text-red-500" />
-                    <b>Remove Product</b>
+                    <FaTrashCan className="size-3.5 text-white" />
                 </button>
             </Tooltip>
             <Modal open={isModalOpen} setOpen={setIsModalOpen} onClose={() => setIsModalOpen(false)} width="w-1/4">

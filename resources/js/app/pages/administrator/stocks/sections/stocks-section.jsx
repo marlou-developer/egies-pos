@@ -369,14 +369,14 @@ export default function StocksSection() {
                                                     "text-sm text-gray-700 "
                                                 )}
                                             >
-                                                <div className="inline-flex items-center font-bold px-2 py-1 gap-4 ">
+                                                <div className="inline-flex items-center font-bold px-2 py-1 gap-2 ">
                                                     <AddStocksSection
                                                         data={product}
                                                     />
                                                     <StocksHistorySection
                                                         data={product}
                                                     />
-                                                    <button className="bg-yellow-300 rounded-md p-2.5" 
+                                                    <button className="bg-yellow-300 hover:bg-yellow-400 rounded-md p-2.5" 
                                                     onClick={() => router.visit(`/administrator/stocks/${product.id}`)}
                                                     // onClick={() => window.open(`/administrator/stocks/${product.id}`, '_blank')}
                                                     >

@@ -158,7 +158,7 @@ export default function SupplierSection() {
                                                     "px-3 py-4 text-sm text-gray-700"
                                                 )}
                                             >
-                                                <div className="inline-flex items-center font-bold px-2 py-1 gap-4">
+                                                <div className="inline-flex items-center font-bold px-2 py-1 gap-2">
                                                     <EditSupplierSection data={supplier} />
                                                     <DeleteSupplierSection data={supplier} />
                                                 </div>
