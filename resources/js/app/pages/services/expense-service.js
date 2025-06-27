@@ -32,9 +32,9 @@ export function get_expense_service() {
 //     return res.data
 // }
 
-export function delete_customer_service(id) {
+export function delete_expense_service(id) {
     try {
-        const result = axios.delete(`/api/customer/${id}`)
+        const result = axios.delete(`/api/expense/${id}`)
         return result
     } catch (error) {
 

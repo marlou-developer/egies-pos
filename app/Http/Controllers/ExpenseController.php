@@ -11,11 +11,11 @@ class ExpenseController extends Controller
     public function index(Request $request)
     {
         $expenses = Expense::orderBy('id', 'desc');
-        
+
         if ($request->filled('search')) {
             $expenses->where('item', 'like', '%' . $request->search . '%');
         }
-        
+
         return response()->json([
             'result' => $expenses->get()
         ], 200);
@@ -47,5 +47,15 @@ class ExpenseController extends Controller
         if ($expense) {
             $expense->update($request->all());
         }
+    }
+
+    public function destroy($id)
+    {
+        $expense = Expense::where('id', $id)->first();
+        if ($expense) {
+            $expense->delete();
+        }
+
+        return response()->json(['message' => 'Expense deleted successfully']);
     }
 }

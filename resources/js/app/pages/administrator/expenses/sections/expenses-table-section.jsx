@@ -6,6 +6,7 @@ import AddExpensesComponent from "../components/add-expenses-component";
 import EditExpenseSection from "./edit-expense-section";
 import { CurrencyDollarIcon } from "@heroicons/react/20/solid";
 import moment from "moment";
+import DeleteExpenseSection from "./delete-expense-section";
 
 
 function classNames(...classes) {
@@ -158,8 +159,9 @@ export default function ExpensesTableSection() {
                                                     "px-3 py-3 text-sm text-gray-700"
                                                 )}
                                             >
-                                                <div className="inline-flex items-center font-bold px-2 py-1 gap-4">
+                                                <div className="inline-flex items-center font-bold px-2 py-1 gap-2">
                                                     <EditExpenseSection data={expense} />
+                                                    <DeleteExpenseSection data={expense} />
                                                 </div>
                                             </td>
                                         </tr>
