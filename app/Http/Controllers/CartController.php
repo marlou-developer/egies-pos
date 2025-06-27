@@ -277,13 +277,19 @@ class CartController extends Controller
 
         // Optional search filter by cart ID
         if ($request->filled('search')) {
-            $query->where('cart_id', 'like', '%' . $request->search . '%');
+            $query->where(function ($q) use ($request) {
+                $q->where('cart_id', 'like', '%' . $request->search . '%')
+                  ->orWhereHas('customer', function ($customerQuery) use ($request) {
+                      $customerQuery->where('name', 'like', '%' . $request->search . '%');
+                  });
+            });
         }
 
         $carts = $query->paginate(10);
 
         return response()->json($carts, 200);
     }
+
     public function get_over_due(Request $request)
     {
         $today = Carbon::today();
@@ -425,9 +431,9 @@ class CartController extends Controller
         if ($request->filled('search')) {
             $carts->where(function ($query) use ($request) {
                 $query->where('cart_id', 'like', '%' . $request->search . '%')
-                      ->orWhereHas('customer', function ($q) use ($request) {
-                          $q->where('name', 'like', '%' . $request->search . '%');
-                      });
+                    ->orWhereHas('customer', function ($q) use ($request) {
+                        $q->where('name', 'like', '%' . $request->search . '%');
+                    });
             });
         }
 
