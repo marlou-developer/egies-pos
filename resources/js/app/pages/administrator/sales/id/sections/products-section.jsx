@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import ProductComponent from "../components/product-component";
 import { useSelector } from "react-redux";
+import ProductComponent from "../../../pos/components/product-component";
+
 
 export default function ProductsSection({ storeName }) {
     const { categories } = useSelector((store) => store.categories);
@@ -55,11 +56,10 @@ export default function ProductsSection({ storeName }) {
                                 key={category.name}
                                 onClick={() => setActiveCategory(category.name)}
                                 className={`cursor-pointer flex-shrink-0 bg-pink-400 justify-center px-5 py-2 rounded-lg text-sm mb-4 
-                    ${
-                        activeCategory === category.name
-                            ? "bg-pink-600 text-white"
-                            : "font-semibold text-white hover:bg-pink-200 hover:text-gray-500"
-                    }`}
+                    ${activeCategory === category.name
+                                        ? "bg-pink-600 text-white"
+                                        : "font-semibold text-white hover:bg-pink-200 hover:text-gray-500"
+                                    }`}
                             >
                                 {category.name}
                             </div>
@@ -86,8 +86,8 @@ export default function ProductsSection({ storeName }) {
                                 );
                             })}
                     {!searchTerm &&
-                    activeProducts &&
-                    activeProducts.length > 0 ? (
+                        activeProducts &&
+                        activeProducts.length > 0 ? (
                         activeProducts.map((product, index) => (
                             <ProductComponent
                                 storeName={storeName}

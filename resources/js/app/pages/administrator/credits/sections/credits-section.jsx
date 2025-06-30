@@ -3,6 +3,7 @@ import {
     FaCashRegister,
     FaFilter,
     FaMoneyBill,
+    FaPenToSquare,
     FaReceipt,
     FaUserPlus,
     FaUsers,
@@ -24,7 +25,7 @@ function classNames(...classes) {
 
 export default function CreditsSection() {
     const { carts } = useSelector((store) => store.carts);
-
+    console.log("carts", carts);
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">
@@ -138,6 +139,15 @@ export default function CreditsSection() {
                                                     )}
                                                     <HistorySection data={res} />
                                                     <EditPaymentSection data={res} />
+                                                    <Tooltip title="Edit Credit Invoice">
+                                                        <a
+                                                            href={`/administrator/credits/id/${res.cart_id}`}
+                                                            target="_blank"
+                                                            className="inline-flex items-center gap-x-1.5 rounded-md bg-blue-400 hover:bg-blue-500 p-3 font-semibold text-gray-900 ring-1 ring-inset ring-gray-300"
+                                                        >
+                                                            <FaPenToSquare className=" text-white" />
+                                                        </a>
+                                                    </Tooltip>
                                                 </div>
                                             </td>
                                         </tr>

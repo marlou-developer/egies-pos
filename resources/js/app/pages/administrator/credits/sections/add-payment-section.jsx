@@ -91,7 +91,7 @@ export default function AddPaymentSection({ data }) {
                 <div className=" flex flex-col gap-3">
                     <div>
                         <div className="font-xl font-bold">
-                            Customer Name: {data.customer.name}
+                            Customer Name: {data?.customer?.name}
                         </div>
                         <div className="font-xl font-bold">
                             Balance: {peso_value(Number(data.balance))}

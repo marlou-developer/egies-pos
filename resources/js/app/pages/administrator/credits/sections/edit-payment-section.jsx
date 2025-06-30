@@ -78,7 +78,7 @@ export default function EditPaymentSection({ data }) {
             <Tooltip title="Edit Due Date">
                 <button
                     onClick={() => setOpen(true)}
-                    className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-blue-400 hover:bg-blue-500 p-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
+                    className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-blue-600 hover:bg-blue-800 p-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
                 >
                     <FaCalendarCheck className=" text-white" />
                 </button>
@@ -94,7 +94,7 @@ export default function EditPaymentSection({ data }) {
                 <div className=" flex flex-col gap-3">
                     <div>
                         <div className="font-xl font-bold">
-                            Customer Name: {data.customer.name}
+                            Customer Name: {data?.customer?.name}
                         </div>
                         <div className="font-xl font-bold">
                             Balance: {peso_value(Number(data.balance))}

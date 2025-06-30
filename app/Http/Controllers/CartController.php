@@ -452,11 +452,6 @@ class CartController extends Controller
         $cart = Cart::where('cart_id', $request->cart_id ?? $cart_id)->first();
         if ($cart) {
             $cart->update([
-                'cart_id' => $request->cart_id ?? $cart_id,
-                'customer_id' => $request->customer_id,
-                'user_id' => Auth::user()->id ?? null,
-                'order_id' => $request->order_id ?? null,
-                'customer' => $request->customer_name ?? null,
                 'sub_total' => $cart->sub_total + $request->sub_total,
                 // 'customer_total_discount' => $request->customer_total_discount,
                 'discount_per_item' => $cart->discount_per_item + $request->total_item_discount,
@@ -464,9 +459,6 @@ class CartController extends Controller
                 'total_price' => $cart->total_price + $request->total_price,
                 'customer_amount' => $cart->customer_amount +  $request->customer_amount,
                 'change' => $cart->change +  $request->change,
-                'is_credit' => $request->is_credit ?? null,
-                'due_date' => $request->due_date ?? null,
-                'shop' => $request->shop ?? null,
                 'balance' => $request->is_credit == 'true' ? $cart->total_price + $request->total_price : '0',
             ]);
         } else {
