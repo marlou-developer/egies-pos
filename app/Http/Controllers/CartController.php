@@ -279,9 +279,9 @@ class CartController extends Controller
         if ($request->filled('search')) {
             $query->where(function ($q) use ($request) {
                 $q->where('cart_id', 'like', '%' . $request->search . '%')
-                  ->orWhereHas('customer', function ($customerQuery) use ($request) {
-                      $customerQuery->where('name', 'like', '%' . $request->search . '%');
-                  });
+                    ->orWhereHas('customer', function ($customerQuery) use ($request) {
+                        $customerQuery->where('name', 'like', '%' . $request->search . '%');
+                    });
             });
         }
 
@@ -449,26 +449,49 @@ class CartController extends Controller
     {
         $cart_id = Carbon::now()->format('mdyHisv');
 
-        $cart = Cart::create([
-            'cart_id' => $cart_id,
-            'customer_id' => $request->customer_id,
-            'user_id' => Auth::user()->id ?? null,
-            'order_id' => $request->order_id ?? null,
-            'customer' => $request->customer_name ?? null,
-            'sub_total' => $request->sub_total,
-            'customer_total_discount' => $request->customer_total_discount,
-            'discount_per_item' => $request->total_item_discount,
-            'discount_per_order' => $request->discount_per_order,
-            'total_price' => $request->total_price,
-            'payment_type' => $request->payment_type,
-            'status' => $request->is_credit == 'true' || $request->shop == 'Shopee' ? 'Pending' : 'Paid',
-            'customer_amount' => $request->customer_amount,
-            'change' => $request->change,
-            'is_credit' => $request->is_credit ?? null,
-            'due_date' => $request->due_date,
-            'shop' => $request->shop,
-            'balance' => $request->is_credit == 'true' ? $request->total_price : '0',
-        ]);
+        $cart = Cart::where('cart_id', $request->cart_id ?? $cart_id)->first();
+        if ($cart) {
+            $cart->update([
+                'cart_id' => $request->cart_id ?? $cart_id,
+                'customer_id' => $request->customer_id,
+                'user_id' => Auth::user()->id ?? null,
+                'order_id' => $request->order_id ?? null,
+                'customer' => $request->customer_name ?? null,
+                'sub_total' => $cart->sub_total + $request->sub_total,
+                // 'customer_total_discount' => $request->customer_total_discount,
+                'discount_per_item' => $cart->discount_per_item + $request->total_item_discount,
+                'discount_per_order' => $cart->discount_per_order + $request->discount_per_order,
+                'total_price' => $cart->total_price + $request->total_price,
+                'customer_amount' => $cart->customer_amount +  $request->customer_amount,
+                'change' => $cart->change +  $request->change,
+                'is_credit' => $request->is_credit ?? null,
+                'due_date' => $request->due_date ?? null,
+                'shop' => $request->shop ?? null,
+                'balance' => $request->is_credit == 'true' ? $cart->total_price + $request->total_price : '0',
+            ]);
+        } else {
+            $cart =  Cart::create([
+                'cart_id' => $request->cart_id ?? $cart_id,
+                'customer_id' => $request->customer_id,
+                'user_id' => Auth::user()->id ?? null,
+                'order_id' => $request->order_id ?? null,
+                'customer' => $request->customer_name ?? null,
+                'sub_total' => $request->sub_total,
+                'customer_total_discount' => $request->customer_total_discount,
+                'discount_per_item' => $request->total_item_discount,
+                'discount_per_order' => $request->discount_per_order,
+                'total_price' => $request->total_price,
+                'payment_type' => $request->payment_type,
+                'status' => $request->is_credit == 'true' || $request->shop == 'Shopee' ? 'Pending' : 'Paid',
+                'customer_amount' => $request->customer_amount,
+                'change' => $request->change,
+                'is_credit' => $request->is_credit ?? null,
+                'due_date' => $request->due_date,
+                'shop' => $request->shop,
+                'balance' => $request->is_credit == 'true' ? $request->total_price : '0',
+            ]);
+        }
+
 
         foreach ($request->cart_items as $item) {
             $subPrice = $item['sub_price'];
@@ -490,7 +513,7 @@ class CartController extends Controller
             $total = ($quantity * $price) - $discounted;
 
             CartItem::create([
-                'cart_id' => $cart->cart_id,
+                'cart_id' => $request->cart_id ?? $cart->cart_id,
                 'product_id' => $item['id'],
                 'discount' => $discount,
                 'customer_discount' => $customer_discount * $quantity,

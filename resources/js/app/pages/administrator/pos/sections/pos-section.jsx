@@ -356,6 +356,12 @@ export default function PosSection() {
                                                                         .value
                                                                 )
                                                             }
+                                                            onWheel={(e) => e.target.blur()}
+                                                            onKeyDown={(e) => {
+                                                                if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                                                                    e.preventDefault();
+                                                                }
+                                                            }}
                                                             className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pl-3 pr-1 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                                         />
                                                     </div>

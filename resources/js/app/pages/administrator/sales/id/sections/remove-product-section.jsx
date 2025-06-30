@@ -1,4 +1,5 @@
 
+import { delete_cart_item_thunk, delete_cart_thunk, get_cart_by_id_thunk } from "@/app/redux/cart-thunk";
 import { delete_product_thunk, get_product_thunk } from "@/app/redux/product-thunk";
 import { delete_supplier_thunk, get_supplier_thunk } from "@/app/redux/supplier-thunk";
 import { delete_user_thunk, get_users_thunk } from "@/app/redux/user-thunk";
@@ -13,19 +14,21 @@ export default function RemoveProductSection({ data }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => setIsModalOpen(true);
     const [loading, setLoading] = useState(false);
+    const cart_id = window.location.pathname.split("/")[3];
+
 
     const deleteUser = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
             await store.dispatch(
-                delete_supplier_thunk(data.id)
+                delete_cart_item_thunk(data.id)
             );
-            store.dispatch(get_supplier_thunk())
+            await store.dispatch(get_cart_by_id_thunk(cart_id));
             message.success("Removed Successfully!");
             setIsModalOpen(false);
         } catch (error) {
-            message.error("Failed to Delete Supplier. Please try again."); // Show error message
+            message.error("Failed to Removed Item. Please try again."); // Show error message
         } finally {
             setLoading(false); // Always reset loading state
         }

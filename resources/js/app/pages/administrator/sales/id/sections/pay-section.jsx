@@ -1,7 +1,7 @@
 import Button from "@/app/_components/button";
 import Input from "@/app/_components/input";
 import Modal from "@/app/_components/modal";
-import { create_cart_thunk } from "@/app/redux/cart-thunk";
+import { create_cart_thunk, get_cart_by_id_thunk } from "@/app/redux/cart-thunk";
 import { get_category_thunk } from "@/app/redux/category-thunk";
 import { search_customer_thunk } from "@/app/redux/customer-thunk";
 import { setCarts } from "@/app/redux/product-slice";
@@ -34,6 +34,7 @@ export default function PaySection({
     discount_per_order,
     data,
     shop,
+    setIsModalOpen
 }) {
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -49,7 +50,7 @@ export default function PaySection({
     const dispatch = useDispatch();
     const [id, setId] = useState(0);
     const discounts = form?.customer?.discounts ?? [];
-
+    const cart_id = window.location.pathname.split("/")[3];
     const discountMap = discounts.reduce((acc, curr) => {
         acc[curr.product_id] = curr;
         return acc;
@@ -97,6 +98,7 @@ export default function PaySection({
     }, [isOpen]);
 
     const form_data = {
+        cart_id: cart_id,
         customer_amount: form.customer_amount,
         change: form.change,
         payment_type: !form.is_credit ? form.payment_type : null,
@@ -118,10 +120,10 @@ export default function PaySection({
         try {
             setLoading(true);
             const results = await store.dispatch(create_cart_thunk(form_data));
+            await store.dispatch(get_cart_by_id_thunk(cart_id));
             setProductId(results?.data?.cart_id ?? "");
             await store.dispatch(get_category_thunk());
-            setId(results?.data?.id);
-            Swal.fire({
+            await Swal.fire({
                 title: "Print Receipt?",
                 text: "",
                 icon: "success",
@@ -147,6 +149,9 @@ export default function PaySection({
                     setLoading(false);
                 }
             });
+            setIsModalOpen(false)
+            setId(results?.data?.id);
+
         } catch (error) {
             await Swal.fire({
                 icon: "error",
@@ -235,7 +240,9 @@ export default function PaySection({
                         <button onClick={() => setIsOpen(false)} className="text-sm hover:text-gray-700 text-gray-500">
                             Cancel
                         </button>
-                        <button className="text-sm bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2">
+                        <button
+                            onClick={() => submit_payment()}
+                            className="text-sm bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2">
                             Submit
                         </button>
                     </div>

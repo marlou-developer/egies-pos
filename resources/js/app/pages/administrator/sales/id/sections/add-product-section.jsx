@@ -75,7 +75,9 @@ export default function AddProductSection({ data, storeName }) {
             </Tooltip>
             <Modal open={isModalOpen} setOpen={setIsModalOpen} onClose={() => setIsModalOpen(false)} maxWidth="8xl" >
                 <div>
-                    <PosSection />
+                    <PosSection 
+                    setIsModalOpen={setIsModalOpen}
+                    />
                 </div>
             </Modal>
         </>
