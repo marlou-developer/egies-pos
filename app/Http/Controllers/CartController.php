@@ -224,6 +224,33 @@ class CartController extends Controller
                 ->values();
 
             return response()->json($paymentTypes, 200);
+        } else if ($request->type == "Payment Types by Customer") {
+            $paymentTypes = Customer::with(['carts' => function ($query) use ($start, $end) {
+                $query->whereBetween('created_at', [$start, $end])
+                    ->whereNotNull('payment_type'); // adjust based on your schema
+            }])->get()
+                ->map(function ($customer) {
+                    $byPaymentType = $customer->carts
+                        ->groupBy('payment_type')
+                        ->map(function ($group, $type) {
+                            return [
+                                'type' => $type,
+                                'count' => $group->count(),
+                                'total_amount' => $group->sum('total_price' ?? '0'),
+                            ];
+                        })
+                        ->values();
+
+                    return [
+                        'customer_id' => $customer->id,
+                        'customer_name' => $customer->name,
+                        'payment_types' => $byPaymentType
+                    ];
+                })
+                ->filter(fn($u) => $u['payment_types']->isNotEmpty())
+                ->values();
+
+            return response()->json($paymentTypes, 200);
         }
     }
     public function update_all_status(Request $request)
