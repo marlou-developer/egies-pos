@@ -84,7 +84,6 @@ const PurchaseInvoiceReportSection = () => {
         0
     );
 
-    console.log('asadda', reports)
 
     return (
         <PDFViewer style={{ width: "100%", height: "100vh" }}>

@@ -99,7 +99,7 @@ export default function GenerateReportSection() {
                             Purchase Invoices
                         </option>
                         {/* <option value="Refunds">Refunds</option> */}
-                        {/* <option value="Invoices">Invoices</option> */}
+                        <option value="Invoices">Invoices</option>
                         {/* <option value="Profit">Profit</option> */}
                     </select>
                 </div>

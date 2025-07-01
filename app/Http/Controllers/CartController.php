@@ -278,6 +278,22 @@ class CartController extends Controller
                 ->values();
 
             return response()->json($purchaseInvoice, 200);
+        } else if ($request->type == "Invoices") {
+            $Invoice = Cart::with(['customer', 'cart_items'])
+                ->get()
+                ->map(function ($items) {
+                    // $total = $items->first()->product->sum('total');
+
+
+                    return [
+                        // 'id' => $items->first()->product->id,
+                        'total' => $items->first()->sum('total_price'),
+                        'total_price' => $items->first()->total_price,
+                    ];
+                })
+                ->values();
+
+            return response()->json($Invoice, 200);
         }
     }
     public function update_all_status(Request $request)
