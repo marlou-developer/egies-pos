@@ -8,6 +8,9 @@ import {
     PDFViewer,
     Font,
 } from "@react-pdf/renderer";
+import { useSelector } from "react-redux";
+import { peso_value } from "@/app/lib/peso";
+import moment from "moment";
 
 // Register font (if needed)
 Font.register({
@@ -72,21 +75,17 @@ const styles = StyleSheet.create({
     },
 });
 
-const data = [
-    { code: "1", product: "Perfect Skin Rejuvenating Set", qty: 12, cost: 1500, total: 1850, profit: 350, margin: "18.92%" },
-    { code: "123", product: "Dr. Alvin Rejuvenating Set", qty: 2, cost: 155, total: 300, profit: 145, margin: "48.33%" },
-    { code: "144", product: "Hikari Ultra", qty: 20, cost: 4500, total: 5700, profit: 1200, margin: "21.06%" },
-    { code: "224", product: "Perfect Skin Flawless White Egg", qty: 20, cost: 2068.60, total: 2600, profit: 531.40, margin: "20.44%" },
-    { code: "234", product: "Perfect Skin Big Toner", qty: 5, cost: 330, total: 600, profit: 270, margin: "45.00%" },
-    { code: "235", product: "Habibi Babad Soap", qty: 50, cost: 4000, total: 6000, profit: 2000, margin: "33.33%" },
-    { code: "320", product: "Pinky Secret", qty: 10, cost: 500, total: 1000, profit: 500, margin: "50.00%" },
-    { code: "329", product: "Ashley Hair Serum", qty: 35, cost: 3360, total: 4200, profit: 840, margin: "20.00%" },
-    { code: "334", product: "KiffyFied Feminine Wash", qty: 30, cost: 2400, total: 4275, profit: 1875, margin: "43.90%" },
-    { code: "337", product: "Beauty White Soap", qty: 170, cost: 16150, total: 18640, profit: 2490, margin: "13.36%" },
-    { code: "346", product: "Hikari SB 50g", qty: 50, cost: 6000, total: 6500, profit: 500, margin: "7.69%" },
-];
 
 const PurchaseInvoiceReportSection = () => {
+
+    const { reports } = useSelector((store) => store.carts);
+    const total = reports.reduce(
+        (sum, item) => sum + Number(item.total),
+        0
+    );
+
+    console.log('asadda', reports)
+
     return (
         <PDFViewer style={{ width: "100%", height: "100vh" }}>
             <Document>
@@ -141,26 +140,29 @@ const PurchaseInvoiceReportSection = () => {
                     </View>
 
                     {/* Table Rows */}
-                    {data.map((item, idx) => (
+
+                    {reports.map((item, idx) => (
                         <View style={styles.tableRow} key={idx}>
-                            <Text style={styles.colSmall}>{item.code}</Text>
-                            <Text style={styles.col}>{item.product}</Text>
-                            <Text style={styles.colSmall}>{item.qty}</Text>
-                            <Text style={styles.colSmall}>{item.cost.toLocaleString()}</Text>
-                            <Text style={styles.colSmall}>{item.total.toLocaleString()}</Text>
-                            <Text style={styles.colSmall}>{item.margin}</Text>
+                            <Text style={styles.colSmall}>{item?.id}</Text>
+                            <Text style={styles.col}>{item?.supplier_name}</Text>
+                            <Text style={styles.colSmall}>{item.delivery_receipt_no}</Text>
+                            <Text style={styles.colSmall}>{item?.none}</Text>
+                            <Text style={styles.colSmall}>{moment(item.date).format('LL')}</Text>
+
+                            <Text style={styles.colSmall}>{peso_value(item?.cost)}</Text>
                         </View>
                     ))}
 
+
                     {/* Summary */}
-                    <View style={styles.summary}>
-                        <Text>Total Cost: 42,048.60</Text>
-                        <Text>Total Sales: 52,879.00</Text>
-                        <Text>Total Profit: 10,830.40</Text>
+                    < View style={styles.summary} >
+                        {/* <Text>Total Cost: 42,048.60</Text> */}
+                        < Text > Total: {peso_value(total)}</Text>
+                        {/* <Text>Total Profit: 10,830.40</Text> */}
                     </View>
                 </Page>
-            </Document>
-        </PDFViewer>
+            </Document >
+        </PDFViewer >
     );
 };
 

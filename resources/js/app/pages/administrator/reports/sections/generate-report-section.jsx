@@ -95,9 +95,9 @@ export default function GenerateReportSection() {
                         <option value="Payment Types by Customer">
                             Payment Types by Customer
                         </option>
-                        {/* <option value="Purchase Invoice">
-                            Purchase Invoice
-                        </option> */}
+                        <option value="Purchase Invoices">
+                            Purchase Invoices
+                        </option>
                         {/* <option value="Refunds">Refunds</option> */}
                         {/* <option value="Invoices">Invoices</option> */}
                         {/* <option value="Profit">Profit</option> */}

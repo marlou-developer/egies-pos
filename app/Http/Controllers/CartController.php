@@ -251,6 +251,33 @@ class CartController extends Controller
                 ->values();
 
             return response()->json($paymentTypes, 200);
+        } else if ($request->type == "Purchase Invoices") {
+            $purchaseInvoice = CartItem::with(['product'])
+                ->get()
+                ->groupBy('product_id')
+                ->map(function ($items) {
+                    $totalQuantity = $items->first()->product->sum('quantity');
+                    $totalSales = $items->sum(function ($item) {
+                        return $item->product->quantity * $item->product->cost;
+                    });
+                    $totalCost = $items->first()->product->quantity * $items->first()->product->cost;
+
+
+                    return [
+                        'id' => $items->first()->product->id,
+                        'product_id' => $items->first()->product_id,
+                        'product_name' => $items->first()->product->name ?? 'Unknown',
+                        'delivery_receipt_no' => $items->first()->product->delivery_receipt_no,
+                        'supplier_name' => $items->first()->product->supplier->name,
+                        'date' => $items->first()->product->created_at,
+                        'cost' => $totalCost,
+                        'total_quantity' => $totalQuantity,
+                        'total' => $totalSales,
+                    ];
+                })
+                ->values();
+
+            return response()->json($purchaseInvoice, 200);
         }
     }
     public function update_all_status(Request $request)

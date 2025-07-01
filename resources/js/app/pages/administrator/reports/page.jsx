@@ -57,7 +57,7 @@ export default function ReportsPage() {
                         {type == "Profit" && <ProfitReportSection />}
                         {type == "Invoices" && <InvoiceReportSection />}
                         {type == "Refunds" && <RefundsReportSection />}
-                        {type == "Purchase Invoice" && (
+                        {type == "Purchase Invoices" && (
                             <PurchaseInvoiceReportSection />
                         )}
                         {type == "Payment Types by Customer" && (
