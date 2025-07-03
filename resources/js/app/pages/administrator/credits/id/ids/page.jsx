@@ -12,7 +12,9 @@ export default function SalesByPage() {
         store.dispatch(get_category_thunk());
         store.dispatch(get_cart_by_id_thunk(cart_id));
     }, []);
-    return <AdminLayout>
-        <SalesIdTableSection />
-    </AdminLayout>;
+    return (
+        <AdminLayout>
+            <SalesIdTableSection />
+        </AdminLayout>
+    );
 }

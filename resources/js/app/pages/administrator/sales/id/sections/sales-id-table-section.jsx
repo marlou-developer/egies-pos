@@ -6,6 +6,7 @@ import { peso_value } from "@/app/lib/peso";
 import SalesEditQuantitySection from "./sales-edit-quantity-section";
 import AddProductSection from "./add-product-section";
 import RemoveProductSection from "./remove-product-section";
+import EditDIscountSection from "../../../credits/id/ids/sections/edit-discount-section";
 
 const people = [
     {
@@ -31,7 +32,8 @@ export default function SalesIdTableSection() {
                         A list of all the Carts in your account.
                     </p>
                 </div>
-                <div>
+                <div className="flex gap-3">
+                    <EditDIscountSection data={cart}/>
                     <AddProductSection />
                 </div>
             </div>
@@ -97,11 +99,25 @@ export default function SalesIdTableSection() {
                                 {peso_value(Number(cart?.sub_total))}
                             </div>
                             <div>
-                                Discount Price:
+                                Customer Total Discount:{" "}
+                                {peso_value(
+                                    Number(cart?.customer_total_discount)
+                                )}
+                            </div>
+                            <div>
+                                Total Discount Per Item:{" "}
+                                {peso_value(Number(cart?.discount_per_item))}
+                            </div>
+                            <div>
+                                Total Discount Per Order:{" "}
+                                {peso_value(Number(cart?.discount_per_order))}
+                            </div>
+                            <div>
+                                Total Discount Price:
                                 {peso_value(
                                     Number(cart?.customer_total_discount ?? 0) +
-                                    Number(cart?.discount_per_item ?? 0) +
-                                    Number(cart?.discount_per_order ?? 0)
+                                        Number(cart?.discount_per_item ?? 0) +
+                                        Number(cart?.discount_per_order ?? 0)
                                 )}{" "}
                             </div>
 

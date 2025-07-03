@@ -201,11 +201,12 @@ export default function PaySection({
         }
     }
 
-    console.log("list_of_available_discount", list_of_available_discount);
+    const disabled = subtotal < discount_per_order;
+    console.log("overall_total", disabled);
     return (
         <>
             <Button
-                disabled={data.length == 0}
+                disabled={data.length == 0 || disabled}
                 onClick={() => setIsOpen(true)}
                 className="w-full bg-pink-500 hover:bg-pink-600"
             >

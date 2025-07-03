@@ -89,7 +89,7 @@ export default function StocksSection() {
         printWindow.document.close();
         printWindow.print();
     };
-
+console.log('products',products.data.data)
 
     return (
         <div className="px-4 sm:px-6 lg:px-8">

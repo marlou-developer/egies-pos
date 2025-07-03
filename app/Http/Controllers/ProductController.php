@@ -3,14 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Stock;
 use App\Models\Upload;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
 
-   
+
     public function index(Request $request)
     {
         $query = Product::with(['categories', 'uploads', 'stocks'])
@@ -73,6 +75,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        $date = Carbon::now();
         $data =  $request->validate([
             'name' => 'required|string|max:255',
             'category_id' => 'nullable|string',
@@ -89,10 +92,20 @@ class ProductController extends Controller
             'provincial_distributor' => 'nullable|string',
             'delivery_receipt_no' => 'nullable|string',
             'supplier_id' => 'nullable|string',
-            
+
         ]);
 
         $product = Product::create($data);
+
+        Stock::create([
+            'product_id' => $product->id,
+            'date' => $date->format('Y-m-d'),
+            'delivery_id' => $date->format('mdyHis'), // H = 24-hour format
+            'quantity' => $request->quantity,
+            'remaining' => $request->quantity,
+            'price' => $request->price,
+            'supplier_id' => $request->supplier_id,
+        ]);
 
         $this->handleFileUploads($request, 'uploads', $product);
 

@@ -17,6 +17,19 @@ use Illuminate\Support\Collection;
 
 class CartController extends Controller
 {
+
+    public function edit_discount(Request $request)
+    {
+        $cart = Cart::where('cart_id', $request->cart_id)->first();
+        $total_price = CartItem::where('cart_id', $request->cart_id)->sum('total');
+        if ($cart) {
+            $cart->update([
+                'discount_per_order' => $request->discount_per_order,
+                'total_price' => $total_price
+            ]);
+        }
+        return response()->json($request, 200);
+    }
     public function edit_quantity(Request $request)
     {
         $cart = Cart::where('cart_id', $request->cart_id)->first();
