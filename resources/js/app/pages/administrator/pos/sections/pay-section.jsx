@@ -25,6 +25,7 @@ import {
 } from "react-thermal-printer";
 import Swal from "sweetalert2";
 import PrintReceiptSection from "./print-receipt-section";
+import Select from "@/app/_components/select";
 
 export default function PaySection({
     total_price,
@@ -113,6 +114,7 @@ export default function PaySection({
         shop: shop,
         order_id: form.order_id ?? null,
         customer_name: form.customer_name ?? null,
+        shopee_store: form.shopee_store ?? null,
     };
     async function submit_payment(params) {
         try {
@@ -121,32 +123,45 @@ export default function PaySection({
             setProductId(results?.data?.cart_id ?? "");
             await store.dispatch(get_category_thunk());
             setId(results?.data?.id);
-            Swal.fire({
-                title: "Print Receipt?",
-                text: "",
-                icon: "success",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Print",
-            }).then((result) => {
-                if (result.isConfirmed) {
+
+            if (shop == "Store") {
+                Swal.fire({
+                    title: "Print Receipt?",
+                    text: "",
+                    icon: "success",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Print",
+                }).then((result) => {
                     if (result.isConfirmed) {
-                        setShouldPrint(true);
+                        if (result.isConfirmed) {
+                            setShouldPrint(true);
+                            setLoading(false);
+                        }
+                        Swal.fire({
+                            icon: "success",
+                            title: "Your cart has been saved",
+                            showConfirmButton: false,
+                            timer: 1500,
+                        });
+                    } else {
+                        dispatch(setCarts([]));
+                        reset_data();
                         setLoading(false);
                     }
-                    Swal.fire({
-                        icon: "success",
-                        title: "Your cart has been saved",
-                        showConfirmButton: false,
-                        timer: 1500,
-                    });
-                } else {
-                    dispatch(setCarts([]));
-                    reset_data();
-                    setLoading(false);
-                }
-            });
+                });
+            } else {
+                await Swal.fire({
+                    icon: "success",
+                    title: "Your cart has been saved",
+                    showConfirmButton: false,
+                    timer: 1500,
+                });
+                dispatch(setCarts([]));
+                reset_data();
+                setLoading(false);
+            }
         } catch (error) {
             await Swal.fire({
                 icon: "error",
@@ -340,6 +355,29 @@ export default function PaySection({
                         <div className="border-pink-600 border-r border-2"></div>
                         {shop == "Shopee" && (
                             <div className="flex-1 flex flex-col gap-3">
+                                <Select
+                                    label="Shopee Store"
+                                    onChange={(e) =>
+                                        setForm({
+                                            ...form,
+                                            shopee_store: e.target.value,
+                                        })
+                                    }
+                                    options={[
+                                        {
+                                            label: "",
+                                            value: "",
+                                        },
+                                        {
+                                            label: "You Glow Darling PH",
+                                            value: "You Glow Darling PH",
+                                        },
+                                        {
+                                            label: "Beauty In Pink",
+                                            value: "Beauty In Pink",
+                                        },
+                                    ]}
+                                />
                                 <Input
                                     onChange={(e) =>
                                         setForm({

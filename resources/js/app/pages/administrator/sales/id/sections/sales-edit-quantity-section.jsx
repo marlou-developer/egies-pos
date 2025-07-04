@@ -1,13 +1,17 @@
 import { edit_quantity_service } from "@/app/pages/services/cart-service";
 import { get_cart_by_id_thunk } from "@/app/redux/cart-thunk";
 import store from "@/app/store/store";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 
 export default function SalesEditQuantitySection({ data }) {
     const [isEdit, setIsEdit] = useState(false);
     const [value, setValue] = useState(data?.quantity || 0);
     const cart_id = window.location.pathname.split("/")[3];
+
+    useEffect(() => {
+        setValue(data?.quantity);
+    }, [data?.quantity]);
 
     const handleKeyDown = async (e) => {
         if (e.key === "Enter") {

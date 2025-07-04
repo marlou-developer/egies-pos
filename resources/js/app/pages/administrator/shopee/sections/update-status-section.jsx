@@ -54,6 +54,9 @@ export default function UpdateStatusSection({ data }) {
                 title="Update Status"
                 width="max-w-lg"
             >
+                <div className="text-red-500">
+                    Selecting "Return" will return all items/products.
+                </div>
                 <div className="flex  flex-col w-full gap-3 items-end justify-end">
                     <select
                         onChange={(e) =>

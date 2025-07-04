@@ -18,6 +18,38 @@ use Illuminate\Support\Collection;
 class CartController extends Controller
 {
 
+    public function return_per_item(Request $request)
+    {
+
+        $cart_item = CartItem::where('id', $request->id)->first();
+        $remaining_quanity = $cart_item->quantity - $request->quantity;
+        $kaltas_price = $request->quantity * $cart_item->fixed_price;
+
+        if ($cart_item) {
+            $cart_item->update([
+                'quantity' =>  $remaining_quanity,
+                'total' =>  $remaining_quanity * $cart_item->fixed_price,
+            ]);
+        }
+        $cart = Cart::where('cart_id', $cart_item->cart_id)->first();
+        if ($cart) {
+            $cart->update([
+                'total_price' => $cart->total_price - $kaltas_price,
+                'sub_total' => $cart->sub_total - $kaltas_price,
+            ]);
+        }
+
+        $product = Product::where('id', $cart_item->product_id)->first();
+        if ($product) {
+            $product->update([
+                'quantity' => $product->quantity +  $request->quantity
+            ]);
+        }
+        return response()->json([
+            'result' => 'success'
+        ], 200);
+    }
+
     public function edit_discount(Request $request)
     {
         $cart = Cart::where('cart_id', $request->cart_id)->first();
@@ -25,7 +57,7 @@ class CartController extends Controller
         if ($cart) {
             $cart->update([
                 'discount_per_order' => $request->discount_per_order,
-                'total_price' => $total_price
+                'total_price' => $total_price - ($request->discount_per_order ?? 0 + $cart->discount_per_item ?? 0 + $cart->customer_total_discount ?? 0)
             ]);
         }
         return response()->json($request, 200);
@@ -563,6 +595,7 @@ class CartController extends Controller
                 'is_credit' => $request->is_credit ?? null,
                 'due_date' => $request->due_date,
                 'shop' => $request->shop,
+                'shopee_store' => $request->shopee_store,
                 'balance' => $request->is_credit == 'true' ? $request->total_price : '0',
             ]);
         }

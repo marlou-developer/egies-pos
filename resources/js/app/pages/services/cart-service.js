@@ -1,6 +1,14 @@
 import axios from "axios";
 
 
+
+export function return_per_item_service(data) {
+    try {
+        const result = axios.post("/api/return_per_item", data);
+
+        return result;
+    } catch (error) { }
+}
 export function edit_payment_service(data) {
     try {
         const result = axios.post("/api/edit_payment", data);

@@ -27,6 +27,7 @@ class Cart extends Model
         'status',
         'is_credit',
         'shop',
+        'shopee_store',
         'balance',
         'due_date',
     ];

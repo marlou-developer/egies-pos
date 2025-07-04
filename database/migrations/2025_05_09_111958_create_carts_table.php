@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->string('is_credit')->nullable();
             $table->string('shop')->nullable();
+            $table->string('shopee_store')->nullable();
             $table->string('balance')->nullable();
             $table->string('due_date')->nullable();
             $table->timestamps();

@@ -19,6 +19,7 @@ class CartItem extends Model
         'price',
         'fixed_price',
         'total',
+        'status'
     ];
 
       public function product(): HasOne

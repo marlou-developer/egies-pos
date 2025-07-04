@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('price')->nullable();
             $table->string('fixed_price')->nullable();
             $table->string('total')->nullable();
+            $table->string('notes')->nullable();
             $table->timestamps();
         });
     }

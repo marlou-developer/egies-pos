@@ -59,7 +59,6 @@ export default function PosSection() {
     }
 
     function update_pcs(result, valueKey) {
-     
         const new_data = carts.map((item) => {
             if (item.id === result.id) {
                 if (item.quantity >= Number(valueKey)) {
@@ -69,8 +68,22 @@ export default function PosSection() {
                     };
                 } else {
                     alert("Insufficient Supply");
-                    return item; 
+                    return item;
                 }
+            } else {
+                return item;
+            }
+        });
+        dispatch(setCarts(new_data));
+    }
+
+    function update_shopee_price(result, valueKey) {
+        const new_data = carts.map((item) => {
+            if (item.id === result.id) {
+                return {
+                    ...item,
+                    sub_price: Number(valueKey),
+                };
             } else {
                 return item;
             }
@@ -183,14 +196,60 @@ export default function PosSection() {
                                                         </span>
                                                     </div>
                                                     <div className="font-bold">
-                                                        ₱{" "}
-                                                        {parseFloat(
-                                                            res.sub_price
-                                                        ).toLocaleString(
-                                                            "en-PH",
-                                                            {
-                                                                minimumFractionDigits: 2,
-                                                            }
+                                                        {store == "Shopee" && (
+                                                            <>
+                                                                <input
+                                                                    id="sub_price"
+                                                                    name="sub_price"
+                                                                    type="number"
+                                                                    onChange={(
+                                                                        e
+                                                                    ) =>
+                                                                        update_shopee_price(
+                                                                            res,
+                                                                            Number(
+                                                                                e
+                                                                                    .target
+                                                                                    .value
+                                                                            )
+                                                                        )
+                                                                    }
+                                                                    value={
+                                                                        res?.sub_price
+                                                                    }
+                                                                    // onKeyDown={(
+                                                                    //     e
+                                                                    // ) => {
+                                                                    //     if (
+                                                                    //         e.key ===
+                                                                    //             "ArrowUp" ||
+                                                                    //         e.key ===
+                                                                    //             "ArrowDown"
+                                                                    //     ) {
+                                                                    //         e.preventDefault();
+                                                                    //     }
+                                                                    // }}
+                                                                    onWheel={(
+                                                                        e
+                                                                    ) =>
+                                                                        e.target.blur()
+                                                                    }
+                                                                    className="block text-center w-full rounded-md bg-white py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
+                                                                />
+                                                            </>
+                                                        )}
+                                                        {store == "Store" && (
+                                                            <>
+                                                                ₱{" "}
+                                                                {parseFloat(
+                                                                    res.sub_price
+                                                                ).toLocaleString(
+                                                                    "en-PH",
+                                                                    {
+                                                                        minimumFractionDigits: 2,
+                                                                    }
+                                                                )}
+                                                            </>
                                                         )}
                                                     </div>
                                                 </div>
@@ -356,12 +415,19 @@ export default function PosSection() {
                                                                         .value
                                                                 )
                                                             }
-                                                            onWheel={(e) => e.target.blur()}
-                                                            onKeyDown={(e) => {
-                                                                if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-                                                                    e.preventDefault();
-                                                                }
-                                                            }}
+                                                            onWheel={(e) =>
+                                                                e.target.blur()
+                                                            }
+                                                            // onKeyDown={(e) => {
+                                                            //     if (
+                                                            //         e.key ===
+                                                            //             "ArrowUp" ||
+                                                            //         e.key ===
+                                                            //             "ArrowDown"
+                                                            //     ) {
+                                                            //         e.preventDefault();
+                                                            //     }
+                                                            // }}
                                                             className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pl-3 pr-1 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                                         />
                                                     </div>

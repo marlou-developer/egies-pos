@@ -7,6 +7,7 @@ import SalesEditQuantitySection from "./sales-edit-quantity-section";
 import AddProductSection from "./add-product-section";
 import RemoveProductSection from "./remove-product-section";
 import EditDIscountSection from "../../../credits/id/ids/sections/edit-discount-section";
+import ReturnItemSection from "./return-item-section";
 
 const people = [
     {
@@ -33,7 +34,7 @@ export default function SalesIdTableSection() {
                     </p>
                 </div>
                 <div className="flex gap-3">
-                    <EditDIscountSection data={cart}/>
+                    <EditDIscountSection data={cart} />
                     <AddProductSection />
                 </div>
             </div>
@@ -76,8 +77,9 @@ export default function SalesIdTableSection() {
                                             {res.product.name}
                                         </td>
                                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                                            <SalesEditQuantitySection data={res} />
-
+                                            <SalesEditQuantitySection
+                                                data={res}
+                                            />
                                         </td>
                                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                                             {res?.price}
@@ -85,8 +87,17 @@ export default function SalesIdTableSection() {
                                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                                             {res?.total}
                                         </td>
-                                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                                            <RemoveProductSection data={res} />
+                                        <td className="px-3 py-4 gap-2 flex  text-sm whitespace-nowrap text-gray-500">
+                                            {Number(res.quantity) != 0 && (
+                                                <>
+                                                    <RemoveProductSection
+                                                        data={res}
+                                                    />
+                                                    <ReturnItemSection
+                                                        data={res}
+                                                    />
+                                                </>
+                                            )}
                                         </td>
                                     </tr>
                                 ))}
@@ -113,7 +124,7 @@ export default function SalesIdTableSection() {
                                 {peso_value(Number(cart?.discount_per_order))}
                             </div>
                             <div>
-                                Total Discount Price:
+                                Overall Total Discount Price:
                                 {peso_value(
                                     Number(cart?.customer_total_discount ?? 0) +
                                         Number(cart?.discount_per_item ?? 0) +

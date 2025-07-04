@@ -172,19 +172,7 @@ export default function ShopeeSection() {
                                                     <UpdateStatusSection
                                                         data={res}
                                                     />
-                                                    <button
-                                                        className="bg-yellow-300 hover:bg-yellow-400 rounded-md p-2.5"
-                                                        onClick={() =>
-                                                            router.visit(
-                                                                `/administrator/sales/${res.cart_id}`
-                                                            )
-                                                        }
-                                                        // onClick={() => window.open(`/administrator/stocks/${product.id}`, '_blank')}
-                                                    >
-                                                        <Tooltip title="Edit Added Stock(s)">
-                                                            <PencilSquareIcon className="h-4" />
-                                                        </Tooltip>
-                                                    </button>
+                                                   
                                                 </div>
                                             </td>
                                         </tr>
