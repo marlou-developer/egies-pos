@@ -12,6 +12,7 @@ import {
 import Modal from "@/app/_components/modal";
 import moment from "moment";
 import { peso_value } from "@/app/lib/peso";
+import { FaPrint } from "react-icons/fa6";
 
 const styles = StyleSheet.create({
     page: {
@@ -82,15 +83,15 @@ export default function PrintSection() {
             {selectedStocks.length != 0 && (
                 <button
                     onClick={() => setIsOpen(true)}
-                    className="p-2 bg-pink-700 rounded-lg hover:bg-pink-600 text-white"
+                    className="p-2 bg-pink-700 rounded-lg flex hover:bg-pink-600 text-white"
                 >
-                    {selectedStocks.length} Print
+                    {selectedStocks.length} &nbsp;<FaPrint className="mr-1"/> PRINT
                 </button>
             )}
 
             <Modal
-            width="max-w-7xl"
-            isOpen={isOpen} onClose={() => setIsOpen(false)}>
+                width="max-w-7xl"
+                isOpen={isOpen} onClose={() => setIsOpen(false)}>
                 <div className="p-3">
                     <PDFViewer style={{ width: "100%", height: "85vh" }}>
                         <Document>
@@ -191,8 +192,8 @@ export default function PrintSection() {
                                                 {item.quantity == 0
                                                     ? "Out of Stock"
                                                     : item.quantity <= 10
-                                                    ? "Low Stock"
-                                                    : "In Stock"}
+                                                        ? "Low Stock"
+                                                        : "In Stock"}
                                             </Text>
                                             <Text
                                                 style={[
@@ -202,23 +203,23 @@ export default function PrintSection() {
                                             >
                                                 {item.stocks?.length > 0
                                                     ? new Date(
-                                                          [...item.stocks].sort(
-                                                              (a, b) =>
-                                                                  new Date(
-                                                                      b.date
-                                                                  ) -
-                                                                  new Date(
-                                                                      a.date
-                                                                  )
-                                                          )[0].date
-                                                      ).toLocaleDateString(
-                                                          "en-US",
-                                                          {
-                                                              year: "numeric",
-                                                              month: "short",
-                                                              day: "numeric",
-                                                          }
-                                                      )
+                                                        [...item.stocks].sort(
+                                                            (a, b) =>
+                                                                new Date(
+                                                                    b.date
+                                                                ) -
+                                                                new Date(
+                                                                    a.date
+                                                                )
+                                                        )[0].date
+                                                    ).toLocaleDateString(
+                                                        "en-US",
+                                                        {
+                                                            year: "numeric",
+                                                            month: "short",
+                                                            day: "numeric",
+                                                        }
+                                                    )
                                                     : "No Stocks Added"}
                                             </Text>
                                             <Text
@@ -229,7 +230,7 @@ export default function PrintSection() {
                                             >
                                                 {peso_value(
                                                     Number(item.quantity) *
-                                                        Number(item.srp)
+                                                    Number(item.srp)
                                                 )}
                                             </Text>
                                             <Text
@@ -240,7 +241,7 @@ export default function PrintSection() {
                                             >
                                                 {peso_value(
                                                     Number(item.quantity) *
-                                                        Number(item.cost)
+                                                    Number(item.cost)
                                                 )}
                                             </Text>
                                         </View>

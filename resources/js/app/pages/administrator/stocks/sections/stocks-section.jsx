@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { FaBoxesStacked, FaClipboardList, FaSquarePlus } from "react-icons/fa6";
+import { FaBoxesStacked, FaClipboardList, FaFilter, FaSquarePlus } from "react-icons/fa6";
 import store from "@/app/store/store";
 import AddStocksSection from "./add-stocks-section";
 import StocksHistorySection from "./stocks-history-section";
@@ -12,6 +12,7 @@ import { setSelectAllStock, setSelectedStocks } from "@/app/redux/product-slice"
 import PrintSection from "./print-section";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { Tooltip } from "antd";
+import FilterStocksComponent from "../components/filter-stocks-component";
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
@@ -89,17 +90,23 @@ export default function StocksSection() {
         printWindow.document.close();
         printWindow.print();
     };
-console.log('products',products.data.data)
+    console.log('products', products.data.data)
 
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             {/* Header Section */}
             <div className="sm:flex sm:items-center">
-                <div className="sm:flex-auto">
-                    <FaBoxesStacked className="float-left mr-1 mt-1 text-pink-500" />
+                <div className="sm:flex-auto flex justify-between">
                     <h1 className="text-base font-semibold text-pink-500">
+                        <FaBoxesStacked className="float-left mr-1 mt-1 text-pink-500" />
                         Stocks Section
                     </h1>
+                    <div>
+                        <FilterStocksComponent
+                            open={openFilter}
+                            setOpenFilter={setOpenFilter}
+                        />
+                    </div>
                 </div>
             </div>
             <div className="mt-4 flex items-start justify-between">
@@ -107,6 +114,8 @@ console.log('products',products.data.data)
 
                 <PrintSection />
             </div>
+
+
             {/* Product Table */}
             <div className="mt-8 flow-root">
                 <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
@@ -376,8 +385,8 @@ console.log('products',products.data.data)
                                                     <StocksHistorySection
                                                         data={product}
                                                     />
-                                                    <button className="bg-yellow-300 hover:bg-yellow-400 rounded-md p-2.5" 
-                                                    onClick={() => router.visit(`/administrator/stocks/${product.id}`)}
+                                                    <button className="bg-yellow-300 hover:bg-yellow-400 rounded-md p-2.5"
+                                                        onClick={() => router.visit(`/administrator/stocks/${product.id}`)}
                                                     // onClick={() => window.open(`/administrator/stocks/${product.id}`, '_blank')}
                                                     >
                                                         <Tooltip title="Edit Added Stock(s)">
