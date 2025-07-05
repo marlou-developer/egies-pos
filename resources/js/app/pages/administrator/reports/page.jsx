@@ -24,6 +24,7 @@ import SalesByProductReportSection from "./sections/sales-by-product-report-sect
 import { get_report_thunk } from "@/app/redux/cart-thunk";
 import FastStockMovementReportSection from "./sections/fast-stock-movement-report-section";
 import SlowStockMovementReportSection from "./sections/slow-stock-movement-report-section";
+import ReportGeneratorSection from "./sections/report-generator-section";
 
 export default function ReportsPage() {
     const params = new URLSearchParams(window.location.search);
@@ -40,18 +41,18 @@ export default function ReportsPage() {
     }, []);
     return (
         <AdminLayout>
-            <div className="flex flex-col gap-3 h-[88vh]">
+            {/* <div className="flex flex-col gap-3 h-[88vh]">
                 <GenerateReportSection />
-                {/* <TabsSection />
-                <BarGraphSection /> */}
-                {/* <div className="flex gap-3">
+                <TabsSection />
+                <BarGraphSection />
+                <div className="flex gap-3">
                     <div className="w-1/3">
                         <ProductTableSection />
                     </div>
                     <div className=" w-2/3">
                         <LineGraphSection />
                     </div>
-                </div> */}
+                </div>
                 {!loading && (
                     <div>
                         {type == "Profit" && <ProfitReportSection />}
@@ -70,9 +71,9 @@ export default function ReportsPage() {
                             <PurchaseBySupplierReportSection />
                         )}
 
-                        {/* {
+                        {
                     type == 'Payment Types by User' && <PaymentTypesByUserReportSection />
-                } */}
+                }
                         {type == "Purchase by Product" && (
                             <PurchaseByProductReportSection />
                         )}
@@ -97,7 +98,8 @@ export default function ReportsPage() {
                         )}
                     </div>
                 )}
-            </div>
+            </div> */}
+            <ReportGeneratorSection />
         </AdminLayout>
     );
 }
