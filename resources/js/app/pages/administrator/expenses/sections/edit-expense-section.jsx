@@ -89,6 +89,20 @@ export default function EditExpenseSection({ data }) {
                                                     onChange={(e) =>
                                                         setForm({
                                                             ...form,
+                                                            category: e.target.value,
+                                                        })
+                                                    }
+                                                    value={form?.category || ""}
+                                                    name="category"
+                                                    label="Category"
+                                                    type="text"
+                                                />
+                                            </div>
+                                            <div>
+                                                <Input
+                                                    onChange={(e) =>
+                                                        setForm({
+                                                            ...form,
                                                             item: e.target.value,
                                                         })
                                                     }

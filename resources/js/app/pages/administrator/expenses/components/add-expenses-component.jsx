@@ -43,6 +43,7 @@ export default function AddExpensesComponent({ open, setOpenExpenses }) {
         setLoading(true);
 
         const fd = new FormData();
+        fd.append("category", expense.category ?? "");
         fd.append("item", expense.item ?? "");
         fd.append("cost", expense.cost ?? "");
         fd.append("qty", expense.qty ?? "");
@@ -109,7 +110,15 @@ export default function AddExpensesComponent({ open, setOpenExpenses }) {
                                         </h3>
                                         <hr />
                                     </div>
-
+                                    <div>
+                                        <Input
+                                            onChange={data_handler}
+                                            value={expense?.category ?? ""}
+                                            name="category"
+                                            label="Category"
+                                            type="text"
+                                        />
+                                    </div>
                                     <div>
                                         <Input
                                             onChange={data_handler}
@@ -134,7 +143,7 @@ export default function AddExpensesComponent({ open, setOpenExpenses }) {
                                             value={expense?.qty ?? ""}
                                             name="qty"
                                             label="Quantity"
-                                            type="text"
+                                            type="number"
                                         />
                                     </div>
                                     <div>

@@ -9,6 +9,7 @@ class Expense extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'category',
         'item',
         'cost',
         'qty',

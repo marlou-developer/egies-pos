@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
+            $table->string('category')->nullable();
             $table->string('item')->nullable();
             $table->string('cost')->nullable();
             $table->string('qty')->nullable();

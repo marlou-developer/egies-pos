@@ -75,6 +75,12 @@ export default function ExpensesTableSection() {
                                         scope="col"
                                         className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter sm:pl-6 lg:pl-8"
                                     >
+                                        Category
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter sm:pl-6 lg:pl-8"
+                                    >
                                         Purchase Item
                                     </th>
                                     <th
@@ -113,6 +119,14 @@ export default function ExpensesTableSection() {
                                 {Array.isArray(expenses) && expenses.length > 0 ? (
                                     expenses.map((expense, expenseIdx) => (
                                         <tr key={expenseIdx}>
+                                            <td
+                                                className={classNames(
+                                                    expenseIdx !== expenses.length - 1 ? "border-b border-gray-200" : "",
+                                                    "py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6 lg:pl-8"
+                                                )}
+                                            >
+                                                {expense.category}
+                                            </td>
                                             <td
                                                 className={classNames(
                                                     expenseIdx !== expenses.length - 1 ? "border-b border-gray-200" : "",
