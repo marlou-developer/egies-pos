@@ -152,7 +152,7 @@ export default function PosSection({ setIsModalOpen }) {
                                     console.log("resres", res);
                                     return (
                                         <>
-                                            <div class="flex flex-row gap-3 border-pink-300 border  p-2 rounded-lg shadow-md justify-between items-center mb-4">
+                                            <div class="flex flex-row gap-3 bg-pink-100 border-pink-300 border  p-2 rounded-lg shadow-md justify-between items-center mb-4">
                                                 <div class="flex flex-1 flex-col gap-3 items-start  justify-between w-2/5">
                                                     <div className="flex text-center w-full gap-3">
                                                         <img

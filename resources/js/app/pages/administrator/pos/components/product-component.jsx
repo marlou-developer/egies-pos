@@ -55,7 +55,7 @@ export default function ProductComponent({ product, storeName }) {
         <>
             <button
                 onClick={() => add_to_cart(product)}
-                className={`relative px-3 py-3 flex flex-col border rounded-md h-32 justify-between shadow-lg transition
+                className={`relative px-3 py-3 flex flex-col border rounded-md h-32 justify-between shadow-lg transition bg-pink-100 border-pink-300
                     ${
                         product.quantity == 0
                             ? "border-gray-300 cursor-not-allowed" // removed bg-gray and opacity
