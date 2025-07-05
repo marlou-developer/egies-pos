@@ -38,7 +38,7 @@ export default function UsersSection() {
                     >
 
                         <FaUserPlus className="mr-1 text-pink-500" />
-                        Add User
+                        ADD USER
                     </button>
                     <AddUserSection
                         open={openUser}

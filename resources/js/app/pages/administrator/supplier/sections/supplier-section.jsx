@@ -39,7 +39,7 @@ export default function SupplierSection() {
                                 className="relative inline-flex items-center rounded-l-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
                             >
                                 <FaPlus className="mr-1 text-pink-500" />
-                                Add New Supplier
+                                ADD NEW SUPPLIER
                             </button>
                             {/* <button
                                 type="button"

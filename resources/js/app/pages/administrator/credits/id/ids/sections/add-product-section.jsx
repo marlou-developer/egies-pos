@@ -67,7 +67,7 @@ export default function AddProductSection({ data, storeName }) {
                     onClick={openModal}
                 >
                     <FaPlus className="size-3.5 text-pink-500" />
-                    <b>Add Product</b>
+                    <b>ADD PRODUCT</b>
                 </button>
             </Tooltip>
             <Modal open={isModalOpen} setOpen={setIsModalOpen} onClose={() => setIsModalOpen(false)} maxWidth="8xl" >

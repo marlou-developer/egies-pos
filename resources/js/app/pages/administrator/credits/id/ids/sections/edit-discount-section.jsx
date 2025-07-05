@@ -19,19 +19,19 @@ import Modal from "@/Components/Modal";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { message, Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
-import { FaTrashCan } from "react-icons/fa6";
+import { FaPercent, FaTrashCan } from "react-icons/fa6";
 
 export default function EditDIscountSection({ data }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => setIsModalOpen(true);
     const [loading, setLoading] = useState(false);
-    const cart_id = window.location.pathname.split("/")[4]??window.location.pathname.split("/")[3];
+    const cart_id = window.location.pathname.split("/")[4] ?? window.location.pathname.split("/")[3];
     const [form, setForm] = useState({});
-    
-    useEffect(()=>{
+
+    useEffect(() => {
         setForm(data)
-    },[isModalOpen])
-    
+    }, [isModalOpen])
+
     const deleteUser = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -56,9 +56,11 @@ export default function EditDIscountSection({ data }) {
         <>
             <Tooltip title="Remove Product on Sales">
                 <button
-                    className="inline-flex items-center justify-center gap-x-1.5 text-white rounded-md bg-blue-500 hover:bg-blue-600 p-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
+                    // className="inline-flex items-center justify-center gap-x-1.5 text-white rounded-md bg-blue-500 hover:bg-blue-600 p-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
+                    className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-blue-100 hover:bg-blue-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
                     onClick={openModal}
                 >
+                    <FaPercent />
                     EDIT DISCOUNT
                 </button>
             </Tooltip>
@@ -77,7 +79,7 @@ export default function EditDIscountSection({ data }) {
                             label="Discount Per Order"
                             name="discount_per_order"
                             type="number"
-                            value={form?.discount_per_order??0}
+                            value={form?.discount_per_order ?? 0}
                             onChange={(e) =>
                                 setForm({
                                     ...data,

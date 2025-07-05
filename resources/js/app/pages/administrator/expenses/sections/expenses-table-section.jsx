@@ -40,7 +40,7 @@ export default function ExpensesTableSection() {
                                 className="relative inline-flex items-center rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
                             >
                                 <FaDollarSign className="mr-1 text-pink-500" />
-                                Add Expense
+                                ADD EXPENSE
                             </button>
                             {/* <button
                                 type="button"

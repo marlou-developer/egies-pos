@@ -187,7 +187,9 @@ export default function AddUserSection({ open, setOpenUser }) {
                                                 className="block w-full rounded-md bg-white px-3 py-2.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6">
                                                 <option value="">Select User Type</option>
                                                 <option value="Admin">Admin</option>
-                                                <option value="Staff">Staff</option>
+                                                <option value="Inventory">Inventory</option>
+                                                <option value="Shopee">Shopee</option>
+                                                <option value="Cashier">Cashier</option>
                                             </select>
                                         </div>
 
