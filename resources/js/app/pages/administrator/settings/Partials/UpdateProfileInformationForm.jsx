@@ -1,9 +1,12 @@
+import { get_user_login_thunk } from '@/app/redux/app-thunk';
+import store from '@/app/store/store';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Transition } from '@headlessui/react';
 import { Link, useForm, usePage } from '@inertiajs/react';
+import { message } from 'antd';
 
 export default function UpdateProfileInformation({
     mustVerifyEmail,
@@ -22,6 +25,8 @@ export default function UpdateProfileInformation({
         e.preventDefault();
 
         patch(route('profile.update'));
+        store.dispatch(get_user_login_thunk())
+        message.success('Updated Successfully')
     };
 
     return (

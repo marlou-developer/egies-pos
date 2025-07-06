@@ -4,6 +4,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
+import { message } from 'antd';
 import { useRef } from 'react';
 
 export default function UpdatePasswordForm({ className = '' }) {
@@ -42,6 +43,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                 }
             },
         });
+        message.success('Password Updated Successfully')
     };
 
     return (
