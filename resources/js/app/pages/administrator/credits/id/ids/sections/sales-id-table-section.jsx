@@ -87,9 +87,17 @@ export default function SalesIdTableSection() {
                                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                                             {res?.total}
                                         </td>
-                                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                                            <RemoveProductSection data={res} />
-                                            <ReturnItemSection data={res} />
+                                        <td className="px-3 py-4 gap-2 flex  text-sm whitespace-nowrap text-gray-500">
+                                            {Number(res.quantity) != 0 && (
+                                                <>
+                                                    <RemoveProductSection
+                                                        data={res}
+                                                    />
+                                                    <ReturnItemSection
+                                                        data={res}
+                                                    />
+                                                </>
+                                            )}
                                         </td>
                                     </tr>
                                 ))}
