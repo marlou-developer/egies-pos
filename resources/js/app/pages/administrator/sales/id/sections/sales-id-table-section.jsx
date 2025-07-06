@@ -82,10 +82,10 @@ export default function SalesIdTableSection() {
                                             />
                                         </td>
                                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                                            {res?.price}
+                                            {peso_value(Number(res?.price ?? 0))}
                                         </td>
                                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                                            {res?.total}
+                                            {peso_value(Number(res?.total ?? 0))}
                                         </td>
                                         <td className="px-3 py-4 gap-2 flex  text-sm whitespace-nowrap text-gray-500">
                                             {Number(res.quantity) != 0 && (
