@@ -54,7 +54,7 @@ export default function EditDIscountSection({ data }) {
 
     return (
         <>
-            <Tooltip title="Remove Product on Sales">
+            <Tooltip title="Edit Discount">
                 <button
                     // className="inline-flex items-center justify-center gap-x-1.5 text-white rounded-md bg-blue-500 hover:bg-blue-600 p-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
                     className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-blue-100 hover:bg-blue-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
