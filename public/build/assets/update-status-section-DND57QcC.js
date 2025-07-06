@@ -1,0 +1,1 @@
+import{j as e}from"./app-Dzu9xr7z.js";function n(){return e.jsx("div",{children:e.jsx("button",{className:"inline-flex items-center justify-center gap-x-1.5 rounded-md bg-yellow-100 hover:bg-yellow-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset",children:"Pay Credit"})})}export{n as default};
