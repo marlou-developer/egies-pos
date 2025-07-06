@@ -7,6 +7,7 @@ import SalesEditQuantitySection from "./sales-edit-quantity-section";
 import AddProductSection from "./add-product-section";
 import RemoveProductSection from "./remove-product-section";
 import EditDIscountSection from "./edit-discount-section";
+import ReturnItemSection from "@/app/pages/administrator/sales/id/sections/return-item-section";
 
 const people = [
     {
@@ -88,6 +89,7 @@ export default function SalesIdTableSection() {
                                         </td>
                                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                                             <RemoveProductSection data={res} />
+                                            <ReturnItemSection data={res} />
                                         </td>
                                     </tr>
                                 ))}
