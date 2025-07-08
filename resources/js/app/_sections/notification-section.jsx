@@ -6,7 +6,8 @@ import {
     NoSymbolIcon,
 } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
-import { Link } from "@inertiajs/react";
+import { Link, router } from "@inertiajs/react";
+import { update_is_read_service } from "../pages/services/cart-service";
 
 export default function NotificationSection() {
     const { over_dues } = useSelector((store) => store.carts);
@@ -29,6 +30,10 @@ export default function NotificationSection() {
         };
     }, []);
 
+    async function route_page(item, routing) {
+        // await update_is_read_service(item);
+        router.visit(routing);
+    }
     return (
         <div className="relative" ref={dropdownRef}>
             <button
@@ -37,9 +42,13 @@ export default function NotificationSection() {
                 aria-label="View notifications"
                 onClick={() => setOpen((prev) => !prev)}
             >
-                {(over_dues?.stocks?.length > 0 || over_dues?.over_due?.length > 0) && (
+                {(over_dues?.stocks?.length > 0 ||
+                    over_dues?.over_due?.length > 0) && (
                     <span className="absolute -top-1 -right-1 inline-flex items-center justify-center h-4 w-4 rounded-full bg-red-500 text-white text-xs font-semibold">
-                        {Number(over_dues?.over_due?.length ?? 0) + Number(over_dues?.stocks?.length ?? 0) + Number(over_dues?.out_stocks?.length ?? 0)}{ }
+                        {Number(over_dues?.over_due?.length ?? 0) +
+                            Number(over_dues?.stocks?.length ?? 0) +
+                            Number(over_dues?.out_stocks?.length ?? 0)}
+                        {}
                     </span>
                 )}
                 <BellIcon aria-hidden="true" className="size-6" />
@@ -47,7 +56,7 @@ export default function NotificationSection() {
 
             {open && (
                 <div className="absolute right-0 z-10 mt-2 w-64 rounded-lg bg-white shadow-lg ring-1 ring-gray-200">
-                    <div className="py-2 text-sm text-gray-700 max-h-60 overflow-y-auto">
+                    <div className="py-2 text-sm flex flex-col items-start justify-start text-gray-700 max-h-60 overflow-y-auto">
                         {over_dues?.stocks?.length == 0 &&
                             over_dues?.over_due?.length == 0 && (
                                 <div className="px-4 py-2 text-center text-gray-500">
@@ -57,24 +66,36 @@ export default function NotificationSection() {
 
                         {over_dues?.over_due?.length != 0 &&
                             over_dues?.over_due?.map((item, index) => {
-                                const today = new Date().toISOString().split('T')[0];
-                                const dueDate = item.due_date?.split(' ')[0]; // Extract date part if datetime
+                                const today = new Date()
+                                    .toISOString()
+                                    .split("T")[0];
+                                const dueDate = item.due_date?.split(" ")[0]; // Extract date part if datetime
                                 const isToday = dueDate === today;
-                                
+
                                 return (
                                     <div
                                         key={index}
                                         className="px-4 py-2 underline hover:bg-gray-50"
                                     >
-                                        <Link
-                                            href={`/administrator/credits?search=${item.cart_id}`}
-                                            className="flex"
+                                        <button
+                                            onClick={() =>
+                                                route_page(
+                                                    item,
+                                                    `/administrator/credits?search=${item.cart_id}`
+                                                )
+                                            }
+                                            className="flex  text-left  w-full"
                                         >
                                             <CalendarDateRangeIcon className="h-6 mr-1" />
                                             <span>
-                                                <b>{item?.customer?.name}</b> has {isToday ? 'due today' : 'over due payment'} .
+                                                <b>{item?.customer?.name}</b>{" "}
+                                                has{" "}
+                                                {isToday
+                                                    ? "due today"
+                                                    : "over due payment"}{" "}
+                                                .
                                             </span>
-                                        </Link>
+                                        </button>
                                     </div>
                                 );
                             })}
@@ -84,15 +105,20 @@ export default function NotificationSection() {
                                     key={index}
                                     className="px-4 py-2 underline hover:bg-gray-50"
                                 >
-                                    <Link
-                                        href={`/administrator/stocks?search=${item.id}`}
-                                        className="flex"
+                                    <button
+                                        onClick={() =>
+                                            route_page(
+                                                item,
+                                                `/administrator/stocks?search=${item.id}`
+                                            )
+                                        }
+                                        className="flex text-left"
                                     >
                                         <ExclamationCircleIcon className="h-6 mr-1" />
                                         <span>
                                             <b>{item?.name}</b> has low stocks.
                                         </span>
-                                    </Link>
+                                    </button>
                                 </div>
                             ))}
                         {over_dues?.out_stocks?.length != 0 &&
@@ -101,15 +127,20 @@ export default function NotificationSection() {
                                     key={index}
                                     className="px-4 py-2 underline hover:bg-gray-50"
                                 >
-                                    <Link
-                                        href={`/administrator/stocks?search=${item.id}`}
-                                        className="flex"
+                                    <button
+                                        onClick={() =>
+                                            route_page(
+                                                item,
+                                                `/administrator/stocks?search=${item.id}`
+                                            )
+                                        }
+                                        className="flex text-left"
                                     >
                                         <NoSymbolIcon className="h-6 mr-1" />
                                         <span>
                                             <b>{item?.name}</b> is out stocks.
                                         </span>
-                                    </Link>
+                                    </button>
                                 </div>
                             ))}
                     </div>

@@ -1,4 +1,4 @@
-import { add_payment_service, create_cart_service, delete_cart_item_service, delete_cart_service, get_cart_by_id_service, get_cart_service, get_over_due_service, get_report_service, get_shopee_service, update_cart_service, update_status_service } from "../pages/services/cart-service";
+import { add_payment_service, create_cart_service, delete_cart_item_service, delete_cart_service, get_cart_by_id_service, get_cart_service, get_over_due_service, get_report_items_service, get_report_service, get_shopee_service, update_cart_service, update_status_service } from "../pages/services/cart-service";
 import { cartSlice } from "./cart-slice";
 
 export function create_cart_thunk(data) {
@@ -16,6 +16,12 @@ export function get_report_thunk() {
     };
 }
 
+export function get_report_items_thunk() {
+    return async function (dispatch, getState) {
+        const res = await get_report_items_service()
+        dispatch(cartSlice.actions.setReportItems(res.data));
+    };
+}
 export function get_over_due_thunk() {
     return async function (dispatch, getState) {
         const res = await get_over_due_service()

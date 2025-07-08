@@ -9,6 +9,15 @@ export function return_per_item_service(data) {
         return result;
     } catch (error) { }
 }
+
+export function update_is_read_service(data) {
+    try {
+        const result = axios.post("/api/update_is_read", data);
+
+        return result;
+    } catch (error) { }
+}
+
 export function edit_payment_service(data) {
     try {
         const result = axios.post("/api/edit_payment", data);
@@ -35,6 +44,13 @@ export function edit_quantity_service(data) {
 export function create_cart_service(data) {
     try {
         const result = axios.post("/api/cart", data);
+        return result;
+    } catch (error) { }
+}
+
+export function get_report_items_service() {
+    try {
+        const result = axios.get("/api/report_items");
         return result;
     } catch (error) { }
 }

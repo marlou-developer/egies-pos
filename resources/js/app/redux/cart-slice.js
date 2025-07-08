@@ -9,7 +9,14 @@ export const cartSlice = createSlice({
         sales: [],
         shopees: [],
         selectedProducts: [],
-        reports:[]
+        reports:[],
+        report_items:{
+            customers:[],
+            suppliers:[],
+            users:[],
+            products:[],
+            categories:[]
+        }
     },
     reducers: {
         setCarts: (state, action) => {
@@ -33,6 +40,9 @@ export const cartSlice = createSlice({
         setReports: (state, action) => {
             state.reports = action.payload;
         },
+         setReportItems: (state, action) => {
+            state.report_items = action.payload;
+        },
     },
 });
 export const {
@@ -42,6 +52,7 @@ export const {
     setSales,
     setShopees,
     setSelectedProducts,
+    setReportItems
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

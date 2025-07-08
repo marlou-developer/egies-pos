@@ -21,8 +21,11 @@ import SalesByPaymentTypeReportSection from "./sections/sales-by-payment-type-re
 import SalesByCustomerReportSection from "./sections/sales-by-customer-report-section";
 import DailySalesReportSection from "./sections/daily-sales-report-section";
 import SalesByProductReportSection from "./sections/sales-by-product-report-section";
-import { get_report_thunk } from "@/app/redux/cart-thunk";
-import FastStockMovementReportSection from "./sections/fast-stock-movement-report-section";
+import {
+    get_report_items_thunk,
+    get_report_thunk,
+} from "@/app/redux/cart-thunk";
+// import FastStockMovementReportSection from "./sections/fast-stock-movement-report-section";
 import SlowStockMovementReportSection from "./sections/slow-stock-movement-report-section";
 import ReportGeneratorSection from "./sections/report-generator-section";
 
@@ -31,10 +34,9 @@ export default function ReportsPage() {
     const type = params.get("type");
     const [loading, setLoading] = useState(true);
     useEffect(() => {
-        // store.dispatch(get_dashboard_thunk("Daily"));
-        // store.dispatch(get_product_thunk());
+       
         async function get_data(params) {
-            await store.dispatch(get_report_thunk());
+            await store.dispatch(get_report_items_thunk());
             setLoading(false);
         }
         get_data();
