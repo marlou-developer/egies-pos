@@ -6,6 +6,8 @@ import {
     get_report_thunk,
 } from "@/app/redux/cart-thunk";
 import FastStockMovementReportSection from "./sections/stock-movement-report-section";
+import SalesByCustomerReportSection from "./sections/sales-by-customer-report-section";
+import DailySalesReportSection from "./sections/daily-sales-report-section";
 
 export default function Page() {
     const params = new URLSearchParams(window.location.search);
@@ -28,6 +30,10 @@ export default function Page() {
                     {type == "Stock Movement" && (
                         <FastStockMovementReportSection />
                     )}
+                    {type == "Sales By Customer" && (
+                        <SalesByCustomerReportSection />
+                    )}
+                    {type == "Daily Sales" && <DailySalesReportSection />}
                 </>
             )}
         </>

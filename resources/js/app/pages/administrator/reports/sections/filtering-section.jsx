@@ -156,17 +156,8 @@ export default function FilteringSection({ setForm, form }) {
                     >
                         Show report
                     </a>
-                    <button className="flex-1 text-center bg-gray-700 hover:bg-gray-600 p-2 rounded text-white">
-                        Print
-                    </button>
-                </div>
-
-                <div className="flex gap-2">
-                    <button className="flex-1 text-center bg-green-600 hover:bg-green-700 p-2 rounded text-white">
+                  <button className="flex-1 text-center bg-green-600 hover:bg-green-700 p-2 rounded text-white">
                         Excel
-                    </button>
-                    <button className="flex-1 text-center bg-red-600 hover:bg-red-700 p-2 rounded text-white">
-                        PDF
                     </button>
                 </div>
             </div>

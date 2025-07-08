@@ -18,8 +18,7 @@ import PaymentTypesByUserReportSection from "./sections/payment-types-by-user-re
 import PurchaseByProductReportSection from "./sections/purchase-by-product-report-section";
 import UnpaidSalesReportSection from "./sections/unpaid-sales-report-section";
 import SalesByPaymentTypeReportSection from "./sections/sales-by-payment-type-report-section";
-import SalesByCustomerReportSection from "./sections/sales-by-customer-report-section";
-import DailySalesReportSection from "./sections/daily-sales-report-section";
+import SalesByCustomerReportSection from "./search/sections/sales-by-customer-report-section";
 import SalesByProductReportSection from "./sections/sales-by-product-report-section";
 import {
     get_report_items_thunk,

@@ -112,7 +112,9 @@ const FastStockMovementReportSection = () => {
                                     }}
                                 >
                                     <Text style={{ width: 60 }}>Period:</Text>
-                                    <Text>{initialStart} - {initialEnd}</Text>
+                                    <Text>
+                                        {initialStart} - {initialEnd}
+                                    </Text>
                                 </View>
                                 <View
                                     style={{
@@ -121,7 +123,9 @@ const FastStockMovementReportSection = () => {
                                     }}
                                 >
                                     <Text style={{ width: 60 }}>Customer:</Text>
-                                    <Text>All</Text>
+                                    <Text>
+                                        {reports?.customer?.name ?? "All"}
+                                    </Text>
                                 </View>
                                 <View
                                     style={{
@@ -130,7 +134,7 @@ const FastStockMovementReportSection = () => {
                                     }}
                                 >
                                     <Text style={{ width: 60 }}>User:</Text>
-                                    <Text>All</Text>
+                                    <Text>{reports?.user?.name ?? "All"}</Text>
                                 </View>
                                 <View
                                     style={{
@@ -139,7 +143,9 @@ const FastStockMovementReportSection = () => {
                                     }}
                                 >
                                     <Text style={{ width: 60 }}>Product:</Text>
-                                    <Text>All</Text>
+                                    <Text>
+                                        {reports?.product?.name ?? "All"}
+                                    </Text>
                                 </View>
                             </View>
 

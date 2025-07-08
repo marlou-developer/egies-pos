@@ -136,12 +136,15 @@ class CartController extends Controller
 
         $start = Carbon::parse($request->start)->startOfDay();
         $end = Carbon::parse($request->end)->endOfDay();
+        $customer = Customer::where('id', $request->customer)->first();
+        $user = User::where('id', $request->user)->first();
+        $product = Product::where('id', $request->product)->first();
+
         if ($request->type == "Stock Movement") {
             $fastMoving = DB::table('cart_items')
                 ->join('products', 'cart_items.product_id', '=', 'products.id')
                 ->join('carts', 'cart_items.cart_id', '=', 'carts.cart_id')
                 ->join('categories', 'products.category_id', '=', 'categories.id')
-                // ->join('stocks', 'products.id', '=', 'stocks.product_id')
                 ->select(
                     'products.id as product_id',
                     'products.name as product_name',
@@ -161,9 +164,9 @@ class CartController extends Controller
                 ->when(!empty($request->category) && $request->category !== 'all', function ($query) use ($request) {
                     return $query->where('categories.id', $request->category);
                 })
-                // ->when(!empty($request->supplier) && $request->supplier !== 'all', function ($query) use ($request) {
-                //     return $query->where('stocks.supplier_id', $request->supplier);
-                // })
+                ->when(!empty($request->supplier) && $request->supplier !== 'all', function ($query) use ($request) {
+                    return $query->where('products.supplier_id', $request->supplier);
+                })
                 ->groupBy('products.id', 'products.name')
                 ->havingRaw('SUM(cart_items.quantity) > 10')
                 ->orderByDesc('total_sold')
@@ -192,53 +195,82 @@ class CartController extends Controller
                 ->when(!empty($request->category) && $request->category !== 'all', function ($query) use ($request) {
                     return $query->where('categories.id', $request->category);
                 })
+                ->when(!empty($request->supplier) && $request->supplier !== 'all', function ($query) use ($request) {
+                    return $query->where('products.supplier_id', $request->supplier);
+                })
                 ->groupBy('products.id', 'products.name')
                 ->havingRaw('SUM(cart_items.quantity) > 0 AND SUM(cart_items.quantity) <= 10')
                 ->orderBy('total_sold') // Slowest first
                 ->get();
 
+
             return response()->json([
                 'fast_movement' => $fastMoving,
                 'slow_movement' => $slowMoving,
+                'customer' => $customer,
+                'user' => $user,
+                'product' => $product
+            ], 200);
+        } else if ($request->type == 'Sales By Customer') {
+            $salesByCustomer = DB::table('carts')
+                ->join('customers', 'carts.customer_id', '=', 'customers.id')
+                ->select(
+                    'customers.id as customer_id',
+                    'customers.name as customer_name',
+                    DB::raw('SUM(carts.total_price) as total_sales'),
+                    DB::raw('COUNT(carts.id) as total_transactions')
+                )
+                ->whereBetween('carts.created_at', [$start, $end])
+                ->when(!empty($request->customer) && $request->customer !== 'all', function ($query) use ($request) {
+                    return $query->where('carts.customer_id', $request->customer);
+                })
+                ->groupBy('customers.id', 'customers.name')
+                ->orderByDesc('total_sales')
+                ->get();
+            return response()->json([
+                'data' => $salesByCustomer,
+                'customer' => $customer,
+                'user' => $user,
+                'product' => $product
+            ], 200);
+        } else if ($request->type == "Daily Sales") {
+
+            // Fetch sales grouped by date
+            $sales = DB::table('carts')
+                ->when(!empty($request->customer) && $request->customer !== 'all', function ($query) {
+                    return $query->join('customers', 'carts.customer_id', '=', 'customers.id');
+                })
+                ->select(DB::raw("DATE(carts.created_at) as date"), DB::raw("SUM(total_price) as total_sales"))
+                ->whereBetween('carts.created_at', [$start, $end])
+                ->groupBy(DB::raw("DATE(carts.created_at)"))
+                ->orderBy('date', 'ASC')
+                ->when(!empty($request->customer) && $request->customer !== 'all', function ($query) use ($request) {
+                    return $query->where('carts.customer_id', $request->customer);
+                })
+                ->when(!empty($request->user) && $request->user !== 'all', function ($query) use ($request) {
+                    return $query->where('carts.user_id', $request->user);
+                })
+                ->pluck('total_sales', 'date'); // result: ['2025-06-13' => 2000, ...]
+
+            // Generate full date range
+            $dateRange = new Collection();
+            for ($date = $start->copy(); $date <= $end; $date->addDay()) {
+                $dateStr = $date->toDateString();
+                $dateRange->push([
+                    'date' => $dateStr,
+                    'total_sales' => $sales[$dateStr] ?? 0
+                ]);
+            }
+
+            return response()->json([
+                'data' => $dateRange,
+                'customer' => $customer,
+                'user' => $user,
+                'product' => $product
             ], 200);
         }
-        // else if ($request->type == "Daily Sales") {
 
-        //     // Fetch sales grouped by date
-        //     $sales = DB::table('carts')
-        //         ->select(DB::raw("DATE(created_at) as date"), DB::raw("SUM(total_price) as total_sales"))
-        //         ->whereBetween('created_at', [$start, $end])
-        //         ->groupBy(DB::raw("DATE(created_at)"))
-        //         ->orderBy('date', 'ASC')
-        //         ->pluck('total_sales', 'date'); // result: ['2025-06-13' => 2000, ...]
-
-        //     // Generate full date range
-        //     $dateRange = new Collection();
-        //     for ($date = $start->copy(); $date <= $end; $date->addDay()) {
-        //         $dateStr = $date->toDateString();
-        //         $dateRange->push([
-        //             'date' => $dateStr,
-        //             'total_sales' => $sales[$dateStr] ?? 0
-        //         ]);
-        //     }
-
-        //     return response()->json($dateRange, 200);
-        // } else if ($request->type == 'Sales By Customer') {
-        //     $salesByCustomer = DB::table('carts')
-        //         ->join('customers', 'carts.customer_id', '=', 'customers.id')
-        //         ->select(
-        //             'customers.id as customer_id',
-        //             'customers.name as customer_name',
-        //             DB::raw('SUM(carts.total_price) as total_sales'),
-        //             DB::raw('COUNT(carts.id) as total_transactions')
-        //         )
-        //         ->whereBetween('carts.created_at', [$start, $end])
-        //         ->groupBy('customers.id', 'customers.name')
-        //         ->orderByDesc('total_sales')
-        //         ->get();
-
-        //     return response()->json($salesByCustomer, 200);
-        // } else if ($request->type == "Sales By Product") {
+        //   else if ($request->type == "Sales By Product") {
         //     $sales_by_product = DB::table('cart_items')
         //         ->join('products', 'cart_items.product_id', '=', 'products.id')
         //         ->select(
@@ -251,7 +283,6 @@ class CartController extends Controller
         //         ->groupBy('products.id', 'products.name')
         //         ->orderByDesc('total_sold')
         //         ->get();
-
         //     return response()->json($sales_by_product, 200);
         // } else if ($request->type == "Sales By Payment Types") {
         //     $carts = DB::table('carts')
