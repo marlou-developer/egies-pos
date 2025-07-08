@@ -22,11 +22,13 @@ import ProductImageSection from "./product-image-section";
 export default function EditProductSection({ data, isOpen, setIsOpen }) {
     const { product } = useSelector((state) => state.products);
     const { categories } = useSelector((state) => state.categories);
+    const { suppliers } = useSelector((state) => state.suppliers);
     const [uploadedFile1, setUploadedFile1] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => setIsModalOpen(true);
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({});
+
 
     useEffect(() => {
         setForm(data);
@@ -57,6 +59,7 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
         fd.append("file_name", form.file_name ?? "");
         fd.append("name", form.name ?? "");
         fd.append("category_id", form.category_id ?? "");
+        fd.append("supplier_id", form.supplier_id ?? "");
         fd.append("quantity", form.quantity ?? "");
         fd.append("status", form.status ?? "");
         fd.append("cost", form.cost ?? "");
@@ -246,6 +249,34 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                             label="Quantity"
                                             type="number"
                                         />
+                                    </div>
+                                    <div>
+                                        <div className="mt-2">
+                                            <select
+                                                onChange={(e) =>
+                                                    setForm({
+                                                        ...form,
+                                                        supplier_id:
+                                                            e.target.value,
+                                                    })
+                                                }
+                                                value={form?.supplier_id ?? ""}
+                                                name="supplier_id"
+                                                className="block w-full rounded-md bg-white px-3 py-2.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
+                                            >
+                                                <option value="">
+                                                    Select Supplier
+                                                </option>
+                                                {suppliers.map((supplier) => (
+                                                    <option
+                                                        key={supplier.id}
+                                                        value={supplier.id}
+                                                    >
+                                                        {supplier.name}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
                                     </div>
 
                                     <div className="sm:col-span-12">
