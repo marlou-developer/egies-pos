@@ -17,6 +17,7 @@ class StockController extends Controller
             $stock->update([
                 'quantity' => $request->new_quantity,
                 'date' => $request->date,
+                'supplier_id' => $request->supplier_id,
             ]);
             $product = Product::where('id', $request->products['id'])->first();
             if ($product) {
@@ -35,7 +36,7 @@ class StockController extends Controller
     }
     public function get_stock_by_products_id($id)
     {
-        $stocks = Stock::where('product_id', $id)->with(['products'])->get();
+        $stocks = Stock::where('product_id', $id)->with(['products', 'supplier'])->get();
         return response()->json($stocks, 200);
     }
     public function store(Request $request)

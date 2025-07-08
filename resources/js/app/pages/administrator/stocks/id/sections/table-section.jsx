@@ -44,6 +44,12 @@ export default function TableSection() {
                                         scope="col"
                                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                     >
+                                        Supplier
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                    >
                                         Quantity
                                     </th>
                                     <th
@@ -82,10 +88,13 @@ export default function TableSection() {
                                                 {res.products.name}
                                             </td>
                                             <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                                                {res?.supplier?.name}
+                                            </td>
+                                            <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                                                 {res.quantity}
                                             </td>
                                             <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                                                {res.price}
+                                                ₱{Number(res.price).toFixed(2)}
                                             </td>
                                             <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                                                 {res.remaining}
