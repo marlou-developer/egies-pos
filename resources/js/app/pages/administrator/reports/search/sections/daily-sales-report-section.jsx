@@ -105,45 +105,49 @@ const DailySalesReportSection = () => {
                         >
                             {/* Left Side: Labels and Values */}
                             <View style={{ flex: 1 }}>
-                                <View
-                                    style={{
-                                        flexDirection: "row",
-                                        marginBottom: 2,
-                                    }}
-                                >
-                                    <Text style={{ width: 60 }}>Period:</Text>
-                                    <Text>
-                                        {initialStart} - {initialEnd}
-                                    </Text>
-                                </View>
-                                <View
-                                    style={{
-                                        flexDirection: "row",
-                                        marginBottom: 2,
-                                    }}
-                                >
-                                    <Text style={{ width: 60 }}>Customer:</Text>
-                                    <Text>All</Text>
-                                </View>
-                                <View
-                                    style={{
-                                        flexDirection: "row",
-                                        marginBottom: 2,
-                                    }}
-                                >
-                                    <Text style={{ width: 60 }}>User:</Text>
-                                    <Text>All</Text>
-                                </View>
-                                <View
-                                    style={{
-                                        flexDirection: "row",
-                                        marginBottom: 2,
-                                    }}
-                                >
-                                    <Text style={{ width: 60 }}>Product:</Text>
-                                    <Text>All</Text>
-                                </View>
-                            </View>
+                                                           <View
+                                                               style={{
+                                                                   flexDirection: "row",
+                                                                   marginBottom: 2,
+                                                               }}
+                                                           >
+                                                               <Text style={{ width: 60 }}>Period:</Text>
+                                                               <Text>
+                                                                   {initialStart} - {initialEnd}
+                                                               </Text>
+                                                           </View>
+                                                           <View
+                                                               style={{
+                                                                   flexDirection: "row",
+                                                                   marginBottom: 2,
+                                                               }}
+                                                           >
+                                                               <Text style={{ width: 60 }}>Customer:</Text>
+                                                               <Text>
+                                                                   {reports?.customer?.name ?? "All"}
+                                                               </Text>
+                                                           </View>
+                                                           <View
+                                                               style={{
+                                                                   flexDirection: "row",
+                                                                   marginBottom: 2,
+                                                               }}
+                                                           >
+                                                               <Text style={{ width: 60 }}>User:</Text>
+                                                               <Text>{reports?.user?.name ?? "All"}</Text>
+                                                           </View>
+                                                           <View
+                                                               style={{
+                                                                   flexDirection: "row",
+                                                                   marginBottom: 2,
+                                                               }}
+                                                           >
+                                                               <Text style={{ width: 60 }}>Product:</Text>
+                                                               <Text>
+                                                                   {reports?.product?.name ?? "All"}
+                                                               </Text>
+                                                           </View>
+                                                       </View>
 
                             {/* Right Side: Company Info */}
                             <View style={{ flex: 1, textAlign: "left" }}>

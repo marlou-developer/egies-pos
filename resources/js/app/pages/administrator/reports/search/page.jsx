@@ -8,6 +8,9 @@ import {
 import FastStockMovementReportSection from "./sections/stock-movement-report-section";
 import SalesByCustomerReportSection from "./sections/sales-by-customer-report-section";
 import DailySalesReportSection from "./sections/daily-sales-report-section";
+import InvoiceReportSection from "./sections/invoices-report-section";
+import PaymentTypesByUserReportSection from "./sections/payment-types-by-user-report-section";
+import ProfitReportSection from "./sections/profit-report-section";
 
 export default function Page() {
     const params = new URLSearchParams(window.location.search);
@@ -34,6 +37,12 @@ export default function Page() {
                         <SalesByCustomerReportSection />
                     )}
                     {type == "Daily Sales" && <DailySalesReportSection />}
+
+                    {type == "Invoices" && <InvoiceReportSection />}
+                    {type == "Payment Types by User" && (
+                        <PaymentTypesByUserReportSection />
+                    )}
+                    {type == "Profit and Margin" && <ProfitReportSection />}
                 </>
             )}
         </>

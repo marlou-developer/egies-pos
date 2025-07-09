@@ -6,7 +6,7 @@ const reports = [
     "Invoices",
     "Payment Types by Customer",
     "Payment Types by User",
-    "Profit & margin",
+    "Profit and Margin",
     "Purchase by Product",
     "Purchase by Supplier",
     "Purchase Invoices",

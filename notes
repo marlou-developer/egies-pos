@@ -1,5 +1,9 @@
+In report Invoices
+Item Count, QUantity & total?
+
 carts
-- is_read
+
+-   is_read
 
 all
 -stock movement
@@ -12,13 +16,10 @@ all
 -invoice
 -profit & margin
 
-
-
 product & categories
-- daily sales
-- Sales By Payment Types
-- Unpaid Sales
-- payment Types by user
-- payment by customer
 
-
+-   daily sales
+-   Sales By Payment Types
+-   Unpaid Sales
+-   payment Types by user
+-   payment by customer
