@@ -2,6 +2,8 @@ import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { Transition } from "@headlessui/react"; // Import Transition component
 import { useState } from "react";
 import { Link } from "@inertiajs/react";
+import { useDispatch } from "react-redux";
+import { setSidebarOpen } from "../redux/app-slice";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -13,7 +15,12 @@ export default function DisclosureComponent({
     openIndex,
     setOpenIndex,
 }) {
+    const dispatch = useDispatch();
     const isOpen = openIndex === i;
+
+    const handleSubLinkClick = () => {
+        dispatch(setSidebarOpen(false));
+    };
 
     return (
         <div>
@@ -61,6 +68,7 @@ export default function DisclosureComponent({
                         <li key={subItem.name}>
                             <Link
                                 href={subItem.href}
+                                onClick={handleSubLinkClick}
                                 className={classNames(
                                     subItem.current
                                         ? "bg-gray-50"

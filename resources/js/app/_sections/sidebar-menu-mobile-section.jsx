@@ -2,16 +2,23 @@ import React from "react";
 import DisclosureComponent from "../_components/disclosure";
 import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 import { Link } from "@inertiajs/react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setSidebarOpen } from "../redux/app-slice";
 
 export default function SidebarMobileSection({
     navigation,
     setOpenIndex,
     openIndex,
 }) {
+    const dispatch = useDispatch();
+    
     function classNames(...classes) {
         return classes.filter(Boolean).join(" ");
     }
+
+    const handleLinkClick = () => {
+        dispatch(setSidebarOpen(false));
+    };
 
     const { over_dues } = useSelector((store) => store.carts);
     return (
@@ -33,6 +40,7 @@ export default function SidebarMobileSection({
                                         <li key={item.name}>
                                             <Link
                                                 href={item.href}
+                                                onClick={handleLinkClick}
                                                 className={classNames(
                                                     item.current
                                                         ? "bg-pink-300 text-white"
@@ -73,6 +81,7 @@ export default function SidebarMobileSection({
                                                 openIndex={openIndex}
                                                 item={item}
                                                 i={i}
+                                                onLinkClick={handleLinkClick}
                                             />
                                         </li>
                                     )
@@ -82,6 +91,7 @@ export default function SidebarMobileSection({
                         <li className="mt-auto">
                             <Link
                                 href="/administrator/settings"
+                                onClick={handleLinkClick}
                                 className="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-black"
                             >
                                 <Cog6ToothIcon
