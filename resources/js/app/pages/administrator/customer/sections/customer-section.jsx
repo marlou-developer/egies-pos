@@ -148,7 +148,13 @@ export default function CustomerSection() {
                                                 "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 sm:table-cell"
                                             )}
                                         >
-                                            {customer.street}, {customer.postal}, {customer.brgy}, {customer.city}, {customer.province}
+                                            {[
+                                                customer.street,
+                                                customer.postal,
+                                                customer.brgy,
+                                                customer.city,
+                                                customer.province
+                                            ].filter(Boolean).join(', ')}
                                         </td>
                                         <td
                                             className={classNames(

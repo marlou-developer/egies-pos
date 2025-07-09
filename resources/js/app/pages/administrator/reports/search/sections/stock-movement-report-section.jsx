@@ -43,6 +43,12 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         marginBottom: 10,
     },
+    slowTitle: {
+        fontSize: 18,
+        fontWeight: "bold",
+        marginBottom: 10,
+        marginTop: 25,
+    },
     infoRow: {
         flexDirection: "row",
         justifyContent: "space-between",
@@ -206,7 +212,7 @@ const FastStockMovementReportSection = () => {
                         </View>
                     ))}
 
-                    <Text style={styles.title}>SLOW STOCK MOVEMENT</Text>
+                    <Text style={styles.slowTitle}>SLOW STOCK MOVEMENT</Text>
                     {reports.slow_movement.map((item, idx) => (
                         <View style={styles.tableRow} key={idx}>
                             <Text>{idx + 1}.</Text>
