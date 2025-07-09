@@ -74,6 +74,11 @@ const styles = StyleSheet.create({
         flex: 0.5,
         paddingHorizontal: 3,
     },
+    colNumber: {
+        flex: 0.5,
+        paddingHorizontal: 3,
+        marginLeft: 30,
+    },
     summary: {
         marginTop: 10,
         alignItems: "flex-end",
@@ -192,8 +197,8 @@ const FastStockMovementReportSection = () => {
                         <Text>#</Text>
                         <Text style={styles.colSmall}>Products</Text>
                         {/* <Text style={styles.col}>Fast Moving</Text> */}
-                        <Text style={styles.colSmall}>Number of Sold</Text>
-                        <Text style={styles.colSmall}>Number of Sales</Text>
+                        <Text style={styles.colSmall}>Number of  Product Sold</Text>
+                        <Text style={styles.colSmall}>Total Sales of Product</Text>
                     </View>
 
                     {/* Table Rows */}
@@ -203,8 +208,8 @@ const FastStockMovementReportSection = () => {
                             <Text style={styles.colSmall}>
                                 {item.product_name}
                             </Text>
-                            <Text style={styles.colSmall}>
-                                {item.total_sold} qty
+                            <Text style={styles.colNumber}>
+                                {item.total_sold}
                             </Text>
                             <Text style={styles.colSmall}>
                                 {peso_value(item.total_sales)}
@@ -219,8 +224,8 @@ const FastStockMovementReportSection = () => {
                             <Text style={styles.colSmall}>
                                 {item.product_name}
                             </Text>
-                            <Text style={styles.colSmall}>
-                                {item.total_sold} qty
+                            <Text style={styles.colNumber}>
+                                {item.total_sold}
                             </Text>
                             <Text style={styles.colSmall}>
                                 {peso_value(item.total_sales)}
