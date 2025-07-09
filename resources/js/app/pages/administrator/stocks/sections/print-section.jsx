@@ -83,7 +83,7 @@ export default function PrintSection() {
             {selectedStocks.length != 0 && (
                 <button
                     onClick={() => setIsOpen(true)}
-                    className="p-2 bg-pink-700 rounded-lg flex hover:bg-pink-600 text-white"
+                    className="p-2 items-center bg-pink-700 rounded-lg flex hover:bg-pink-600 text-white"
                 >
                     {selectedStocks.length} &nbsp;<FaPrint className="mr-1"/> PRINT
                 </button>

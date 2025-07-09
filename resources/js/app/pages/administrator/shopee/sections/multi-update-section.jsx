@@ -47,7 +47,7 @@ export default function MultiUpdateSection() {
             {selectedProducts.length != 0 && (
                 <button
                     onClick={() => setOpen(true)}
-                    className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-yellow-100 hover:bg-yellow-200 px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
+                    className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-yellow-100 hover:bg-yellow-200 px-4 py-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
                 >
                     <FaCheckToSlot className=" text-yellow-500" />
                     {selectedProducts.length} Update

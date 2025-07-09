@@ -101,18 +101,18 @@ export default function StocksSection() {
                         <FaBoxesStacked className="float-left mr-1 mt-1 text-pink-500" />
                         Stocks Section
                     </h1>
-                    <div>
-                        <FilterStocksComponent
-                            open={openFilter}
-                            setOpenFilter={setOpenFilter}
-                        />
-                    </div>
+
                 </div>
             </div>
             <div className="mt-4 flex items-start justify-between">
                 <SearchSection />
-
-                <PrintSection />
+                <div className="flex gap-3">
+                    <PrintSection />
+                    <FilterStocksComponent
+                        open={openFilter}
+                        setOpenFilter={setOpenFilter}
+                    />
+                </div>
             </div>
 
 

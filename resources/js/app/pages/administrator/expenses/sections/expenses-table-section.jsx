@@ -7,6 +7,7 @@ import EditExpenseSection from "./edit-expense-section";
 import { CurrencyDollarIcon } from "@heroicons/react/20/solid";
 import moment from "moment";
 import DeleteExpenseSection from "./delete-expense-section";
+import FilterExpensesComponent from "../components/filter-expenses-component";
 
 
 function classNames(...classes) {
@@ -62,8 +63,11 @@ export default function ExpensesTableSection() {
                     </div>
                 </div>
             </div>
-            <div className="mt-4 flex items-start justify-start">
+            <div className="mt-4 flex items-start justify-between">
                 <SearchSection />
+                <div>
+                    <FilterExpensesComponent />
+                </div>
             </div>
             <div className="mt-8 flow-root">
                 <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
@@ -81,7 +85,7 @@ export default function ExpensesTableSection() {
                                         scope="col"
                                         className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter sm:pl-6 lg:pl-8"
                                     >
-                                        Purchase Item
+                                        Purchased Item/Name
                                     </th>
                                     <th
                                         scope="col"

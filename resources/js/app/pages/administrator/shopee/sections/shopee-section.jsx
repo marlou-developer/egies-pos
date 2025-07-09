@@ -16,6 +16,7 @@ import PaginationSection from "./pagination-section";
 import { Tooltip } from "antd";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { router } from "@inertiajs/react";
+import FilterShopeeComponent from "../components/filter-shopee-component";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -50,17 +51,22 @@ export default function ShopeeSection() {
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">
-                <div className="sm:flex-auto flex items-center gap-2">
-                    <img src="/images/shopee.png" className="h-6" alt="" />
-                    <h1 className="text-base font-semibold text-orange-500">
-                        Shopee Section
-                    </h1>
+                <div className="sm:flex-auto flex justify-between items-center gap-2">
+                    <div>
+                        <h1 className="text-base flex font-semibold text-orange-500">
+                            <img src="/images/shopee.png" className="h-6" alt="" />
+                            Shopee Section
+                        </h1>
+                    </div>
                 </div>
             </div>
 
             <div className="mt-4 flex items-start justify-between">
                 <SearchSection />
-                <MultiUpdateSection />
+                <div className="flex gap-3">
+                    <MultiUpdateSection />
+                    <FilterShopeeComponent />
+                </div>
             </div>
 
             <div className="mt-8 flow-root">
@@ -97,7 +103,7 @@ export default function ShopeeSection() {
                                             className={classNames(
                                                 "sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 px-3 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter",
                                                 idx === 5 &&
-                                                    "pr-4 sm:pr-6 lg:pr-8"
+                                                "pr-4 sm:pr-6 lg:pr-8"
                                             )}
                                         >
                                             {header || (
@@ -172,7 +178,7 @@ export default function ShopeeSection() {
                                                     <UpdateStatusSection
                                                         data={res}
                                                     />
-                                                   
+
                                                 </div>
                                             </td>
                                         </tr>

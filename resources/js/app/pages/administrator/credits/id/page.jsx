@@ -178,7 +178,7 @@ const InvoicePDF = () => {
                                     {index + 1}
                                 </Text>
                                 <Text style={styles.tableCol}>
-                                    {item.product.name}
+                                    {item.product?.name}
                                 </Text>
                                 <Text style={[styles.tableCol, { flex: 0.8 }]}>
                                     {item.quantity}

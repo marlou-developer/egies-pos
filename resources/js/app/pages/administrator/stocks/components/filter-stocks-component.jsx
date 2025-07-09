@@ -21,7 +21,7 @@ export default function FilterStocksComponent() {
                 name="quantity"
                 value={stockStatus}
                 onChange={(e) => setStockStatus(e.target.value)}
-                className="w-full rounded-md border border-gray-300 bg-white py-2  text-sm text-gray-900 focus:border-pink-400 focus:ring-pink-300"
+                className="w-full rounded-lg border border-gray-300 bg-white py-3  text-sm text-gray-900 focus:border-pink-400 focus:ring-pink-300"
             >
                 <option value=""><b>All Stock</b></option>
                 <option value="11">In Stock</option>

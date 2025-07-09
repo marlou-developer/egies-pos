@@ -111,20 +111,31 @@ export default function AddExpensesComponent({ open, setOpenExpenses }) {
                                         <hr />
                                     </div>
                                     <div>
-                                        <Input
+                                        <select
+                                            id="category"
+                                            name="category"
                                             onChange={data_handler}
                                             value={expense?.category ?? ""}
-                                            name="category"
-                                            label="Category"
-                                            type="text"
-                                        />
+                                            className="w-full rounded-md border border-gray-500 bg-white py-3 text-gray-900 focus:border-pink-400 focus:ring-pink-300"
+                                        >
+                                            <option disabled selected>Select Expense Category</option>
+                                            <option value="N/A">N/A</option>
+                                            <option value="Maintenance & Repair Expense">Maintenance & Repair Expense</option>
+                                            <option value="Miscellaneous Expense">Miscellaneous Expense</option>
+                                            <option value="Operating Expenses">Operating Expenses</option>
+                                            <option value="Permits & Licenses Expense">Permits & Licenses Expense</option>
+                                            <option value="Rent Expense">Rent Expense</option>
+                                            <option value="Salary Expenses">Salary Expenses</option>
+                                            <option value="Supplies Expense">Supplies Expense</option>
+                                            <option value="Utilities Expenses">Utilities Expenses</option>
+                                        </select>
                                     </div>
                                     <div>
                                         <Input
                                             onChange={data_handler}
                                             value={expense?.item ?? ""}
                                             name="item"
-                                            label="Purchased Item"
+                                            label="Purchased Item/Name"
                                             type="text"
                                         />
                                     </div>
