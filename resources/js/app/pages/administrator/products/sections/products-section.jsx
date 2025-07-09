@@ -75,19 +75,26 @@ export default function ProductsSection() {
                 th, td { padding: 8px; text-align: left; border: 1px solid #000; }
                 th { background-color: #f4f4f4; }
                 
-                th:nth-child(10), td:nth-child(10) {
-                  display: none;
-                }
-    
+                /* Show all columns in print */
+                .hidden { display: table-cell !important; }
+                
+                /* Hide mobile-specific content in print */
+                .sm\\:hidden { display: none !important; }
+                
                 /* Adjust icon sizes */
                 img, svg, i, .icon { 
                   width: 16px !important;
                   height: 16px !important;
                 }
+                
+                /* Ensure proper spacing */
+                .flex { display: inline !important; }
+                .flex-col { display: inline !important; }
+                .mt-1 { margin-top: 0 !important; }
               </style>
             </head>
             <body>
-              <h2>Report</h2>
+              <h2>Products Report</h2>
               ${printContent.outerHTML} 
             </body>
           </html>
@@ -107,46 +114,37 @@ export default function ProductsSection() {
                     <h1 className="text-base font-semibold text-pink-500">
                         Products Section
                     </h1>
-                    <p className="mt-2 text-sm text-gray-700">
-                        A list of all the products in your account including
-                        their product name, quantity, category and price.
-                    </p>
                 </div>
                 <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                    <span className="isolate inline-flex rounded-md shadow-xs">
+                    <div className="flex flex-wrap gap-2">
                         <button
                             type="button"
                             onClick={() => setOpenProduct(true)}
-                            className="relative inline-flex items-center rounded-l-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
+                            className="inline-flex items-center rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
                         >
                             <FaClipboardList className="mr-1 text-pink-500" />
-                            ADD NEW PRODUCT
+                            <span className="hidden sm:inline">ADD NEW PRODUCT</span>
+                            <span className="sm:hidden">ADD PRODUCT</span>
                         </button>
                         <button
                             type="button"
                             onClick={() => setOpenCategory(true)}
-                            className="relative -ml-px inline-flex items-center bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
+                            className="inline-flex items-center rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
                         >
                             <FaList className="mr-1 text-pink-500" />
-                            ADD CATEGORY
+                            <span className="hidden sm:inline">ADD CATEGORY</span>
+                            <span className="sm:hidden">CATEGORY</span>
                         </button>
-                        {/* <button
-                            type="button"
-                            onClick={handlePrint}
-                            className="relative -ml-px inline-flex items-center bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
-                        >
-                            <FaPrint className="mr-1 text-pink-500" />
-                            Print
-                        </button> */}
                         <button
                             type="button"
                             onClick={() => setOpenFilter(true)}
-                            className="relative -ml-px inline-flex items-center rounded-r-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-50 focus:z-10"
+                            className="inline-flex items-center rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-50 focus:z-10"
                         >
                             <FaFilter className="mr-1 text-pink-500" />
-                            FILTER PRODUCTS
+                            <span className="hidden sm:inline">FILTER PRODUCTS</span>
+                            <span className="sm:hidden">FILTER</span>
                         </button>
-                    </span>
+                    </div>
                     <AddProductComponent
                         open={openProduct}
                         setOpenProduct={setOpenProduct}
@@ -161,122 +159,242 @@ export default function ProductsSection() {
                     />
                 </div>
             </div>
-            <div className="mt-4 flex items-start justify-between">
-                <SearchSection />
-                <PrintSection />
+            <div className="mt-4 flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+                <div className="flex-1 max-w-md">
+                    <SearchSection />
+                </div>
+                <div className="flex-shrink-0">
+                    <PrintSection />
+                </div>
             </div>
 
             {/* Product Table */}
             <div className="mt-8 flow-root">
-                <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
-                    <div className="inline-block min-w-full py-2 align-middle">
-                        <table
-                            id="product-table"
-                            className="min-w-full border-separate border-spacing-0"
-                        >
-                            <thead>
-                                <tr>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:pl-6 lg:pl-8"
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            checked={selectAll}
-                                            onChange={(e) => {
-                                                const isChecked =
-                                                    e.target.checked;
-                                                dispatch(
-                                                    setSelectAll(isChecked)
-                                                );
+                {/* Mobile Card Layout */}
+                <div className="block md:hidden">
+                    <div className="space-y-4">
+                        {products?.data?.data?.map((product, productIdx) => (
+                            <div key={product.id || product.name} className="bg-white p-4 rounded-lg shadow ring-1 ring-black ring-opacity-5">
+                                <div className="flex items-start justify-between">
+                                    <div className="flex-1">
+                                        <div className="flex items-center space-x-3">
+                                            <input
+                                                type="checkbox"
+                                                checked={selectedProducts.some(
+                                                    (p) => p.id === product.id
+                                                )}
+                                                onChange={(e) => {
+                                                    const isChecked = e.target.checked;
+                                                    const updatedSelected = isChecked
+                                                        ? [...selectedProducts, product]
+                                                        : selectedProducts.filter(
+                                                            (p) => p.id !== product.id
+                                                        );
+                                                    dispatch(setSelectedProducts(updatedSelected));
+                                                }}
+                                                className="rounded border-gray-300 text-pink-600 focus:ring-pink-500"
+                                            />
+                                            <div className="flex-1">
+                                                <h3 className="text-sm font-bold text-pink-500">{product.name}</h3>
+                                                <div className="mt-1 flex flex-wrap gap-2">
+                                                    {product?.categories?.name && (
+                                                        <span className="inline-flex items-center rounded-full bg-pink-50 px-2 py-1 text-xs font-medium text-pink-800 ring-1 ring-pink-600/20 ring-inset">
+                                                            {product.categories.name}
+                                                        </span>
+                                                    )}
+                                                    {product?.brand && (
+                                                        <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
+                                                            {product.brand}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        {/* Product Details Grid */}
+                                        <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                                            <div>
+                                                <dt className="font-medium text-gray-500">Cost Per Unit</dt>
+                                                <dd className="mt-1 font-bold text-gray-900">
+                                                    {(product.cost == null || Number(product.cost) === 0)
+                                                        ? "₱None"
+                                                        : `₱${Number(product.cost).toFixed(2)}`}
+                                                </dd>
+                                            </div>
+                                            <div>
+                                                <dt className="font-medium text-gray-500">SRP</dt>
+                                                <dd className="mt-1 font-bold text-gray-900">
+                                                    {(product.srp == null || Number(product.srp) === 0)
+                                                        ? "₱None"
+                                                        : `₱${Number(product.srp).toFixed(2)}`}
+                                                </dd>
+                                            </div>
+                                            <div>
+                                                <dt className="font-medium text-gray-500">Shopee Price</dt>
+                                                <dd className="mt-1 font-bold text-gray-900">
+                                                    {(product.shopee == null || Number(product.shopee) === 0)
+                                                        ? "₱None"
+                                                        : `₱${Number(product.shopee).toFixed(2)}`}
+                                                </dd>
+                                            </div>
+                                            <div>
+                                                <dt className="font-medium text-gray-500">Reseller</dt>
+                                                <dd className="mt-1 font-bold text-gray-900">
+                                                    {(product.reseller == null || Number(product.reseller) === 0)
+                                                        ? "₱None"
+                                                        : `₱${Number(product.reseller).toFixed(2)}`}
+                                                </dd>
+                                            </div>
+                                            <div>
+                                                <dt className="font-medium text-gray-500">City Distributor</dt>
+                                                <dd className="mt-1 font-bold text-gray-900">
+                                                    {(product.city_distributor == null || Number(product.city_distributor) === 0)
+                                                        ? "₱None"
+                                                        : `₱${Number(product.city_distributor).toFixed(2)}`}
+                                                </dd>
+                                            </div>
+                                            <div>
+                                                <dt className="font-medium text-gray-500">District Distributor</dt>
+                                                <dd className="mt-1 font-bold text-gray-900">
+                                                    {(product.district_distributor == null || Number(product.district_distributor) === 0)
+                                                        ? "₱None"
+                                                        : `₱${Number(product.district_distributor).toFixed(2)}`}
+                                                </dd>
+                                            </div>
+                                            <div className="col-span-2">
+                                                <dt className="font-medium text-gray-500">Provincial Distributor</dt>
+                                                <dd className="mt-1 font-bold text-gray-900">
+                                                    {(product.provincial_distributor == null || Number(product.provincial_distributor) === 0)
+                                                        ? "₱None"
+                                                        : `₱${Number(product.provincial_distributor).toFixed(2)}`}
+                                                </dd>
+                                            </div>
+                                            {product?.delivery_receipt_no && (
+                                                <div className="col-span-2">
+                                                    <dt className="font-medium text-gray-500">Delivery Receipt</dt>
+                                                    <dd className="mt-1">
+                                                        <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
+                                                            {product.delivery_receipt_no}
+                                                        </span>
+                                                    </dd>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className="ml-4 flex-shrink-0">
+                                        <ProductOptionMenuSection data={product} />
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
 
-                                                dispatch(
-                                                    setSelectedProducts(
-                                                        isChecked
-                                                            ? [...products.all]
-                                                            : []
-                                                    )
-                                                );
-                                            }}
-                                        />
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:pl-6 lg:pl-8"
-                                    >
-                                        Product
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
-                                    >
-                                        Brand
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
-                                    >
-                                        Delivery Receipt
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
-                                    >
-                                        Category
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter"
-                                    >
-                                        Cost Per Unit
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter lg:table-cell"
-                                    >
-                                        Shopee Price
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter"
-                                    >
-                                        SRP
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter"
-                                    >
-                                        Reseller
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter"
-                                    >
-                                        City Distributor
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter"
-                                    >
-                                        District Distributor
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter"
-                                    >
-                                        Provincial Distributor
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-4 pl-3 backdrop-blur-sm backdrop-filter sm:pr-6 lg:pr-8"
-                                    >
-                                        <span className="sr-only">Edit</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {products?.data?.data?.map(
-                                    (product, productIdx) => {
+                {/* Desktop Table Layout */}
+                <div className="hidden md:block">
+                    <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                        <div className="inline-block min-w-full py-2 align-middle">
+                            <div className="overflow-hidden shadow ring-1 ring-black ring-opacity-5 md:rounded-lg">
+                                <table
+                                    id="product-table"
+                                    className="min-w-full divide-y divide-gray-300"
+                                >
+                                <thead className="bg-gray-50">
+                                    <tr>
+                                        <th
+                                            scope="col"
+                                            className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                checked={selectAll}
+                                                onChange={(e) => {
+                                                    const isChecked = e.target.checked;
+                                                    dispatch(setSelectAll(isChecked));
+                                                    dispatch(
+                                                        setSelectedProducts(
+                                                            isChecked ? [...products.all] : []
+                                                        )
+                                                    );
+                                                }}
+                                            />
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                                        >
+                                            Product
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                        >
+                                            Brand
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                        >
+                                            Delivery Receipt
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                        >
+                                            Category
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                        >
+                                            Cost Per Unit
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                        >
+                                            Shopee Price
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                        >
+                                            SRP
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                        >
+                                            Reseller
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                        >
+                                            City Distributor
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                        >
+                                            District Distributor
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                        >
+                                            Provincial Distributor
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="relative py-3.5 pl-3 pr-4 sm:pr-6"
+                                        >
+                                            <span className="sr-only">Edit</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-200 bg-white">
+                                    {products?.data?.data?.map((product, productIdx) => {
                                         let quantityy = product?.quantity; // Default status
                                         let statusClass =
                                             "inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20";
@@ -293,237 +411,92 @@ export default function ProductsSection() {
                                         }
 
                                         return (
-                                            <tr
-                                                key={product.id || product.name}
-                                            >
-                                                <td
-                                                    className={classNames(
-                                                        productIdx !==
-                                                            products.length - 1
-                                                            ? "border-b border-gray-200"
-                                                            : "",
-                                                        "py-4 pl-4 pr-3 text-sm sm:pl-6 lg:pl-8"
-                                                    )}
-                                                >
+                                            <tr key={product.id || product.name} className="hover:bg-gray-50">
+                                                <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                                                     <input
                                                         type="checkbox"
                                                         checked={selectedProducts.some(
-                                                            (p) =>
-                                                                p.id ===
-                                                                product.id
+                                                            (p) => p.id === product.id
                                                         )}
                                                         onChange={(e) => {
-                                                            const isChecked =
-                                                                e.target
-                                                                    .checked;
-
-                                                            const updatedSelected =
-                                                                isChecked
-                                                                    ? [
-                                                                        ...selectedProducts,
-                                                                        product,
-                                                                    ]
-                                                                    : selectedProducts.filter(
-                                                                        (p) =>
-                                                                            p.id !==
-                                                                            product.id
-                                                                    ); // Correctly compare by object.id
-
-                                                            dispatch(
-                                                                setSelectedProducts(
-                                                                    updatedSelected
-                                                                )
-                                                            );
+                                                            const isChecked = e.target.checked;
+                                                            const updatedSelected = isChecked
+                                                                ? [...selectedProducts, product]
+                                                                : selectedProducts.filter(
+                                                                    (p) => p.id !== product.id
+                                                                );
+                                                            dispatch(setSelectedProducts(updatedSelected));
                                                         }}
                                                     />
                                                 </td>
-
-                                                <td
-                                                    className={classNames(
-                                                        productIdx !==
-                                                            products.length - 1
-                                                            ? "border-b border-gray-200"
-                                                            : "",
-                                                        "py-4 pr-3 pl-4 text-sm font-bold text-pink-500"
-                                                    )}
-                                                >
+                                                <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-pink-500 sm:pl-6">
                                                     {product.name}
                                                 </td>
-                                                <td
-                                                    className={classNames(
-                                                        productIdx !==
-                                                            product.length - 1
-                                                            ? "border-b border-gray-200"
-                                                            : "",
-                                                        "hidden px-3 py-4 text-sm font-bold whitespace-nowrap text-gray-500 sm:table-cell"
-                                                    )}
-                                                >
-                                                    <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 mr-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
+                                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                    <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
                                                         {product?.brand}
                                                     </span>
                                                 </td>
-                                                <td
-                                                    className={classNames(
-                                                        productIdx !==
-                                                            product.length - 1
-                                                            ? "border-b border-gray-200"
-                                                            : "",
-                                                        "hidden px-3 py-4 text-sm font-bold whitespace-nowrap text-gray-500 sm:table-cell"
-                                                    )}
-                                                >
-                                                    <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 mr-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
-                                                        {
-                                                            product?.delivery_receipt_no
-                                                        }
+                                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                    <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
+                                                        {product?.delivery_receipt_no}
                                                     </span>
                                                 </td>
-                                                <td
-                                                    className={classNames(
-                                                        productIdx !==
-                                                            product.length - 1
-                                                            ? "border-b border-gray-200"
-                                                            : "",
-                                                        "hidden px-3 py-4 text-sm font-bold whitespace-nowrap text-gray-500 sm:table-cell"
-                                                    )}
-                                                >
-                                                    <span className="inline-flex items-center rounded-full bg-pink-50 px-2 py-1 mr-1 text-xs font-medium text-pink-800 ring-1 ring-pink-600/20 ring-inset">
-                                                        {
-                                                            product?.categories
-                                                                ?.name
-                                                        }
+                                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                    <span className="inline-flex items-center rounded-full bg-pink-50 px-2 py-1 text-xs font-medium text-pink-800 ring-1 ring-pink-600/20 ring-inset">
+                                                        {product?.categories?.name}
                                                     </span>
                                                 </td>
-                                                {/* <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
-                                                )}
-                                            >
-                                                <span className="inline-flex items-center rounded-full bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-green-600/20 ring-inset">
-                                                    {product.quantity}
-                                                </span>
-
-                                            </td> */}
-                                                <td
-                                                    className={classNames(
-                                                        productIdx !==
-                                                            product.length - 1
-                                                            ? "border-b border-gray-200"
-                                                            : "",
-                                                        "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
-                                                    )}
-                                                >
+                                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
                                                     {(product.cost == null || Number(product.cost) === 0)
                                                         ? "₱None"
                                                         : `₱${Number(product.cost).toFixed(2)}`}
                                                 </td>
-                                                <td
-                                                    className={classNames(
-                                                        productIdx !==
-                                                            product.length - 1
-                                                            ? "border-b border-gray-200"
-                                                            : "",
-                                                        "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
-                                                    )}
-                                                >
+                                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
                                                     {(product.shopee == null || Number(product.shopee) === 0)
                                                         ? "₱None"
                                                         : `₱${Number(product.shopee).toFixed(2)}`}
                                                 </td>
-                                                <td
-                                                    className={classNames(
-                                                        productIdx !==
-                                                            product.length - 1
-                                                            ? "border-b border-gray-200"
-                                                            : "",
-                                                        "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
-                                                    )}
-                                                >
+                                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
                                                     {(product.srp == null || Number(product.srp) === 0)
                                                         ? "₱None"
                                                         : `₱${Number(product.srp).toFixed(2)}`}
                                                 </td>
-                                                <td
-                                                    className={classNames(
-                                                        productIdx !==
-                                                            product.length - 1
-                                                            ? "border-b border-gray-200"
-                                                            : "",
-                                                        "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
-                                                    )}
-                                                >
+                                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
                                                     {(product.reseller == null || Number(product.reseller) === 0)
                                                         ? "₱None"
                                                         : `₱${Number(product.reseller).toFixed(2)}`}
                                                 </td>
-                                                <td
-                                                    className={classNames(
-                                                        productIdx !==
-                                                            product.length - 1
-                                                            ? "border-b border-gray-200"
-                                                            : "",
-                                                        "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
-                                                    )}
-                                                >
+                                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
                                                     {(product.city_distributor == null || Number(product.city_distributor) === 0)
                                                         ? "₱None"
                                                         : `₱${Number(product.city_distributor).toFixed(2)}`}
-
                                                 </td>
-                                                <td
-                                                    className={classNames(
-                                                        productIdx !==
-                                                            product.length - 1
-                                                            ? "border-b border-gray-200"
-                                                            : "",
-                                                        "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
-                                                    )}
-                                                >
+                                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
                                                     {(product.district_distributor == null || Number(product.district_distributor) === 0)
                                                         ? "₱None"
                                                         : `₱${Number(product.district_distributor).toFixed(2)}`}
                                                 </td>
-                                                <td
-                                                    className={classNames(
-                                                        productIdx !==
-                                                            product.length - 1
-                                                            ? "border-b border-gray-200"
-                                                            : "",
-                                                        "px-3 py-4 text-sm whitespace-nowrap text-gray-700 font-bold"
-                                                    )}
-                                                >
+                                                <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
                                                     {(product.provincial_distributor == null || Number(product.provincial_distributor) === 0)
                                                         ? "₱None"
                                                         : `₱${Number(product.provincial_distributor).toFixed(2)}`}
                                                 </td>
-                                                <td
-                                                    className={classNames(
-                                                        productIdx !==
-                                                            product.length - 1
-                                                            ? "border-b border-gray-200"
-                                                            : "",
-                                                        "px-3 py-4 text-sm text-gray-700 "
-                                                    )}
-                                                >
-                                                    <ProductOptionMenuSection
-                                                        data={product}
-                                                    />
+                                                <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                                    <ProductOptionMenuSection data={product} />
                                                 </td>
                                             </tr>
                                         );
-                                    }
-                                )}
-                            </tbody>
-                        </table>
-
-                        {/* Pagination */}
-
-                        <PaginationSection />
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
+                </div>
+
+                {/* Pagination */}
+                <PaginationSection />
             </div>
         </div>
     );
