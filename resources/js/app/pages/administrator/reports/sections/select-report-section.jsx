@@ -1,20 +1,21 @@
 import React, { useState } from "react";
 
 const reports = [
-    "Stock Movement",
-    "Sales By Customer",
     "Daily Sales",
-    "Sales By Product",
-    "Sales By Payment Types",
-    "Unpaid Sales",
-    "Purchase by Product",
-    "Payment Types by User",
-    "Purchase by Supplier",
+    "Expenses",
+    "Invoices",
     "Payment Types by Customer",
+    "Payment Types by User",
+    "Profit & margin",
+    "Purchase by Product",
+    "Purchase by Supplier",
     "Purchase Invoices",
     "Refunds",
-    "Invoices",
-    "Profit & margin",
+    "Sales By Customer",
+    "Sales By Payment Types",
+    "Sales By Product",
+    "Stock Movement",
+    "Unpaid Sales",
 ];
 
 export default function SelectReportSection({ setForm, form }) {
@@ -29,11 +30,10 @@ export default function SelectReportSection({ setForm, form }) {
                 {reports.map((report) => (
                     <li key={report}>
                         <label
-                            className={`flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-blue-700 ${
-                                selectedReport === report
-                                    ? "bg-blue-600 text-white"
-                                    : "text-gray-300"
-                            }`}
+                            className={`flex items-center gap-2 p-2 rounded cursor-pointer hover:bg-blue-700 ${selectedReport === report
+                                ? "bg-blue-600 text-white"
+                                : "text-gray-300"
+                                }`}
                         >
                             <input
                                 type="radio"
