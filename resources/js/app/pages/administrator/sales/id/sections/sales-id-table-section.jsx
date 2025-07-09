@@ -74,7 +74,7 @@ export default function SalesIdTableSection() {
                                 {cart?.cart_items?.map((res, index) => (
                                     <tr key={res?.email}>
                                         <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">
-                                            {res.product.name}
+                                            {res.product?.name}
                                         </td>
                                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                                             <SalesEditQuantitySection

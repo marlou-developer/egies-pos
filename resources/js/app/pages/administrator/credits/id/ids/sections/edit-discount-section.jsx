@@ -71,7 +71,7 @@ export default function EditDIscountSection({ data }) {
                 width="w-1/4"
             >
                 <h2 className="text-xl font-semibold mb-4">
-                    Are you sure you want to remove {data?.product?.name}?
+                    Update Discount
                 </h2>
                 <form action="" onSubmit={deleteUser}>
                     <div className="flex flex-col w-full gap-5">

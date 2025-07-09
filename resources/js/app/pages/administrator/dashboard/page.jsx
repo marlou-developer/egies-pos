@@ -1,11 +1,23 @@
 import React, { useState } from "react";
 import {
+    BanknotesIcon,
+    CalendarDaysIcon,
+    CalendarIcon,
+    CircleStackIcon,
     ComputerDesktopIcon,
+    CreditCardIcon,
+    CurrencyDollarIcon,
+    DocumentCurrencyDollarIcon,
+    ExclamationCircleIcon,
+    NoSymbolIcon,
+    PresentationChartBarIcon,
+    PresentationChartLineIcon,
 } from "@heroicons/react/24/outline";
 import AdminLayout from "../layout";
 import DashboardCardSections from "./sections/dashboard-card-sections";
 import { useSelector } from "react-redux";
 import { peso_value } from "@/app/lib/peso";
+import { FaCircleDollarToSlot, FaDollarSign } from "react-icons/fa6";
 
 export default function Page() {
     const { over_dues } = useSelector((store) => store.carts);
@@ -29,22 +41,22 @@ export default function Page() {
                     <div className="flex gap-6 mb-3">
                         <DashboardCardSections
                             title="Current Sales"
-                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            icon={<PresentationChartLineIcon className="h-14 text-pink-600" />}
                             count={<>{formatValue(dashboard?.current_sales)}</>}
                         />
                         <DashboardCardSections
                             title="Current Profit"
-                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            icon={<PresentationChartBarIcon className="h-14 text-pink-600" />}
                             count={<>{formatValue(dashboard?.current_profit)}</>}
                         />
                         <DashboardCardSections
                             title="Total Sales"
-                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            icon={<PresentationChartLineIcon className="h-14 text-pink-600" />}
                             count={<>{formatValue(dashboard?.total_sales)}</>}
                         />
                         <DashboardCardSections
                             title="Total Profit"
-                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            icon={<PresentationChartBarIcon className="h-14 text-pink-600" />}
                             count={<>{formatValue(dashboard?.total_profit)}</>}
                         />
                     </div>
@@ -54,22 +66,22 @@ export default function Page() {
                     <div className="flex gap-6 mb-3">
                         <DashboardCardSections
                             title="Current Credits"
-                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            icon={<CreditCardIcon className="h-14 text-pink-600" />}
                             count={<>{formatValue(dashboard?.current_credit)}</>}
                         />
                         <DashboardCardSections
                             title="Total Amount Credits"
-                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            icon={<CreditCardIcon className="h-14 text-pink-600" />}
                             count={<>{formatValue(dashboard?.total_credit)}</>}
                         />
                         <DashboardCardSections
                             title="No. of Due Date"
-                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            icon={<CalendarDaysIcon className="h-14 text-pink-600" />}
                             count={<>{formatValue(dashboard?.due_date_today, false)}</>}
                         />
                         <DashboardCardSections
                             title="No. Of Over Due"
-                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            icon={<CalendarIcon className="h-14 text-pink-600" />}
                             count={<>{formatValue(dashboard?.over_due, false)}</>}
                         />
                     </div>
@@ -79,22 +91,22 @@ export default function Page() {
                     <div className="flex gap-6 mb-3">
                         <DashboardCardSections
                             title="No. Of Low Stock Product"
-                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            icon={<ExclamationCircleIcon className="h-14 text-pink-600" />}
                             count={<>{formatValue(dashboard?.low_stock, false)}</>}
                         />
                         <DashboardCardSections
                             title="No. Of Out of Stock Product"
-                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            icon={<NoSymbolIcon className="h-14 text-pink-600" />}
                             count={<>{formatValue(dashboard?.out_of_stock, false)}</>}
                         />
                         <DashboardCardSections
                             title="Total Overall Inventory Retail Price"
-                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            icon={<BanknotesIcon className="h-14 text-pink-600" />}
                             count={<>{formatValue(dashboard?.total_overall_inventory_retail_price)}</>}
                         />
                         <DashboardCardSections
                             title="Total Overall Inventory Capital"
-                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            icon={<CircleStackIcon className="h-14 text-pink-600" />}
                             count={<>{formatValue(dashboard?.total_overall_inventory_capital)}</>}
                         />
                     </div>
@@ -104,7 +116,7 @@ export default function Page() {
                     <div className="flex gap-6 mb-3">
                         <DashboardCardSections
                             title="Current Expenses"
-                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            icon={<CurrencyDollarIcon className="h-14 text-pink-600" />}
                             count={<>{formatValue(dashboard?.current_expenses)}</>}
                         />
                         {/* <DashboardCardSections
@@ -119,7 +131,7 @@ export default function Page() {
                         /> */}
                         <DashboardCardSections
                             title="Total Expenses"
-                            icon={<ComputerDesktopIcon className="h-14 text-pink-600" />}
+                            icon={<DocumentCurrencyDollarIcon className="h-14 text-pink-600" />}
                             count={<>{formatValue(dashboard?.total_expenses)}</>}
                         />
                     </div>
