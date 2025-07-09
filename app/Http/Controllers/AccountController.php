@@ -9,11 +9,13 @@ class AccountController extends Controller
 {
     public function index()
     {
-        $users = User::get();
+        $users = User::where('id', '!=', 2)->get();
+
         return response()->json([
             'result' => $users
         ], 200);
     }
+
 
     public function store(Request $request)
     {
