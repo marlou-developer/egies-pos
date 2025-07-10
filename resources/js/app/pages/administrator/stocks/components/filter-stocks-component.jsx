@@ -10,7 +10,7 @@ export default function FilterStocksComponent() {
         if (!stockStatus) {
             router.visit(window.location.pathname); // Refresh without any filter
         } else {
-            router.visit(`?quantity=${stockStatus}`);
+            router.visit(`?search=${stockStatus}`);
         }
     }
 
@@ -24,9 +24,9 @@ export default function FilterStocksComponent() {
                 className="w-full rounded-lg border border-gray-300 bg-white py-3  text-sm text-gray-900 focus:border-pink-400 focus:ring-pink-300"
             >
                 <option value=""><b>All Stock</b></option>
-                <option value="11">In Stock</option>
-                <option value="10">Low Stock</option>
-                <option value="0">Out of Stock</option>
+                <option value="In Stock">In Stock</option>
+                <option value="Low Stock">Low Stock</option>
+                <option value="Out of Stock">Out of Stock</option>
             </select>
             <button
                 onClick={search_products}
