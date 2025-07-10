@@ -332,6 +332,77 @@ class CartController extends Controller
                 'user' => $user,
                 'product' => $product
             ], 200);
+        } else if ($request->type == "Profit and Margin") {
+
+
+            $cart_items = CartItem::select(
+                'product_id',
+                DB::raw('SUM(quantity) as quantity'),
+                DB::raw('SUM(cost) as cost'),
+                DB::raw('SUM(profit) as profit'),
+                DB::raw('SUM(fixed_price * quantity) as total')
+            )
+                ->whereBetween('created_at', [$start, $end])
+                ->when(!empty($request->customer) && $request->customer !== 'all', function ($query) use ($request) {
+                    if ($request->customer == '1') {
+                        $query->whereHas('cart', function ($q) {
+                            $q->whereNull('customer_id');
+                        });
+                    } else {
+                        $query->whereHas('cart.customer', function ($q) use ($request) {
+                            $q->where('id', $request->customer);
+                        });
+                    }
+                })
+                ->when(!empty($request->user) && $request->user !== 'all', function ($query) use ($request) {
+                    $query->whereHas('cart', function ($q) use ($request) {
+                        $q->where('user_id', $request->user);
+                    });
+                })
+                ->when(!empty($request->product) && $request->product !== 'all', function ($query) use ($request) {
+                    $query->where('product_id', $request->product);
+                })
+                ->when(!empty($request->category) && $request->category !== 'all', function ($query) use ($request) {
+                    $query->whereHas('product', function ($q) use ($request) {
+                        $q->where('category_id', $request->category);
+                    });
+                })
+
+
+                ->groupBy('product_id')
+                ->with(['product' => function ($query) {
+                    $query->select('id', 'name');
+                }])
+                ->get()
+                ->map(function ($item) {
+                    $margin = $item->total > 0
+                        ? round(($item->profit / $item->total) * 100, 2)
+                        : 0;
+
+                    return [
+                        'code' => $item->product_id,
+                        'product' => $item->product->name ?? 'N/A',
+                        'quantity' => $item->quantity,
+                        'cost' => $item->cost,
+                        'total' => $item->total,
+                        'profit' => $item->profit,
+                        'margin' => $margin . '%',
+                    ];
+                });
+
+            return response()->json([
+                'data' => $cart_items,
+                'customer' => $customer,
+                'user' => $user
+            ], 200);
+
+
+            return response()->json([
+                'data' => $cart_items,
+                'customer' => $customer,
+                'user' => $user,
+                'product' => $product
+            ], 200);
         }
         //   else if ($request->type == "Sales By Product") {
         //     $sales_by_product = DB::table('cart_items')

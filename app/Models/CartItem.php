@@ -24,10 +24,10 @@ class CartItem extends Model
 
       public function product(): HasOne
     {
-        return $this->hasOne(Product::class, 'id', 'product_id')->with('supplier');
+        return $this->hasOne(Product::class, 'id', 'product_id')->with(['supplier']);
     }
      public function cart(): HasOne
     {
-        return $this->hasOne(Cart::class, 'cart_id', 'cart_id');
+        return $this->hasOne(Cart::class, 'cart_id', 'cart_id')->with(['customer']);
     }
 }
