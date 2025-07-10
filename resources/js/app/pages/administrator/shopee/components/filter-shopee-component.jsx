@@ -10,7 +10,7 @@ export default function FilterShopeeComponent() {
         if (!shopeeStatus) {
             router.visit(window.location.pathname); // Refresh without any filter
         } else {
-            router.visit(`?status=${shopeeStatus}`);
+            router.visit(`?search=${shopeeStatus}`);
         }
     }
 
