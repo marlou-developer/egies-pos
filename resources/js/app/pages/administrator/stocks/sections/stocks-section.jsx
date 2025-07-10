@@ -116,295 +116,388 @@ export default function StocksSection() {
             </div>
 
 
-            {/* Product Table */}
-            <div className="mt-8 flow-root">
-                <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
-                    <div className="inline-block min-w-full py-2 align-middle">
-                        <table
-                            id="product-table"
-                            className="min-w-full border-separate border-spacing-0"
-                        >
-                            <thead>
-                                <tr>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:pl-6 lg:pl-8"
-                                    >
+            {/* Mobile Card Layout */}
+            <div className="mt-8 block md:hidden">
+                <div className="space-y-4">
+                    {/* Select All for Mobile */}
+                    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <label className="flex items-center space-x-2">
+                            <input
+                                type="checkbox"
+                                checked={selectAllStock}
+                                onChange={(e) => {
+                                    const isChecked = e.target.checked;
+                                    dispatch(setSelectAllStock(isChecked));
+                                    dispatch(
+                                        setSelectedStocks(
+                                            isChecked ? [...products.all] : []
+                                        )
+                                    );
+                                }}
+                                className="rounded border-gray-300 text-pink-600 focus:ring-pink-500"
+                            />
+                            <span className="text-sm font-medium text-gray-700">
+                                Select All
+                            </span>
+                        </label>
+                    </div>
+
+                    {products?.data?.data?.map((product, productIdx) => {
+                        let statusClass =
+                            "inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20";
+
+                        if (product.quantity == 0) {
+                            statusClass =
+                                "inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20";
+                        } else if (
+                            product.quantity >= 1 &&
+                            product.quantity <= 10
+                        ) {
+                            statusClass =
+                                "inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20";
+                        }
+
+                        const lastStockDate = product.stocks?.length > 0
+                            ? new Date(
+                                [...product.stocks].sort(
+                                    (a, b) => new Date(b.date) - new Date(a.date)
+                                )[0].date
+                            ).toLocaleDateString("en-US", {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                            })
+                            : "No Stocks Added";
+
+                        return (
+                            <div key={productIdx} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                                <div className="flex items-start justify-between">
+                                    <div className="flex items-start space-x-3">
                                         <input
                                             type="checkbox"
-                                            checked={selectAllStock}
+                                            checked={selectedStocks.some(
+                                                (p) => p.id === product.id
+                                            )}
                                             onChange={(e) => {
-                                                const isChecked =
-                                                    e.target.checked;
-                                                dispatch(setSelectAllStock(isChecked));
-
-                                                dispatch(
-                                                    setSelectedStocks(
-                                                        isChecked
-                                                            ? [...products.all]
-                                                            : []
-                                                    )
-                                                );
+                                                const isChecked = e.target.checked;
+                                                const updatedSelected = isChecked
+                                                    ? [...selectedStocks, product]
+                                                    : selectedStocks.filter(
+                                                        (p) => p.id !== product.id
+                                                    );
+                                                dispatch(setSelectedStocks(updatedSelected));
                                             }}
+                                            className="mt-1 rounded border-gray-300 text-pink-600 focus:ring-pink-500"
                                         />
-                                    </th>
-
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:pl-6 lg:pl-8"
-                                    >
-                                        Product
-                                    </th>
-                                    {/* <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
-                                    >
-                                        Delivery Receipt
-                                    </th> */}
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
-                                    >
-                                        Stocks
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
-                                    >
-                                        Status
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
-                                    >
-                                        Date last stock(s) added
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
-                                    >
-                                        Total Inventory Retail Price
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
-                                    >
-                                        Total Inventory Capital
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="sticky top-0 z-10 hidden border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:table-cell"
-                                    >
-                                        <span className="sr-only">Action</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {products?.data?.data?.map((product, productIdx) => {
-                                    let quantityy = product?.quantity; // Default status
-                                    let statusClass =
-                                        "inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20";
-
-                                    if (product.quantity == 0) {
-                                        statusClass =
-                                            "inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20";
-                                    } else if (
-                                        product.quantity >= 1 &&
-                                        product.quantity <= 10
-                                    ) {
-                                        statusClass =
-                                            "inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20";
-                                    }
-
-                                    return (
-                                        <tr key={productIdx}>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        products.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "py-4 pl-4 pr-3 text-sm sm:pl-6 lg:pl-8"
-                                                )}
-                                            >
-                                                <input
-                                                    type="checkbox"
-                                                    checked={selectedStocks.some(
-                                                        (p) =>
-                                                            p.id === product.id
-                                                    )}
-                                                    onChange={(e) => {
-                                                        const isChecked =
-                                                            e.target.checked;
-
-                                                        const updatedSelected =
-                                                            isChecked
-                                                                ? [
-                                                                    ...selectedStocks,
-                                                                    product,
-                                                                ]
-                                                                : selectedStocks.filter(
-                                                                    (p) =>
-                                                                        p.id !==
-                                                                        product.id
-                                                                ); // Correctly compare by object.id
-
-                                                        dispatch(
-                                                            setSelectedStocks(
-                                                                updatedSelected
-                                                            )
-                                                        );
-                                                    }}
-                                                />
-                                            </td>
-
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        products.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "py-4 px-3 pl-4 text-sm font-bold text-pink-500"
-                                                )}
-                                            >
+                                        <div className="flex-1">
+                                            <h3 className="text-sm font-bold text-pink-500 mb-2">
                                                 {product.name}
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
-                                                )}
-                                            >
-                                                <span className="inline-flex items-center font-bold px-2 py-1">
-                                                    {product.quantity}
-                                                </span>
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "hidden px-3 py-4 text-sm font-bold whitespace-nowrap text-gray-500 sm:table-cell"
-                                                )}
-                                            >
-                                                <span className={statusClass}>
-                                                    {product.quantity == 0
-                                                        ? "Out of Stock"
-                                                        : product.quantity <= 10
-                                                            ? "Low Stock"
-                                                            : "In Stock"}
-                                                </span>
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        products.data.data.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
-                                                )}
-                                            >
-                                                <span className="inline-flex items-center font-bold px-2 py-1">
-                                                    {product.stocks?.length > 0
-                                                        ? new Date(
-                                                            [
-                                                                ...product.stocks,
-                                                            ].sort(
-                                                                (a, b) =>
-                                                                    new Date(
-                                                                        b.date
-                                                                    ) -
-                                                                    new Date(
-                                                                        a.date
-                                                                    )
-                                                            )[0].date
-                                                        ).toLocaleDateString(
-                                                            "en-US",
-                                                            {
+                                            </h3>
+                                            
+                                            <div className="space-y-2">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-xs text-gray-500">Stock:</span>
+                                                    <span className="text-sm font-bold text-gray-900">
+                                                        {product.quantity}
+                                                    </span>
+                                                </div>
+                                                
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-xs text-gray-500">Status:</span>
+                                                    <span className={statusClass}>
+                                                        {product.quantity == 0
+                                                            ? "Out of Stock"
+                                                            : product.quantity <= 10
+                                                                ? "Low Stock"
+                                                                : "In Stock"}
+                                                    </span>
+                                                </div>
+                                                
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-xs text-gray-500">Last Added:</span>
+                                                    <span className="text-xs font-medium text-gray-700">
+                                                        {lastStockDate}
+                                                    </span>
+                                                </div>
+                                                
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-xs text-gray-500">Retail Value:</span>
+                                                    <span className="text-sm font-bold text-green-600">
+                                                        {peso_value(
+                                                            Number(product.quantity) * Number(product.srp)
+                                                        )}
+                                                    </span>
+                                                </div>
+                                                
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-xs text-gray-500">Capital:</span>
+                                                    <span className="text-sm font-bold text-blue-600">
+                                                        {peso_value(
+                                                            Number(product.quantity) * Number(product.cost)
+                                                        )}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div className="mt-4 flex justify-end space-x-2">
+                                    <AddStocksSection data={product} />
+                                    <StocksHistorySection data={product} />
+                                    <button 
+                                        className="bg-yellow-300 hover:bg-yellow-400 rounded-md p-2.5"
+                                        onClick={() => router.visit(`/administrator/stocks/${product.id}`)}
+                                    >
+                                        <Tooltip title="Edit Added Stock(s)">
+                                            <PencilSquareIcon className="h-4" />
+                                        </Tooltip>
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+
+            {/* Desktop Table Layout */}
+            <div className="mt-8 hidden md:block">
+                <div className="flow-root">
+                    <div className="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
+                        <div className="inline-block min-w-full py-2 align-middle">
+                            <table
+                                id="product-table"
+                                className="min-w-full border-separate border-spacing-0"
+                            >
+                                <thead>
+                                    <tr>
+                                        <th
+                                            scope="col"
+                                            className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:pl-6 lg:pl-8"
+                                        >
+                                            <input
+                                                type="checkbox"
+                                                checked={selectAllStock}
+                                                onChange={(e) => {
+                                                    const isChecked = e.target.checked;
+                                                    dispatch(setSelectAllStock(isChecked));
+                                                    dispatch(
+                                                        setSelectedStocks(
+                                                            isChecked ? [...products.all] : []
+                                                        )
+                                                    );
+                                                }}
+                                            />
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter sm:pl-6 lg:pl-8"
+                                        >
+                                            Product
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter"
+                                        >
+                                            Stocks
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter"
+                                        >
+                                            Status
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter"
+                                        >
+                                            Date last stock(s) added
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter"
+                                        >
+                                            Total Inventory Retail Price
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter"
+                                        >
+                                            Total Inventory Capital
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter"
+                                        >
+                                            <span className="sr-only">Action</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {products?.data?.data?.map((product, productIdx) => {
+                                        let statusClass =
+                                            "inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20";
+
+                                        if (product.quantity == 0) {
+                                            statusClass =
+                                                "inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20";
+                                        } else if (
+                                            product.quantity >= 1 &&
+                                            product.quantity <= 10
+                                        ) {
+                                            statusClass =
+                                                "inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20";
+                                        }
+
+                                        return (
+                                            <tr key={productIdx}>
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !== products.data.data.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "py-4 pl-4 pr-3 text-sm sm:pl-6 lg:pl-8"
+                                                    )}
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={selectedStocks.some(
+                                                            (p) => p.id === product.id
+                                                        )}
+                                                        onChange={(e) => {
+                                                            const isChecked = e.target.checked;
+                                                            const updatedSelected = isChecked
+                                                                ? [...selectedStocks, product]
+                                                                : selectedStocks.filter(
+                                                                    (p) => p.id !== product.id
+                                                                );
+                                                            dispatch(setSelectedStocks(updatedSelected));
+                                                        }}
+                                                    />
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !== products.data.data.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "py-4 px-3 pl-4 text-sm font-bold text-pink-500"
+                                                    )}
+                                                >
+                                                    {product.name}
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !== products.data.data.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "px-3 py-4 text-sm whitespace-nowrap text-gray-500"
+                                                    )}
+                                                >
+                                                    <span className="inline-flex items-center font-bold px-2 py-1">
+                                                        {product.quantity}
+                                                    </span>
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !== products.data.data.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "px-3 py-4 text-sm font-bold whitespace-nowrap text-gray-500"
+                                                    )}
+                                                >
+                                                    <span className={statusClass}>
+                                                        {product.quantity == 0
+                                                            ? "Out of Stock"
+                                                            : product.quantity <= 10
+                                                                ? "Low Stock"
+                                                                : "In Stock"}
+                                                    </span>
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !== products.data.data.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "px-3 py-4 text-sm whitespace-nowrap text-gray-500"
+                                                    )}
+                                                >
+                                                    <span className="inline-flex items-center font-bold px-2 py-1">
+                                                        {product.stocks?.length > 0
+                                                            ? new Date(
+                                                                [...product.stocks].sort(
+                                                                    (a, b) =>
+                                                                        new Date(b.date) - new Date(a.date)
+                                                                )[0].date
+                                                            ).toLocaleDateString("en-US", {
                                                                 year: "numeric",
                                                                 month: "short",
                                                                 day: "numeric",
-                                                            }
-                                                        )
-                                                        : "No Stocks Added"}
-                                                </span>
-                                            </td>
-
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
-                                                )}
-                                            >
-                                                <span className="inline-flex items-center font-bold px-2 py-1">
-                                                    {peso_value(
-                                                        Number(
-                                                            product.quantity
-                                                        ) * Number(product.srp)
+                                                            })
+                                                            : "No Stocks Added"}
+                                                    </span>
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !== products.data.data.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "px-3 py-4 text-sm whitespace-nowrap text-gray-500"
                                                     )}
-                                                </span>
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
-                                                )}
-                                            >
-                                                <span className="inline-flex items-center font-bold px-2 py-1">
-                                                    {peso_value(
-                                                        Number(
-                                                            product.quantity
-                                                        ) * Number(product.cost)
+                                                >
+                                                    <span className="inline-flex items-center font-bold px-2 py-1">
+                                                        {peso_value(
+                                                            Number(product.quantity) * Number(product.srp)
+                                                        )}
+                                                    </span>
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !== products.data.data.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "px-3 py-4 text-sm whitespace-nowrap text-gray-500"
                                                     )}
-                                                    {/* {peso_value(((Number(product.srp) - Number(product.cost)) * Number(product.quantity)))} */}
-                                                </span>
-                                            </td>
-                                            <td
-                                                className={classNames(
-                                                    productIdx !==
-                                                        product.length - 1
-                                                        ? "border-b border-gray-200"
-                                                        : "",
-                                                    "text-sm text-gray-700 "
-                                                )}
-                                            >
-                                                <div className="inline-flex items-center font-bold px-2 py-1 gap-2 ">
-                                                    <AddStocksSection
-                                                        data={product}
-                                                    />
-                                                    <StocksHistorySection
-                                                        data={product}
-                                                    />
-                                                    <button className="bg-yellow-300 hover:bg-yellow-400 rounded-md p-2.5"
-                                                        onClick={() => router.visit(`/administrator/stocks/${product.id}`)}
-                                                    // onClick={() => window.open(`/administrator/stocks/${product.id}`, '_blank')}
-                                                    >
-                                                        <Tooltip title="Edit Added Stock(s)">
-                                                            <PencilSquareIcon className="h-4" />
-                                                        </Tooltip>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-
-                        {/* Pagination */}
-                        <PaginationSection />
+                                                >
+                                                    <span className="inline-flex items-center font-bold px-2 py-1">
+                                                        {peso_value(
+                                                            Number(product.quantity) * Number(product.cost)
+                                                        )}
+                                                    </span>
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !== products.data.data.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "px-3 py-4 text-sm text-gray-700"
+                                                    )}
+                                                >
+                                                    <div className="inline-flex items-center gap-2">
+                                                        <AddStocksSection data={product} />
+                                                        <StocksHistorySection data={product} />
+                                                        <button 
+                                                            className="bg-yellow-300 hover:bg-yellow-400 rounded-md p-2.5"
+                                                            onClick={() => router.visit(`/administrator/stocks/${product.id}`)}
+                                                        >
+                                                            <Tooltip title="Edit Added Stock(s)">
+                                                                <PencilSquareIcon className="h-4" />
+                                                            </Tooltip>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
+            </div>
+
+            {/* Pagination */}
+            <div className="mt-8">
+                <PaginationSection />
             </div>
         </div>
     );

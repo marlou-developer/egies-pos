@@ -134,7 +134,7 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                     </button>
                                 </div>
                             </div>
-                            <div className="mt-1">
+                            <div className="mt-1 ">
                                 <p className="text-sm text-gray-600">
                                     Get started by updating the information
                                     below to modify your product.

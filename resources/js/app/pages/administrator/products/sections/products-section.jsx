@@ -18,7 +18,7 @@ import SearchSection from "./search-section";
 import PrintSection from "./print-section";
 import { setSelectAll, setSelectedProducts } from "@/app/redux/product-slice";
 import PaginationSection from "./pagination-section";
-import MobileCardComponent from "@/app/_components/mobile-card-component";
+import MobileCardProductComponent from "../components/mobile-card-product-component";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -174,11 +174,11 @@ export default function ProductsSection() {
             {/* Product Table */}
             <div className="mt-8 flow-root">
 
-                <MobileCardComponent
-                    products={products}
-                    selectedProducts={selectedProducts}
+                <MobileCardProductComponent
+                    data={products}
+                    selectedData={selectedProducts}
                     dispatch={dispatch}
-                    setSelectedProducts={setSelectedProducts}
+                    setSelectedData={setSelectedProducts}
                 />
 
                 {/* Desktop Table Layout */}
@@ -373,7 +373,7 @@ export default function ProductsSection() {
                                                             ? "₱None"
                                                             : `₱${Number(product.provincial_distributor).toFixed(2)}`}
                                                     </td>
-                                                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                                    <td className="relative py-4 pl-3 pr-4 text-sm font-medium sm:pr-6">
                                                         <ProductOptionMenuSection data={product} />
                                                     </td>
                                                 </tr>
