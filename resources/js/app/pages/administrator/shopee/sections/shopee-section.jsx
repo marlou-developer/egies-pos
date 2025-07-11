@@ -92,7 +92,7 @@ export default function ShopeeSection() {
                                     </th>
                                     {[
                                         "Invoice No.",
-                                        "Order ID",
+                                        // "Order ID",
                                         "Total",
                                         "Status",
                                         "Date",
@@ -137,9 +137,9 @@ export default function ShopeeSection() {
                                             <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">
                                                 {res.cart_id}
                                             </td>
-                                            <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
+                                            {/* <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
                                                 {res.order_id}
-                                            </td>
+                                            </td> */}
                                             <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
                                                 <b>
                                                     {peso_value(
