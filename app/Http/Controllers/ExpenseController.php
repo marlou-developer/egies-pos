@@ -14,6 +14,7 @@ class ExpenseController extends Controller
 
         if ($request->filled('search')) {
             $expenses->where('item', 'like', '%' . $request->search . '%');
+            $expenses->where('category', 'like', '%' . $request->search . '%');
         }
 
         return response()->json([

@@ -208,7 +208,8 @@ export default function PaySection({
                 }
             }
         } else {
-            if (form.customer_name && form.order_id) {
+            // For Shopee, check if shopee_store is selected
+            if (form.shopee_store) {
                 return false;
             } else {
                 return true;
@@ -377,30 +378,6 @@ export default function PaySection({
                                             value: "Beauty In Pink",
                                         },
                                     ]}
-                                />
-                                <Input
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            customer_name: e.target.value,
-                                        })
-                                    }
-                                    type="text"
-                                    value={form?.customer_name}
-                                    name="customer_name"
-                                    label="Customer Name"
-                                />
-                                <Input
-                                    onChange={(e) =>
-                                        setForm({
-                                            ...form,
-                                            order_id: e.target.value,
-                                        })
-                                    }
-                                    type="text"
-                                    value={form?.order_id}
-                                    name="order_id"
-                                    label="Shopee Order ID"
                                 />
                             </div>
                         )}

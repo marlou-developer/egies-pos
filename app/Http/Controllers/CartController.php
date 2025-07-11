@@ -736,14 +736,15 @@ class CartController extends Controller
 
         $carts = Cart::where('shop', 'Shopee')->with(['cart_items', 'credit_payments']);
         if ($request->filled('search')) {
-            $carts->where(function($query) use ($request) {
+            $carts->where(function ($query) use ($request) {
                 $query->where('cart_id', 'like', '%' . $request->search . '%')
-                      ->orWhere('customer', 'like', '%' . $request->search . '%')
-                      ->orWhere('order_id', 'like', '%' . $request->search . '%')
-                      ->orWhere('status', 'like', '%' . $request->search . '%');
+                    ->orWhere('customer', 'like', '%' . $request->search . '%')
+                    ->orWhere('order_id', 'like', '%' . $request->search . '%')
+                    ->orWhere('status', 'like', '%' . $request->search . '%');
             });
         }
 
+        $carts->orderBy('id', 'desc');
 
         return response()->json($carts->paginate(10), 200);
     }

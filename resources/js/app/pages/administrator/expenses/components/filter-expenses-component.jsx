@@ -10,7 +10,7 @@ export default function FilterExpensesComponent() {
         if (!expenseStatus) {
             router.visit(window.location.pathname); // Refresh without any filter
         } else {
-            router.visit(`?status=${expenseStatus}`);
+            router.visit(`?search=${expenseStatus}`);
         }
     }
 
