@@ -296,11 +296,9 @@ class CartController extends Controller
                         $query->where('carts.customer_id', $request->customer);
                     }
                 }
-
                 if (!empty($request->user) && $request->user !== 'all') {
                     $query->where('carts.user_id', $request->user);
                 }
-
                 $query->whereBetween('created_at', [$start, $end])
                     ->whereNotNull('payment_type');
             }])->get()
@@ -585,104 +583,177 @@ class CartController extends Controller
                 'user' => $user,
                 'product' => $product
             ], 200);
+        } else if ($request->type == "Sales By Payment Types") {
+            $carts = DB::table('carts')
+                ->select(
+                    DB::raw('DATE(created_at) as date'),
+                    'payment_type',
+                    DB::raw('SUM(total_price) as total_sales'),
+                    DB::raw('COUNT(*) as total_transactions')
+                )
+                ->when(!empty($request->customer) && $request->customer !== 'all', function ($query) use ($request) {
+                    return $request->customer == '1'
+                        ? $query->whereNull('carts.customer_id')
+                        : $query->where('carts.customer_id', $request->customer);
+                })
+                ->when(!empty($request->user) && $request->user !== 'all', function ($query) use ($request) {
+                    return $query->where('carts.user_id', $request->user);
+                })
+                ->whereBetween('created_at', [$start, $end])
+                // ->whereNotNull('payment_type')
+                ->groupBy(DB::raw('DATE(created_at)'), 'payment_type')
+                ->orderBy('date', 'asc')
+                ->orderByDesc('total_sales')
+                ->get();
+            return response()->json([
+                'data' => $carts,
+                'customer' => $customer,
+                'user' => $user,
+                'product' => $product
+            ], 200);
+        } else if ($request->type == "Sales By Product") {
+            $sales_by_product = DB::table('cart_items')
+                ->join('products', 'cart_items.product_id', '=', 'products.id')
+                ->join('carts', 'cart_items.cart_id', '=', 'carts.cart_id')
+                ->leftJoin('customers', 'carts.customer_id', '=', 'customers.id')
+                ->when(!empty($request->customer) && $request->customer !== 'all', function ($query) use ($request) {
+                    if ($request->customer == '1') {
+                        $query->whereNull('carts.customer_id');
+                    } else {
+                        $query->where('carts.customer_id', $request->customer);
+                    }
+                })
+                ->when(!empty($request->user) && $request->user !== 'all', function ($query) use ($request) {
+                    $query->where('carts.user_id', $request->user);
+                })
+                ->when(!empty($request->product) && $request->product !== 'all', function ($query) use ($request) {
+                    $query->where('cart_items.product_id', $request->product);
+                })
+                ->when(!empty($request->category) && $request->category !== 'all', function ($query) use ($request) {
+                    $query->where('products.category_id', $request->category);
+                })
+                ->select(
+                    'products.id as product_id',
+                    'products.name as product_name',
+                    DB::raw('SUM(cart_items.quantity) as total_sold'),
+                    DB::raw('SUM(cart_items.total) as total_sales')
+                )
+                ->whereBetween('cart_items.created_at', [$start, $end])
+                ->groupBy('products.id', 'products.name')
+                ->orderByDesc('total_sold')
+                ->get();
+
+            return response()->json([
+                'data' => $sales_by_product,
+                'customer' => $customer,
+                'user' => $user,
+                'product' => $product
+            ], 200);
+        } else if ($request->type == "Unpaid Sales") {
+            $unpaidCartsQuery = Customer::with(['carts' => function ($query) use ($start, $end, $request) {
+                $query->whereBetween('created_at', [$start, $end])
+                    ->where('is_credit', 'true')
+                    ->whereIn('status', ['Partial', 'Pending'])
+                    ->when(!empty($request->product) && $request->product !== 'all', function ($q) use ($request) {
+                        $q->whereHas('cart_items', function ($q2) use ($request) {
+                            $q2->where('product_id', $request->product);
+                        });
+                    })
+                    ->when(!empty($request->category) && $request->category !== 'all', function ($q) use ($request) {
+                        $q->whereHas('cart_items.product', function ($q2) use ($request) {
+                            $q2->where('category_id', $request->category);
+                        });
+                    });
+            }]);
+
+            // Filter customers if needed
+            if (!empty($request->customer) && $request->customer !== 'all') {
+                if ($request->customer == '1') {
+                    $unpaidCartsQuery->whereDoesntHave('carts', function ($q) {
+                        $q->whereNotNull('customer_id');
+                    });
+                } else {
+                    $unpaidCartsQuery->where('id', $request->customer);
+                }
+            }
+
+            $unpaidCarts = $unpaidCartsQuery->get()
+                ->filter(fn($customer) => $customer->carts->isNotEmpty())
+                ->values();
+
+            return response()->json([
+                'data' => $unpaidCarts,
+                'customer' => $customer,
+                'user' => $user,
+                'product' => $product
+            ], 200);
+        } else if ($request->type == "Payment Types by Customer") {
+            if (!empty($request->customer) && $request->customer === '1') {
+                // Anonymous carts (no customer_id)
+                $carts = Cart::whereNull('customer_id')
+                    ->whereBetween('created_at', [$start, $end])
+                    ->whereNotNull('payment_type')
+                    ->get();
+
+                $byPaymentType = $carts
+                    ->groupBy('payment_type')
+                    ->map(function ($group, $type) {
+                        return [
+                            'type' => $type,
+                            'count' => $group->count(),
+                            'total_amount' => $group->sum(fn($item) => $item->total_price ?? 0),
+                        ];
+                    })
+                    ->values();
+
+                $paymentTypes = [
+                    [
+                        'customer_id' => null,
+                        'customer_name' => 'Walk-In Customer',
+                        'payment_types' => $byPaymentType,
+                    ]
+                ];
+            } else {
+                // Carts for specific customer(s)
+                $paymentTypesQuery = Customer::with(['carts' => function ($query) use ($start, $end) {
+                    $query->whereBetween('created_at', [$start, $end])
+                        ->whereNotNull('payment_type');
+                }]);
+
+                if (!empty($request->customer) && $request->customer !== 'all') {
+                    $paymentTypesQuery->where('id', $request->customer);
+                }
+
+                $paymentTypes = $paymentTypesQuery->get()
+                    ->map(function ($customer) {
+                        $byPaymentType = $customer->carts
+                            ->groupBy('payment_type')
+                            ->map(function ($group, $type) {
+                                return [
+                                    'type' => $type,
+                                    'count' => $group->count(),
+                                    'total_amount' => $group->sum(fn($item) => $item->total_price ?? 0),
+                                ];
+                            })
+                            ->values();
+
+                        return [
+                            'customer_id' => $customer->id,
+                            'customer_name' => $customer->name,
+                            'payment_types' => $byPaymentType,
+                        ];
+                    })
+                    ->filter(fn($item) => $item['payment_types']->isNotEmpty())
+                    ->values();
+            }
+
+            return response()->json([
+                'data' => $paymentTypes,
+                'customer' => $customer,
+                'user' => $user,
+                'product' => $product,
+            ]);
         }
-
-        //   else if ($request->type == "Sales By Product") {
-        //     $sales_by_product = DB::table('cart_items')
-        //         ->join('products', 'cart_items.product_id', '=', 'products.id')
-        //         ->select(
-        //             'products.id as product_id',
-        //             'products.name as product_name',
-        //             DB::raw('SUM(cart_items.quantity) as total_sold'),
-        //             DB::raw('SUM(cart_items.total) as total_sales')
-        //         )
-        //         ->whereBetween('cart_items.created_at', [$start, $end])
-        //         ->groupBy('products.id', 'products.name')
-        //         ->orderByDesc('total_sold')
-        //         ->get();
-        //     return response()->json($sales_by_product, 200);
-        // } else if ($request->type == "Sales By Payment Types") {
-        //     $carts = DB::table('carts')
-        //         ->select(
-        //             DB::raw('DATE(created_at) as date'),
-        //             'payment_type',
-        //             DB::raw('SUM(total_price) as total_sales'),
-        //             DB::raw('COUNT(*) as total_transactions')
-        //         )
-        //         ->whereBetween('created_at', [$start, $end])
-        //         // ->whereNotNull('payment_type')
-        //         ->groupBy(DB::raw('DATE(created_at)'), 'payment_type')
-        //         ->orderBy('date', 'asc')
-        //         ->orderByDesc('total_sales')
-        //         ->get();
-
-        //     return response()->json($carts, 200);
-        // } else if ($request->type == "Unpaid Sales") {
-        //     $unpaidCarts = Customer::with(['carts' => function ($query) use ($start, $end) {
-        //         $query->whereBetween('created_at', [$start, $end])
-        //             ->where('is_credit', 'true')
-        //             ->whereIn('status', ['Partial', 'Pending']);
-        //     }])->get()
-        //         ->filter(function ($customer) {
-        //             return $customer->carts->isNotEmpty();
-        //         })
-        //         ->values();
-        //     return response()->json($unpaidCarts, 200);
-        // } else if ($request->type == "Payment Types by User") {
-        //     $paymentTypes = User::with(['carts' => function ($query) use ($start, $end) {
-        //         $query->whereBetween('created_at', [$start, $end])
-        //             ->whereNotNull('payment_type'); // adjust based on your schema
-        //     }])->get()
-        //         ->map(function ($user) {
-        //             $byPaymentType = $user->carts
-        //                 ->groupBy('payment_type')
-        //                 ->map(function ($group, $type) {
-        //                     return [
-        //                         'type' => $type,
-        //                         'count' => $group->count(),
-        //                         'total_amount' => $group->sum('total_price' ?? '0'),
-        //                     ];
-        //                 })
-        //                 ->values();
-
-        //             return [
-        //                 'user_id' => $user->id,
-        //                 'user_name' => $user->name,
-        //                 'payment_types' => $byPaymentType
-        //             ];
-        //         })
-        //         ->filter(fn($u) => $u['payment_types']->isNotEmpty())
-        //         ->values();
-
-        //     return response()->json($paymentTypes, 200);
-        // } else if ($request->type == "Payment Types by Customer") {
-        //     $paymentTypes = Customer::with(['carts' => function ($query) use ($start, $end) {
-        //         $query->whereBetween('created_at', [$start, $end])
-        //             ->whereNotNull('payment_type'); // adjust based on your schema
-        //     }])->get()
-        //         ->map(function ($customer) {
-        //             $byPaymentType = $customer->carts
-        //                 ->groupBy('payment_type')
-        //                 ->map(function ($group, $type) {
-        //                     return [
-        //                         'type' => $type,
-        //                         'count' => $group->count(),
-        //                         'total_amount' => $group->sum('total_price' ?? '0'),
-        //                     ];
-        //                 })
-        //                 ->values();
-
-        //             return [
-        //                 'customer_id' => $customer->id,
-        //                 'customer_name' => $customer->name,
-        //                 'payment_types' => $byPaymentType
-        //             ];
-        //         })
-        //         ->filter(fn($u) => $u['payment_types']->isNotEmpty())
-        //         ->values();
-
-        //     return response()->json($paymentTypes, 200);
-
     }
     public function update_all_status(Request $request)
     {

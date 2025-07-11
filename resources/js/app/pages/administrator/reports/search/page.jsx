@@ -15,6 +15,9 @@ import SalesByProductReportSection from "./sections/sales-by-product-report-sect
 import PurchaseByProductReportSection from "./sections/purchase-by-product-report-section";
 import PurchaseBySupplierReportSection from "./sections/purchase-by-supplier-report-section";
 import PurchaseInvoiceReportSection from "./sections/purchase-invoice-report-section";
+import SalesByPaymentTypeReportSection from "./sections/sales-by-payment-type-report-section";
+import UnpaidSalesReportSection from "./sections/unpaid-sales-report-section";
+import PaymentTypesByCustomerReportSection from "./sections/payment-types-by-customer-report-section";
 
 export default function Page() {
     const params = new URLSearchParams(window.location.search);
@@ -58,9 +61,16 @@ export default function Page() {
                     {type == "Purchase Invoices" && (
                         <PurchaseInvoiceReportSection />
                     )}
-                    {/* {type == "Sales By Product" && (
+                    {type == "Sales By Payment Types" && (
+                        <SalesByPaymentTypeReportSection />
+                    )}
+                    {type == "Sales By Product" && (
                         <SalesByProductReportSection />
-                    )} */}
+                    )}
+                    {type == "Unpaid Sales" && <UnpaidSalesReportSection />}
+                    {type == "Payment Types by Customer" && (
+                        <PaymentTypesByCustomerReportSection />
+                    )}
                 </>
             )}
         </>

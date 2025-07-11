@@ -112,7 +112,9 @@ const SalesByProductReportSection = () => {
                                     }}
                                 >
                                     <Text style={{ width: 60 }}>Period:</Text>
-                                    <Text>4/13/2025 - 4/13/2025</Text>
+                                    <Text>
+                                        {initialStart} - {initialEnd}
+                                    </Text>
                                 </View>
                                 <View
                                     style={{
@@ -121,7 +123,9 @@ const SalesByProductReportSection = () => {
                                     }}
                                 >
                                     <Text style={{ width: 60 }}>Customer:</Text>
-                                    <Text>All</Text>
+                                    <Text>
+                                        {reports?.customer?.name ?? "All"}
+                                    </Text>
                                 </View>
                                 <View
                                     style={{
@@ -130,7 +134,7 @@ const SalesByProductReportSection = () => {
                                     }}
                                 >
                                     <Text style={{ width: 60 }}>User:</Text>
-                                    <Text>All</Text>
+                                    <Text>{reports?.user?.name ?? "All"}</Text>
                                 </View>
                                 <View
                                     style={{
@@ -139,7 +143,9 @@ const SalesByProductReportSection = () => {
                                     }}
                                 >
                                     <Text style={{ width: 60 }}>Product:</Text>
-                                    <Text>All</Text>
+                                    <Text>
+                                        {reports?.product?.name ?? "All"}
+                                    </Text>
                                 </View>
                             </View>
 
@@ -209,8 +215,8 @@ const SalesByProductReportSection = () => {
 
                     {/* Summary */}
                     <View style={styles.summary}>
-                        <Text>Total Sales: {peso_value(total_sold)}</Text>
-                        <Text>Total Sold: {total_sold}</Text>
+                        <Text>Total Sold: {peso_value(total_sold)}</Text>
+                        <Text>Total Sales: {peso_value(total_sales)}</Text>
                     </View>
                 </Page>
             </Document>

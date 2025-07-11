@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaSquarePlus, FaTrashRestore } from "react-icons/fa6";
+// import { FaSquarePlus, FaTrashRestore } from "react-icons/fa6";
 import Modal from "@/Components/Modal";
 import store from "@/app/store/store";
 import { restore_thunk } from "@/app/redux/stock-thunk";
@@ -42,7 +42,8 @@ export default function RestoreSection({ data }) {
                     onClick={() => setModalOpen(true)}
                     className="relative inline-flex items-center rounded-md bg-green-400 w-full p-3 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-green-600 "
                 >
-                    <FaTrashRestore className="text-green-100" />
+                    {/* <FaTrashRestore className="text-green-100" /> */}
+                    Restore
                 </button>
             </Tooltip>
 
