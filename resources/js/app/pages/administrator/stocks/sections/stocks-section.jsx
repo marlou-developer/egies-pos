@@ -13,6 +13,7 @@ import PrintSection from "./print-section";
 import { PencilSquareIcon } from "@heroicons/react/24/outline";
 import { Tooltip } from "antd";
 import FilterStocksComponent from "../components/filter-stocks-component";
+import SoftDeleteSection from "./soft-delete-section";
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
@@ -170,7 +171,7 @@ export default function StocksSection() {
                             : "No Stocks Added";
 
                         return (
-                            <div key={productIdx} className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+                            <div key={productIdx} className="bg-white rounded-lg shadow-sm border border-gray-200 p-5">
                                 <div className="flex items-start justify-between">
                                     <div className="flex items-start space-x-3">
                                         <input
@@ -248,20 +249,22 @@ export default function StocksSection() {
                                             </div>
                                         </div>
                                     </div>
+                                    <div className="mt-4 flex justify-end space-x-2">
+                                        <AddStocksSection data={product} />
+                                        <StocksHistorySection data={product} />
+                                        <button
+                                            className="bg-yellow-300 hover:bg-yellow-400 rounded-md p-2.5"
+                                            onClick={() => router.visit(`/administrator/stocks/${product.id}`)}
+                                        >
+                                            <Tooltip title="Edit Added Stock(s)">
+                                                <PencilSquareIcon className="h-4" />
+                                            </Tooltip>
+                                        </button>
+                                        <SoftDeleteSection data={product} />
+                                    </div>
                                 </div>
 
-                                <div className="mt-4 flex justify-end space-x-2">
-                                    <AddStocksSection data={product} />
-                                    <StocksHistorySection data={product} />
-                                    <button
-                                        className="bg-yellow-300 hover:bg-yellow-400 rounded-md p-2.5"
-                                        onClick={() => router.visit(`/administrator/stocks/${product.id}`)}
-                                    >
-                                        <Tooltip title="Edit Added Stock(s)">
-                                            <PencilSquareIcon className="h-4" />
-                                        </Tooltip>
-                                    </button>
-                                </div>
+
                             </div>
                         );
                     })}
@@ -509,6 +512,7 @@ export default function StocksSection() {
                                                                 <PencilSquareIcon className="h-4" />
                                                             </Tooltip>
                                                         </button>
+                                                        <SoftDeleteSection data={product} />
                                                     </div>
                                                 </td>
                                             </tr>

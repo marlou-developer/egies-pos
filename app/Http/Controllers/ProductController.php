@@ -16,6 +16,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $query = Product::with(['categories', 'uploads', 'stocks'])
+            ->notSoftDeleted()
             ->orderBy('name', 'asc');
 
         if ($request->search) {

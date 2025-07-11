@@ -27,7 +27,8 @@ class Product extends Model
         'city_distributor',
         'district_distributor',
         'provincial_distributor',
-        'delivery_receipt_no'
+        'delivery_receipt_no',
+        'is_soft_deleted'
     ];
 
     public function uploads(): HasMany
@@ -45,5 +46,32 @@ class Product extends Model
     public function supplier(): HasOne
     {
         return $this->hasOne(Supplier::class, 'id', 'supplier_id');
+    }
+    
+    /**
+     * Check if the product is soft deleted
+     */
+    public function isSoftDeleted()
+    {
+        return $this->is_soft_deleted == '1' || $this->is_soft_deleted == 1;
+    }
+
+    /**
+     * Scope to get only non-soft-deleted products
+     */
+    public function scopeNotSoftDeleted($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('is_soft_deleted', '!=', '1')
+              ->orWhereNull('is_soft_deleted');
+        });
+    }
+
+    /**
+     * Scope to get only soft-deleted products
+     */
+    public function scopeSoftDeleted($query)
+    {
+        return $query->where('is_soft_deleted', '1');
     }
 }

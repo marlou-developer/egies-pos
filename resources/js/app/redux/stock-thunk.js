@@ -1,4 +1,4 @@
-import { create_stock_service, get_stock_by_products_id_service, get_update_stock_service } from "../pages/services/stock-service";
+import { create_stock_service, get_stock_by_products_id_service, get_update_stock_service, soft_delete_service, restore_service } from "../pages/services/stock-service";
 import { categorySlice } from "./category-slice";
 import { stockSlice } from "./stock-slice";
 
@@ -16,6 +16,19 @@ export function get_update_stock_thunk(data) {
     };
 }
 
+export function soft_delete_thunk(data) {
+    return async function (dispatch, getState) {
+        const res = await soft_delete_service(data)
+
+    };
+}
+
+export function restore_thunk(data) {
+    return async function (dispatch, getState) {
+        const res = await restore_service(data)
+        return res;
+    };
+}
 
 export function get_stock_by_products_id_thunk() {
     return async function (dispatch) {

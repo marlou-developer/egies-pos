@@ -763,6 +763,7 @@ class CartController extends Controller
         $carts = $query->get();
 
         $stocks = Product::whereBetween('quantity', [1, 10])
+            ->notSoftDeleted()
             ->get()
             ->map(function ($product) {
                 $product->stock_status = 'Low Stock';
@@ -772,6 +773,7 @@ class CartController extends Controller
 
 
         $out_stocks = Product::where('quantity', 0)
+            ->notSoftDeleted()
             ->get()
             ->map(function ($product) {
                 $product->stock_status = 'Out of Stock';
@@ -820,12 +822,16 @@ class CartController extends Controller
             ->with('customer')->count();
 
         $low_stock = Product::whereBetween('quantity', [1, 10])
+            ->notSoftDeleted()
             ->count();
 
-        $out_of_stock = Product::where('quantity', 0)->count();
+        $out_of_stock = Product::where('quantity', 0)
+            ->notSoftDeleted()
+            ->count();
 
 
         $total_overall_inventory_retail_price = Product::selectRaw('SUM(quantity * srp) as total')
+            ->notSoftDeleted()
             ->value('total');
 
         $total_overall_inventory_capital = Product::selectRaw('SUM(quantity * cost) as total')
