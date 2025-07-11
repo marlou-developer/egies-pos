@@ -13,13 +13,13 @@ import InvoiceReportSection from "./search/sections/invoices-report-section";
 import RefundsReportSection from "./sections/refunds-report-section";
 import PurchaseInvoiceReportSection from "./sections/purchase-invoice-report-section";
 import PaymentTypesByCustomerReportSection from "./sections/payment-types-by-customer-report-section";
-import PurchaseBySupplierReportSection from "./sections/purchase-by-supplier-report-section";
+// import PurchaseBySupplierReportSection from "./search/sections/purchase-by-supplier-report-section";
 // import PaymentTypesByUserReportSection from "./search/sections/payment-types-by-user-report-section";
-import PurchaseByProductReportSection from "./sections/purchase-by-product-report-section";
+// import PurchaseByProductReportSection from "./search/sections/purchase-by-product-report-section";
 import UnpaidSalesReportSection from "./sections/unpaid-sales-report-section";
 import SalesByPaymentTypeReportSection from "./sections/sales-by-payment-type-report-section";
 import SalesByCustomerReportSection from "./search/sections/sales-by-customer-report-section";
-import SalesByProductReportSection from "./sections/sales-by-product-report-section";
+// import SalesByProductReportSection from "./search/sections/sales-by-product-report-section";
 import {
     get_report_items_thunk,
     get_report_thunk,

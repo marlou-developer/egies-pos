@@ -11,6 +11,10 @@ import DailySalesReportSection from "./sections/daily-sales-report-section";
 import InvoiceReportSection from "./sections/invoices-report-section";
 import PaymentTypesByUserReportSection from "./sections/payment-types-by-user-report-section";
 import ProfitReportSection from "./sections/profit-report-section";
+import SalesByProductReportSection from "./sections/sales-by-product-report-section";
+import PurchaseByProductReportSection from "./sections/purchase-by-product-report-section";
+import PurchaseBySupplierReportSection from "./sections/purchase-by-supplier-report-section";
+import PurchaseInvoiceReportSection from "./sections/purchase-invoice-report-section";
 
 export default function Page() {
     const params = new URLSearchParams(window.location.search);
@@ -43,6 +47,20 @@ export default function Page() {
                         <PaymentTypesByUserReportSection />
                     )}
                     {type == "Profit and Margin" && <ProfitReportSection />}
+
+                    {type == "Purchase by Product" && (
+                        <PurchaseByProductReportSection />
+                    )}
+
+                    {type == "Purchase by Supplier" && (
+                        <PurchaseBySupplierReportSection />
+                    )}
+                    {type == "Purchase Invoices" && (
+                        <PurchaseInvoiceReportSection />
+                    )}
+                    {/* {type == "Sales By Product" && (
+                        <SalesByProductReportSection />
+                    )} */}
                 </>
             )}
         </>

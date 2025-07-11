@@ -403,7 +403,190 @@ class CartController extends Controller
                 'user' => $user,
                 'product' => $product
             ], 200);
+        } else if ($request->type == "Purchase by Product") {
+            $productSales = CartItem::with(['product:id,name', 'cart.customer:id'])
+                ->whereBetween('created_at', [$start, $end])
+                ->when(!empty($request->customer) && $request->customer !== 'all', function ($query) use ($request) {
+                    if ($request->customer == '1') {
+                        $query->whereHas('cart', function ($q) {
+                            $q->whereNull('customer_id');
+                        });
+                    } else {
+                        $query->whereHas('cart.customer', function ($q) use ($request) {
+                            $q->where('id', $request->customer);
+                        });
+                    }
+                })
+
+                ->when(!empty($request->supplier) && $request->supplier !== 'all', function ($query) use ($request) {
+                    $query->whereHas('product', function ($q) use ($request) {
+                        $q->where('supplier_id', $request->supplier);
+                    });
+                })
+                // ->when(!empty($request->user) && $request->user !== 'all', function ($query) use ($request) {
+                //     $query->whereHas('cart', function ($q) use ($request) {
+                //         $q->where('user_id', $request->user);
+                //     });
+                // })
+                ->when(!empty($request->product) && $request->product !== 'all', function ($query) use ($request) {
+                    $query->where('product_id', $request->product);
+                })
+                ->when(!empty($request->category) && $request->category !== 'all', function ($query) use ($request) {
+                    $query->whereHas('product', function ($q) use ($request) {
+                        $q->where('category_id', $request->category);
+                    });
+                })
+                ->get()
+                ->groupBy('product_id')
+                ->filter(fn($items) => optional($items->first()->product)->name !== null)
+                ->map(function ($items) {
+                    $firstItem = $items->first();
+                    $product = optional($firstItem->product);
+
+                    $totalQuantity = $items->sum('quantity');
+                    $totalSales = $items->sum(fn($item) => $item->quantity * $item->price);
+
+                    return [
+                        'product_id' => $firstItem->product_id,
+                        'product_name' => $product->name ?? 'Unknown',
+                        'total_quantity' => $totalQuantity,
+                        'total_sales' => $totalSales,
+                    ];
+                })
+                ->sortByDesc('total_sales')
+                ->values();
+
+            return response()->json([
+                'data' => $productSales,
+                'customer' => $customer,
+                'user' => $user,
+                'product' => $product
+            ], 200);
+        } else if ($request->type == "Purchase by Supplier") {
+            $cart_items = CartItem::select(
+                'product_id',
+                DB::raw('SUM(quantity) as quantity'),
+                DB::raw('SUM(cost) as cost'),
+                DB::raw('SUM(profit) as profit'),
+                DB::raw('SUM(fixed_price * quantity) as total')
+            )
+                ->whereBetween('created_at', [$start, $end])
+                ->when(!empty($request->customer) && $request->customer !== 'all', function ($query) use ($request) {
+                    if ($request->customer == '1') {
+                        $query->whereHas('cart', function ($q) {
+                            $q->whereNull('customer_id');
+                        });
+                    } else {
+                        $query->whereHas('cart.customer', function ($q) use ($request) {
+                            $q->where('id', $request->customer);
+                        });
+                    }
+                })
+                ->when(!empty($request->user) && $request->user !== 'all', function ($query) use ($request) {
+                    $query->whereHas('cart', function ($q) use ($request) {
+                        $q->where('user_id', $request->user);
+                    });
+                })
+                ->when(!empty($request->product) && $request->product !== 'all', function ($query) use ($request) {
+                    $query->where('product_id', $request->product);
+                })
+                ->when(!empty($request->category) && $request->category !== 'all', function ($query) use ($request) {
+                    $query->whereHas('product', function ($q) use ($request) {
+                        $q->where('category_id', $request->category);
+                    });
+                })
+
+
+                ->groupBy('product_id')
+                ->with(['product' => function ($query) {
+                    $query->select('id', 'name', 'supplier_id');
+                }])
+                ->get()
+                ->map(function ($item) {
+                    $margin = $item->total > 0
+                        ? round(($item->profit / $item->total) * 100, 2)
+                        : 0;
+
+                    return [
+                        'product' => $item->product ?? 'N/A',
+                        'cost' => $item->cost,
+                        'total' => $item->total,
+                        'profit' => $item->profit,
+                    ];
+                });
+
+            return response()->json([
+                'data' => $cart_items,
+                'customer' => $customer,
+                'user' => $user
+            ], 200);
+
+
+            return response()->json([
+                'data' => $cart_items,
+                'customer' => $customer,
+                'user' => $user,
+                'product' => $product
+            ], 200);
+        } else if ($request->type == "Purchase Invoices") {
+            $purchaseInvoice = CartItem::with(['product'])
+                ->whereBetween('created_at', [$start, $end])
+                ->when(!empty($request->customer) && $request->customer !== 'all', function ($query) use ($request) {
+                    if ($request->customer == '1') {
+                        $query->whereHas('cart', function ($q) {
+                            $q->whereNull('customer_id');
+                        });
+                    } else {
+                        $query->whereHas('cart.customer', function ($q) use ($request) {
+                            $q->where('id', $request->customer);
+                        });
+                    }
+                })
+                ->when(!empty($request->user) && $request->user !== 'all', function ($query) use ($request) {
+                    $query->whereHas('cart', function ($q) use ($request) {
+                        $q->where('user_id', $request->user);
+                    });
+                })
+                ->when(!empty($request->product) && $request->product !== 'all', function ($query) use ($request) {
+                    $query->where('product_id', $request->product);
+                })
+                ->when(!empty($request->category) && $request->category !== 'all', function ($query) use ($request) {
+                    $query->whereHas('product', function ($q) use ($request) {
+                        $q->where('category_id', $request->category);
+                    });
+                })
+
+                ->get()
+                ->groupBy('product_id')
+                ->map(function ($items) {
+                    $totalQuantity = $items->first()->product->sum('quantity');
+                    $totalSales = $items->sum(function ($item) {
+                        return $item->product->quantity * $item->product->cost;
+                    });
+                    $totalCost = $items->first()->product->quantity * $items->first()->product->cost;
+
+                    return [
+                        'id' => $items->first()->product->id,
+                        'product_id' => $items->first()->product_id,
+                        'product_name' => $items->first()->product->name ?? 'Unknown',
+                        'delivery_receipt_no' => $items->first()->product->delivery_receipt_no,
+                        'supplier_name' => $items->first()->product->supplier->name ?? 'Unknown',
+                        'date' => $items->first()->product->created_at,
+                        'cost' => $totalCost,
+                        'total_quantity' => $totalQuantity,
+                        'total' => $totalSales,
+                    ];
+                })
+                ->values();
+
+            return response()->json([
+                'data' => $purchaseInvoice,
+                'customer' => $customer,
+                'user' => $user,
+                'product' => $product
+            ], 200);
         }
+
         //   else if ($request->type == "Sales By Product") {
         //     $sales_by_product = DB::table('cart_items')
         //         ->join('products', 'cart_items.product_id', '=', 'products.id')
@@ -445,26 +628,6 @@ class CartController extends Controller
         //         })
         //         ->values();
         //     return response()->json($unpaidCarts, 200);
-        // } else if ($request->type == "Purchase by Product") {
-        //     $productSales = CartItem::with(['product'])
-        //         ->get()
-        //         ->groupBy('product_id')
-        //         ->map(function ($items) {
-        //             $totalQuantity = $items->sum('quantity');
-        //             $totalSales = $items->sum(function ($item) {
-        //                 return $item->quantity * $item->price;
-        //             });
-
-        //             return [
-        //                 'product_id' => $items->first()->product_id,
-        //                 'product_name' => $items->first()->product->name ?? 'Unknown',
-        //                 'total_quantity' => $totalQuantity,
-        //                 'total_sales' => $totalSales,
-        //             ];
-        //         })
-        //         ->values();
-
-        //     return response()->json($productSales, 200);
         // } else if ($request->type == "Payment Types by User") {
         //     $paymentTypes = User::with(['carts' => function ($query) use ($start, $end) {
         //         $query->whereBetween('created_at', [$start, $end])
@@ -519,34 +682,7 @@ class CartController extends Controller
         //         ->values();
 
         //     return response()->json($paymentTypes, 200);
-        // } else if ($request->type == "Purchase Invoices") {
-        //     $purchaseInvoice = CartItem::with(['product'])
-        //         ->get()
-        //         ->groupBy('product_id')
-        //         ->map(function ($items) {
-        //             $totalQuantity = $items->first()->product->sum('quantity');
-        //             $totalSales = $items->sum(function ($item) {
-        //                 return $item->product->quantity * $item->product->cost;
-        //             });
-        //             $totalCost = $items->first()->product->quantity * $items->first()->product->cost;
 
-
-        //             return [
-        //                 'id' => $items->first()->product->id,
-        //                 'product_id' => $items->first()->product_id,
-        //                 'product_name' => $items->first()->product->name ?? 'Unknown',
-        //                 'delivery_receipt_no' => $items->first()->product->delivery_receipt_no,
-        //                 'supplier_name' => $items->first()->product->supplier->name,
-        //                 'date' => $items->first()->product->created_at,
-        //                 'cost' => $totalCost,
-        //                 'total_quantity' => $totalQuantity,
-        //                 'total' => $totalSales,
-        //             ];
-        //         })
-        //         ->values();
-
-        //     return response()->json($purchaseInvoice, 200);
-        //   }
     }
     public function update_all_status(Request $request)
     {
