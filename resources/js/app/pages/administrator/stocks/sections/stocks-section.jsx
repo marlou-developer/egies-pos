@@ -193,15 +193,23 @@ export default function StocksSection() {
                                             <h3 className="text-sm font-bold text-pink-500 mb-2">
                                                 {product.name}
                                             </h3>
-                                            
+
                                             <div className="space-y-2">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="text-xs text-gray-500">Cost Price:</span>
+                                                    <span className="text-sm font-bold text-gray-900">
+                                                        {peso_value(
+                                                            Number(product.cost)
+                                                        )}
+                                                    </span>
+                                                </div>
                                                 <div className="flex justify-between items-center">
                                                     <span className="text-xs text-gray-500">Stock:</span>
                                                     <span className="text-sm font-bold text-gray-900">
                                                         {product.quantity}
                                                     </span>
                                                 </div>
-                                                
+
                                                 <div className="flex justify-between items-center">
                                                     <span className="text-xs text-gray-500">Status:</span>
                                                     <span className={statusClass}>
@@ -212,14 +220,14 @@ export default function StocksSection() {
                                                                 : "In Stock"}
                                                     </span>
                                                 </div>
-                                                
+
                                                 <div className="flex justify-between items-center">
                                                     <span className="text-xs text-gray-500">Last Added:</span>
                                                     <span className="text-xs font-medium text-gray-700">
                                                         {lastStockDate}
                                                     </span>
                                                 </div>
-                                                
+
                                                 <div className="flex justify-between items-center">
                                                     <span className="text-xs text-gray-500">Retail Value:</span>
                                                     <span className="text-sm font-bold text-green-600">
@@ -228,7 +236,7 @@ export default function StocksSection() {
                                                         )}
                                                     </span>
                                                 </div>
-                                                
+
                                                 <div className="flex justify-between items-center">
                                                     <span className="text-xs text-gray-500">Capital:</span>
                                                     <span className="text-sm font-bold text-blue-600">
@@ -241,11 +249,11 @@ export default function StocksSection() {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div className="mt-4 flex justify-end space-x-2">
                                     <AddStocksSection data={product} />
                                     <StocksHistorySection data={product} />
-                                    <button 
+                                    <button
                                         className="bg-yellow-300 hover:bg-yellow-400 rounded-md p-2.5"
                                         onClick={() => router.visit(`/administrator/stocks/${product.id}`)}
                                     >
@@ -300,6 +308,12 @@ export default function StocksSection() {
                                             className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter"
                                         >
                                             Stocks
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 px-3 py-3.5 text-left text-sm font-semibold text-gray-600 backdrop-blur-sm backdrop-filter"
+                                        >
+                                            Cost Price
                                         </th>
                                         <th
                                             scope="col"
@@ -405,6 +419,18 @@ export default function StocksSection() {
                                                         "px-3 py-4 text-sm font-bold whitespace-nowrap text-gray-500"
                                                     )}
                                                 >
+                                                    {product.cost == null || Number(product.cost) === 0
+                                                        ? "₱None"
+                                                        : `₱${Number(product.cost).toFixed(2)}`}
+                                                </td>
+                                                <td
+                                                    className={classNames(
+                                                        productIdx !== products.data.data.length - 1
+                                                            ? "border-b border-gray-200"
+                                                            : "",
+                                                        "px-3 py-4 text-sm font-bold whitespace-nowrap text-gray-500"
+                                                    )}
+                                                >
                                                     <span className={statusClass}>
                                                         {product.quantity == 0
                                                             ? "Out of Stock"
@@ -475,7 +501,7 @@ export default function StocksSection() {
                                                     <div className="inline-flex items-center gap-2">
                                                         <AddStocksSection data={product} />
                                                         <StocksHistorySection data={product} />
-                                                        <button 
+                                                        <button
                                                             className="bg-yellow-300 hover:bg-yellow-400 rounded-md p-2.5"
                                                             onClick={() => router.visit(`/administrator/stocks/${product.id}`)}
                                                         >
