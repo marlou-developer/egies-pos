@@ -13,8 +13,18 @@ class ExpenseController extends Controller
         $expenses = Expense::orderBy('id', 'desc');
 
         if ($request->filled('search')) {
-            $expenses->where('item', 'like', '%' . $request->search . '%');
-            $expenses->where('category', 'like', '%' . $request->search . '%');
+            if ($request->search === 'N/A') {
+                // Search for null values in category field
+                $expenses->where(function ($query) {
+                    $query->whereNull('category')
+                          ->orWhere('category', '');
+                });
+            } else {
+                $expenses->where(function ($query) use ($request) {
+                    $query->where('item', 'like', '%' . $request->search . '%')
+                          ->orWhere('category', 'like', '%' . $request->search . '%');
+                });
+            }
         }
 
         return response()->json([

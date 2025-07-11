@@ -24,6 +24,7 @@ export default function FilterExpensesComponent() {
                 className="w-full rounded-lg border border-gray-300 bg-white py-3  text-sm text-gray-900 focus:border-pink-400 focus:ring-pink-300"
             >
                 <option value=""><b>All Categories</b></option>
+                <option value="N/A"><b>N/A</b></option>
                 <option value="Maintenance & Repair Expense">Maintenance & Repair Expense</option>
                 <option value="Miscellaneous Expense">Miscellaneous Expense</option>
                 <option value="Operating Expenses">Operating Expenses</option>
