@@ -28,7 +28,7 @@ class ExpenseController extends Controller
         }
 
         return response()->json([
-            'result' => $expenses->get()
+            'result' => $expenses->paginate(10)
         ], 200);
     }
 

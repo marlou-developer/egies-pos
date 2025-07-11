@@ -8,6 +8,7 @@ import { CurrencyDollarIcon } from "@heroicons/react/20/solid";
 import moment from "moment";
 import DeleteExpenseSection from "./delete-expense-section";
 import FilterExpensesComponent from "../components/filter-expenses-component";
+import PaginationSection from "./pagination-section";
 
 
 function classNames(...classes) {
@@ -20,6 +21,8 @@ export default function ExpensesTableSection() {
     const [openExpenses, setOpenExpenses] = useState(false);
     const [openSFilter, setOpenSFilter] = useState(false);
 
+    // Get current data - handle paginated data structure
+    const currentExpenses = expenses?.data || [];
 
     console.log('expenses', expenses)
 
@@ -120,12 +123,12 @@ export default function ExpensesTableSection() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {Array.isArray(expenses) && expenses.length > 0 ? (
-                                    expenses.map((expense, expenseIdx) => (
+                                {Array.isArray(currentExpenses) && currentExpenses.length > 0 ? (
+                                    currentExpenses.map((expense, expenseIdx) => (
                                         <tr key={expenseIdx}>
                                             <td
                                                 className={classNames(
-                                                    expenseIdx !== expenses.length - 1 ? "border-b border-gray-200" : "",
+                                                    expenseIdx !== currentExpenses.length - 1 ? "border-b border-gray-200" : "",
                                                     "py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6 lg:pl-8"
                                                 )}
                                             >
@@ -133,7 +136,7 @@ export default function ExpensesTableSection() {
                                             </td>
                                             <td
                                                 className={classNames(
-                                                    expenseIdx !== expenses.length - 1 ? "border-b border-gray-200" : "",
+                                                    expenseIdx !== currentExpenses.length - 1 ? "border-b border-gray-200" : "",
                                                     "py-3 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6 lg:pl-8"
                                                 )}
                                             >
@@ -141,7 +144,7 @@ export default function ExpensesTableSection() {
                                             </td>
                                             <td
                                                 className={classNames(
-                                                    expenseIdx !== expenses.length - 1 ? "border-b border-gray-200" : "",
+                                                    expenseIdx !== currentExpenses.length - 1 ? "border-b border-gray-200" : "",
                                                     "hidden px-3 py-3 text-sm whitespace-nowrap text-gray-500 sm:table-cell"
                                                 )}
                                             >
@@ -149,7 +152,7 @@ export default function ExpensesTableSection() {
                                             </td>
                                             <td
                                                 className={classNames(
-                                                    expenseIdx !== expenses.length - 1 ? "border-b border-gray-200" : "",
+                                                    expenseIdx !== currentExpenses.length - 1 ? "border-b border-gray-200" : "",
                                                     "hidden px-3 py-3 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
                                                 )}
                                             >
@@ -157,7 +160,7 @@ export default function ExpensesTableSection() {
                                             </td>
                                             <td
                                                 className={classNames(
-                                                    expenseIdx !== expenses.length - 1 ? "border-b border-gray-200" : "",
+                                                    expenseIdx !== currentExpenses.length - 1 ? "border-b border-gray-200" : "",
                                                     "hidden px-3 py-3 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
                                                 )}
                                             >
@@ -165,7 +168,7 @@ export default function ExpensesTableSection() {
                                             </td>
                                             <td
                                                 className={classNames(
-                                                    expenseIdx !== expenses.length - 1 ? "border-b border-gray-200" : "",
+                                                    expenseIdx !== currentExpenses.length - 1 ? "border-b border-gray-200" : "",
                                                     "hidden px-3 py-3 text-sm whitespace-nowrap text-gray-500 lg:table-cell"
                                                 )}
                                             >
@@ -173,7 +176,7 @@ export default function ExpensesTableSection() {
                                             </td>
                                             <td
                                                 className={classNames(
-                                                    expenseIdx !== expenses.length - 1 ? "border-b border-gray-200" : "",
+                                                    expenseIdx !== currentExpenses.length - 1 ? "border-b border-gray-200" : "",
                                                     "px-3 py-3 text-sm text-gray-700"
                                                 )}
                                             >
@@ -186,7 +189,7 @@ export default function ExpensesTableSection() {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan="6" className="text-center py-4 text-sm text-gray-500">
+                                        <td colSpan="7" className="text-center py-4 text-sm text-gray-500">
                                             No data available
                                         </td>
                                     </tr>
@@ -197,6 +200,7 @@ export default function ExpensesTableSection() {
                     </div>
                 </div>
             </div>
+            <PaginationSection />
         </div>
     );
 }
