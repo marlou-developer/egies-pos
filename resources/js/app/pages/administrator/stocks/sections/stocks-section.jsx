@@ -10,7 +10,7 @@ import { Link, router } from "@inertiajs/react";
 import PaginationSection from "./pagination-section";
 import { setSelectAllStock, setSelectedStocks } from "@/app/redux/product-slice";
 import PrintSection from "./print-section";
-import { PencilSquareIcon } from "@heroicons/react/24/outline";
+import { ArrowRightIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { Tooltip } from "antd";
 import FilterStocksComponent from "../components/filter-stocks-component";
 import SoftDeleteSection from "./soft-delete-section";
@@ -91,7 +91,7 @@ export default function StocksSection() {
         printWindow.document.close();
         printWindow.print();
     };
-    console.log('products', products.data.data)
+    console.log('products', products.data)
 
     return (
         <div className="px-4 sm:px-6 lg:px-8">
@@ -101,8 +101,12 @@ export default function StocksSection() {
                     <h1 className="text-base font-semibold text-pink-500">
                         <FaBoxesStacked className="float-left mr-1 mt-1 text-pink-500" />
                         Stocks Section
-                    </h1>
-
+                    </h1>ss
+                    <div>
+                        <button type="button" onClick={() => (router.visit('stocks/soft_deleted'))} className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-pink-500 hover:bg-pink-600 p-3 text-sm font-semibold text-white shadow-xs ring-1 ring-gray-300 ring-inset">
+                            View Removed Products<ArrowRightIcon className="h-5" />
+                        </button>
+                    </div>
                 </div>
             </div>
             <div className="mt-4 flex items-start justify-between">

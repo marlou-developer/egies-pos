@@ -187,4 +187,90 @@ class ProductController extends Controller
         $product->delete();
         return response()->json(['message' => 'Product deleted successfully']);
     }
+
+    /**
+     * Get all soft deleted products
+     */
+    public function getSoftDeleted(Request $request)
+    {
+        $query = Product::with(['categories', 'uploads', 'stocks'])
+            ->softDeleted()
+            ->orderBy('name', 'asc');
+
+        if ($request->search) {
+            if ($request->search === 'In Stock') {
+                $query->where('quantity', '>=', 10);
+            } elseif ($request->search === 'Low Stock') {
+                $query->whereBetween('quantity', [1, 9]);
+            } elseif ($request->search === 'Out of Stock') {
+                $query->where('quantity', '<=', 0);
+            } else {
+                $query->where(function ($q) use ($request) {
+                    $q->where('id', $request->search)
+                        ->orWhere('name', 'like', '%' . $request->search . '%')
+                        ->orWhere('brand', 'like', '%' . $request->search . '%')
+                        ->orWhere('delivery_receipt_no', 'like', '%' . $request->search . '%')
+                        ->orWhereHas('categories', function ($catQuery) use ($request) {
+                            $catQuery->where('name', 'like', '%' . $request->search . '%');
+                        });
+                });
+            }
+        }
+
+        if ($request->filled('category_id') && $request->category_id !== 'undefined') {
+            $query->where('category_id', $request->category_id);
+        }
+
+        if ($request->filled('name') && $request->name !== 'undefined') {
+            $query->where('name', $request->name);
+        }
+
+        $products = $query->paginate(20);
+
+        return response()->json([
+            'products' => $products,
+            'all' => $query->get()
+        ]);
+    }
+
+    /**
+     * Restore a soft deleted product
+     */
+    // public function restore($id)
+    // {
+    //     $product = Product::withTrashed()->findOrFail($id);
+
+    //     if (!$product->trashed()) {
+    //         return response()->json([
+    //             'status' => 'error',
+    //             'message' => 'Product is not deleted'
+    //         ], 400);
+    //     }
+
+    //     $product->restore();
+
+    //     return response()->json([
+    //         'status' => 'success',
+    //         'message' => 'Product restored successfully',
+    //         'data' => $product
+    //     ]);
+    // }
+
+    public function restore(Request $request, $id)
+    {
+        $product = Product::where('id', $id)->first();
+
+        if ($product) {
+            $data = $request->all();
+            $data['is_soft_deleted'] = null;
+
+            $product->update($data);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Product restored successfully',
+            'data' => $product
+        ]);
+    }
 }

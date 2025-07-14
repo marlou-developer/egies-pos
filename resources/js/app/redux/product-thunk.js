@@ -1,5 +1,5 @@
 import { create_product_discount_service, delete_product_discount_service, get_product_discount_by_id_service, update_product_discount_service } from "../pages/services/product-discount-service";
-import { create_product_service, delete_product_service, get_product_service, update_product_service } from "../pages/services/product-service";
+import { create_product_service, delete_product_service, get_product_service, get_soft_deleted_product_service, update_product_service } from "../pages/services/product-service";
 import { customerSlice } from "./customer-slice";
 import { productSlice } from "./product-slice";
 
@@ -25,6 +25,22 @@ export function get_product_thunk() {
             dispatch(productSlice.actions.setProducts(res.data));
         } catch (error) {
             console.error("Error fetching products:", error);
+        }
+    };
+}
+
+export function get_soft_deleted_product_thunk(params = {}) {
+    return async function (dispatch) {
+        try {
+            dispatch(productSlice.actions.setLoading(true));
+            const res = await get_soft_deleted_product_service(params);
+            console.log('soft deleted products', res.data)
+            dispatch(productSlice.actions.setProducts(res.data));
+        } catch (error) {
+            console.error("Error fetching soft deleted products:", error);
+            dispatch(productSlice.actions.setError(error.message || 'Failed to fetch soft deleted products'));
+        } finally {
+            dispatch(productSlice.actions.setLoading(false));
         }
     };
 }

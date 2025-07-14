@@ -31,7 +31,7 @@ export default function SoftDeleteSection({ data }) {
             );
             await store.dispatch(get_over_due_thunk());
             await store.dispatch(get_product_thunk());
-            message.success("Successfully soft deleted!");
+            message.success("Product Removed Successfully!");
             setModalOpen(false);
             setForm({});
             setCostOption("same");
@@ -46,7 +46,7 @@ export default function SoftDeleteSection({ data }) {
     console.log('suppliers', suppliers)
     return (
         <div>
-            <Tooltip title="Soft Delete">
+            <Tooltip title="Removed Product">
                 <button
                     type="button"
                     onClick={() => setModalOpen(true)}
@@ -62,7 +62,7 @@ export default function SoftDeleteSection({ data }) {
                 <form onSubmit={softDelete}>
                     <div className="mt-6 flex flex-col gap-5">
                         <h1 className="text-xl">
-                            Are you sure to move <b>{data?.name}</b> with <b>{peso_value(Number(data.cost))}</b> cost price to soft delete?
+                            Are you sure to remove <b>{data?.name}</b> with <b>{peso_value(Number(data.cost))}</b> cost price to soft delete?
                         </h1>
 
                     </div>
@@ -79,7 +79,7 @@ export default function SoftDeleteSection({ data }) {
                             disabled={loading}
                             className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-red-400 hover:bg-red-500 disabled:bg-gray-400 p-3 text-sm font-semibold text-white shadow-xs ring-1 ring-gray-300 ring-inset"
                         >
-                            {loading ? 'Moving...' : 'Move'}
+                            {loading ? 'Removing...' : 'Remove'}
                         </button>
                     </div>
                 </form>

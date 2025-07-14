@@ -18,6 +18,17 @@ export function get_product_service() {
     }
 }
 
+export function get_soft_deleted_product_service(params = {}) {
+    try {
+        const queryParams = new URLSearchParams(params).toString();
+        const url = `/api/product_soft_deleted${queryParams ? `?${queryParams}` : ''}`;
+        const result = axios.get(url);
+        return result;
+    } catch (error) {
+        throw error;
+    }
+}
+
 // export async function get_category_by_id_service(id) {
 //     const res = await axios.get('/api/category/' + id)
 //     return res.data

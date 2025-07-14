@@ -42,11 +42,17 @@ Route::middleware('auth:sanctum')->prefix('administrator')->group(function () {
     Route::get('products', function () {
         return Inertia::render('administrator/products/page');
     });
-    Route::get('stocks', function () {
-        return Inertia::render('administrator/stocks/page');
-    });
-    Route::get('stocks/{id}', function () {
-        return Inertia::render('administrator/stocks/id/page');
+
+    Route::prefix('stocks')->group(function () {
+        Route::get('/', function () {
+            return Inertia::render('administrator/stocks/page');
+        });
+        Route::get('/soft_deleted', function () {
+            return Inertia::render('administrator/stocks/soft_deleted/page');
+        });
+        Route::get('/{id}', function () {
+            return Inertia::render('administrator/stocks/id/page');
+        });
     });
     Route::get('shopee', function () {
         return Inertia::render('administrator/shopee/page');
