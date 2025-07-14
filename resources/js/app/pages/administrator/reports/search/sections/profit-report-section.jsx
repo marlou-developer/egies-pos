@@ -80,19 +80,44 @@ const ProfitReportSection = () => {
     const initialStart = params.get("start");
     const initialEnd = params.get("end");
 
-    const total_cost = reports?.data?.reduce(
+    const total_cost_store = reports?.data?.store?.reduce(
         (sum, item) => sum + Number(item.cost),
         0
     );
-    const total_sales = reports?.data?.reduce(
+    const total_sales_store = reports?.data?.store?.reduce(
         (sum, item) => sum + Number(item.total),
         0
     );
-    const total_profit = reports?.data?.reduce(
+    const total_profit_store = reports?.data?.store?.reduce(
         (sum, item) => sum + Number(item.profit),
         0
     );
-    console.log("reports", reports);
+
+    const total_cost_shopee = reports?.data?.shopee?.reduce(
+        (sum, item) => sum + Number(item.cost),
+        0
+    );
+    const total_sales_shopee = reports?.data?.shopee?.reduce(
+        (sum, item) => sum + Number(item.total),
+        0
+    );
+    const total_profit_shopee = reports?.data?.shopee?.reduce(
+        (sum, item) => sum + Number(item.profit),
+        0
+    );
+
+    const total_cost_credit = reports?.data?.credit?.reduce(
+        (sum, item) => sum + Number(item.cost),
+        0
+    );
+    const total_sales_credit = reports?.data?.credit?.reduce(
+        (sum, item) => sum + Number(item.total),
+        0
+    );
+    const total_profit_credit = reports?.data?.credit?.reduce(
+        (sum, item) => sum + Number(item.profit),
+        0
+    );
     return (
         <PDFViewer style={{ width: "100%", height: "100vh" }}>
             <Document>
@@ -186,6 +211,7 @@ const ProfitReportSection = () => {
                         </View>
                     </View>
 
+                    <Text style={styles.title}>Store</Text>
                     {/* Table Header */}
                     <View style={styles.tableHeader}>
                         <Text style={styles.colSmall}>Code</Text>
@@ -198,7 +224,7 @@ const ProfitReportSection = () => {
                     </View>
 
                     {/* Table Rows */}
-                    {reports?.data?.map((item, idx) => (
+                    {reports?.data?.store?.map((item, idx) => (
                         <View style={styles.tableRow} key={idx}>
                             <Text style={styles.colSmall}>{item.code}</Text>
                             <Text style={styles.col}>{item?.product}</Text>
@@ -226,12 +252,117 @@ const ProfitReportSection = () => {
                         </View>
                     ))}
 
-                    {/* Summary */}
                     <View style={styles.summary}>
-                        <Text>Total Cost: {peso_value(total_cost)}</Text>
-                        <Text>Total Sales: {peso_value(total_sales)}</Text>
-                        <Text>Total Profit: {peso_value(total_profit)}</Text>
+                        <Text>Total Cost: {peso_value(total_cost_store)}</Text>
+                        <Text>
+                            Total Sales: {peso_value(total_sales_store)}
+                        </Text>
+                        <Text>
+                            Total Profit: {peso_value(total_profit_store)}
+                        </Text>
                     </View>
+                    <Text style={styles.title}>Shopee</Text>
+                    {/* Table Header */}
+                    <View style={styles.tableHeader}>
+                        <Text style={styles.colSmall}>Code</Text>
+                        <Text style={styles.col}>Product</Text>
+                        <Text style={styles.colSmall}>Quantity</Text>
+                        <Text style={styles.colSmall}>Cost</Text>
+                        <Text style={styles.colSmall}>Total</Text>
+                        <Text style={styles.colSmall}>Profit</Text>
+                        <Text style={styles.colSmall}>Margin</Text>
+                    </View>
+
+                    {/* Table Rows */}
+                    {reports?.data?.shopee?.map((item, idx) => (
+                        <View style={styles.tableRow} key={idx}>
+                            <Text style={styles.colSmall}>{item.code}</Text>
+                            <Text style={styles.col}>{item?.product}</Text>
+                            <Text style={styles.colSmall}>{item.quantity}</Text>
+                            <Text style={styles.colSmall}>
+                                {peso_value(item.cost)}
+                            </Text>
+                            <Text style={styles.colSmall}>
+                                {peso_value(item.total)}
+                            </Text>
+                            <Text style={styles.colSmall}>
+                                {peso_value(item.profit)}
+                            </Text>
+                            <Text style={styles.colSmall}>{item.margin}</Text>
+                            {/* <Text style={styles.colSmall}>
+                                {item.cost.toLocaleString()}
+                            </Text> */}
+                            {/* <Text style={styles.colSmall}>
+                                {item.total.toLocaleString()}
+                            </Text> */}
+                            {/* <Text style={styles.colSmall}>
+                                {item.profit.toLocaleString()}
+                            </Text> */}
+                            {/* <Text style={styles.colSmall}>{item.margin}</Text> */}
+                        </View>
+                    ))}
+
+                    <View style={styles.summary}>
+                        <Text>Total Cost: {peso_value(total_cost_shopee)}</Text>
+                        <Text>
+                            Total Sales: {peso_value(total_sales_shopee)}
+                        </Text>
+                        <Text>
+                            Total Profit: {peso_value(total_profit_shopee)}
+                        </Text>
+                    </View>
+
+                    <Text style={styles.title}>Credits</Text>
+                    {/* Table Header */}
+                    <View style={styles.tableHeader}>
+                        <Text style={styles.colSmall}>Code</Text>
+                        <Text style={styles.col}>Product</Text>
+                        <Text style={styles.colSmall}>Quantity</Text>
+                        <Text style={styles.colSmall}>Cost</Text>
+                        <Text style={styles.colSmall}>Total</Text>
+                        <Text style={styles.colSmall}>Profit</Text>
+                        <Text style={styles.colSmall}>Margin</Text>
+                    </View>
+
+                    {/* Table Rows */}
+                    {reports?.data?.credit?.map((item, idx) => (
+                        <View style={styles.tableRow} key={idx}>
+                            <Text style={styles.colSmall}>{item.code}</Text>
+                            <Text style={styles.col}>{item?.product}</Text>
+                            <Text style={styles.colSmall}>{item.quantity}</Text>
+                            <Text style={styles.colSmall}>
+                                {peso_value(item.cost)}
+                            </Text>
+                            <Text style={styles.colSmall}>
+                                {peso_value(item.total)}
+                            </Text>
+                            <Text style={styles.colSmall}>
+                                {peso_value(item.profit)}
+                            </Text>
+                            <Text style={styles.colSmall}>{item.margin}</Text>
+                            {/* <Text style={styles.colSmall}>
+                                {item.cost.toLocaleString()}
+                            </Text> */}
+                            {/* <Text style={styles.colSmall}>
+                                {item.total.toLocaleString()}
+                            </Text> */}
+                            {/* <Text style={styles.colSmall}>
+                                {item.profit.toLocaleString()}
+                            </Text> */}
+                            {/* <Text style={styles.colSmall}>{item.margin}</Text> */}
+                        </View>
+                    ))}
+
+                    <View style={styles.summary}>
+                        <Text>Total Cost: {peso_value(total_cost_credit)}</Text>
+                        <Text>
+                            Total Sales: {peso_value(total_sales_credit)}
+                        </Text>
+                        <Text>
+                            Total Profit: {peso_value(total_profit_credit)}
+                        </Text>
+                    </View>
+                    {/* Summary */}
                 </Page>
             </Document>
         </PDFViewer>

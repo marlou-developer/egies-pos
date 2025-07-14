@@ -44,7 +44,7 @@ export default function FilteringSection({ setForm, form }) {
                                 value: res.id,
                             })),
                         ],
-                        disabled: false,
+                        disabled: form.type == "Expenses",
                     },
                     {
                         label: "Suppliers",
@@ -59,7 +59,7 @@ export default function FilteringSection({ setForm, form }) {
                                 value: res.id,
                             })),
                         ],
-                        disabled: false,
+                        disabled: form.type == "Expenses",
                     },
                     {
                         label: "User",
@@ -74,7 +74,7 @@ export default function FilteringSection({ setForm, form }) {
                                 value: res.id,
                             })),
                         ],
-                        disabled: false,
+                        disabled: form.type == "Expenses",
                     },
                     {
                         label: "Product",
@@ -89,7 +89,9 @@ export default function FilteringSection({ setForm, form }) {
                                 value: res.id,
                             })),
                         ],
-                        disabled: reports.includes(form.type),
+                        disabled:
+                            reports.includes(form.type) ||
+                            form.type == "Expenses",
                     },
                     {
                         label: "Product group",
@@ -104,7 +106,9 @@ export default function FilteringSection({ setForm, form }) {
                                 value: res.id,
                             })),
                         ],
-                        disabled: reports.includes(form.type),
+                        disabled:
+                            reports.includes(form.type) ||
+                            form.type == "Expenses",
                     },
                 ].map(({ label, id, options, disabled }) => {
                     return (
@@ -156,7 +160,7 @@ export default function FilteringSection({ setForm, form }) {
                     >
                         Show report
                     </a>
-                  <button className="flex-1 text-center bg-green-600 hover:bg-green-700 p-2 rounded text-white">
+                    <button className="flex-1 text-center bg-green-600 hover:bg-green-700 p-2 rounded text-white">
                         Excel
                     </button>
                 </div>

@@ -332,74 +332,84 @@ class CartController extends Controller
             ], 200);
         } else if ($request->type == "Profit and Margin") {
 
+            $baseCartItemsQuery = function ($shopConditionCallback) use ($start, $end, $request) {
+                return CartItem::select(
+                    'product_id',
+                    DB::raw('SUM(quantity) as quantity'),
+                    DB::raw('SUM(cost) as cost'),
+                    DB::raw('SUM(profit) as profit'),
+                    DB::raw('SUM(fixed_price * quantity) as total'),
 
-            $cart_items = CartItem::select(
-                'product_id',
-                DB::raw('SUM(quantity) as quantity'),
-                DB::raw('SUM(cost) as cost'),
-                DB::raw('SUM(profit) as profit'),
-                DB::raw('SUM(fixed_price * quantity) as total')
-            )
-                ->whereBetween('created_at', [$start, $end])
-                ->when(!empty($request->customer) && $request->customer !== 'all', function ($query) use ($request) {
-                    if ($request->customer == '1') {
-                        $query->whereHas('cart', function ($q) {
-                            $q->whereNull('customer_id');
+                )
+                    ->whereBetween('cart_items.created_at', [$start, $end])
+                    ->when(!empty($request->customer) && $request->customer !== 'all', function ($query) use ($request) {
+                        if ($request->customer == '1') {
+                            $query->whereHas('cart', function ($q) {
+                                $q->whereNull('customer_id');
+                            });
+                        } else {
+                            $query->whereHas('cart.customer', function ($q) use ($request) {
+                                $q->where('id', $request->customer);
+                            });
+                        }
+                    })
+                    ->when(!empty($request->user) && $request->user !== 'all', function ($query) use ($request) {
+                        $query->whereHas('cart', function ($q) use ($request) {
+                            $q->where('user_id', $request->user);
                         });
-                    } else {
-                        $query->whereHas('cart.customer', function ($q) use ($request) {
-                            $q->where('id', $request->customer);
+                    })
+                    ->when(!empty($request->product) && $request->product !== 'all', function ($query) use ($request) {
+                        $query->where('product_id', $request->product);
+                    })
+                    ->when(!empty($request->category) && $request->category !== 'all', function ($query) use ($request) {
+                        $query->whereHas('product', function ($q) use ($request) {
+                            $q->where('category_id', $request->category);
                         });
-                    }
-                })
-                ->when(!empty($request->user) && $request->user !== 'all', function ($query) use ($request) {
-                    $query->whereHas('cart', function ($q) use ($request) {
-                        $q->where('user_id', $request->user);
+                    })
+                    ->whereHas('cart', $shopConditionCallback)
+                    ->groupBy('product_id')
+                    ->with(['product:id,name'])
+                    ->get()
+                    ->map(function ($item) {
+                        $margin = $item->total > 0
+                            ? round(($item->profit / $item->total) * 100, 2)
+                            : 0;
+
+                        return [
+                            'code' => $item->product_id,
+                            'product' => $item->product->name ?? 'N/A',
+                            'quantity' => $item->quantity,
+                            'cost' => $item->cost,
+                            'total' => $item->total,
+                            'profit' => $item->profit,
+                            'margin' => $margin . '%',
+                        ];
                     });
-                })
-                ->when(!empty($request->product) && $request->product !== 'all', function ($query) use ($request) {
-                    $query->where('product_id', $request->product);
-                })
-                ->when(!empty($request->category) && $request->category !== 'all', function ($query) use ($request) {
-                    $query->whereHas('product', function ($q) use ($request) {
-                        $q->where('category_id', $request->category);
-                    });
-                })
+            };
 
+            // Generate each cart item collection with specific cart condition
+            $cart_items_store = $baseCartItemsQuery(function ($q) {
+                $q->where('shop', 'Store');
+            });
 
-                ->groupBy('product_id')
-                ->with(['product' => function ($query) {
-                    $query->select('id', 'name');
-                }])
-                ->get()
-                ->map(function ($item) {
-                    $margin = $item->total > 0
-                        ? round(($item->profit / $item->total) * 100, 2)
-                        : 0;
+            $cart_items_shopee = $baseCartItemsQuery(function ($q) {
+                $q->where('shop', 'Shopee');
+            });
 
-                    return [
-                        'code' => $item->product_id,
-                        'product' => $item->product->name ?? 'N/A',
-                        'quantity' => $item->quantity,
-                        'cost' => $item->cost,
-                        'total' => $item->total,
-                        'profit' => $item->profit,
-                        'margin' => $margin . '%',
-                    ];
-                });
+            $cart_items_credit = $baseCartItemsQuery(function ($q) {
+                $q->where('is_credit', 'true');
+            });
 
+            // Final response
             return response()->json([
-                'data' => $cart_items,
-                'customer' => $customer,
-                'user' => $user
-            ], 200);
-
-
-            return response()->json([
-                'data' => $cart_items,
+                'data' => [
+                    'store' => $cart_items_store,
+                    'shopee' => $cart_items_shopee,
+                    'credit' => $cart_items_credit,
+                ],
                 'customer' => $customer,
                 'user' => $user,
-                'product' => $product
+                'product' => $product,
             ], 200);
         } else if ($request->type == "Purchase by Product") {
             $productSales = CartItem::with(['product:id,name', 'cart.customer:id'])
@@ -749,6 +759,15 @@ class CartController extends Controller
 
             return response()->json([
                 'data' => $paymentTypes,
+                'customer' => $customer,
+                'user' => $user,
+                'product' => $product,
+            ]);
+        } else if ($request->type == 'Expenses') {
+            $carts = Expense::whereBetween('created_at', [$start, $end])
+                ->get();
+            return response()->json([
+                'data' => $carts,
                 'customer' => $customer,
                 'user' => $user,
                 'product' => $product,
