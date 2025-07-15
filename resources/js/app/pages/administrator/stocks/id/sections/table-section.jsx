@@ -103,11 +103,11 @@ export default function TableSection() {
                                                 {moment(res.date).format('LL')}
                                             </td>
                                             <td className="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
-                                                {index === 0 && (
+                                                {/* {index === 0 && ( */}
                                                     <a href="#" className="text-indigo-600 hover:text-indigo-900">
                                                         <EditQuantitySection data={res} />
                                                     </a>
-                                                )}
+                                                {/* )} */}
                                             </td>
                                         </tr>
                                     ))}
