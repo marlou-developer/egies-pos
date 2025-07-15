@@ -7,6 +7,7 @@ use App\Models\CartItem;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Expense;
+use App\Models\Notification;
 use App\Models\Product;
 use App\Models\Stock;
 use App\Models\Supplier;
@@ -39,6 +40,12 @@ class CartController extends Controller
 
     public function update_is_read(Request $request)
     {
+        $notif = Notification::where('id', $request->id)->first();
+        if ($notif) {
+            $notif->update([
+                'is_read' => 'true'
+            ]);
+        }
         return response()->json([
             'result' => 'success'
         ], 200);
@@ -850,7 +857,7 @@ class CartController extends Controller
             $query->where('cart_id', $request->search);
         }
 
-        $carts = $query->get();
+        $over_due = $query->get();
 
         $stocks = Product::whereBetween('quantity', [1, 10])
             ->notSoftDeleted()
@@ -871,6 +878,8 @@ class CartController extends Controller
             });
 
 
+
+
         $current_sales = CartItem::whereHas('cart', function ($query) {
             $today = Carbon::today();
             $query->whereDate('updated_at', $today);
@@ -878,13 +887,67 @@ class CartController extends Controller
         })
             ->sum(DB::raw('total'));
 
+        foreach ($out_stocks as $key => $value) {
+            $notif = Notification::where([
+                ['cp_id', '=', $value->id],
+                ['type', '=', 'product'],
+                ['status', '=', 'out_stocks'],
+                ['date', '=', $value->updated_at],
+            ])->first();
+            if (!$notif) {
+                Notification::create([
+                    'cp_id' => $value->id,
+                    'type' => "product",
+                    'status' => "out_stocks",
+                    'date' => $value->updated_at,
+                    'is_read' => "false",
+                ]);
+            }
+        }
+
+        foreach ($stocks as $key => $value) {
+            $notif = Notification::where([
+                ['cp_id', '=', $value->id],
+                ['type', '=', 'product'],
+                ['status', '=', 'low_stock'],
+                ['date', '=', $value->updated_at],
+            ])->first();
+
+            if (!$notif) {
+                Notification::create([
+                    'cp_id' => $value->id,
+                    'type' => "product",
+                    'status' => "low_stock",
+                    'date' => $value->updated_at,
+                    'is_read' => "false",
+                ]);
+            }
+        }
+
+        foreach ($over_due as $key => $value) {
+            $notif = Notification::where([
+                ['cp_id', '=', $value->id],
+                ['type', '=', 'cart'],
+                ['status', '=', 'over_due'],
+                ['date', '=', $value->updated_at],
+            ])->first();
+            if (!$notif) {
+                Notification::create([
+                    'cp_id' => $value->id,
+                    'type' => "cart",
+                    'status' => "over_due",
+                    'date' => $value->updated_at,
+                    'is_read' => "false",
+                ]);
+            }
+        }
+        // 
         $current_profit = CartItem::whereHas('cart', function ($query) {
             $today = Carbon::today();
             $query->whereDate('updated_at', $today);
             $query->where('status', 'Paid');
         })
             ->sum(DB::raw('profit'));
-
         $total_sales = CartItem::whereHas('cart', function ($query) {
             $query->where('status', 'Paid');
         })->sum(DB::raw('total'));
@@ -933,9 +996,10 @@ class CartController extends Controller
 
         $total_expenses = Expense::selectRaw('SUM(cost * qty) as total')
             ->value('total');
-
+        $notification = Notification::where('is_read', 'false')->with(['cart', 'product'])->get();
         return response()->json([
-            'over_due' => $carts, //
+            'notification' => $notification, //
+            'over_due' => $over_due, //
             'stocks' => $stocks, //
             'out_stocks' => $out_stocks, //
             'dashboard' => [
