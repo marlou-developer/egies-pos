@@ -141,3 +141,12 @@ export function update_cart_service(data) {
         return result;
     } catch (error) { }
 }
+
+export function update_customer_service(data) {
+    try {
+        const result = axios.put(`/api/update_customer/${data.id}`, data)
+        return result
+    } catch (error) {
+
+    }
+}

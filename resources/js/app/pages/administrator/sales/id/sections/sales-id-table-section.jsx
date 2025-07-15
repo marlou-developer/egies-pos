@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 // import EditQuantitySection from "./edit-quantity-section";
 import moment from "moment";
@@ -8,6 +8,9 @@ import AddProductSection from "./add-product-section";
 import RemoveProductSection from "./remove-product-section";
 import EditDIscountSection from "../../../credits/id/ids/sections/edit-discount-section";
 import ReturnItemSection from "./return-item-section";
+import UpdateBillToSection from "./update-bill-to-section";
+import store from "@/app/store/store";
+import { get_customer_thunk } from "@/app/redux/customer-thunk";
 
 const people = [
     {
@@ -21,6 +24,10 @@ const people = [
 
 export default function SalesIdTableSection() {
     const { cart } = useSelector((store) => store.carts);
+
+    useEffect(() => {
+        store.dispatch(get_customer_thunk())
+    }, []);
     console.log("cartscarts", cart);
     return (
         <div className="px-4 sm:px-6 lg:px-8">
@@ -105,6 +112,13 @@ export default function SalesIdTableSection() {
                         </table>
                         <div className="flex flex-col items-end justify-end">
                             <div className="w-1/4">
+                                <div className="flex justify-between">
+                                    Bill To:
+                                    <div className="flex gap-1">
+                                        {cart?.customer?.name ?? "Walk-In Customer"}
+                                        <UpdateBillToSection data={cart} />
+                                    </div>
+                                </div>
                                 <div className="flex justify-between">
                                     Payment Status: <div>{cart?.status ?? "Loading..."}</div>
                                 </div>

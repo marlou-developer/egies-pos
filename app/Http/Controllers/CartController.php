@@ -1087,4 +1087,18 @@ class CartController extends Controller
 
         return $cart;
     }
+
+    public function update_customer(Request $request, $id)
+    {
+        $cart = Cart::find($id);
+
+        if ($cart) {
+            $cart->update([
+                'customer_id' => $request->customer_id,
+            ]);
+        }
+
+        // Optional: return a response
+        return response()->json(['message' => 'Cart updated successfully']);
+    }
 }
