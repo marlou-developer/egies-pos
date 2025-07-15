@@ -3,11 +3,15 @@ import { FaFilter } from "react-icons/fa6";
 import { router } from "@inertiajs/react";
 
 export default function FilterShopeeComponent() {
-    const [shopeeStatus, setShopeeStatus] = useState("");
+    // Get current search parameter from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentSearch = urlParams.get('search') || 'all';
+    
+    const [shopeeStatus, setShopeeStatus] = useState(currentSearch);
 
     function search_shopee_sales() {
-        // If "All Stock" is selected (empty value), just visit the base URL
-        if (!shopeeStatus) {
+        // If "All" is selected or no value, just visit the base URL
+        if (!shopeeStatus || shopeeStatus === "all") {
             router.visit(window.location.pathname); // Refresh without any filter
         } else {
             router.visit(`?search=${shopeeStatus}`);
@@ -23,7 +27,7 @@ export default function FilterShopeeComponent() {
                 onChange={(e) => setShopeeStatus(e.target.value)}
                 className="w-full rounded-lg border border-gray-300 bg-white py-3  text-sm text-gray-900 focus:border-pink-400 focus:ring-pink-300"
             >
-                <option value=""><b>All</b></option>
+                <option value="all">All</option>
                 <option value="Pending">Pending</option>
                 <option value="Returned">Returned</option>
                 <option value="Refunded">Refunded</option>

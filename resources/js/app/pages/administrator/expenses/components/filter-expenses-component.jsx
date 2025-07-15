@@ -3,11 +3,15 @@ import { FaFilter } from "react-icons/fa6";
 import { router } from "@inertiajs/react";
 
 export default function FilterExpensesComponent() {
-    const [expenseStatus, setExpensesStatus] = useState("");
+    // Get current search parameter from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentSearch = urlParams.get('search') || 'all';
+
+    const [expenseStatus, setExpensesStatus] = useState(currentSearch);
 
     function search_expenses_status() {
-        // If "All Stock" is selected (empty value), just visit the base URL
-        if (!expenseStatus) {
+        // If "All Categories" is selected or no value, just visit the base URL
+        if (!expenseStatus || expenseStatus === "all") {
             router.visit(window.location.pathname); // Refresh without any filter
         } else {
             router.visit(`?search=${expenseStatus}`);
@@ -23,9 +27,9 @@ export default function FilterExpensesComponent() {
                 onChange={(e) => setExpensesStatus(e.target.value)}
                 className="w-full rounded-lg border border-gray-300 bg-white py-3  text-sm text-gray-900 focus:border-pink-400 focus:ring-pink-300"
             >
-                <option value=""><b>All Categories</b></option>
-                <option value="N/A"><b>N/A</b></option>
-                <option value="Maintenance & Repair Expense">Maintenance & Repair Expense</option>
+                <option value="all">All Categories</option>
+                <option value="N/A">N/A</option>
+                <option value="Maintenance">Maintenance & Repair Expense</option>
                 <option value="Miscellaneous Expense">Miscellaneous Expense</option>
                 <option value="Operating Expenses">Operating Expenses</option>
                 <option value="Permits & Licenses Expense">Permits & Licenses Expense</option>
