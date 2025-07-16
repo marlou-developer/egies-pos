@@ -996,7 +996,7 @@ class CartController extends Controller
 
         $total_expenses = Expense::selectRaw('SUM(cost * qty) as total')
             ->value('total');
-        $notification = Notification::where('is_read', 'false')->with(['cart', 'product'])->get();
+        $notification = Notification::with(['cart', 'product'])->get();
         return response()->json([
             'notification' => $notification, //
             'over_due' => $over_due, //
