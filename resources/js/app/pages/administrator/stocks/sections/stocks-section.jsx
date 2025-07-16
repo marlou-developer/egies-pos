@@ -101,7 +101,7 @@ export default function StocksSection() {
                     <h1 className="text-base font-semibold text-pink-500">
                         <FaBoxesStacked className="float-left mr-1 mt-1 text-pink-500" />
                         Stocks Section
-                    </h1>ss
+                    </h1>
                     <div>
                         <button type="button" onClick={() => (router.visit('stocks/soft_deleted'))} className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-pink-500 hover:bg-pink-600 p-3 text-sm font-semibold text-white shadow-xs ring-1 ring-gray-300 ring-inset">
                             View Removed Products<ArrowRightIcon className="h-5" />

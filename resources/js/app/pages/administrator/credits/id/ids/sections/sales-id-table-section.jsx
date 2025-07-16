@@ -8,6 +8,7 @@ import AddProductSection from "./add-product-section";
 import RemoveProductSection from "./remove-product-section";
 import EditDIscountSection from "./edit-discount-section";
 import ReturnItemSection from "@/app/pages/administrator/sales/id/sections/return-item-section";
+import UpdateBillToSection from "@/app/pages/administrator/sales/id/sections/update-bill-to-section";
 
 const people = [
     {
@@ -105,6 +106,13 @@ export default function SalesIdTableSection() {
                         </table>
                         <div className="flex flex-col items-end justify-end">
                             <div className="w-1/4">
+                                <div className="flex justify-between">
+                                    Bill To:
+                                    <div className="flex gap-1">
+                                        {cart?.customer?.name ?? "Walk-In Customer"}
+                                        <UpdateBillToSection data={cart} />
+                                    </div>
+                                </div>
                                 <div className="flex justify-between">
                                     Payment Status: <div>{cart?.status ?? "Loading..."}</div>
                                 </div>
