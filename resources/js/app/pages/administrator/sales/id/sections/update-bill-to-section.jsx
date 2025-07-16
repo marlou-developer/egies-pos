@@ -14,24 +14,28 @@ export default function UpdateBillToSection({ data }) {
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({});
 
-    const id = window.location.pathname.split("/")[3];
+    const cart_id = window.location.pathname.split("/")[3];
 
     useEffect(() => {
         setForm({
             ...data,
-            id: id,
+            // id: data?.id,
             customer_id: data?.customer_id || ""
         })
-    }, [data, id])
+    }, [data])
 
     const editCustomer = async (e) => {
         e.preventDefault()
         setLoading(true);
         try {
             await store.dispatch(
-                update_customer_thunk(form)
+                update_customer_thunk({
+                    ...form,
+                    id: data?.id,
+                    customer_id: form?.customer_id || ""
+                })
             );
-            store.dispatch(get_cart_by_id_thunk(id))
+            store.dispatch(get_cart_by_id_thunk(cart_id))
             message.success("Updated Successfully!");
             setIsModalOpen(false);
         } catch (error) {

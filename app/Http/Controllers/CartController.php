@@ -1154,7 +1154,7 @@ class CartController extends Controller
 
     public function update_customer(Request $request, $id)
     {
-        $cart = Cart::find($id);
+        $cart = Cart::where('id', $request->id)->first();
 
         if ($cart) {
             $cart->update([
