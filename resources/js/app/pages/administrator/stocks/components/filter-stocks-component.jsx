@@ -6,7 +6,7 @@ export default function FilterStocksComponent() {
     // Get current search parameter from URL
     const urlParams = new URLSearchParams(window.location.search);
     const currentSearch = urlParams.get('search') || 'all';
-    
+
     const [stockStatus, setStockStatus] = useState(currentSearch);
 
     function search_products() {
@@ -32,6 +32,7 @@ export default function FilterStocksComponent() {
                 <option value="In Stock">In Stock</option>
                 <option value="Low Stock">Low Stock</option>
                 <option value="Out of Stock">Out of Stock</option>
+                <option value="Negative Stock">Product w/ Negative Stock(s)</option>
             </select>
 
             <button

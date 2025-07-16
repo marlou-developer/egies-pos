@@ -90,18 +90,18 @@ export default function RestoreSection({ data, onRestoreSuccess }) {
                             </p>
                         )}
                     </div>
-                    <div className="flex gap-3 mt-5 justify-end">
+                    <div className="flex gap-2.5 mt-5 justify-end">
                         <button
                             type="submit"
                             disabled={loading}
-                            className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-green-400 hover:bg-green-500 disabled:bg-gray-400 p-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
+                            className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-green-400 hover:bg-green-500 disabled:bg-gray-400 p-3 text-sm font-semibold text-white shadow-xs ring-1 ring-gray-300 ring-inset"
                         >
                             {loading ? 'Restoring...' : 'Restore'}
                         </button>
                         <button
                             type="button"
                             onClick={() => setModalOpen(false)}
-                            className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-gray-400 hover:bg-gray-500 p-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
+                            className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-gray-400 hover:bg-gray-500 p-3 text-sm font-semibold text-white shadow-xs ring-1 ring-gray-300 ring-inset"
                         >
                             Cancel
                         </button>

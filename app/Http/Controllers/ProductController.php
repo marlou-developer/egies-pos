@@ -25,12 +25,15 @@ class ProductController extends Controller
             } elseif ($request->search === 'Low Stock') {
                 $query->whereBetween('quantity', [1, 9]);
             } elseif ($request->search === 'Out of Stock') {
-                $query->where('quantity', '<=', 0);
+                $query->where('quantity', '=', 0);
+            } elseif ($request->search === 'Negative Stock') {
+                $query->where('quantity', '<', 0);
             } else {
                 $query->where(function ($q) use ($request) {
                     $q->where('id', $request->search)
                         ->orWhere('name', 'like', '%' . $request->search . '%')
                         ->orWhere('brand', 'like', '%' . $request->search . '%')
+                        ->orWhere('quantity', 'like', '%' . $request->search . '%')
                         ->orWhere('delivery_receipt_no', 'like', '%' . $request->search . '%')
                         ->orWhereHas('categories', function ($catQuery) use ($request) {
                             $catQuery->where('name', 'like', '%' . $request->search . '%');
@@ -203,7 +206,9 @@ class ProductController extends Controller
             } elseif ($request->search === 'Low Stock') {
                 $query->whereBetween('quantity', [1, 9]);
             } elseif ($request->search === 'Out of Stock') {
-                $query->where('quantity', '<=', 0);
+                $query->where('quantity', '=', 0);
+            } elseif ($request->search === 'Negative Stock') {
+                $query->where('quantity', '<', 0);
             } else {
                 $query->where(function ($q) use ($request) {
                     $q->where('id', $request->search)
