@@ -65,6 +65,7 @@ export function get_cart_thunk() {
             dispatch(cartSlice.actions.setLoading(true));
             const res = await get_cart_service();
             dispatch(cartSlice.actions.setCarts(res.data));
+            dispatch(cartSlice.actions.setSales(res.data));
         } catch (error) {
             console.error("Error fetching carts:", error);
             dispatch(cartSlice.actions.setError(error.message));
