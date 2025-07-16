@@ -11,6 +11,7 @@ import UpdateStatusSection from "./update-status-section";
 import moment from "moment";
 import { peso_value } from "@/app/lib/peso";
 import { setSelectedProducts } from "@/app/redux/cart-slice";
+import { get_shopee_thunk } from "@/app/redux/cart-thunk";
 import MultiUpdateSection from "./multi-update-section";
 import PaginationSection from "./pagination-section";
 import { Tooltip } from "antd";
@@ -24,8 +25,13 @@ function classNames(...classes) {
 
 export default function ShopeeSection() {
     const dispatch = useDispatch();
-    const { shopees, selectedProducts } = useSelector((store) => store.carts);
+    const { shopees, selectedProducts, loading } = useSelector((store) => store.carts);
     const [selectAll, setSelectAll] = useState(false);
+
+    // Fetch Shopee orders on component mount
+    useEffect(() => {
+        dispatch(get_shopee_thunk());
+    }, [dispatch]);
 
     useEffect(() => {
         if (shopees?.data?.length > 0) {
@@ -47,6 +53,19 @@ export default function ShopeeSection() {
 
         dispatch(setSelectedProducts(updatedSelected));
     };
+
+    const LoadingComponent = ({ message = "Loading Shopee orders..." }) => {
+        return (
+            <div className="flex justify-center items-center h-64">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <span className="ml-2 text-gray-600">{message}</span>
+            </div>
+        );
+    };
+
+    if (loading) {
+        return <LoadingComponent />;
+    }
 
     return (
         <div className="px-4 sm:px-6 lg:px-8">

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { get_product_thunk } from "@/app/redux/product-thunk";
+import { peso_value } from "@/app/lib/peso";
 import {
     FaCirclePlus,
     FaClipboardList,
@@ -46,7 +47,7 @@ export default function ProductsSection() {
     const [current, setCurrent] = useState(1);
     const [pageSize] = useState(10);
     const dispatch = useDispatch();
-    const { products, selectedProducts, selectAll } = useSelector(
+    const { products, selectedProducts, selectAll, loading, error } = useSelector(
         (state) => state.products
     ) || {
         products: { data: [], total: 0, last_page: 1 },
@@ -106,6 +107,21 @@ export default function ProductsSection() {
     };
 
     console.log("products", products);
+
+    // Loading component function
+    const LoadingComponent = ({ message = "Loading products..." }) => {
+        return (
+            <div className="flex justify-center items-center h-64">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <span className="ml-2 text-gray-600">{message}</span>
+            </div>
+        );
+    };
+
+    if (loading) {
+        return <LoadingComponent />;
+    }
+
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             {/* Header Section */}

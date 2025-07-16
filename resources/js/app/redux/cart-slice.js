@@ -9,18 +9,21 @@ export const cartSlice = createSlice({
         sales: [],
         shopees: [],
         selectedProducts: [],
-        reports:[],
-        report_items:{
-            customers:[],
-            suppliers:[],
-            users:[],
-            products:[],
-            categories:[]
-        }
+        reports: [],
+        report_items: {
+            customers: [],
+            suppliers: [],
+            users: [],
+            products: [],
+            categories: []
+        },
+        loading: false,
+        error: null,
     },
     reducers: {
         setCarts: (state, action) => {
             state.carts = action.payload;
+            state.loading = false;
         },
         setCart: (state, action) => {
             state.cart = action.payload;
@@ -33,6 +36,7 @@ export const cartSlice = createSlice({
         },
         setShopees: (state, action) => {
             state.shopees = action.payload;
+            state.loading = false;
         },
         setSelectedProducts: (state, action) => {
             state.selectedProducts = action.payload;
@@ -40,8 +44,14 @@ export const cartSlice = createSlice({
         setReports: (state, action) => {
             state.reports = action.payload;
         },
-         setReportItems: (state, action) => {
+        setReportItems: (state, action) => {
             state.report_items = action.payload;
+        },
+        setLoading: (state, action) => {
+            state.loading = action.payload;
+        },
+        setError: (state, action) => {
+            state.error = action.payload;
         },
     },
 });
@@ -52,7 +62,9 @@ export const {
     setSales,
     setShopees,
     setSelectedProducts,
-    setReportItems
+    setReportItems,
+    setLoading,
+    setError
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

@@ -46,16 +46,30 @@ export function add_payment_thunk(data) {
 
 export function get_shopee_thunk() {
     return async function (dispatch, getState) {
-        const res = await get_shopee_service();
-        dispatch(cartSlice.actions.setShopees(res.data));
+        try {
+            dispatch(cartSlice.actions.setLoading(true));
+            const res = await get_shopee_service();
+            dispatch(cartSlice.actions.setShopees(res.data));
+        } catch (error) {
+            console.error("Error fetching shopee orders:", error);
+            dispatch(cartSlice.actions.setError(error.message));
+            dispatch(cartSlice.actions.setLoading(false));
+        }
     };
 }
 
 
 export function get_cart_thunk() {
     return async function (dispatch, getState) {
-        const res = await get_cart_service()
-        dispatch(cartSlice.actions.setSales(res.data));
+        try {
+            dispatch(cartSlice.actions.setLoading(true));
+            const res = await get_cart_service();
+            dispatch(cartSlice.actions.setCarts(res.data));
+        } catch (error) {
+            console.error("Error fetching carts:", error);
+            dispatch(cartSlice.actions.setError(error.message));
+            dispatch(cartSlice.actions.setLoading(false));
+        }
     };
 }
 

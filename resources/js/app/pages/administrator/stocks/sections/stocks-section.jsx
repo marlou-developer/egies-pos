@@ -38,7 +38,7 @@ function classNames(...classes) {
 
 export default function StocksSection() {
 
-    const { products, selectedStocks, selectAllStock } = useSelector(
+    const { products, selectedStocks, selectAllStock, loading, error } = useSelector(
         (state) => state.products
     ) || {
         products: { data: [], total: 0, last_page: 1 },
@@ -92,6 +92,20 @@ export default function StocksSection() {
         printWindow.print();
     };
     console.log('products', products.data)
+
+    const LoadingComponent = ({ message = "Loading stocks..." }) => {
+        return (
+            <div className="flex justify-center items-center h-64">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+                <span className="ml-2 text-gray-600">{message}</span>
+            </div>
+        );
+    };
+
+    if (loading) {
+        return <LoadingComponent />;
+    }
+
 
     return (
         <div className="px-4 sm:px-6 lg:px-8">
