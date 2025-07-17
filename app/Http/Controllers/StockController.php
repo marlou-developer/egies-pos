@@ -70,7 +70,7 @@ class StockController extends Controller
         try {
             // Try to get product ID from different sources
             $productId = $id ?? $request->products['id'] ?? $request->product_id;
-            
+
             if (!$productId) {
                 return response()->json([
                     'status' => 'error',
@@ -79,7 +79,7 @@ class StockController extends Controller
             }
 
             $product = Product::where('id', $productId)->first();
-            
+
             if (!$product) {
                 return response()->json([
                     'status' => 'error',
@@ -118,7 +118,6 @@ class StockController extends Controller
                 'message' => 'Product soft deleted successfully',
                 'data' => $product
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -127,13 +126,13 @@ class StockController extends Controller
             ], 500);
         }
     }
-    
+
     public function restore(Request $request, $id)
     {
         try {
             // Try to get product ID from different sources
             $productId = $id ?? $request->products['id'] ?? $request->product_id;
-            
+
             if (!$productId) {
                 return response()->json([
                     'status' => 'error',
@@ -142,7 +141,7 @@ class StockController extends Controller
             }
 
             $product = Product::where('id', $productId)->first();
-            
+
             if (!$product) {
                 return response()->json([
                     'status' => 'error',
@@ -168,7 +167,6 @@ class StockController extends Controller
                 'message' => 'Product restored successfully',
                 'data' => $product
             ], 200);
-
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -176,5 +174,22 @@ class StockController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function destroy($id)
+    {
+        $stock = Stock::where('id', $id)->first();
+        if ($stock) {
+            $stock->delete();
+        }
+
+        $product = Product::where('id', $stock->product_id)->first();
+        if ($product) {
+            $product->update([
+                'quantity' => $product->quantity - $stock->quantity
+            ]);
+        }
+
+        return response()->json(['message' => 'Stock deleted successfully']);
     }
 }

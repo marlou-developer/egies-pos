@@ -9,12 +9,14 @@ export function create_stock_service(data) {
     }
 }
 
-export function get_stock_by_products_id_service() {
+export function get_stock_by_products_id_service(product_id) {
     try {
-        const result = axios.get('/api/get_stock_by_products_id/' + window.location.pathname.split('/')[3])
+        const id = product_id || window.location.pathname.split('/')[3];
+        const result = axios.get('/api/get_stock_by_products_id/' + id)
         return result
     } catch (error) {
-
+        console.error('Error in get_stock_by_products_id_service:', error);
+        throw error;
     }
 }
 
@@ -49,6 +51,16 @@ export function restore_service(data) {
         return result
     } catch (error) {
         console.error('Error in restore_service:', error);
+        throw error;
+    }
+}
+
+export function delete_stock_service(id) {
+    try {
+        const result = axios.delete(`/api/stock/${id}`)
+        return result
+    } catch (error) {
+        console.error('Error in delete_stock_service:', error);
         throw error;
     }
 }

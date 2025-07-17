@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import EditQuantitySection from "./edit-quantity-section";
 import moment from "moment";
+import RemoveStockAddedSection from "./remove-stock-added-section";
 
 const people = [
     {
@@ -102,11 +103,12 @@ export default function TableSection() {
                                             <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                                                 {moment(res.date).format('LL')}
                                             </td>
-                                            <td className="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
+                                            <td className="relative flex gap-2 py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
                                                 {/* {index === 0 && ( */}
-                                                    <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                                                        <EditQuantitySection data={res} />
-                                                    </a>
+                                                <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                                                    <EditQuantitySection data={res} />
+                                                </a>
+                                                <RemoveStockAddedSection data={res} />
                                                 {/* )} */}
                                             </td>
                                         </tr>
