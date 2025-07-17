@@ -110,54 +110,69 @@ export default function SalesIdTableSection() {
                                 ))}
                             </tbody>
                         </table>
-                        <div className="flex flex-col items-end justify-end">
-                            <div className="w-1/4">
-                                <div className="flex justify-between">
-                                    Bill To:
-                                    <div className="flex gap-1">
-                                        {cart?.customer?.name ?? "Walk-In Customer"}
-                                        <UpdateBillToSection data={cart} />
+                        <div className="flex flex-col items-end justify-end p-4">
+                            <div className="w-1/3 lg:w-1/4">
+                                <div className="flex flex-col gap-2 text-sm">
+                                    <div className="flex flex-col sm:flex-row sm:justify-between">
+                                        <span>Bill To:</span>
+                                        <div className="flex gap-1 justify-end">
+                                            {cart?.customer?.name ?? "Walk-In Customer"}
+                                            <UpdateBillToSection data={cart} />
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="flex justify-between">
-                                    Payment Status: <div>{cart?.status ?? "Loading..."}</div>
-                                </div>
 
-                                <div className="flex justify-between">
-                                    Subtotal Price:{" "}
-                                    <div>{peso_value(Number(cart?.sub_total ?? 0))}</div>
-                                </div>
-
-                                <div className="flex justify-between">
-                                    Customer Total Discount:{" "}
-                                    <div>{peso_value(Number(cart?.customer_total_discount ?? 0))}</div>
-                                </div>
-
-                                <div className="flex justify-between">
-                                    Total Discount Per Item:{" "}
-                                    <div>{peso_value(Number(cart?.discount_per_item ?? 0))}</div>
-                                </div>
-
-                                <div className="flex justify-between">
-                                    Total Discount Per Order:{" "}
-                                    <div>{peso_value(Number(cart?.discount_per_order ?? 0))}</div>
-                                </div>
-
-                                <div className="flex justify-between">
-                                    Overall Total Discount Price:
-                                    <div>
-                                        {peso_value(
-                                            Number(cart?.customer_total_discount ?? 0) +
-                                            Number(cart?.discount_per_item ?? 0) +
-                                            Number(cart?.discount_per_order ?? 0)
-                                        )}
+                                    <div className="flex flex-col sm:flex-row sm:justify-between">
+                                        <span>Payment Status:</span>
+                                        <div className="text-right">{cart?.status ?? "Loading..."}</div>
                                     </div>
-                                </div>
 
-                                <hr className="my-4 border-t border-gray-300 lg:my-3" />
+                                    <div className="flex flex-col sm:flex-row sm:justify-between">
+                                        <span>Subtotal Price:</span>
+                                        <div className="text-right">
+                                            {peso_value(Number(cart?.sub_total ?? 0))}
+                                        </div>
+                                    </div>
 
-                                <div className="flex justify-between">
-                                    Total: <div>{peso_value(Number(cart?.total_price ?? 0))}</div>
+                                    <div className="flex flex-col sm:flex-row sm:justify-between">
+                                        <span>Customer Total Discount:</span>
+                                        <div className="text-right">
+                                            {peso_value(Number(cart?.customer_total_discount ?? 0))}
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-col sm:flex-row sm:justify-between">
+                                        <span>Total Discount Per Item:</span>
+                                        <div className="text-right">
+                                            {peso_value(Number(cart?.discount_per_item ?? 0))}
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-col sm:flex-row sm:justify-between">
+                                        <span>Total Discount Per Order:</span>
+                                        <div className="text-right">
+                                            {peso_value(Number(cart?.discount_per_order ?? 0))}
+                                        </div>
+                                    </div>
+
+                                    <div className="flex flex-col sm:flex-row sm:justify-between">
+                                        <span>Overall Total Discount Price:</span>
+                                        <div className="text-right">
+                                            {peso_value(
+                                                Number(cart?.customer_total_discount ?? 0) +
+                                                Number(cart?.discount_per_item ?? 0) +
+                                                Number(cart?.discount_per_order ?? 0)
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    <hr className="my-4 border-t border-gray-300" />
+
+                                    <div className="flex flex-col sm:flex-row sm:justify-between font-semibold">
+                                        <span>Total:</span>
+                                        <div className="text-right">
+                                            {peso_value(Number(cart?.total_price ?? 0))}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
