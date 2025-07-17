@@ -7,10 +7,10 @@ import SalesEditQuantitySection from "./sales-edit-quantity-section";
 import AddProductSection from "./add-product-section";
 import RemoveProductSection from "./remove-product-section";
 import EditDIscountSection from "./edit-discount-section";
-import ReturnItemSection from "@/app/pages/administrator/sales/id/sections/return-item-section";
 import UpdateBillToSection from "@/app/pages/administrator/sales/id/sections/update-bill-to-section";
 import store from "@/app/store/store";
 import { get_customer_thunk } from "@/app/redux/customer-thunk";
+import ReturnItemSection from "./return-item-section";
 
 const people = [
     {
