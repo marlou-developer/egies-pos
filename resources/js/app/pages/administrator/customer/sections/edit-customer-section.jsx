@@ -52,7 +52,11 @@ export default function EditCustomerSection({ data, isOpen, setIsOpen }) {
             await store.dispatch(
                 update_customer_thunk(form)
             );
-            store.dispatch(get_customer_thunk())
+            // Refresh the customer list while preserving current page and search
+            const params = new URLSearchParams(window.location.search);
+            const page = params.get('page') || 1;
+            const search = params.get('search') || '';
+            store.dispatch(get_customer_thunk({ page, search, per_page: 10 }));
             message.success("Updated Successfully!");
             setIsOpen(false);
         } catch (error) {

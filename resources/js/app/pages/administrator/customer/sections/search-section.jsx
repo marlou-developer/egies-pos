@@ -1,5 +1,7 @@
 import { router } from "@inertiajs/react";
 import React, { useEffect, useState } from "react";
+import store from "@/app/store/store";
+import { get_customer_thunk } from "@/app/redux/customer-thunk";
 
 export default function SearchSection() {
     const params = new URLSearchParams(window.location.search);
@@ -7,13 +9,25 @@ export default function SearchSection() {
     const [search, setSearch] = useState("");
 
     useEffect(() => {
-        setSearch(searchValue);
-    }, []);
+        setSearch(searchValue || "");
+    }, [searchValue]);
 
     function search_data(e) {
         e.preventDefault();
-        router.visit("?search=" + search);
+        // Reset to page 1 when searching
+        const newUrl = search ? `?search=${encodeURIComponent(search)}&page=1` : "?page=1";
+        router.visit(newUrl);
+        
+        // Also dispatch the search immediately
+        store.dispatch(get_customer_thunk({ search, page: 1, per_page: 10 }));
     }
+
+    function clear_search() {
+        setSearch("");
+        router.visit("?page=1");
+        store.dispatch(get_customer_thunk({ search: "", page: 1, per_page: 10 }));
+    }
+
     return (
         <form onSubmit={search_data} className="max-w-md w-96">
             <label
@@ -44,16 +58,27 @@ export default function SearchSection() {
                     type="search"
                     id="default-search"
                     className="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-pink-500 focus:border-pink-500"
-                    placeholder="Search..."
+                    placeholder="Search customers..."
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
-                <button
-                    type="submit"
-                    className="text-white absolute end-2.5 bottom-2.5 bg-pink-700 hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-lg text-sm px-4 py-2"
-                >
-                    Search
-                </button>
+                <div className="absolute end-2.5 bottom-2.5 flex gap-1">
+                    {search && (
+                        <button
+                            type="button"
+                            onClick={clear_search}
+                            className="text-gray-500 hover:text-gray-700 font-medium rounded-lg text-sm px-2 py-2"
+                        >
+                            Clear
+                        </button>
+                    )}
+                    <button
+                        type="submit"
+                        className="text-white bg-pink-700 hover:bg-pink-800 focus:ring-4 focus:outline-none focus:ring-pink-300 font-medium rounded-lg text-sm px-4 py-2"
+                    >
+                        Search
+                    </button>
+                </div>
             </div>
         </form>
     );

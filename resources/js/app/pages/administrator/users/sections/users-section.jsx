@@ -26,9 +26,9 @@ export default function UsersSection() {
                 <div className="sm:flex-auto">
                     <FaUserGroup className="float-left mt-1 mr-1 text-pink-500" />
                     <h1 className="text-base font-semibold text-pink-500">User Management</h1>
-                    <p className="mt-2 text-sm text-gray-700">
+                    {/* <p className="mt-2 text-sm text-gray-700">
                         A list of all the users in your account including their name, title, email and role.
-                    </p>
+                    </p> */}
                 </div>
                 <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                     <button
@@ -52,6 +52,33 @@ export default function UsersSection() {
                         <table className="min-w-full border-separate border-spacing-0">
                             <thead>
                                 <tr>
+                                    {[
+                                        "Name",
+                                        "Title",
+                                        "Email",
+                                        "Role",
+                                        "",
+                                    ].map((header, idx) => (
+                                        <th
+                                            key={idx}
+                                            scope="col"
+                                            className={classNames(
+                                                "sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 px-3 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter",
+                                                idx === 0 &&
+                                                "pl-4 sm:pl-6 lg:pl-8",
+                                                idx === 6 &&
+                                                "pr-4 sm:pr-6 lg:pr-8"
+                                            )}
+                                        >
+                                            {header || (
+                                                <span className="sr-only">
+                                                    Actions
+                                                </span>
+                                            )}
+                                        </th>
+                                    ))}
+                                </tr>
+                                {/* <tr>
                                     <th
                                         scope="col"
                                         className="sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter sm:pl-6 lg:pl-8"
@@ -82,7 +109,7 @@ export default function UsersSection() {
                                     >
                                         <span className="sr-only">Edit</span>
                                     </th>
-                                </tr>
+                                </tr> */}
                             </thead>
                             <tbody>
                                 {users.map((person, personIdx) => (
@@ -90,7 +117,7 @@ export default function UsersSection() {
                                         <td
                                             className={classNames(
                                                 personIdx !== people.length - 1 ? 'border-b border-gray-200' : '',
-                                                'py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6 lg:pl-8',
+                                                'whitespace-nowrap border-b border-gray-200 py-4 pr-3 text-sm text-gray-900 sm:pl-8',
                                             )}
                                         >
                                             {person.name}
@@ -98,7 +125,7 @@ export default function UsersSection() {
                                         <td
                                             className={classNames(
                                                 personIdx !== people.length - 1 ? 'border-b border-gray-200' : '',
-                                                'hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 sm:table-cell',
+                                                'whitespace-nowrap border-b border-gray-200 py-4 pr-3 text-sm text-gray-900 sm:pl-3',
                                             )}
                                         >
                                             {person.title}
@@ -106,7 +133,7 @@ export default function UsersSection() {
                                         <td
                                             className={classNames(
                                                 personIdx !== people.length - 1 ? 'border-b border-gray-200' : '',
-                                                'hidden px-3 py-4 text-sm whitespace-nowrap text-gray-500 lg:table-cell',
+                                                'whitespace-nowrap border-b border-gray-200 py-4 pr-3 text-sm text-gray-900 sm:pl-3',
                                             )}
                                         >
                                             {person.email}
@@ -114,7 +141,7 @@ export default function UsersSection() {
                                         <td
                                             className={classNames(
                                                 personIdx !== people.length - 1 ? 'border-b border-gray-200' : '',
-                                                'px-3 py-4 text-sm whitespace-nowrap text-gray-500',
+                                                'whitespace-nowrap border-b border-gray-200 py-4 pr-3 text-sm text-gray-900 sm:pl-3',
                                             )}
                                         >
                                             {person.user_type}

@@ -63,7 +63,11 @@ export default function AddCustomerComponent({ open, setOpenCustomer }) {
 
         try {
             await store.dispatch(create_customer_thunk(fd));
-            await store.dispatch(get_customer_thunk());
+            // Refresh the customer list while preserving current page and search
+            const params = new URLSearchParams(window.location.search);
+            const page = params.get('page') || 1;
+            const search = params.get('search') || '';
+            await store.dispatch(get_customer_thunk({ page, search, per_page: 10 }));
             message.success("Customer successfully saved!");
             setOpenCustomer(false);
             dispatch(setCustomer({}));

@@ -108,7 +108,7 @@ export default function TableSection() {
                             <tbody>
                                 {(sales?.data ?? []).slice().map((res, idx) => (
                                     <tr key={idx} className="hover:bg-gray-50">
-                                        <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
+                                        <td className="border-b border-gray-200 px-3 pl-8 py-4 text-gray-500 whitespace-nowrap">
                                             {res.cart_id}
                                         </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap lg:table-cell">

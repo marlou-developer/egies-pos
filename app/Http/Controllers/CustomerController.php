@@ -41,8 +41,23 @@ class CustomerController extends Controller
             $query->where('email', $request->email);
         }
 
+        // Add search functionality
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('email', 'like', '%' . $search . '%')
+                  ->orWhere('mobile_no', 'like', '%' . $search . '%')
+                  ->orWhere('street', 'like', '%' . $search . '%')
+                  ->orWhere('brgy', 'like', '%' . $search . '%')
+                  ->orWhere('city', 'like', '%' . $search . '%')
+                  ->orWhere('province', 'like', '%' . $search . '%');
+            });
+        }
 
-        $customers['data'] = $query->get();
+        // Paginate the results
+        $perPage = $request->input('per_page', 10);
+        $customers = $query->paginate($perPage);
 
         return response()->json($customers, 200);
     }
