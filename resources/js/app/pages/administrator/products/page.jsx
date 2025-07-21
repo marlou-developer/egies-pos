@@ -19,12 +19,14 @@ export default function ProductsPage() {
 
     return (
         <AdminLayout>
-            <ProductsSection
+            <div className='w-full flex items-center justify-center'>
+                <ProductsSection
                 current={current}
                 setCurrent={setCurrent}
                 pageSize={pageSize}
                 setPageSize={setPageSize}
             />
+            </div>
         </AdminLayout>
     );
 }

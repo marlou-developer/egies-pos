@@ -1,6 +1,7 @@
 -refund
 -expenses
 
+php artisan serve --host=192.168.123.1  --port=8000
 
 
 In report Invoices

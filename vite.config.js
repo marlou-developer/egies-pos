@@ -13,4 +13,9 @@ export default defineConfig({
         }),
         react(),
     ],
+    server: {
+    host: '192.168.123.34', // Your local IP
+    port: 8000,
+    cors: true, // ✅ Add this
+  },
 });
