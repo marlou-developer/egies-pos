@@ -88,7 +88,8 @@ export default function SidebarSection({ navigation, collapsed }) {
                     </button>
 
                     {/* Logo */}
-                    <div className="flex h-16 shrink-0 items-center justify-center">
+                    <div className="flex gap-3 overflow-auto flex-col h-screen">
+                        <div className="flex h-16 shrink-0 items-center justify-center">
                         {!collapsed && (
                             <img
                                 className="h-16 w-auto"
@@ -105,6 +106,7 @@ export default function SidebarSection({ navigation, collapsed }) {
                         navigation={navigation}
                         collapsed={collapsed} // optional: pass to render minimized icons
                     />
+                    </div>
                 </div>
             </div>
         </>
