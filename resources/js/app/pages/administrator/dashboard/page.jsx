@@ -17,7 +17,8 @@ import AdminLayout from "../layout";
 import DashboardCardSections from "./sections/dashboard-card-sections";
 import { useSelector } from "react-redux";
 import { peso_value } from "@/app/lib/peso";
-import { FaCircleDollarToSlot, FaDollarSign } from "react-icons/fa6";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPesetaSign, faPesoSign } from "@fortawesome/free-solid-svg-icons";
 
 export default function Page() {
     const { over_dues } = useSelector((store) => store.carts);
@@ -116,7 +117,9 @@ export default function Page() {
                     <div className="flex gap-6 mb-3">
                         <DashboardCardSections
                             title="Current Expenses"
-                            icon={<CurrencyDollarIcon className="h-14 text-pink-600" />}
+                            icon={
+                                <FontAwesomeIcon icon={faPesetaSign} className="h-11 text-pink-600" />
+                            }
                             count={<>{formatValue(dashboard?.current_expenses)}</>}
                         />
                         {/* <DashboardCardSections
@@ -131,7 +134,9 @@ export default function Page() {
                         /> */}
                         <DashboardCardSections
                             title="Total Expenses"
-                            icon={<DocumentCurrencyDollarIcon className="h-14 text-pink-600" />}
+                            icon={
+                                <FontAwesomeIcon icon={faPesetaSign} className="h-11 text-pink-600" />
+                            }
                             count={<>{formatValue(dashboard?.total_expenses)}</>}
                         />
                     </div>

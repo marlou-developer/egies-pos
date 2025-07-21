@@ -12,6 +12,8 @@ import { message } from "antd";
 import store from "@/app/store/store";
 import { setExpense } from "@/app/redux/expense-slice";
 import { create_expense_thunk, get_expense_thunk } from "@/app/redux/expense-thunk";
+import { faPesoSign } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function AddExpensesComponent({ open, setOpenExpenses }) {
     const [loading, setLoading] = useState(false);
@@ -73,7 +75,7 @@ export default function AddExpensesComponent({ open, setOpenExpenses }) {
                         <div className="bg-pink-200 px-4 py-6 sm:px-6">
                             <div className="flex items-center justify-between">
                                 <div className="text-base font-semibold text-pink-600">
-                                    <FaDollarSign className="float-left mr-1 mt-1" />
+                                    <FontAwesomeIcon icon={faPesoSign} className=" h-5 items-center mr-1" />
                                     New Expense
                                 </div>
                                 <div className="ml-3 flex h-7 items-center">
@@ -104,11 +106,11 @@ export default function AddExpensesComponent({ open, setOpenExpenses }) {
                             <div className="divide-y divide-gray-200 px-4 sm:px-6">
                                 <div className="space-y-6 pt-6 pb-5">
                                     <div className="sm:col-span-12">
-                                        <FaDollarSign className="float-left size-5 mr-1 mt-3 text-pink-500" />
-                                        <h3 className="text-base font-medium text-gray-600 pt-3">
+                                        <FontAwesomeIcon icon={faPesoSign} className="float-left size-5 mr-1 mt-3 text-pink-500" />
+                                        <h3 className="text-base font-medium text-pink-500 pt-3">
                                             Expense Information
                                         </h3>
-                                        <hr />
+                                        <hr className="border-t border-gray-300" />
                                     </div>
                                     <div>
                                         <select

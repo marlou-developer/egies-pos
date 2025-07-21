@@ -9,6 +9,8 @@ import moment from "moment";
 import DeleteExpenseSection from "./delete-expense-section";
 import FilterExpensesComponent from "../components/filter-expenses-component";
 import PaginationSection from "./pagination-section";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPesetaSign, faPesoSign } from "@fortawesome/free-solid-svg-icons";
 
 
 function classNames(...classes) {
@@ -30,7 +32,7 @@ export default function ExpensesTableSection() {
         <div className="px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto">
-                    <CurrencyDollarIcon className="float-left h-6 items-center mr-1 text-pink-500" />
+                    <FontAwesomeIcon icon={faPesoSign} className="float-left h-6 items-center mr-2 text-pink-500" />
                     <h1 className="text-base font-semibold text-pink-500">
                         Expenses Section
                     </h1>
@@ -43,7 +45,8 @@ export default function ExpensesTableSection() {
                                 onClick={() => setOpenExpenses(true)}
                                 className="relative inline-flex items-center rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
                             >
-                                <FaDollarSign className="mr-1 text-pink-500" />
+                                {/* <FaDollarSign className="mr-1 text-pink-500" /> */}
+                                <FontAwesomeIcon icon={faPesoSign} className="h-4 items-center mr-1 " />
                                 ADD EXPENSE
                             </button>
                             {/* <button

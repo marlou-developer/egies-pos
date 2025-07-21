@@ -19,12 +19,16 @@ import { FaBook } from "react-icons/fa6";
 import store from "@/app/store/store";
 import { get_over_due_thunk } from "@/app/redux/cart-thunk";
 import { useDispatch, useSelector } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPesetaSign, faPesoSign } from "@fortawesome/free-solid-svg-icons";
 
 export default function AdminLayout({ children }) {
     const { collapsed } = useSelector((store) => store.app)
     useEffect(() => {
         store.dispatch(get_over_due_thunk());
     }, []);
+
+    const PesoIcon = (props) => <FontAwesomeIcon icon={faPesetaSign} {...props} />;
 
     const path = window.location.pathname.split("/")[2];
     const navigation = [
@@ -67,7 +71,7 @@ export default function AdminLayout({ children }) {
         {
             name: "Expenses",
             href: "/administrator/expenses",
-            icon: CurrencyDollarIcon,
+            icon: PesoIcon,
             current: path == "expenses",
         },
         {
