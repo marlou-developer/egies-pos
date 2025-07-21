@@ -4,9 +4,11 @@ import { ChevronDownIcon, PencilSquareIcon, TrashIcon } from "@heroicons/react/2
 import DeleteProductSection from './delete-product-section';
 import EditProductSection from './edit-product-section';
 import { FaCirclePlus } from 'react-icons/fa6';
+import { useSelector } from 'react-redux';
 
 export default function ProductOptionMenuSection({ data }) {
     const [isEditOpen, setIsEditOpen] = useState(false);
+    const { user } = useSelector((store) => store.app);
 
     return (
         <>
@@ -31,7 +33,10 @@ export default function ProductOptionMenuSection({ data }) {
                             <FaCirclePlus className="mr-3 size-5 text-gray-400" />
                             <b>Add Stock</b>
                         </MenuItem> */}
-                            <DeleteProductSection data={data} />
+                            {(user?.user_type === "Admin") && (
+                                <DeleteProductSection data={data} />
+                            )}
+
                         </div>
                     </MenuItems>
                     <MenuButton className="inline-flex justify-center gap-x-1.5 rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-600 ring-1 ring-gray-300 hover:bg-pink-200 hover:text-gray-700">

@@ -24,86 +24,111 @@ import { faPesetaSign, faPesoSign } from "@fortawesome/free-solid-svg-icons";
 
 export default function AdminLayout({ children }) {
     const { collapsed } = useSelector((store) => store.app)
+    const { user } = useSelector((store) => store.app);
     useEffect(() => {
         store.dispatch(get_over_due_thunk());
     }, []);
-
+    console.log("User Data:", user);
     const PesoIcon = (props) => <FontAwesomeIcon icon={faPesetaSign} {...props} />;
 
     const path = window.location.pathname.split("/")[2];
     const navigation = [
-        {
-            name: "Dashboard",
-            href: "/administrator/dashboard",
-            icon: HomeIcon,
-            current: path == "dashboard",
-        },
-        {
-            name: "POS",
-            href: "/administrator/pos",
-            icon: CalculatorIcon,
-            current: path == "pos",
-        },
-        {
-            name: "Products",
-            href: "/administrator/products",
-            icon: ShoppingBagIcon,
-            current: path == "products",
-        },
-        {
-            name: "Stocks",
-            href: "/administrator/stocks",
-            icon: InboxStackIcon,
-            current: path == "stocks",
-        },
-        {
-            name: "Shopee",
-            href: "/administrator/shopee",
-            icon: ShoppingCartIcon,
-            current: path == "shopee",
-        },
-        {
-            name: "Credits",
-            href: "/administrator/credits",
-            icon: BanknotesIcon,
-            current: path == "credits",
-        },
-        {
-            name: "Expenses",
-            href: "/administrator/expenses",
-            icon: PesoIcon,
-            current: path == "expenses",
-        },
-        {
-            name: "Sales",
-            href: "/administrator/sales",
-            icon: PresentationChartBarIcon,
-            current: path == "sales",
-        },
-        {
-            name: "Report",
-            href: "/administrator/reports",
-            icon: ChartPieIcon,
-            current: path == "reports",
-        },
-        {
-            name: "Supplier",
-            href: "/administrator/supplier",
-            icon: TruckIcon,
-            current: path == "supplier",
-        },
-        {
-            name: "Customer",
-            href: "/administrator/customer",
-            icon: UserGroupIcon,
-            current: path == "customer",
-        },
-        {
-            name: "User Management",
-            href: "/administrator/users",
-            icon: UsersIcon,
-            current: path == "users",
-        },
+        ...(user?.user_type === "Admin"
+            ? [{
+                name: "Dashboard",
+                href: "/administrator/dashboard",
+                icon: HomeIcon,
+                current: path === "dashboard",
+            }]
+            : []),
+        ...(user?.user_type === "Admin" || user?.user_type === "Cashier"
+            ? [{
+                name: "POS",
+                href: "/administrator/pos",
+                icon: CalculatorIcon,
+                current: path == "pos",
+            }]
+            : []),
+        ...(user?.user_type === "Admin" || user?.user_type === "Inventory"
+            ? [{
+                name: "Products",
+                href: "/administrator/products",
+                icon: ShoppingBagIcon,
+                current: path == "products",
+            }]
+            : []),
+        ...(user?.user_type === "Admin" || user?.user_type === "Inventory"
+            ? [{
+                name: "Stocks",
+                href: "/administrator/stocks",
+                icon: InboxStackIcon,
+                current: path == "stocks",
+            }]
+            : []),
+        ...(user?.user_type === "Admin" || user?.user_type === "Shopee"
+            ? [{
+                name: "Shopee",
+                href: "/administrator/shopee",
+                icon: ShoppingCartIcon,
+                current: path == "shopee",
+            }]
+            : []),
+        ...(user?.user_type === "Admin"
+            ? [{
+                name: "Credits",
+                href: "/administrator/credits",
+                icon: BanknotesIcon,
+                current: path == "credits",
+            }]
+            : []),
+        ...(user?.user_type === "Admin"
+            ? [{
+                name: "Expenses",
+                href: "/administrator/expenses",
+                icon: PesoIcon,
+                current: path == "expenses",
+            }]
+            : []),
+        ...(user?.user_type === "Admin"
+            ? [{
+                name: "Sales",
+                href: "/administrator/sales",
+                icon: PresentationChartBarIcon,
+                current: path == "sales",
+            }]
+            : []),
+        ...(user?.user_type === "Admin"
+            ? [{
+                name: "Report",
+                href: "/administrator/reports",
+                icon: ChartPieIcon,
+                current: path == "reports",
+            }]
+            : []),
+        ...(user?.user_type === "Admin"
+            ? [{
+                name: "Supplier",
+                href: "/administrator/supplier",
+                icon: TruckIcon,
+                current: path == "supplier",
+            }]
+            : []),
+        ...(user?.user_type === "Admin"
+            ? [{
+                name: "Customer",
+                href: "/administrator/customer",
+                icon: UserGroupIcon,
+                current: path == "customer",
+            }]
+            : []),
+        ...(user?.user_type === "Admin"
+            ? [{
+                name: "User Management",
+                href: "/administrator/users",
+                icon: UsersIcon,
+                current: path == "users",
+            }]
+            : []),
     ];
 
     const userNavigation = [

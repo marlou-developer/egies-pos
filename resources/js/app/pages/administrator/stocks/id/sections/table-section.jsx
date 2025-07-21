@@ -16,6 +16,7 @@ const people = [
 
 export default function TableSection() {
     const { stocks } = useSelector((store) => store.stocks);
+    const { user } = useSelector((store) => store.app);
     console.log("stocksstocks", stocks);
     return (
         <div className="px-4 sm:px-6 lg:px-8">
@@ -108,7 +109,10 @@ export default function TableSection() {
                                                 <a href="#" className="text-indigo-600 hover:text-indigo-900">
                                                     <EditQuantitySection data={res} />
                                                 </a>
-                                                <RemoveStockAddedSection data={res} />
+                                                {(user?.user_type === "Admin") && (
+                                                    <RemoveStockAddedSection data={res} />
+                                                )}
+
                                                 {/* )} */}
                                             </td>
                                         </tr>

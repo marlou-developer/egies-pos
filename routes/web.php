@@ -9,7 +9,19 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     if (Auth::check()) {
-        return redirect('/administrator/dashboard');
+        $user = Auth::user();
+        switch ($user->user_type) {
+            case 'Admin':
+                return redirect('/administrator/dashboard');
+            case 'Cashier':
+                return redirect('/administrator/pos');
+            case 'Inventory':
+                return redirect('/administrator/stocks');
+            case 'Shopee':
+                return redirect('/administrator/shopee');
+            default:
+                return redirect('/administrator/dashboard');
+        }
     }
     return Inertia::render('auth/login/page');
 })->name('login');

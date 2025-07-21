@@ -28,6 +28,7 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
     const openModal = () => setIsModalOpen(true);
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({});
+    const { user } = useSelector((store) => store.app);
 
 
     useEffect(() => {
@@ -236,20 +237,22 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                             </select>
                                         </div>
                                     </div>
-                                    <div>
-                                        <Input
-                                            onChange={(e) =>
-                                                setForm({
-                                                    ...form,
-                                                    quantity: e.target.value,
-                                                })
-                                            }
-                                            value={form?.quantity}
-                                            name="quantity"
-                                            label="Quantity"
-                                            type="number"
-                                        />
-                                    </div>
+                                    {(user?.user_type === "Admin") && (
+                                        <div>
+                                            <Input
+                                                onChange={(e) =>
+                                                    setForm({
+                                                        ...form,
+                                                        quantity: e.target.value,
+                                                    })
+                                                }
+                                                value={form?.quantity}
+                                                name="quantity"
+                                                label="Quantity"
+                                                type="number"
+                                            />
+                                        </div>
+                                    )}
                                     <div>
                                         <div className="mt-2">
                                             <select

@@ -62,7 +62,7 @@ export default function SoftDeleteSection({ data }) {
                 <form onSubmit={softDelete}>
                     <div className="mt-6 flex flex-col gap-5">
                         <h1 className="text-xl">
-                            Are you sure to remove <b>{data?.name}</b> with <b>{peso_value(Number(data.cost))}</b> cost price to soft delete?
+                            Are you sure you want to remove <b>{data?.name}</b> with <b>{peso_value(Number(data.cost))}</b> cost price?
                         </h1>
 
                     </div>
