@@ -26,7 +26,6 @@ export default function SalesIdTableSection() {
     const { cart } = useSelector((store) => store.carts);
 
     useEffect(() => {
-        store.dispatch(get_customer_thunk())
         store.dispatch(get_all_customers_thunk());
     }, []);
     console.log("cartscarts", cart);
