@@ -26,7 +26,6 @@ class AccountController extends Controller
             'suffix' => 'nullable|string|max:255',
             'user_type' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6',
             'title' => 'nullable|string|max:255',
         ]);
 
@@ -39,7 +38,7 @@ class AccountController extends Controller
             'email' => $data['email'] ?? null,
             'user_type' => $data['user_type'] ?? null,
             'title' => $data['title'],
-            'password' => bcrypt('Egies123'), // Default password
+            'password' => bcrypt('egiespos'), // Default password
         ]);
 
 
