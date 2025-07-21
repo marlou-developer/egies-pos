@@ -13,6 +13,7 @@ import { get_over_due_thunk } from "../redux/cart-thunk";
 
 export default function NotificationSection() {
     const { over_dues } = useSelector((store) => store.carts);
+    const { user } = useSelector((store) => store.app);
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef(null);
 
@@ -56,9 +57,14 @@ export default function NotificationSection() {
                 {over_dues?.notification?.length > 0 && (
                     <span className="absolute -top-1 -right-1 inline-flex items-center justify-center h-4 w-4 rounded-full bg-red-500 text-white text-xs font-semibold">
                         {
-                            over_dues?.notification?.filter(
-                                (res) => res.is_read == "false"
-                            )?.length
+                            over_dues?.notification?.filter((res) => {
+                                // For Inventory and Cashier users, only count stock-related notifications
+                                if (user?.user_type === "Inventory" || user?.user_type === "Cashier") {
+                                    return (res.status === "low_stock" || res.status === "out_stocks") && res.is_read === "false";
+                                }
+                                // For other users, count all notifications
+                                return res.is_read === "false";
+                            })?.length
                         }
                     </span>
                 )}
@@ -74,7 +80,9 @@ export default function NotificationSection() {
                             </div>
                         )}
 
-                        {over_dues?.notification?.length != 0 &&
+                        {/* Cart notifications - only show for users who are not Inventory or Cashier */}
+                        {user?.user_type !== "Inventory" && user?.user_type !== "Cashier" &&
+                            over_dues?.notification?.length != 0 &&
                             over_dues?.notification
                                 ?.filter((res) => res.type == "cart")
                                 ?.map((item, index) => {
@@ -88,11 +96,10 @@ export default function NotificationSection() {
                                     return (
                                         <div
                                             key={index}
-                                            className={`${
-                                                item?.is_read == "true"
-                                                    ? "bg-gray-100"
-                                                    : ""
-                                            } my-1.5 px-4 py-2 underline `}
+                                            className={`${item?.is_read == "true"
+                                                ? "bg-gray-100"
+                                                : ""
+                                                } my-1.5 px-4 py-2 underline `}
                                         >
                                             <button
                                                 onClick={() =>
@@ -121,17 +128,18 @@ export default function NotificationSection() {
                                         </div>
                                     );
                                 })}
+
+                        {/* Low stock notifications - show for all users */}
                         {over_dues?.notification?.length != 0 &&
                             over_dues?.notification
                                 ?.filter((res) => res.status == "low_stock")
                                 ?.map((item, index) => (
                                     <div
                                         key={index}
-                                        className={`${
-                                            item?.is_read == "true"
-                                                ? "bg-gray-100"
-                                                : ""
-                                        } my-1.5 px-4 py-2 underline `}
+                                        className={`${item?.is_read == "true"
+                                            ? "bg-gray-100"
+                                            : ""
+                                            } my-1.5 px-4 py-2 underline `}
                                     >
                                         <button
                                             onClick={() =>
@@ -150,17 +158,18 @@ export default function NotificationSection() {
                                         </button>
                                     </div>
                                 ))}
+
+                        {/* Out of stock notifications - show for all users */}
                         {over_dues?.notification?.length != 0 &&
                             over_dues?.notification
                                 ?.filter((res) => res.status == "out_stocks")
                                 ?.map((item, index) => (
                                     <div
                                         key={index}
-                                        className={`${
-                                            item?.is_read == "true"
-                                                ? "bg-gray-100"
-                                                : ""
-                                        } my-1.5 px-4 py-2 underline `}
+                                        className={`${item?.is_read == "true"
+                                            ? "bg-gray-100"
+                                            : ""
+                                            } my-1.5 px-4 py-2 underline `}
                                     >
                                         <button
                                             onClick={() =>

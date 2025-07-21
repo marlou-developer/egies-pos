@@ -202,22 +202,50 @@ export default function PosSection() {
                                     console.log("resres", res);
                                     return (
                                         <>
-                                            <div class="flex flex-row gap-3 bg-pink-100 border-pink-300 border  p-2 rounded-lg shadow-md justify-between items-center mb-4">
-                                                <div class="flex flex-1 flex-col gap-3 items-start  justify-between w-2/5">
-                                                    <div className="flex text-center w-full gap-3">
+                                            <div className="flex flex-col md:flex-row gap-2 bg-pink-100 border-pink-300 border p-3 rounded-lg shadow-md mb-4 overflow-hidden">
+                                                {/* Product Info Section */}
+                                                <div className="flex flex-col md:flex-1 gap-2 min-w-0">
+                                                    <div className="flex items-center gap-2">
                                                         <img
                                                             src={
                                                                 res?.uploads[0]
                                                                     ?.file
                                                             }
-                                                            class="w-10 h-10 object-cover rounded-md"
+                                                            className="w-10 h-10 object-cover rounded-md flex-shrink-0"
                                                             alt=""
                                                         />
-                                                        <span class="font-semibold text-sm">
-                                                            {res?.name}
-                                                        </span>
+                                                        <div className="flex-1 min-w-0">
+                                                            <span className="font-semibold text-xs md:text-sm block truncate">
+                                                                {res?.name}
+                                                            </span>
+                                                        </div>
+                                                        {/* Delete button for mobile - top right */}
+                                                        <div className="md:hidden flex-shrink-0">
+                                                            <button
+                                                                onClick={() => {
+                                                                    const updated =
+                                                                        carts.filter(
+                                                                            (
+                                                                                item
+                                                                            ) =>
+                                                                                item.id !==
+                                                                                res.id
+                                                                        );
+                                                                    dispatch(
+                                                                        setCarts(
+                                                                            updated
+                                                                        )
+                                                                    );
+                                                                }}
+                                                                className="p-1 rounded-md hover:text-gray-700"
+                                                            >
+                                                                <XMarkIcon className="h-4 w-4" />
+                                                            </button>
+                                                        </div>
                                                     </div>
-                                                    <div className="font-bold">
+                                                    
+                                                    {/* Price Section */}
+                                                    <div className="font-bold text-xs md:text-sm">
                                                         {store == "Shopee" && (
                                                             <>
                                                                 <input
@@ -238,29 +266,17 @@ export default function PosSection() {
                                                                     } value={
                                                                         res?.sub_price === 0 ? "" : res?.sub_price
                                                                     }
-                                                                    // onKeyDown={(
-                                                                    //     e
-                                                                    // ) => {
-                                                                    //     if (
-                                                                    //         e.key ===
-                                                                    //             "ArrowUp" ||
-                                                                    //         e.key ===
-                                                                    //             "ArrowDown"
-                                                                    //     ) {
-                                                                    //         e.preventDefault();
-                                                                    //     }
-                                                                    // }}
                                                                     onWheel={(
                                                                         e
                                                                     ) =>
                                                                         e.target.blur()
                                                                     }
-                                                                    className="block text-center w-full rounded-md bg-white py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
+                                                                    className="block text-center w-full max-w-24 rounded-md bg-white py-1 px-2 text-xs text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300"
                                                                 />
                                                             </>
                                                         )}
                                                         {store == "Store" && (
-                                                            <>
+                                                            <span className="block truncate">
                                                                 ₱{" "}
                                                                 {parseFloat(
                                                                     res.sub_price
@@ -270,51 +286,52 @@ export default function PosSection() {
                                                                         minimumFractionDigits: 2,
                                                                     }
                                                                 )}
-                                                            </>
+                                                            </span>
                                                         )}
                                                     </div>
                                                 </div>
 
-                                                <div class="flex-1 flex flex-col gap-3 justify-between">
-                                                    <div className="flex w-full">
+                                                {/* Quantity and Price Type Section */}
+                                                <div className="flex flex-col md:flex-1 gap-2 min-w-0">
+                                                    {/* Quantity Controls */}
+                                                    <div className="flex items-center justify-center gap-1">
                                                         <button
                                                             onClick={() =>
                                                                 subtractPCS(res)
                                                             }
-                                                            class="px-3 py-1 rounded-md bg-gray-300 "
+                                                            className="px-2 py-1 rounded-md bg-gray-300 flex-shrink-0 text-xs"
                                                         >
                                                             -
                                                         </button>
-                                                        <span class="font-semibold mx-1">
-                                                            <input
-                                                                id="pcs"
-                                                                name="pcs"
-                                                                type="number"
-                                                                onChange={(e) =>
-                                                                    update_pcs(
-                                                                        res,
-                                                                        Number(
-                                                                            e
-                                                                                .target
-                                                                                .value
-                                                                        )
+                                                        <input
+                                                            id="pcs"
+                                                            name="pcs"
+                                                            type="number"
+                                                            onChange={(e) =>
+                                                                update_pcs(
+                                                                    res,
+                                                                    Number(
+                                                                        e
+                                                                            .target
+                                                                            .value
                                                                     )
-                                                                }
-                                                                value={res?.pcs}
-                                                                className="block text-center w-full rounded-md bg-white py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
-                                                            />
-                                                        </span>
+                                                                )
+                                                            }
+                                                            value={res?.pcs}
+                                                            className="block text-center w-12 rounded-md bg-white py-1 text-xs text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300"
+                                                        />
                                                         <button
                                                             onClick={() =>
                                                                 addPCS(res)
                                                             }
-                                                            class="px-3 py-1 rounded-md bg-gray-300 "
+                                                            className="px-2 py-1 rounded-md bg-gray-300 flex-shrink-0 text-xs"
                                                         >
                                                             +
                                                         </button>
                                                     </div>
 
-                                                    <span class=" font-semibold text-sm">
+                                                    {/* Price Type Selector */}
+                                                    <div className="w-full">
                                                         <select
                                                             onChange={(e) =>
                                                                 add_sub_price(
@@ -326,7 +343,7 @@ export default function PosSection() {
                                                             id="pricing"
                                                             name="pricing"
                                                             autoComplete="pricing"
-                                                            className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pl-3 pr-1 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
+                                                            className="w-full appearance-none rounded-md bg-white py-1 h-9 pl-2 pr-1 text-xs text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 truncate"
                                                         >
                                                             {store !=
                                                                 "Store" && (
@@ -344,45 +361,40 @@ export default function PosSection() {
                                                                             value="srp"
                                                                             selected
                                                                         >
-                                                                            SRP
-                                                                            Price
+                                                                            SRP Price
                                                                         </option>
 
                                                                         {res.reseller && (
                                                                             <option value="reseller">
-                                                                                Reseller
-                                                                                Price
+                                                                                Reseller Price
                                                                             </option>
                                                                         )}
                                                                         {res.city_distributor && (
                                                                             <option value="city_distributor">
-                                                                                City
-                                                                                Distributor
-                                                                                Price
+                                                                                City Distributor
                                                                             </option>
                                                                         )}
                                                                         {res.district_distributor && (
                                                                             <option value="district_distributor">
-                                                                                District
-                                                                                Distributor
-                                                                                Price
+                                                                                District Distributor
                                                                             </option>
                                                                         )}
                                                                         {res.district_distributor && (
                                                                             <option value="district_distributor">
-                                                                                Provincial
-                                                                                Distributor
-                                                                                Price
+                                                                                Provincial Distributor
                                                                             </option>
                                                                         )}
                                                                     </>
                                                                 )}
                                                         </select>
-                                                    </span>
+                                                    </div>
                                                 </div>
-                                                <div class="font-semibold text-xl flex-1  flex flex-col gap-3  text-left">
-                                                    <div className="flex flex-1 justify-between">
-                                                        <div className="flex items-center justify-center">
+
+                                                {/* Total and Discount Section */}
+                                                <div className="flex flex-col md:flex-1 gap-2 min-w-0">
+                                                    {/* Total Price and Delete Button */}
+                                                    <div className="flex justify-between items-center">
+                                                        <div className="font-semibold text-sm md:text-base truncate">
                                                             ₱
                                                             {parseFloat(
                                                                 Number(
@@ -398,7 +410,8 @@ export default function PosSection() {
                                                                 )
                                                             ).toFixed(2)}
                                                         </div>
-                                                        <div className="">
+                                                        {/* Delete button for desktop */}
+                                                        <div className="hidden md:block flex-shrink-0">
                                                             <button
                                                                 onClick={() => {
                                                                     const updated =
@@ -408,20 +421,22 @@ export default function PosSection() {
                                                                             ) =>
                                                                                 item.id !==
                                                                                 res.id
-                                                                        ); // Fix: use res.id
+                                                                        );
                                                                     dispatch(
                                                                         setCarts(
                                                                             updated
                                                                         )
                                                                     );
                                                                 }}
-                                                                className=" p-1 rounded-md hover:text-gray-700"
+                                                                className="p-1 rounded-md hover:text-gray-700"
                                                             >
-                                                                <XMarkIcon className="h-5" />
+                                                                <XMarkIcon className="h-4 w-4" />
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    <div className="flex-1">
+                                                    
+                                                    {/* Discount Input */}
+                                                    <div className="w-full">
                                                         <input
                                                             placeholder="Discount"
                                                             type="number"
@@ -439,17 +454,7 @@ export default function PosSection() {
                                                             onWheel={(e) =>
                                                                 e.target.blur()
                                                             }
-                                                            // onKeyDown={(e) => {
-                                                            //     if (
-                                                            //         e.key ===
-                                                            //             "ArrowUp" ||
-                                                            //         e.key ===
-                                                            //             "ArrowDown"
-                                                            //     ) {
-                                                            //         e.preventDefault();
-                                                            //     }
-                                                            // }}
-                                                            className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pl-3 pr-1 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
+                                                            className="w-full appearance-none rounded-md bg-white py-1 pl-2 pr-1 h-9 text-xs text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300"
                                                         />
                                                     </div>
                                                 </div>
