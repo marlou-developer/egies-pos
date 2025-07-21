@@ -10,7 +10,7 @@ import EditDIscountSection from "../../../credits/id/ids/sections/edit-discount-
 import ReturnItemSection from "./return-item-section";
 import UpdateBillToSection from "./update-bill-to-section";
 import store from "@/app/store/store";
-import { get_customer_thunk } from "@/app/redux/customer-thunk";
+import { get_all_customers_thunk, get_customer_thunk } from "@/app/redux/customer-thunk";
 
 const people = [
     {
@@ -27,6 +27,7 @@ export default function SalesIdTableSection() {
 
     useEffect(() => {
         store.dispatch(get_customer_thunk())
+        store.dispatch(get_all_customers_thunk());
     }, []);
     console.log("cartscarts", cart);
     return (

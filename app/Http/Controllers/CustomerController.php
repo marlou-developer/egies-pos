@@ -44,14 +44,14 @@ class CustomerController extends Controller
         // Add search functionality
         if ($request->filled('search')) {
             $search = $request->search;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('email', 'like', '%' . $search . '%')
-                  ->orWhere('mobile_no', 'like', '%' . $search . '%')
-                  ->orWhere('street', 'like', '%' . $search . '%')
-                  ->orWhere('brgy', 'like', '%' . $search . '%')
-                  ->orWhere('city', 'like', '%' . $search . '%')
-                  ->orWhere('province', 'like', '%' . $search . '%');
+                    ->orWhere('email', 'like', '%' . $search . '%')
+                    ->orWhere('mobile_no', 'like', '%' . $search . '%')
+                    ->orWhere('street', 'like', '%' . $search . '%')
+                    ->orWhere('brgy', 'like', '%' . $search . '%')
+                    ->orWhere('city', 'like', '%' . $search . '%')
+                    ->orWhere('province', 'like', '%' . $search . '%');
             });
         }
 
@@ -61,6 +61,16 @@ class CustomerController extends Controller
 
         return response()->json($customers, 200);
     }
+
+    public function get_customers()
+    {
+        $customers = Customer::get();
+        return response()->json([
+            'result' => $customers
+        ], 200);
+    }
+
+
 
     public function store(Request $request)
     {

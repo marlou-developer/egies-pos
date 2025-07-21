@@ -159,7 +159,7 @@ export default function AddUserSection({ open, setOpenUser }) {
                                                 type="email"
                                             />
                                         </div>
-                                        <div>
+                                        {/* <div>
                                             <Input
                                                 onChange={(e) =>
                                                     setForm({
@@ -172,7 +172,7 @@ export default function AddUserSection({ open, setOpenUser }) {
                                                 label="Password"
                                                 type="password"
                                             />
-                                        </div>
+                                        </div> */}
                                         <div>
                                             <select
                                                 onChange={(e) =>

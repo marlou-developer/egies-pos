@@ -11,7 +11,7 @@ export function create_customer_service(data) {
 
 export function search_customer_service(data) {
     try {
-        const result = axios.get('/api/search_customer?search='+ data)
+        const result = axios.get('/api/search_customer?search=' + data)
         return result
     } catch (error) {
 
@@ -26,6 +26,16 @@ export function get_customer_service() {
 
     }
 }
+
+export function get_all_customer_service() {
+    try {
+        const result = axios.get('/api/get_customers' + window.location.search)
+        return result
+    } catch (error) {
+
+    }
+}
+
 
 // export async function get_category_by_id_service(id) {
 //     const res = await axios.get('/api/category/' + id)

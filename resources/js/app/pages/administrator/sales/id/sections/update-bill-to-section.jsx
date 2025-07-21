@@ -1,5 +1,6 @@
 import { get_cart_by_id_thunk, update_customer_thunk } from '@/app/redux/cart-thunk';
 import { get_category_thunk, update_category_thunk } from '@/app/redux/category-thunk';
+import { get_all_customers_thunk } from '@/app/redux/customer-thunk';
 import store from '@/app/store/store';
 import Modal from '@/Components/Modal';
 import { PencilIcon, PlusIcon } from '@heroicons/react/24/outline'
@@ -15,6 +16,11 @@ export default function UpdateBillToSection({ data }) {
     const [form, setForm] = useState({});
 
     const cart_id = window.location.pathname.split("/")[3];
+
+    // Load customers when component mounts
+    useEffect(() => {
+        store.dispatch(get_all_customers_thunk());
+    }, []);
 
     useEffect(() => {
         setForm({
@@ -46,6 +52,11 @@ export default function UpdateBillToSection({ data }) {
     };
 
     console.log("customers", customers);
+    console.log("customers.data", customers?.data);
+    
+    // Handle both possible data structures
+    const customersList = customers?.data || customers || [];
+    const customersArray = Array.isArray(customersList) ? customersList : customersList?.data || [];
 
     return (
         <>
@@ -74,7 +85,7 @@ export default function UpdateBillToSection({ data }) {
                             <option value="">
                                 N/A
                             </option>
-                            {customers?.data?.map((customer) => (
+                            {customersArray?.map((customer) => (
                                 <option
                                     key={customer.id}
                                     value={customer.id}

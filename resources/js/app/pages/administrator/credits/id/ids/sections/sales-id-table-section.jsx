@@ -7,10 +7,10 @@ import SalesEditQuantitySection from "./sales-edit-quantity-section";
 import AddProductSection from "./add-product-section";
 import RemoveProductSection from "./remove-product-section";
 import EditDIscountSection from "./edit-discount-section";
-import UpdateBillToSection from "@/app/pages/administrator/sales/id/sections/update-bill-to-section";
 import store from "@/app/store/store";
-import { get_customer_thunk } from "@/app/redux/customer-thunk";
+import { get_all_customers_thunk, get_customer_thunk } from "@/app/redux/customer-thunk";
 import ReturnItemSection from "./return-item-section";
+import UpdateBillToSection from "./update-bill-to-section";
 
 const people = [
     {
@@ -25,7 +25,8 @@ const people = [
 export default function SalesIdTableSection() {
     const { cart } = useSelector((store) => store.carts);
     useEffect(() => {
-        store.dispatch(get_customer_thunk())
+        // store.dispatch(get_customer_thunk())
+        store.dispatch(get_all_customers_thunk());
     }, []);
     console.log("cartscarts", cart);
     return (

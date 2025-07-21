@@ -32,14 +32,14 @@ class AccountController extends Controller
 
         $user = User::create([
             'name' => trim($data['fname'] . ' ' . ($data['mname'] ?? '') . ' ' . $data['lname']),
-            'fname' => $data['fname'],
+            'fname' => $data['fname'] ?? null,
             'mname' => $data['mname'] ?? null,
-            'lname' => $data['lname'],
-            'suffix' => $data['suffix'],
-            'email' => $data['email'],
-            'user_type' => $data['user_type'],
+            'lname' => $data['lname'] ?? null,
+            'suffix' => $data['suffix'] ?? null,
+            'email' => $data['email'] ?? null,
+            'user_type' => $data['user_type'] ?? null,
             'title' => $data['title'],
-            'password' => bcrypt($data['password']),
+            'password' => bcrypt('Egies123'), // Default password
         ]);
 
 

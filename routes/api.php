@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('stock', StockController::class);
     Route::get('get_stock_by_products_id/{id}', [StockController::class, 'get_stock_by_products_id']);
     Route::resource('category', CategoryController::class);
+    Route::get('get_customers', [CustomerController::class, 'get_customers']);
     Route::resource('customer', CustomerController::class);
     Route::put('update_customer/{id}', [CartController::class, 'update_customer']);
     Route::resource('cart', CartController::class);

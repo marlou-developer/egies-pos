@@ -5,7 +5,7 @@ import AdminLayout from "../../layout";
 import { useSelector } from "react-redux";
 import SalesIdTableSection from "./sections/sales-id-table-section";
 import { get_category_thunk } from "@/app/redux/category-thunk";
-import { get_customer_thunk } from "@/app/redux/customer-thunk";
+import { get_all_customers_thunk, get_customer_thunk } from "@/app/redux/customer-thunk";
 
 export default function SalesByPage() {
     const cart_id = window.location.pathname.split("/")[3];
