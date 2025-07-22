@@ -7,13 +7,17 @@ import {
     FaClipboardList,
     FaFilter,
     FaList,
+    FaMagnifyingGlass,
     FaPrint,
+    FaSearchengin,
+    FaXmark,
 } from "react-icons/fa6";
 import AddProductComponent from "../components/add-products-component";
 import AddCategoryComponent from "../components/add-category-component";
 import FilterProductsComponent from "../components/filter-products-component";
 import store from "@/app/store/store";
 import { get_category_thunk } from "@/app/redux/category-thunk";
+import { search_product_by_code_service } from "@/app/pages/services/product-service";
 import ProductOptionMenuSection from "./product-option-menu-section";
 import SearchSection from "./search-section";
 import PrintSection from "./print-section";
@@ -46,6 +50,10 @@ function getStatusLabelAndClass(quantity) {
 export default function ProductsSection() {
     const [current, setCurrent] = useState(1);
     const [pageSize] = useState(10);
+    const [showSearchModal, setShowSearchModal] = useState(false);
+    const [searchCode, setSearchCode] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
+    const [isSearching, setIsSearching] = useState(false);
     const dispatch = useDispatch();
     const { products, selectedProducts, selectAll, loading, error } = useSelector(
         (state) => state.products
@@ -56,6 +64,16 @@ export default function ProductsSection() {
     const [openProduct, setOpenProduct] = useState(false);
     const [openCategory, setOpenCategory] = useState(false);
     const [openFilter, setOpenFilter] = useState(false);
+
+    // Initialize search code from URL parameters
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const searchValue = params.get("search");
+        if (searchValue) {
+            setSearchCode(searchValue);
+            // setShowSearchModal(true);
+        }
+    }, []);
 
     const handlePrint = () => {
         const printContent = document.getElementById("product-table"); // Get the table by its ID
@@ -104,6 +122,38 @@ export default function ProductsSection() {
 
         printWindow.document.close();
         printWindow.print();
+    };
+
+    const handleCodeSearch = async () => {
+        if (!searchCode.trim()) return;
+
+        setIsSearching(true);
+        try {
+            // Call the specific product code search API
+            const response = await search_product_by_code_service(searchCode.trim());
+            setSearchResults(response.data.data || []);
+        } catch (error) {
+            console.error("Error searching by product code:", error);
+            setSearchResults([]);
+        } finally {
+            setIsSearching(false);
+        }
+    };
+
+    const handleSelectProduct = (product) => {
+        // Close modal and optionally highlight the selected product
+        setShowSearchModal(false);
+        setSearchCode("");
+        setSearchResults([]);
+
+        // You can add logic here to highlight or scroll to the selected product
+        console.log("Selected product:", product);
+    };
+
+    const clearSearch = () => {
+        setSearchCode("");
+        setSearchResults([]);
+        setShowSearchModal(false);
     };
 
     console.log("products", products);
@@ -230,6 +280,21 @@ export default function ProductsSection() {
                                                 scope="col"
                                                 className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                                             >
+                                                <div className="flex gap-1 items-center">
+                                                    ID/Code
+                                                    <button
+                                                        onClick={() => setShowSearchModal(true)}
+                                                        className="text-gray-500 hover:text-pink-500 transition-colors"
+                                                        title="Search by Product Code/ID"
+                                                    >
+                                                        <FaMagnifyingGlass className="h-4" />
+                                                    </button>
+                                                </div>
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                                            >
                                                 Product
                                             </th>
                                             <th
@@ -336,6 +401,9 @@ export default function ProductsSection() {
                                                             }}
                                                         />
                                                     </td>
+                                                    <td className="whitespace-nowrap py-4 pl-3 pr-3 text-center text-sm font-bold text-gray-700 bg-slate-100">
+                                                        {product.id}
+                                                    </td>
                                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-pink-500 sm:pl-6">
                                                         {product.name}
                                                     </td>
@@ -405,6 +473,112 @@ export default function ProductsSection() {
                 {/* Pagination */}
                 <PaginationSection />
             </div>
+
+            {/* Search Modal */}
+            {showSearchModal && (
+                <div className="fixed inset-0 z-50 overflow-y-auto">
+                    <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={() => setShowSearchModal(false)}></div>
+
+                        <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                            <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                <div className="sm:flex sm:items-start">
+                                    <div className="w-full">
+                                        <div className="flex justify-between items-center mb-4">
+                                            <h3 className="text-lg leading-6 font-medium text-gray-900">
+                                                Search by Product Code/ID
+                                            </h3>
+                                            <button
+                                                onClick={() => setShowSearchModal(false)}
+                                                className="text-gray-400 hover:text-gray-600"
+                                            >
+                                                <FaXmark className="h-5 w-5" />
+                                            </button>
+                                        </div>
+
+                                        <div className="mb-4">
+                                            <div className="flex gap-2">
+                                                <input
+                                                    type="text"
+                                                    placeholder="Enter product code or ID..."
+                                                    value={searchCode}
+                                                    onChange={(e) => setSearchCode(e.target.value)}
+                                                    onKeyPress={(e) => e.key === 'Enter' && handleCodeSearch()}
+                                                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
+                                                    autoFocus
+                                                />
+                                                <button
+                                                    onClick={handleCodeSearch}
+                                                    disabled={isSearching || !searchCode.trim()}
+                                                    className="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                                                >
+                                                    {isSearching ? "Searching..." : "Search"}
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Search Results */}
+                                        <div className="max-h-64 overflow-y-auto">
+                                            {isSearching && (
+                                                <div className="flex justify-center items-center py-8">
+                                                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-pink-500"></div>
+                                                    <span className="ml-2 text-gray-600">Searching...</span>
+                                                </div>
+                                            )}
+
+                                            {!isSearching && searchResults.length === 0 && searchCode && (
+                                                <div className="text-center py-8 text-gray-500">
+                                                    No products found with code "{searchCode}"
+                                                </div>
+                                            )}
+
+                                            {!isSearching && searchResults.length > 0 && (
+                                                <div className="space-y-2">
+                                                    <h4 className="font-medium text-gray-900 mb-2">Results:</h4>
+                                                    {searchResults.map((product) => (
+                                                        <div
+                                                            key={product.id}
+                                                            onClick={() => handleSelectProduct(product)}
+                                                            className="p-3 border rounded-md hover:bg-gray-50 cursor-pointer"
+                                                        >
+                                                            <div className="flex justify-between items-start">
+                                                                <div>
+                                                                    <div className="font-medium text-gray-900">
+                                                                        ID: {product.id}
+                                                                    </div>
+                                                                    <div className="text-sm text-pink-600 font-medium">
+                                                                        {product.name}
+                                                                    </div>
+                                                                    <div className="text-xs text-gray-500">
+                                                                        {product.categories?.name} • {product.brand}
+                                                                    </div>
+                                                                </div>
+                                                                <div className="text-right text-sm">
+                                                                    <div className="font-medium text-gray-900">
+                                                                        ₱{Number(product.srp || 0).toFixed(2)}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                <button
+                                    onClick={clearSearch}
+                                    className="w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 sm:ml-3 sm:w-auto sm:text-sm"
+                                >
+                                    Clear & Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

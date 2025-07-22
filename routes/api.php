@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('account', AccountController::class);
+    Route::get('product/search-by-code', [ProductController::class, 'searchByCode']);
     Route::resource('product', ProductController::class);
     Route::get('product_soft_deleted', [ProductController::class, 'getSoftDeleted']);
     Route::post('soft_delete/{id}', [StockController::class, 'soft_delete']);

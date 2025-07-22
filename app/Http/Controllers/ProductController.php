@@ -31,6 +31,7 @@ class ProductController extends Controller
             } else {
                 $query->where(function ($q) use ($request) {
                     $q->where('id', $request->search)
+                        ->orWhere('id', 'like', '%' . $request->search . '%')
                         ->orWhere('name', 'like', '%' . $request->search . '%')
                         ->orWhere('brand', 'like', '%' . $request->search . '%')
                         ->orWhere('quantity', 'like', '%' . $request->search . '%')
@@ -277,5 +278,34 @@ class ProductController extends Controller
             'message' => 'Product restored successfully',
             'data' => $product
         ]);
+    }
+
+    public function searchByCode(Request $request)
+    {
+        $code = $request->query('code');
+        
+        if (!$code) {
+            return response()->json([
+                'data' => [],
+                'message' => 'Code parameter is required'
+            ], 400);
+        }
+
+        $query = Product::with(['categories', 'uploads', 'stocks'])
+            ->notSoftDeleted()
+            ->where(function ($q) use ($code) {
+                $q->where('id', $code)
+                  ->orWhere('id', 'like', $code . '%');
+            })
+            ->orderBy('id', 'asc')
+            ->limit(10); // Limit results for performance
+
+        $products = $query->get();
+
+        return response()->json([
+            'data' => $products,
+            'message' => 'Products found',
+            'count' => $products->count()
+        ], 200);
     }
 }

@@ -51,3 +51,12 @@ export function update_product_service(id,data) {
 
     }
 }
+
+export function search_product_by_code_service(code) {
+    try {
+        const result = axios.get(`/api/product/search-by-code?code=${encodeURIComponent(code)}`)
+        return result
+    } catch (error) {
+        throw error;
+    }
+}
