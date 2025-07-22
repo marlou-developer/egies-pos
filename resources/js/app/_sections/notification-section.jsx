@@ -73,7 +73,7 @@ export default function NotificationSection() {
 
             {open && (
                 <div className="absolute right-0 z-10 mt-2 w-64 rounded-lg bg-pink-100 shadow-lg ring-1 ring-gray-200">
-                    <div className=" text-sm flex flex-col items-start justify-start text-gray-700 max-h-60 overflow-y-auto">
+                    <div className=" text-sm flex flex-col items-start justify-start max-h-60 overflow-y-auto">
                         {over_dues?.notification?.length == 0 && (
                             <div className="px-4 py-2 text-center text-gray-500">
                                 No notification?.

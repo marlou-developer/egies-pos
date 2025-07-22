@@ -67,7 +67,7 @@ export default function ProductsSection({ storeName }) {
                 </div>
             </div>
 
-            <div className="px-5 mt-4 h-[62vh] overflow-y-auto">
+            <div className="px-5 mt-4 h-[66vh] overflow-y-auto">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
                     {searchTerm &&
                         filteredProducts
