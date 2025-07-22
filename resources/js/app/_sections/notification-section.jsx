@@ -72,8 +72,8 @@ export default function NotificationSection() {
             </button>
 
             {open && (
-                <div className="absolute right-0 z-10 mt-2 w-64 rounded-lg bg-white shadow-lg ring-1 ring-gray-200">
-                    <div className="py-2 text-sm flex flex-col items-start justify-start text-gray-700 max-h-60 overflow-y-auto">
+                <div className="absolute right-0 z-10 mt-2 w-64 rounded-lg bg-pink-100 shadow-lg ring-1 ring-gray-200">
+                    <div className=" text-sm flex flex-col items-start justify-start text-gray-700 max-h-60 overflow-y-auto">
                         {over_dues?.notification?.length == 0 && (
                             <div className="px-4 py-2 text-center text-gray-500">
                                 No notification?.
@@ -97,9 +97,9 @@ export default function NotificationSection() {
                                         <div
                                             key={index}
                                             className={`${item?.is_read == "true"
-                                                ? "bg-gray-100"
+                                                ? "bg-white w-full"
                                                 : ""
-                                                } my-1.5 px-4 py-2 underline `}
+                                                } px-4 py-2 underline `}
                                         >
                                             <button
                                                 onClick={() =>
@@ -137,9 +137,9 @@ export default function NotificationSection() {
                                     <div
                                         key={index}
                                         className={`${item?.is_read == "true"
-                                            ? "bg-gray-100"
+                                            ? "bg-white w-full"
                                             : ""
-                                            } my-1.5 px-4 py-2 underline `}
+                                            } px-4 py-2 underline `}
                                     >
                                         <button
                                             onClick={() =>
@@ -167,9 +167,9 @@ export default function NotificationSection() {
                                     <div
                                         key={index}
                                         className={`${item?.is_read == "true"
-                                            ? "bg-gray-100"
+                                            ? "bg-white w-full"
                                             : ""
-                                            } my-1.5 px-4 py-2 underline `}
+                                            } px-4 py-2 underline `}
                                     >
                                         <button
                                             onClick={() =>
