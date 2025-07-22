@@ -123,7 +123,7 @@ export default function ProductsSection() {
     }
 
     return (
-        <div className="px-4 flex flex-col w-[78vw] sm:px-6 lg:px-8">
+        <div className="px-4 sm:px-6 lg:px-8">
             {/* Header Section */}
             <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto">
