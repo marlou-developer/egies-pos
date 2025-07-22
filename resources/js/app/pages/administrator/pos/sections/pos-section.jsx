@@ -161,7 +161,7 @@ export default function PosSection() {
                 {/* Right column */}
                 <div className="grid grid-cols-1 lg:col-span-4 gap-4">
                     <section
-                        className="flex flex-col items-center justify-between mt-6 w-full xl:h-[82vh] xxl:h-[87vh]"
+                        className="flex flex-col items-center justify-between  w-full xl:h-[80vh] xxl:h-[87vh]"
                         aria-labelledby="section-2-title"
                     >
                         <div className="overflow-hidden rounded-lg bg-white shadow-sm  w-full ">

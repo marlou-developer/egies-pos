@@ -30,14 +30,69 @@ export default function PrintReceiptSection({
                     <title>Print Receipt</title>
                     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
                     <style>
+                        @page {
+                            size: 80mm auto;
+                            margin: 0mm;
+                        }
+                        
                         body {
-                            font-family: monospace;
-                            padding: 0px;
+                            font-family: 'Courier New', monospace;
+                            font-size: 12px;
+                            line-height: 1.3;
+                            margin: 0;
+                            padding: 2mm;
+                            width: 80mm;
+                            max-width: 80mm;
+                            color: #000;
+                            background: #fff;
+                        }
+                        
+                        .receipt-container {
+                            width: 54mm;
+                            max-width: 54mm;
+                            margin: 0 auto;
+                        }
+                        
+                        .w-full {
+                            width: 100% !important;
+                        }
+                        
+                        .max-w-xs {
+                            max-width: 54mm !important;
+                            width: 54mm !important;
+                        }
+                        
+                        .text-xs {
+                            font-size: 11px !important;
+                        }
+                        
+                        .text-sm {
+                            font-size: 12px !important;
+                        }
+                        
+                        .font-bold {
+                            font-weight: bold !important;
+                        }
+                        
+                        .border-dashed {
+                            border-style: dashed !important;
+                        }
+                        
+                        .flex {
+                            display: flex !important;
+                        }
+                        
+                        .justify-between {
+                            justify-content: space-between !important;
+                        }
+                        
+                        .text-center {
+                            text-align: center !important;
                         }
                     </style>
                 </head>
                 <body>
-                    <div class="w-full max-w-xs mx-auto text-xs font-mono">
+                    <div class="receipt-container">
                         ${receiptRef.current.innerHTML}
                     </div>
                 </body>
@@ -61,82 +116,75 @@ export default function PrintReceiptSection({
     return (
         <div style={{ display: "none" }}>
             <div ref={receiptRef}>
-                <div className="flex flex-col items-center space-y-4 pr-5">
-                    <div
-                        ref={receiptRef}
-                        className="w-full max-w-xs text-xs font-mono border-y border-dashed py-4"
-                    >
-                        <div className="text-center">
-                            <h2 className="font-bold text-sm">
-                                Egie’s Beauty Boutique
-                            </h2>
-                            <p>Rizal Street</p>
-                            <p>San Carlos City, Negros Occidental</p>
-                            <p>09295878881</p>
-                        </div>
-
-                        <div className="mt-4">
-                            <p>
-                                Receipt No: {moment().format("Y")}-000010{id}
-                            </p>
-                            <p>Date: {moment().format("LLL")}</p>
-                        </div>
-
-                        <div className="mt-4 border-t border-dashed pt-2">
-                            {data?.cart_items.map((res, i) => {
-                                return (
-                                    <div className="flex justify-between">
-                                        <span>{res.name}</span>
-                                        <span>
-                                            {res.pcs}@
-                                            {peso_value(Number(res.sub_price))}
-                                        </span>
-                                    </div>
-                                );
-                            })}
-                        </div>
-
-                        <div className="mt-4 border-t border-dashed pt-2">
-                            <div className="flex justify-between">
-                                <span>Cash:</span>
-                                <span>
-                                    {peso_value(Number(data.customer_amount))}
-                                </span>
-                            </div>
-                            <div className="flex justify-between">
-                                <span>Change:</span>
-                                <span>{peso_value(Number(data.change))}</span>
-                            </div>
-                            <div className="flex justify-between">
-                                <span>Subtotal:</span>
-                                <span>
-                                    {peso_value(Number(data.sub_total))}
-                                </span>
-                            </div>
-                            <div className="flex justify-between font-bold">
-                                <span>TOTAL:</span>
-                                <span>
-                                    {peso_value(Number(data.total_price))}
-                                </span>
-                            </div>
-                        </div>
-
-                        <div className="text-center mt-4">
-                            <div className="h-10 border border-black mb-1">
-                                {/* [Barcode] */}
-                                INVOICE NUMBER
-                                <p className="text-[10px] tracking-widest">
-                                    {productId}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="h-10 flex items-center justify-center text-center border border-black mb-1">
-                            THANK YOU!
-                        </div>
-                        <br />
-                        <br />
+                <div className="w-full max-w-xs text-xs font-mono border-y border-dashed py-4">
+                    <div className="text-center">
+                        <h2 className="font-bold text-sm">
+                            Egie's Beauty Boutique
+                        </h2>
+                        <p>Rizal Street</p>
+                        <p>San Carlos City, Negros Occidental</p>
+                        <p>09295878881</p>
                     </div>
+
+                    <div className="mt-4">
+                        <p>
+                            Receipt No: {moment().format("Y")}-000010{id}
+                        </p>
+                        <p>Date: {moment().format("MM/DD/YYYY hh:mm A")}</p>
+                    </div>
+
+                    <div className="mt-4 border-t border-dashed pt-2">
+                        {data?.cart_items.map((res, i) => {
+                            return (
+                                <div key={i} className="mb-1">
+                                    <div>{res.name}</div>
+                                    <div className="flex justify-between">
+                                        <span>{res.pcs} pcs</span>
+                                        <span>{peso_value(Number(res.sub_price))}</span>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+
+                    <div className="mt-4 border-t border-dashed pt-2">
+                        <div className="flex justify-between">
+                            <span>Subtotal:</span>
+                            <span>
+                                {peso_value(Number(data.sub_total))}
+                            </span>
+                        </div>
+                        <div className="flex justify-between font-bold">
+                            <span>TOTAL:</span>
+                            <span>
+                                {peso_value(Number(data.total_price))}
+                            </span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span>Cash:</span>
+                            <span>
+                                {peso_value(Number(data.customer_amount))}
+                            </span>
+                        </div>
+                        <div className="flex justify-between">
+                            <span>Change:</span>
+                            <span>{peso_value(Number(data.change))}</span>
+                        </div>
+                    </div>
+
+                    <div className="text-center mt-4">
+                        <div className="border border-black mb-1 p-1">
+                            <div>INVOICE NUMBER</div>
+                            <div className="text-[10px] tracking-widest">
+                                {productId}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="text-center border border-black mb-1 p-2 font-bold">
+                        THANK YOU!
+                    </div>
+                    <div style={{height: "15mm"}}></div>
                 </div>
             </div>
         </div>
