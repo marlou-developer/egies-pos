@@ -3,6 +3,7 @@ import React from "react";
 import DisclosureComponent from "../_components/disclosure";
 import { Link } from "@inertiajs/react";
 import { useSelector } from "react-redux";
+import { Tooltip } from "antd";
 
 export default function SidebarDesktopSection({
     navigation,
@@ -14,10 +15,10 @@ export default function SidebarDesktopSection({
         return classes.filter(Boolean).join(" ");
     }
 
-    
+
     const { over_dues } = useSelector((store) => store.carts);
 
-    console.log('over_dues',over_dues)
+    console.log('over_dues', over_dues)
     return (
         <nav className="flex flex-1 flex-col">
             <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -26,35 +27,37 @@ export default function SidebarDesktopSection({
                         {navigation.map((item, i) =>
                             !item.children ? (
                                 <li key={item.name}>
-                                    <Link
-                                        href={item.href}
-                                        className={classNames(
-                                            item.current
-                                                ? "bg-pink-300 text-white"
-                                                : "text-gray-700 hover:bg-pink-100 hover:text-pink-400",
-                                            "group flex items-center gap-x-3 rounded-md p-2 py-3 text-sm font-semibold"
-                                        )}
-                                    >
-                                        <item.icon
-                                            aria-hidden="true"
+                                    <Tooltip className="tooltip" title={item.name}>
+                                        <Link
+                                            href={item.href}
                                             className={classNames(
                                                 item.current
-                                                    ? "text-white"
-                                                    : "text-gray-700 group-hover:text-pink-400",
-                                                "h-6 w-6 shrink-0"
+                                                    ? "bg-pink-300 text-white"
+                                                    : "text-gray-700 hover:bg-pink-100 hover:text-pink-400",
+                                                "group flex items-center gap-x-3 rounded-md p-2 py-3 text-sm font-semibold"
                                             )}
-                                        />
-                                        <div className="flex gap-3 items-start justify-between w-full">
-                                            <div>{!collapsed && item.name}</div>
-                                            {/* <div>
+                                        >
+                                            <item.icon
+                                                aria-hidden="true"
+                                                className={classNames(
+                                                    item.current
+                                                        ? "text-white"
+                                                        : "text-gray-700 group-hover:text-pink-400",
+                                                    "h-6 w-6 shrink-0"
+                                                )}
+                                            />
+                                            <div className="flex gap-3 items-start justify-between w-full">
+                                                <div>{!collapsed && item.name}</div>
+                                                {/* <div>
                                                 {(over_dues?.stocks?.length != 0 && item.notification) && (
                                                     <button className="bg-red-600 px-2 rounded-md p-1 text-white">
                                                        LS {over_dues?.stocks?.length}
                                                     </button>
                                                 )}
                                             </div> */}
-                                        </div>
-                                    </Link>
+                                            </div>
+                                        </Link>
+                                    </Tooltip>
                                 </li>
                             ) : (
                                 <li key={i}>
