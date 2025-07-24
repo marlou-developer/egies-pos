@@ -96,7 +96,7 @@ export default function NotificationSection() {
                                         <div
                                             key={index}
                                             className={`${item?.is_read == "true"
-                                                ? "bg-white w-full"
+                                                ? "bg-gray-200 w-full"
                                                 : ""
                                                 } px-4 py-2 underline `}
                                         >
