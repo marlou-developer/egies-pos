@@ -41,7 +41,7 @@ export default function AdminLayout({ children }) {
                 current: path === "dashboard",
             }]
             : []),
-        ...(user?.user_type === "Admin" || user?.user_type === "Cashier"
+        ...(user?.user_type === "Admin" || user?.user_type === "Cashier" || user?.user_type === "Encoder" || user?.user_type === "Shopee"
             ? [{
                 name: "POS",
                 href: "/administrator/pos",
@@ -49,7 +49,7 @@ export default function AdminLayout({ children }) {
                 current: path == "pos",
             }]
             : []),
-        ...(user?.user_type === "Admin" || user?.user_type === "Inventory"
+        ...(user?.user_type === "Admin" || user?.user_type === "Inventory" || user?.user_type === "Encoder"
             ? [{
                 name: "Products",
                 href: "/administrator/products",
@@ -73,7 +73,7 @@ export default function AdminLayout({ children }) {
                 current: path == "shopee",
             }]
             : []),
-        ...(user?.user_type === "Admin"
+        ...(user?.user_type === "Admin" || user?.user_type === "Cashier"
             ? [{
                 name: "Credits",
                 href: "/administrator/credits",
@@ -89,7 +89,7 @@ export default function AdminLayout({ children }) {
                 current: path == "expenses",
             }]
             : []),
-        ...(user?.user_type === "Admin"
+        ...(user?.user_type === "Admin" || user?.user_type === "Cashier"
             ? [{
                 name: "Sales",
                 href: "/administrator/sales",

@@ -95,7 +95,7 @@ export default function SalesIdTableSection() {
                                             {peso_value(Number(res?.total ?? 0))}
                                         </td>
                                         <td className="px-3 py-4 gap-2 flex  text-sm whitespace-nowrap text-gray-500">
-                                            {Number(res.quantity) != 0 && (
+                                            {/* {Number(res.quantity) != 0 && ( */}
                                                 <>
                                                     <RemoveProductSection
                                                         data={res}
@@ -104,7 +104,7 @@ export default function SalesIdTableSection() {
                                                         data={res}
                                                     />
                                                 </>
-                                            )}
+                                            {/* )} */}
                                         </td>
                                     </tr>
                                 ))}

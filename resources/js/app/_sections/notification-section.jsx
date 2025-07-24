@@ -59,7 +59,7 @@ export default function NotificationSection() {
                         {
                             over_dues?.notification?.filter((res) => {
                                 // For Inventory and Cashier users, only count stock-related notifications
-                                if (user?.user_type === "Inventory" || user?.user_type === "Cashier") {
+                                if (user?.user_type === "Inventory" || user?.user_type === "Encoder" || user?.user_type === "Shopee") {
                                     return (res.status === "low_stock" || res.status === "out_stocks") && res.is_read === "false";
                                 }
                                 // For other users, count all notifications
@@ -80,8 +80,7 @@ export default function NotificationSection() {
                             </div>
                         )}
 
-                        {/* Cart notifications - only show for users who are not Inventory or Cashier */}
-                        {user?.user_type !== "Inventory" && user?.user_type !== "Cashier" &&
+                        {user?.user_type !== "Inventory" && user?.user_type !== "Encoder" && user?.user_type !== "Shopee" &&
                             over_dues?.notification?.length != 0 &&
                             over_dues?.notification
                                 ?.filter((res) => res.type == "cart")

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ProductsSection from "./products-section";
 import { useDispatch, useSelector } from "react-redux";
 import { setCarts } from "@/app/redux/product-slice";
@@ -13,10 +13,17 @@ export default function PosSection() {
     const dispatch = useDispatch();
     const [overallDiscount, setOverallDiscount] = useState(null);
     const [store, setStore] = useState("Store");
+    const { user } = useSelector((store) => store.app);
+
+    useEffect(() => {
+        if (user?.user_type === "Shopee") {
+            setStore("Shopee");
+        }
+    }, [user]);
 
     const handleStoreChange = (newStore) => {
         setStore(newStore);
-        
+
         // Reset prices when switching to Shopee if no shopee price exists
         if (newStore === "Shopee") {
             const updatedCarts = carts.map((item) => ({
@@ -169,13 +176,14 @@ export default function PosSection() {
                                 <div className="w-full">
                                     <select
                                         value={store}
-                                        onChange={(e) =>
-                                            handleStoreChange(e.target.value)
-                                        }
+                                        onChange={(e) => handleStoreChange(e.target.value)}
                                         className="w-full rounded-md"
                                         name=""
+                                        disabled={user?.user_type === "Shopee"} // Optional: disable dropdown for Shopee users
                                     >
-                                        <option value="Store">Store</option>
+                                        {user?.user_type !== "Shopee" && (
+                                            <option value="Store">Store</option>
+                                        )}
                                         <option value="Shopee">Shopee</option>
                                     </select>
                                 </div>
@@ -243,7 +251,7 @@ export default function PosSection() {
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     {/* Price Section */}
                                                     <div className="font-bold text-xs md:text-sm">
                                                         {store == "Shopee" && (
@@ -434,7 +442,7 @@ export default function PosSection() {
                                                             </button>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     {/* Discount Input */}
                                                     <div className="w-full">
                                                         <input

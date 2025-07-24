@@ -190,6 +190,7 @@ export default function AddUserSection({ open, setOpenUser }) {
                                                 <option value="Inventory">Inventory</option>
                                                 <option value="Shopee">Shopee</option>
                                                 <option value="Cashier">Cashier</option>
+                                                <option value="Encoder">Encoder</option>
                                             </select>
                                         </div>
 
