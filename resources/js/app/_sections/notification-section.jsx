@@ -46,6 +46,20 @@ export default function NotificationSection() {
         over_dues?.notification?.filter((res) => res.type == "cart")
     );
 
+    const filteredNotifications = over_dues?.notification?.filter((res) => {
+        if (
+            user?.user_type === "Inventory" ||
+            user?.user_type === "Encoder" ||
+            user?.user_type === "Shopee"
+        ) {
+            return (
+                (res.status === "low_stock" || res.status === "out_stocks") &&
+                res.is_read === "false"
+            );
+        }
+        return res.is_read === "false";
+    }) || [];
+
     return (
         <div className="relative" ref={dropdownRef}>
             <button
@@ -54,18 +68,9 @@ export default function NotificationSection() {
                 aria-label="View notifications"
                 onClick={() => setOpen((prev) => !prev)}
             >
-                {over_dues?.notification?.length > 0 && (
+                {filteredNotifications.length > 0 && (
                     <span className="absolute -top-1 -right-1 inline-flex items-center justify-center h-4 w-4 rounded-full bg-red-500 text-white text-xs font-semibold">
-                        {
-                            over_dues?.notification?.filter((res) => {
-                                // For Inventory and Cashier users, only count stock-related notifications
-                                if (user?.user_type === "Inventory" || user?.user_type === "Encoder" || user?.user_type === "Shopee") {
-                                    return (res.status === "low_stock" || res.status === "out_stocks") && res.is_read === "false";
-                                }
-                                // For other users, count all notifications
-                                return res.is_read === "false";
-                            })?.length
-                        }
+                        {filteredNotifications.length}
                     </span>
                 )}
                 <BellIcon aria-hidden="true" className="size-6" />
@@ -73,123 +78,93 @@ export default function NotificationSection() {
 
             {open && (
                 <div className="absolute right-0 z-10 mt-2 w-64 rounded-lg bg-pink-100 shadow-lg ring-1 ring-gray-200">
-                    <div className=" text-sm flex flex-col items-start justify-start max-h-60 overflow-y-auto">
-                        {over_dues?.notification?.length == 0 && (
+                    <div className="text-sm flex flex-col items-start justify-start max-h-60 overflow-y-auto">
+                        {(!over_dues?.notification || over_dues?.notification.length === 0) && (
                             <div className="px-4 py-2 text-center text-gray-500">
-                                No notification?.
+                                No notification.
                             </div>
                         )}
 
-                        {user?.user_type !== "Inventory" && user?.user_type !== "Encoder" && user?.user_type !== "Shopee" &&
-                            over_dues?.notification?.length != 0 &&
-                            over_dues?.notification
-                                ?.filter((res) => res.type == "cart")
-                                ?.map((item, index) => {
-                                    const today = new Date()
-                                        .toISOString()
-                                        .split("T")[0];
-                                    const dueDate =
-                                        item?.cart?.due_date?.split(" ")[0]; // Extract date part if datetime
-                                    const isToday = dueDate === today;
+                        {over_dues?.notification
+                            ?.filter((item) => {
+                                // Filter notifications based on user type
+                                if (
+                                    user?.user_type === "Inventory" ||
+                                    user?.user_type === "Encoder" ||
+                                    user?.user_type === "Shopee"
+                                ) {
+                                    return item.status === "low_stock" || item.status === "out_stocks";
+                                }
+                                return (
+                                    item.type === "cart" ||
+                                    item.status === "low_stock" ||
+                                    item.status === "out_stocks"
+                                );
+                            })
+                            ?.map((item, index) => {
+                                const isRead = item?.is_read === "true";
+                                const today = new Date().toISOString().split("T")[0];
+                                const dueDate = item?.cart?.due_date?.split(" ")[0];
+                                const isToday = dueDate === today;
+                                console.log('itemitemitem', item)
 
-                                    return (
-                                        <div
-                                            key={index}
-                                            className={`${item?.is_read == "true"
-                                                ? "bg-gray-200 w-full"
-                                                : ""
-                                                } px-4 py-2 underline `}
-                                        >
-                                            <button
-                                                onClick={() =>
-                                                    route_page(
-                                                        item,
-                                                        `/administrator/credits?search=${item?.cart?.cart_id}`
-                                                    )
-                                                }
-                                                className="flex  text-left  w-full"
-                                            >
-                                                <CalendarDateRangeIcon className="h-6 mr-1" />
-                                                <span>
-                                                    <b>
-                                                        {
-                                                            item?.cart?.customer
-                                                                ?.name
-                                                        }
-                                                    </b>{" "}
-                                                    has{" "}
-                                                    {isToday
-                                                        ? "due today"
-                                                        : "over due payment"}{" "}
-                                                    .
-                                                </span>
-                                            </button>
-                                        </div>
+                                let content = null;
+                                let icon = null;
+                                let onClickUrl = "#";
+
+                                if (item.type === "cart") {
+                                    icon = <CalendarDateRangeIcon className="h-6 mr-1" />;
+                                    content = (
+                                        <span>
+                                            <b>{item?.cart?.customer?.name}</b>{" "}
+                                            has {isToday ? "due today" : "over due payment"}.
+                                        </span>
                                     );
-                                })}
+                                    onClickUrl = `/administrator/credits?search=${item?.cart?.cart_id}`;
+                                } else if (item.status === "low_stock") {
+                                    icon = <ExclamationCircleIcon className="h-6 mr-1" />;
+                                    content = (
+                                        <span>
+                                            <b>{item?.product?.name}</b> has low stocks.
+                                        </span>
+                                    );
+                                    onClickUrl = `/administrator/stocks?search=${item?.product?.name}`;
+                                } else if (item.status === "out_stocks") {
+                                    icon = <NoSymbolIcon className="h-6 mr-1" />;
+                                    content = (
+                                        <span>
+                                            <b>{item?.product?.name}</b> is out of stocks.
+                                        </span>
+                                    );
+                                    onClickUrl = `/administrator/stocks?search=${item?.product?.name}`;
+                                }
+                                let color = ''
+                                if (isRead && item.status == "over_due" && (item.cart.status == 'Pending' || item.cart.status == 'Partial')) {
+                                    color = 'bg-gray-200'
+                                } else if (isRead && item.status == "over_due" && item.cart.status == 'Paid') {
+                                    color = 'bg-white'
+                                } else if (!isRead) {
+                                    color = 'bg-pink-200'
+                                } else {
+                                    color = 'bg-white'
+                                }
 
-                        {/* Low stock notifications - show for all users */}
-                        {over_dues?.notification?.length != 0 &&
-                            over_dues?.notification
-                                ?.filter((res) => res.status == "low_stock")
-                                ?.map((item, index) => (
-                                    <div
-                                        key={index}
-                                        className={`${item?.is_read == "true"
-                                            ? "bg-white w-full"
-                                            : ""
-                                            } px-4 py-2 underline `}
-                                    >
+                                return (
+                                    <div key={index} className={` w-full  underline`}>
                                         <button
-                                            onClick={() =>
-                                                route_page(
-                                                    item,
-                                                    `/administrator/stocks?search=${item?.product?.id}`
-                                                )
-                                            }
-                                            className="flex text-left"
+                                            onClick={() => route_page(item, onClickUrl)}
+                                            className={`flex text-left  w-full py-2 px-1 border-b ${color}`}
                                         >
-                                            <ExclamationCircleIcon className="h-6 mr-1" />
-                                            <span>
-                                                <b>{item?.product?.name}</b> has
-                                                low stocks.
-                                            </span>
+                                            {icon}
+                                            {content}
                                         </button>
                                     </div>
-                                ))}
-
-                        {/* Out of stock notifications - show for all users */}
-                        {over_dues?.notification?.length != 0 &&
-                            over_dues?.notification
-                                ?.filter((res) => res.status == "out_stocks")
-                                ?.map((item, index) => (
-                                    <div
-                                        key={index}
-                                        className={`${item?.is_read == "true"
-                                            ? "bg-white w-full"
-                                            : ""
-                                            } px-4 py-2 underline `}
-                                    >
-                                        <button
-                                            onClick={() =>
-                                                route_page(
-                                                    item,
-                                                    `/administrator/stocks?search=${item?.product?.id}`
-                                                )
-                                            }
-                                            className="flex text-left"
-                                        >
-                                            <NoSymbolIcon className="h-6 mr-1" />
-                                            <span>
-                                                <b>{item?.product?.name}</b> is
-                                                out stocks.
-                                            </span>
-                                        </button>
-                                    </div>
-                                ))}
+                                );
+                            })}
                     </div>
                 </div>
             )}
+
         </div>
     );
 }

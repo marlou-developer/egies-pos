@@ -30,9 +30,9 @@ class ProductController extends Controller
                 $query->where('quantity', '<', 0);
             } else {
                 $query->where(function ($q) use ($request) {
-                    $q->where('id', $request->search)
+                        $q->where('name', '=', $request->search)
+                    // ->orWhere('id', $request->search)
                         ->orWhere('id', 'like', '%' . $request->search . '%')
-                        ->orWhere('name', 'like', '%' . $request->search . '%')
                         ->orWhere('brand', 'like', '%' . $request->search . '%')
                         ->orWhere('quantity', 'like', '%' . $request->search . '%')
                         ->orWhere('delivery_receipt_no', 'like', '%' . $request->search . '%')
@@ -283,7 +283,7 @@ class ProductController extends Controller
     public function searchByCode(Request $request)
     {
         $code = $request->query('code');
-        
+
         if (!$code) {
             return response()->json([
                 'data' => [],
@@ -295,7 +295,7 @@ class ProductController extends Controller
             ->notSoftDeleted()
             ->where(function ($q) use ($code) {
                 $q->where('id', $code)
-                  ->orWhere('id', 'like', $code . '%');
+                    ->orWhere('id', 'like', $code . '%');
             })
             ->orderBy('id', 'asc')
             ->limit(10); // Limit results for performance

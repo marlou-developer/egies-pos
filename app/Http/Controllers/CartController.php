@@ -938,7 +938,7 @@ class CartController extends Controller
                     'status' => "over_due",
                     'date' => $value->updated_at,
                     'is_read' => "false",
-                ]);
+                ])->with(['cart']);
             }
         }
         // 
@@ -996,7 +996,8 @@ class CartController extends Controller
 
         $total_expenses = Expense::selectRaw('SUM(cost * qty) as total')
             ->value('total');
-        $notification = Notification::with(['cart', 'product'])->get();
+        $notification = Notification::with(['cart', 'product'])->orderBy('id', 'desc')
+            ->limit(100)->get();
         return response()->json([
             'notification' => $notification, //
             'over_due' => $over_due, //
