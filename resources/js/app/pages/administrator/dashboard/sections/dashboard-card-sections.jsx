@@ -18,7 +18,7 @@ export default function DashboardCardSections({
                     </span>
                     <div class="space-y-6 flex flex-col items-start justify-between pt-5 text-base leading-7 text-gray-800 transition-all duration-300 group-hover:text-white/90">
                         <p>{title}:</p>
-                        <div className="text-3xl">{count ?? 0}</div>
+                        <div className="text-xl sm:text-2xl md:text-3xl font-semibold whitespace-nowrap">{count ?? 0}</div>
                     </div>
                     <div class="pt-5 text-base font-semibold leading-7">
                         {/* <p>
