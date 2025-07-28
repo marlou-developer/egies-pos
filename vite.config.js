@@ -13,10 +13,10 @@ export default defineConfig({
         }),
         react(),
     ],
-    server: {
-        host: '127.0.0.1',
-        // host: '192.168.123.34', // Your local IP
-        port: 8000,
-        cors: true, // ✅ Add this
-    },
+    // server: {
+    //     // host: '127.0.0.1',
+    //     host: '192.168.1.48', // Your local IP
+    //     port: 8080,
+    //     cors: true, // ✅ Add this
+    // },
 });

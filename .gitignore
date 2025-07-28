@@ -4,6 +4,7 @@
 /public/storage
 /storage/*.key
 /storage/pail
+vite.config.js
 .env
 .env.backup
 .env.production

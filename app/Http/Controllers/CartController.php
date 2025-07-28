@@ -285,6 +285,11 @@ class CartController extends Controller
                 ->when(!empty($request->user) && $request->user !== 'all', function ($query) use ($request) {
                     return $query->where('carts.user_id', $request->user);
                 })
+                ->when(!empty($request->product) && $request->product !== 'all', function ($query) use ($request) {
+                    return $query->whereHas('cart_items', function ($q) use ($request) {
+                        $q->where('product_id', $request->product);
+                    });
+                })
                 ->get()
                 ->values();
 

@@ -210,12 +210,11 @@ const InvoiceReportSection = () => {
                                 sum + Number(item.fixed_price) * item.quantity,
                             0
                         );
-                        console.log("itttttss", item?.customer?.name);
                         return (
                             <View style={styles.tableRow} key={idx}>
                                 <Text style={styles.colSmall}>{idx + 1}</Text>
                                 <Text style={styles.colSmall}>
-                                    {moment(item?.date).format("LL")}
+                                    {moment(item?.created_at).format("LL")}
                                 </Text>
                                 <Text style={styles.colSmall}>
                                     {item.cart_id}
