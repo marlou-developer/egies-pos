@@ -33,6 +33,7 @@ class ProductController extends Controller
                         $q->where('name', '=', $request->search)
                     // ->orWhere('id', $request->search)
                         ->orWhere('id', 'like', '%' . $request->search . '%')
+                        ->orWhere('name', 'like', '%' . $request->search . '%')
                         ->orWhere('brand', 'like', '%' . $request->search . '%')
                         ->orWhere('quantity', 'like', '%' . $request->search . '%')
                         ->orWhere('delivery_receipt_no', 'like', '%' . $request->search . '%')
