@@ -275,7 +275,11 @@ class CartController extends Controller
                 'product' => $product
             ], 200);
         } else if ($request->type == "Invoices") {
-            $Invoice = Cart::with(['customer', 'cart_items'])
+            $Invoice = Cart::with(['customer',    'cart_items' => function ($q) use ($request) {
+                if (!empty($request->product) && $request->product !== 'all') {
+                    $q->where('product_id', $request->product);
+                }
+            }])
                 ->whereBetween('created_at', [$start, $end])
                 ->when(!empty($request->customer) && $request->customer !== 'all', function ($query) use ($request) {
                     return $request->customer == '1'
@@ -285,6 +289,7 @@ class CartController extends Controller
                 ->when(!empty($request->user) && $request->user !== 'all', function ($query) use ($request) {
                     return $query->where('carts.user_id', $request->user);
                 })
+
                 ->when(!empty($request->product) && $request->product !== 'all', function ($query) use ($request) {
                     return $query->whereHas('cart_items', function ($q) use ($request) {
                         $q->where('product_id', $request->product);
