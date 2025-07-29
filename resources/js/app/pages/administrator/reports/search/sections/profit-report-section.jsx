@@ -118,6 +118,11 @@ const ProfitReportSection = () => {
         (sum, item) => sum + Number(item.profit),
         0
     );
+    // Sort data by product name
+    const sortedStore = (reports?.data?.store || []).slice().sort((a, b) => (a?.product || '').localeCompare(b?.product || ''));
+    const sortedShopee = (reports?.data?.shopee || []).slice().sort((a, b) => (a?.product || '').localeCompare(b?.product || ''));
+    const sortedCredit = (reports?.data?.credit || []).slice().sort((a, b) => (a?.product || '').localeCompare(b?.product || ''));
+
     return (
         <PDFViewer style={{ width: "100%", height: "100vh" }}>
             <Document>
@@ -224,7 +229,7 @@ const ProfitReportSection = () => {
                     </View>
 
                     {/* Table Rows */}
-                    {reports?.data?.store?.map((item, idx) => (
+                    {sortedStore.map((item, idx) => (
                         <View style={styles.tableRow} key={idx}>
                             <Text style={styles.colSmall}>{item.code}</Text>
                             <Text style={styles.col}>{item?.product}</Text>
@@ -274,7 +279,7 @@ const ProfitReportSection = () => {
                     </View>
 
                     {/* Table Rows */}
-                    {reports?.data?.shopee?.map((item, idx) => (
+                    {sortedShopee.map((item, idx) => (
                         <View style={styles.tableRow} key={idx}>
                             <Text style={styles.colSmall}>{item.code}</Text>
                             <Text style={styles.col}>{item?.product}</Text>
@@ -325,7 +330,7 @@ const ProfitReportSection = () => {
                     </View>
 
                     {/* Table Rows */}
-                    {reports?.data?.credit?.map((item, idx) => (
+                    {sortedCredit.map((item, idx) => (
                         <View style={styles.tableRow} key={idx}>
                             <Text style={styles.colSmall}>{item.code}</Text>
                             <Text style={styles.col}>{item?.product}</Text>
