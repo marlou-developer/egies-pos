@@ -10,7 +10,7 @@ export default function ProductsSection({ storeName }) {
 
     const activeProducts = categories.find(
         (category) => category.name === activeCategory
-    )?.products;
+    )?.products?.filter((product) => product.is_soft_deleted !== "1");
 
     useEffect(() => {
         if (categories.length > 0) {
@@ -24,9 +24,11 @@ export default function ProductsSection({ storeName }) {
         }))
     );
 
-    const filteredProducts = mergedProducts.filter((product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredProducts = mergedProducts
+        .filter((product) => product.is_soft_deleted !== "1")
+        .filter((product) =>
+            product.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
     console.log("waaaaa", filteredProducts);
     return (
         <div className="w-full flex-col">
