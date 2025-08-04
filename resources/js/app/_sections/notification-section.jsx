@@ -15,6 +15,7 @@ export default function NotificationSection() {
     const { over_dues } = useSelector((store) => store.carts);
     const { user } = useSelector((store) => store.app);
     const [open, setOpen] = useState(false);
+    const [isMarkingAsRead, setIsMarkingAsRead] = useState(false);
     const dropdownRef = useRef(null);
 
     // Close dropdown when clicking outside
@@ -39,6 +40,41 @@ export default function NotificationSection() {
         });
         await store.dispatch(get_over_due_thunk());
         router.visit(routing);
+    }
+
+    async function markAllAsRead() {
+        setIsMarkingAsRead(true);
+        try {
+            // Get all unread notifications
+            const unreadNotifications = over_dues?.notification?.filter((res) => {
+                if (
+                    user?.user_type === "Inventory" ||
+                    user?.user_type === "Encoder" ||
+                    user?.user_type === "Shopee"
+                ) {
+                    return (
+                        (res.status === "low_stock" || res.status === "out_stocks") &&
+                        res.is_read === "false"
+                    );
+                }
+                return res.is_read === "false";
+            }) || [];
+
+            // Mark all unread notifications as read
+            for (const notification of unreadNotifications) {
+                await update_is_read_service({
+                    id: notification.id,
+                });
+            }
+            
+            // Refresh the notifications
+            await store.dispatch(get_over_due_thunk());
+            setOpen(false);
+        } catch (error) {
+            console.error('Error marking notifications as read:', error);
+        } finally {
+            setIsMarkingAsRead(false);
+        }
     }
 
     console.log(
@@ -79,6 +115,26 @@ export default function NotificationSection() {
             {open && (
                 <div className="absolute right-0 z-10 mt-2 w-64 rounded-lg bg-pink-100 shadow-lg ring-1 ring-gray-200">
                     <div className="text-sm flex flex-col items-start justify-start max-h-60 overflow-y-auto">
+                        {/* Header with Mark All as Read button */}
+                        {filteredNotifications.length > 0 && (
+                            <div className="w-full px-4 py-2 border-b border-gray-300 bg-pink-50 flex justify-between items-center">
+                                <span className="font-semibold text-gray-700">Notifications</span>
+                                <button
+                                    onClick={markAllAsRead}
+                                    disabled={isMarkingAsRead}
+                                    className="text-xs text-blue-600 hover:text-blue-800 underline disabled:text-gray-400 disabled:no-underline disabled:cursor-not-allowed flex items-center gap-1"
+                                >
+                                    {isMarkingAsRead && (
+                                        <svg className="animate-spin h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                                        </svg>
+                                    )}
+                                    {isMarkingAsRead ? 'Marking...' : 'Mark all as read'}
+                                </button>
+                            </div>
+                        )}
+
                         {(!over_dues?.notification || over_dues?.notification.length === 0) && (
                             <div className="px-4 py-2 text-center text-gray-500">
                                 No notification.
