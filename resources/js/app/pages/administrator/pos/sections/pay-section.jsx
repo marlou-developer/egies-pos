@@ -245,6 +245,52 @@ export default function PaySection({
                 title="PAYMENT METHOD"
             >
                 <div className="flex flex-col gap-3">
+                    {/* Cart Items Display */}
+                    {data && data.length > 0 && (
+                        <div className="p-4 bg-gray-50 border border-gray-300 rounded-md">
+                            <div className="font-black text-gray-800 mb-3">
+                                Cart Items ({data.length} {data.length === 1 ? 'item' : 'items'})
+                            </div>
+                            <div className="max-h-40 overflow-y-auto">
+                                <div className="flex flex-col gap-2">
+                                    {data.map((item, i) => {
+                                        const price = Number(item.sub_price) || 0;
+                                        const quantity = Number(item.pcs) || 0;
+                                        const discount = Number(item.discount) || 0;
+                                        const totalPrice = quantity * price;
+                                        const totalDiscount = quantity * discount;
+
+                                        return (
+                                            <div
+                                                className="flex items-center justify-between bg-white p-2 rounded border"
+                                                key={i}
+                                            >
+                                                <div className="flex-1">
+                                                    <div className="font-medium text-sm">
+                                                        {item.name || 'Unknown Product'}
+                                                    </div>
+                                                    <div className="text-xs text-gray-500">
+                                                        Qty: {quantity} × ₱{price.toFixed(2)}
+                                                    </div>
+                                                </div>
+                                                <div className="text-right">
+                                                    <div className="font-bold text-sm">
+                                                        ₱{totalPrice.toFixed(2)}
+                                                    </div>
+                                                    {discount > 0 && (
+                                                        <div className="text-xs text-red-500">
+                                                            -₱{totalDiscount.toFixed(2)}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {list_of_available_discount &&
                         list_of_available_discount?.length != 0 && (
                             <div className="p-4 bg-white border border-pink-500 rounded-md">
@@ -318,8 +364,8 @@ export default function PaySection({
                                     {isNaN(parseFloat(discount_per_order))
                                         ? "0.00"
                                         : parseFloat(
-                                              discount_per_order
-                                          ).toFixed(2)}
+                                            discount_per_order
+                                        ).toFixed(2)}
                                 </span>
                             </div>
 
@@ -389,14 +435,18 @@ export default function PaySection({
                                         name="is_customer"
                                         type="checkbox"
                                         checked={form.is_customer}
-                                        onChange={(e) =>
+                                        onChange={(e) => {
                                             setForm({
                                                 ...form,
                                                 customer: null,
                                                 [e.target.name]:
                                                     e.target.checked,
-                                            })
-                                        }
+                                            });
+                                            // Reset customer search results when unchecking
+                                            if (!e.target.checked) {
+                                                setCustomer(null);
+                                            }
+                                        }}
                                         className="h-5 w-5 rounded border-pink-500 text-pink-600 focus:ring-pink-500 checked:bg-pink-600 checked:hover:bg-pink-600"
                                     />
                                     <span>Is Regular Customer?</span>
@@ -441,64 +491,66 @@ export default function PaySection({
                                     </div>
                                 )}
                                 {form?.is_customer && customer?.length != 0 && (
-                                    <table className="min-w-full divide-y divide-gray-300">
-                                        <tbody className="divide-y divide-gray-200">
-                                            {customer?.map((customer, i) => (
-                                                <tr key={i}>
-                                                    <td className="capitalize pr-3 py-2 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">
-                                                        {customer.name}
-                                                    </td>
-                                                    <td className="relative pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
-                                                        {form?.customer?.id ==
-                                                            customer.id && (
-                                                            <div className="flex items-end justify-end gap-6 w-full">
-                                                                <button className="flex gap-1">
-                                                                    <CheckIcon className="h-4 w-4 text-green-500" />
-                                                                    <div className=" text-green-500">
-                                                                        SELECTED
-                                                                    </div>{" "}
-                                                                </button>
-                                                                <button
-                                                                    onClick={() =>
-                                                                        setForm(
-                                                                            {
-                                                                                ...form,
-                                                                                customer:
-                                                                                    null,
-                                                                            }
-                                                                        )
-                                                                    }
-                                                                    className="text-pink-600 hover:text-pink-900"
-                                                                >
-                                                                    REMOVE
-                                                                </button>
-                                                            </div>
-                                                        )}
+                                    <div className="max-h-40 overflow-y-auto px-2 border border-gray-200 rounded-md">
+                                        <table className="min-w-full divide-y divide-gray-300">
+                                            <tbody className="divide-y divide-gray-200">
+                                                {customer?.map((customer, i) => (
+                                                    <tr key={i}>
+                                                        <td className="capitalize pr-3 py-2 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">
+                                                            {customer.name}
+                                                        </td>
+                                                        <td className="relative pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
+                                                            {form?.customer?.id ==
+                                                                customer.id && (
+                                                                <div className="flex items-end justify-end gap-6 w-full">
+                                                                    <button className="flex gap-1">
+                                                                        <CheckIcon className="h-4 w-4 text-green-500" />
+                                                                        <div className=" text-green-500">
+                                                                            SELECTED
+                                                                        </div>{" "}
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={() =>
+                                                                            setForm(
+                                                                                {
+                                                                                    ...form,
+                                                                                    customer:
+                                                                                        null,
+                                                                                }
+                                                                            )
+                                                                        }
+                                                                        className="text-pink-600 hover:text-pink-900"
+                                                                    >
+                                                                        REMOVE
+                                                                    </button>
+                                                                </div>
+                                                            )}
 
-                                                        {form?.customer?.id !=
-                                                            customer.id && (
-                                                            <>
-                                                                <button
-                                                                    onClick={() =>
-                                                                        setForm(
-                                                                            {
-                                                                                ...form,
-                                                                                customer:
-                                                                                    customer,
-                                                                            }
-                                                                        )
-                                                                    }
-                                                                    className="text-pink-600 hover:text-pink-900"
-                                                                >
-                                                                    SELECT
-                                                                </button>
-                                                            </>
-                                                        )}
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
+                                                            {form?.customer?.id !=
+                                                                customer.id && (
+                                                                <>
+                                                                    <button
+                                                                        onClick={() =>
+                                                                            setForm(
+                                                                                {
+                                                                                    ...form,
+                                                                                    customer:
+                                                                                        customer,
+                                                                                }
+                                                                            )
+                                                                        }
+                                                                        className="text-pink-600 hover:text-pink-900"
+                                                                    >
+                                                                        SELECT
+                                                                    </button>
+                                                                </>
+                                                            )}
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 )}
                                 {form?.is_credit &&
                                     form?.is_customer &&
