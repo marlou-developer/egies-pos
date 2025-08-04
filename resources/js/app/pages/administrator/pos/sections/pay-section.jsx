@@ -245,11 +245,11 @@ export default function PaySection({
                 title="PAYMENT METHOD"
             >
                 <div className="flex flex-col gap-3">
-                    {/* Cart Items Display */}
+                    {/* Cart Products Display */}
                     {data && data.length > 0 && (
                         <div className="p-4 bg-gray-50 border border-gray-300 rounded-md">
                             <div className="font-black text-gray-800 mb-3">
-                                Cart Items ({data.length} {data.length === 1 ? 'item' : 'items'})
+                                Cart Products ({data.length} {data.length === 1 ? 'Product' : 'Products'})
                             </div>
                             <div className="max-h-40 overflow-y-auto">
                                 <div className="flex flex-col gap-2">
