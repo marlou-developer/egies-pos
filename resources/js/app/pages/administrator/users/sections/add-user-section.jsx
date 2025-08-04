@@ -143,6 +143,7 @@ export default function AddUserSection({ open, setOpenUser }) {
                                                 name="title"
                                                 label="Position"
                                                 type="text"
+                                                required={true}
                                             />
                                         </div>
                                         <div>

@@ -61,12 +61,10 @@ export default function NotificationSection() {
             }) || [];
 
             // Mark all unread notifications as read
-            for (const notification of unreadNotifications) {
-                await update_is_read_service({
-                    id: notification.id,
-                });
-            }
-            
+            await update_is_read_service({
+                notifications: unreadNotifications,
+            });
+
             // Refresh the notifications
             await store.dispatch(get_over_due_thunk());
             setOpen(false);

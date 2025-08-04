@@ -40,16 +40,25 @@ class CartController extends Controller
 
     public function update_is_read(Request $request)
     {
-        $notif = Notification::where('id', $request->id)->first();
-        if ($notif) {
-            $notif->update([
-                'is_read' => 'true'
-            ]);
+        $user = Auth::user();
+
+        foreach ($request->notifications as $value) {
+            $notif = Notification::where('id', $value['id'])
+                ->where('user_id', $user->id)
+                ->first();
+
+            if ($notif) {
+                $notif->update([
+                    'is_read' => 'true'
+                ]);
+            }
         }
+
         return response()->json([
             'result' => 'success'
         ], 200);
     }
+
     public function return_per_item(Request $request)
     {
 
@@ -897,60 +906,71 @@ class CartController extends Controller
         })
             ->sum(DB::raw('total'));
 
-        foreach ($out_stocks as $key => $value) {
-            $notif = Notification::where([
-                ['cp_id', '=', $value->id],
-                ['type', '=', 'product'],
-                ['status', '=', 'out_stocks'],
-                ['date', '=', $value->updated_at],
-            ])->first();
-            if (!$notif) {
-                Notification::create([
-                    'cp_id' => $value->id,
-                    'type' => "product",
-                    'status' => "out_stocks",
-                    'date' => $value->updated_at,
-                    'is_read' => "false",
-                ]);
+        $users = User::all();
+
+        foreach ($users as $key => $user) {
+            foreach ($out_stocks as $key => $value) {
+                $notif = Notification::where([
+                    ['user_id', '=', $user->id],
+                    ['cp_id', '=', $value->id],
+                    ['type', '=', 'product'],
+                    ['status', '=', 'out_stocks'],
+                    ['date', '=', $value->updated_at],
+                ])->first();
+                if (!$notif) {
+                    Notification::create([
+                        'user_id' => $user->id,
+                        'cp_id' => $value->id,
+                        'type' => "product",
+                        'status' => "out_stocks",
+                        'date' => $value->updated_at,
+                        'is_read' => "false",
+                    ]);
+                }
+            }
+
+            foreach ($stocks as $key => $value) {
+                $notif = Notification::where([
+                    ['user_id', '=', $user->id],
+                    ['cp_id', '=', $value->id],
+                    ['type', '=', 'product'],
+                    ['status', '=', 'low_stock'],
+                    ['date', '=', $value->updated_at],
+                ])->first();
+
+                if (!$notif) {
+                    Notification::create([
+                        'user_id' => $user->id,
+                        'cp_id' => $value->id,
+                        'type' => "product",
+                        'status' => "low_stock",
+                        'date' => $value->updated_at,
+                        'is_read' => "false",
+                    ]);
+                }
+            }
+
+            foreach ($over_due as $key => $value) {
+                $notif = Notification::where([
+                    ['user_id', '=', $user->id],
+                    ['cp_id', '=', $value->id],
+                    ['type', '=', 'cart'],
+                    ['status', '=', 'over_due'],
+                    ['date', '=', $value->updated_at],
+                ])->first();
+                if (!$notif) {
+                    Notification::create([
+                        'user_id' => $user->id,
+                        'cp_id' => $value->id,
+                        'type' => "cart",
+                        'status' => "over_due",
+                        'date' => $value->updated_at,
+                        'is_read' => "false",
+                    ])->with(['cart']);
+                }
             }
         }
 
-        foreach ($stocks as $key => $value) {
-            $notif = Notification::where([
-                ['cp_id', '=', $value->id],
-                ['type', '=', 'product'],
-                ['status', '=', 'low_stock'],
-                ['date', '=', $value->updated_at],
-            ])->first();
-
-            if (!$notif) {
-                Notification::create([
-                    'cp_id' => $value->id,
-                    'type' => "product",
-                    'status' => "low_stock",
-                    'date' => $value->updated_at,
-                    'is_read' => "false",
-                ]);
-            }
-        }
-
-        foreach ($over_due as $key => $value) {
-            $notif = Notification::where([
-                ['cp_id', '=', $value->id],
-                ['type', '=', 'cart'],
-                ['status', '=', 'over_due'],
-                ['date', '=', $value->updated_at],
-            ])->first();
-            if (!$notif) {
-                Notification::create([
-                    'cp_id' => $value->id,
-                    'type' => "cart",
-                    'status' => "over_due",
-                    'date' => $value->updated_at,
-                    'is_read' => "false",
-                ])->with(['cart']);
-            }
-        }
         // 
         $current_profit = CartItem::whereHas('cart', function ($query) {
             $today = Carbon::today();
@@ -991,8 +1011,7 @@ class CartController extends Controller
         $out_of_stock = Product::where('quantity', 0)
             ->notSoftDeleted()
             ->count();
-
-
+        $userAuth = Auth::user();
         $total_overall_inventory_retail_price = Product::selectRaw('SUM(quantity * srp) as total')
             ->notSoftDeleted()
             ->value('total');
@@ -1006,7 +1025,7 @@ class CartController extends Controller
 
         $total_expenses = Expense::selectRaw('SUM(cost * qty) as total')
             ->value('total');
-        $notification = Notification::with(['cart', 'product'])->orderBy('id', 'desc')
+        $notification = Notification::where('user_id', $userAuth->id)->with(['cart', 'product'])->orderBy('id', 'desc')
             ->limit(100)->get();
         return response()->json([
             'notification' => $notification, //
