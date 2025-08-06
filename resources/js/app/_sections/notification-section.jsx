@@ -35,18 +35,30 @@ export default function NotificationSection() {
     }, []);
 
     async function route_page(item, routing) {
-        await update_is_read_service({
-            id: item.id,
-        });
-        await store.dispatch(get_over_due_thunk());
-        router.visit(routing);
+        try {
+            // Send notification in the same format as markAllAsRead
+            await update_is_read_service({
+                notifications: [item],
+            });
+            await store.dispatch(get_over_due_thunk());
+            router.visit(routing);
+        } catch (error) {
+            console.error('Error marking notification as read:', error);
+            // Still navigate even if marking as read fails
+            router.visit(routing);
+        }
     }
 
     async function markAllAsRead() {
         setIsMarkingAsRead(true);
         try {
-            // Get all unread notifications
+            // Get all unread notifications for current user
             const unreadNotifications = over_dues?.notification?.filter((res) => {
+                // First check if notification belongs to current user
+                if (res.user_id && user?.id && res.user_id !== user.id) {
+                    return false;
+                }
+                
                 if (
                     user?.user_type === "Inventory" ||
                     user?.user_type === "Encoder" ||
@@ -75,12 +87,12 @@ export default function NotificationSection() {
         }
     }
 
-    console.log(
-        " over_dues?.notification",
-        over_dues?.notification?.filter((res) => res.type == "cart")
-    );
-
     const filteredNotifications = over_dues?.notification?.filter((res) => {
+        // First check if notification belongs to current user
+        if (res.user_id && user?.id && res.user_id !== user.id) {
+            return false;
+        }
+        
         if (
             user?.user_type === "Inventory" ||
             user?.user_type === "Encoder" ||
@@ -141,13 +153,20 @@ export default function NotificationSection() {
 
                         {over_dues?.notification
                             ?.filter((item) => {
-                                // Filter notifications based on user type
+                                // First check if notification belongs to current user
+                                if (item.user_id && user?.id && item.user_id !== user.id) {
+                                    return false;
+                                }
+                                
+                                // Filter notifications based on user type (show both read and unread)
                                 if (
                                     user?.user_type === "Inventory" ||
                                     user?.user_type === "Encoder" ||
                                     user?.user_type === "Shopee"
                                 ) {
-                                    return item.status === "low_stock" || item.status === "out_stocks";
+                                    return (
+                                        item.status === "low_stock" || item.status === "out_stocks"
+                                    );
                                 }
                                 return (
                                     item.type === "cart" ||
@@ -160,7 +179,6 @@ export default function NotificationSection() {
                                 const today = new Date().toISOString().split("T")[0];
                                 const dueDate = item?.cart?.due_date?.split(" ")[0];
                                 const isToday = dueDate === today;
-                                console.log('itemitemitem', item)
 
                                 let content = null;
                                 let icon = null;
@@ -193,14 +211,12 @@ export default function NotificationSection() {
                                     onClickUrl = `/administrator/stocks?search=${item?.product?.name}`;
                                 }
                                 let color = ''
-                                if (isRead && item.status == "over_due" && (item.cart.status == 'Pending' || item.cart.status == 'Partial')) {
-                                    color = 'bg-gray-200'
-                                } else if (isRead && item.status == "over_due" && item.cart.status == 'Paid') {
-                                    color = 'bg-white'
-                                } else if (!isRead) {
-                                    color = 'bg-pink-200'
+                                if (item.is_read === "false") {
+                                    color = 'bg-pink-200'  // Pink background for unread notifications
+                                } else if (item.type === "cart" && item?.cart?.status !== "Paid") {
+                                    color = 'bg-gray-200'  // Gray background for unpaid cart notifications
                                 } else {
-                                    color = 'bg-white'
+                                    color = 'bg-white'     // White background for read notifications
                                 }
 
                                 return (

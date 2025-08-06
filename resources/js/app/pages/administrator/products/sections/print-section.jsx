@@ -12,6 +12,7 @@ import {
 import Modal from "@/app/_components/modal";
 import moment from "moment";
 import { peso_value } from "@/app/lib/peso";
+import { PrinterIcon } from "@heroicons/react/24/outline";
 
 const styles = StyleSheet.create({
     page: {
@@ -82,9 +83,9 @@ export default function PrintSection() {
             {selectedProducts.length != 0 && (
                 <button
                     onClick={() => setIsOpen(true)}
-                    className="p-2 bg-pink-700 rounded-lg hover:bg-pink-600 text-white"
+                    className="p-2 flex bg-pink-700 rounded-lg hover:bg-pink-600 text-white"
                 >
-                    {selectedProducts.length} Print
+                    {selectedProducts.length} <PrinterIcon className="h-5 ml-2"/> Print
                 </button>
             )}
 

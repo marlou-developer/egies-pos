@@ -24,6 +24,7 @@ import PrintSection from "./print-section";
 import { setSelectAll, setSelectedProducts } from "@/app/redux/product-slice";
 import PaginationSection from "./pagination-section";
 import MobileCardProductComponent from "../components/mobile-card-product-component";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -176,63 +177,70 @@ export default function ProductsSection() {
         <div className="px-4 sm:px-6 lg:px-8">
             {/* Header Section */}
             <div className="sm:flex sm:items-center">
-                <div className="sm:flex-auto">
-                    <FaClipboardList className="float-left mr-1 mt-1 text-pink-500" />
+                <div className="sm:flex-auto flex justify-between">
                     <h1 className="text-base font-semibold text-pink-500">
+                        <FaClipboardList className="float-left mr-1 mt-1 text-pink-500" />
                         Products Section
                     </h1>
                 </div>
-                <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                    <div className="flex flex-wrap gap-2">
-                        <button
-                            type="button"
-                            onClick={() => setOpenProduct(true)}
-                            className="inline-flex items-center rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
-                        >
-                            <FaClipboardList className="mr-1 text-pink-500" />
-                            <span className="hidden sm:inline">ADD NEW PRODUCT</span>
-                            <span className="sm:hidden">ADD PRODUCT</span>
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setOpenCategory(true)}
-                            className="inline-flex items-center rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
-                        >
-                            <FaList className="mr-1 text-pink-500" />
-                            <span className="hidden sm:inline">ADD CATEGORY</span>
-                            <span className="sm:hidden">CATEGORY</span>
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setOpenFilter(true)}
-                            className="inline-flex items-center rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-50 focus:z-10"
-                        >
-                            <FaFilter className="mr-1 text-pink-500" />
-                            <span className="hidden sm:inline">FILTER PRODUCTS</span>
-                            <span className="sm:hidden">FILTER</span>
-                        </button>
-                    </div>
-                    <AddProductComponent
-                        open={openProduct}
-                        setOpenProduct={setOpenProduct}
-                    />
-                    <AddCategoryComponent
-                        open={openCategory}
-                        setOpenCategory={setOpenCategory}
-                    />
-                    <FilterProductsComponent
-                        open={openFilter}
-                        setOpenFilter={setOpenFilter}
-                    />
+                <div className="flex gap-3">
+                    <PrintSection />
+                    <button type="button" onClick={() => (router.visit('stocks/soft_deleted'))} className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-pink-500 hover:bg-pink-600 p-3 text-sm font-semibold text-white shadow-xs ring-1 ring-gray-300 ring-inset">
+                        View Removed Products<ArrowRightIcon className="h-5" />
+                    </button>
                 </div>
             </div>
             <div className="mt-4 flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                 <div className="flex-1 max-w-md">
                     <SearchSection />
                 </div>
-                <div className="flex-shrink-0">
-                    <PrintSection />
+                <div className="flex-shrink-0 flex items-center">
+                    <div className="mt-4 sm:mt-0 sm:ml-2 sm:flex-none">
+                        <div className="flex flex-wrap gap-2">
+                            <button
+                                type="button"
+                                onClick={() => setOpenProduct(true)}
+                                className="inline-flex items-center rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
+                            >
+                                <FaClipboardList className="mr-1 text-pink-500" />
+                                <span className="hidden sm:inline">ADD NEW PRODUCT</span>
+                                <span className="sm:hidden">ADD PRODUCT</span>
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setOpenCategory(true)}
+                                className="inline-flex items-center rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
+                            >
+                                <FaList className="mr-1 text-pink-500" />
+                                <span className="hidden sm:inline">ADD CATEGORY</span>
+                                <span className="sm:hidden">CATEGORY</span>
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setOpenFilter(true)}
+                                className="inline-flex items-center rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-50 focus:z-10"
+                            >
+                                <FaFilter className="mr-1 text-pink-500" />
+                                <span className="hidden sm:inline">FILTER PRODUCTS</span>
+                                <span className="sm:hidden">FILTER</span>
+                            </button>
+                        </div>
+                        <AddProductComponent
+                            open={openProduct}
+                            setOpenProduct={setOpenProduct}
+                        />
+                        <AddCategoryComponent
+                            open={openCategory}
+                            setOpenCategory={setOpenCategory}
+                        />
+                        <FilterProductsComponent
+                            open={openFilter}
+                            setOpenFilter={setOpenFilter}
+                        />
+                    </div>
+
                 </div>
+
             </div>
 
 

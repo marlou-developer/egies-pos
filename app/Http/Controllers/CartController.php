@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Collection;
 
 class CartController extends Controller
@@ -42,20 +43,46 @@ class CartController extends Controller
     {
         $user = Auth::user();
 
-        foreach ($request->notifications as $value) {
-            $notif = Notification::where('id', $value['id'])
-                ->where('user_id', $user->id)
-                ->first();
+        // Debug: Log the incoming request
+        Log::info('Update is_read request:', [
+            'user_id' => $user->id,
+            'notifications' => $request->all()
+        ]);
 
-            if ($notif) {
-                $notif->update([
-                    'is_read' => 'true'
-                ]);
+        // Check if notifications exist and handle both array and object cases
+        $notifications = $request->input('notifications', []);
+        
+        if (!empty($notifications)) {
+            foreach ($notifications as $value) {
+                // Handle both array and object notation
+                $notificationId = is_array($value) ? $value['id'] : $value->id;
+                
+                if ($notificationId) {
+                    $notif = Notification::where('id', $notificationId)
+                        ->where('user_id', $user->id)
+                        ->first();
+
+                    if ($notif) {
+                        $updated = $notif->update([
+                            'is_read' => 'true'
+                        ]);
+                        Log::info('Updated notification:', [
+                            'id' => $notificationId,
+                            'success' => $updated
+                        ]);
+                    } else {
+                        Log::warning('Notification not found:', [
+                            'id' => $notificationId,
+                            'user_id' => $user->id
+                        ]);
+                    }
+                }
             }
         }
 
         return response()->json([
-            'result' => 'success'
+            'result' => 'success',
+            'updated_count' => count($notifications)
         ], 200);
     }
 
