@@ -321,12 +321,12 @@ export default function ProductsSection() {
                                             >
                                                 Cost Per Unit
                                             </th>
-                                            <th
+                                            {/* <th
                                                 scope="col"
                                                 className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                             >
                                                 Shopee Price
-                                            </th>
+                                            </th> */}
                                             <th
                                                 scope="col"
                                                 className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
@@ -427,11 +427,11 @@ export default function ProductsSection() {
                                                             ? "₱None"
                                                             : `₱${Number(product.cost).toFixed(2)}`}
                                                     </td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
+                                                    {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
                                                         {(product.shopee == null || Number(product.shopee) === 0)
                                                             ? "₱None"
                                                             : `₱${Number(product.shopee).toFixed(2)}`}
-                                                    </td>
+                                                    </td> */}
                                                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
                                                         {(product.srp == null || Number(product.srp) === 0)
                                                             ? "₱None"

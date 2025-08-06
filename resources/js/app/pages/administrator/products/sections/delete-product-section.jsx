@@ -1,5 +1,6 @@
 
 import { delete_product_thunk, get_product_thunk } from "@/app/redux/product-thunk";
+import { soft_delete_thunk } from "@/app/redux/stock-thunk";
 import store from "@/app/store/store";
 import Modal from "@/Components/Modal";
 import { PencilSquareIcon, TrashIcon } from "@heroicons/react/20/solid";
@@ -16,7 +17,7 @@ export default function DeleteProductSection({ data }) {
         setLoading(true);
         try {
             await store.dispatch(
-                delete_product_thunk(data.id)
+                soft_delete_thunk(data.id)
             );
             store.dispatch(get_product_thunk())
             message.success("Deleted Successfully!");
