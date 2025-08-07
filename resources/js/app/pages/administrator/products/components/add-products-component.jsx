@@ -20,7 +20,7 @@ export default function AddProductComponent({ open, setOpenProduct }) {
     const [uploadedFile1, setUploadedFile1] = useState(null);
     const { product } = useSelector((state) => state.products);
     const { suppliers } = useSelector((state) => state.suppliers);
-    
+
     const dispatch = useDispatch();
 
     console.log("categories", product);
@@ -67,7 +67,7 @@ export default function AddProductComponent({ open, setOpenProduct }) {
         fd.append("city_distributor", product.city_distributor ?? "");
         fd.append("district_distributor", product.district_distributor ?? "");
         fd.append("supplier_id", product.supplier_id ?? "");
-        
+
         fd.append(
             "provincial_distributor",
             product.provincial_distributor ?? ""
@@ -210,12 +210,32 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={data_handler}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (/^\d*\.?\d*$/.test(value)) {
+                                                    data_handler(e);
+                                                }
+                                            }}
                                             value={product?.quantity ?? ""}
                                             name="quantity"
                                             label="Quantity"
-                                            type="number"
+                                            type="text"
                                         />
+                                        {/* <Input
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (/^\d*\.?\d*$/.test(value)) {
+                                                    setForm({
+                                                        ...form,
+                                                        quantity: value,
+                                                    });
+                                                }
+                                            }}
+                                            value={product?.quantity ?? ""}
+                                            name="quantity"
+                                            label="Quantity"
+                                            type="text"
+                                        /> */}
                                     </div>
                                     <div>
                                         <select
@@ -264,29 +284,44 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={data_handler}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (/^\d*\.?\d*$/.test(value)) {
+                                                    data_handler(e);
+                                                }
+                                            }}
                                             value={product?.cost ?? ""}
                                             name="cost"
                                             label="Cost Per Unit"
-                                            type="number"
+                                            type="text"
                                         />
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={data_handler}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (/^\d*\.?\d*$/.test(value)) {
+                                                    data_handler(e);
+                                                }
+                                            }}
                                             value={product?.srp ?? ""}
                                             name="srp"
                                             label="SRP Price"
-                                            type="number"
+                                            type="text"
                                         />
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={data_handler}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (/^\d*\.?\d*$/.test(value)) {
+                                                    data_handler(e);
+                                                }
+                                            }}
                                             value={product?.shopee ?? ""}
                                             name="shopee"
                                             label="Shopee Price (optional)"
-                                            type="number"
+                                            type="text"
                                         />
                                     </div>
                                     {/* <div>
@@ -300,39 +335,59 @@ export default function AddProductComponent({ open, setOpenProduct }) {
                                     </div> */}
                                     <div>
                                         <Input
-                                            onChange={data_handler}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (/^\d*\.?\d*$/.test(value)) {
+                                                    data_handler(e);
+                                                }
+                                            }}
                                             value={product?.reseller ?? ""}
                                             name="reseller"
                                             label="Reseller Price"
-                                            type="number"
+                                            type="text"
                                         />
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={data_handler}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (/^\d*\.?\d*$/.test(value)) {
+                                                    data_handler(e);
+                                                }
+                                            }}
                                             value={
                                                 product?.city_distributor ?? ""
                                             }
                                             name="city_distributor"
                                             label="Distributor Price"
-                                            type="number"
+                                            type="text"
                                         />
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={data_handler}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (/^\d*\.?\d*$/.test(value)) {
+                                                    data_handler(e);
+                                                }
+                                            }}
                                             value={
                                                 product?.district_distributor ??
                                                 ""
                                             }
                                             name="district_distributor"
                                             label="District Distributor Price"
-                                            type="number"
+                                            type="text"
                                         />
                                     </div>
                                     <div>
                                         <Input
-                                            onChange={data_handler}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                if (/^\d*\.?\d*$/.test(value)) {
+                                                    data_handler(e);
+                                                }
+                                            }}
                                             value={
                                                 product?.provincial_distributor ??
                                                 ""

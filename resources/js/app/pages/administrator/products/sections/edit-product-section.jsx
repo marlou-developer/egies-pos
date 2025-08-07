@@ -240,16 +240,19 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                     {(user?.user_type === "Admin") && (
                                         <div>
                                             <Input
-                                                onChange={(e) =>
-                                                    setForm({
-                                                        ...form,
-                                                        quantity: e.target.value,
-                                                    })
-                                                }
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+                                                    if (/^\d*\.?\d*$/.test(value)) {
+                                                        setForm({
+                                                            ...form,
+                                                            quantity: value,
+                                                        });
+                                                    }
+                                                }}
                                                 value={form?.quantity}
                                                 name="quantity"
                                                 label="Quantity"
-                                                type="number"
+                                                type="text"
                                             />
                                         </div>
                                     )}
