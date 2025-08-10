@@ -25,6 +25,7 @@ import { setSelectAll, setSelectedProducts } from "@/app/redux/product-slice";
 import PaginationSection from "./pagination-section";
 import MobileCardProductComponent from "../components/mobile-card-product-component";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
+import { router } from "@inertiajs/react";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
