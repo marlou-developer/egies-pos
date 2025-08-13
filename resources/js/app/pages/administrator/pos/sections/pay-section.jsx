@@ -258,7 +258,7 @@ export default function PaySection({
                                         const quantity = Number(item.pcs) || 0;
                                         const discount = Number(item.discount) || 0;
                                         const totalPrice = quantity * price;
-                                        const totalDiscount = quantity * discount;
+                                        const totalDiscount =discount;
 
                                         return (
                                             <div
@@ -279,7 +279,7 @@ export default function PaySection({
                                                     </div>
                                                     {discount > 0 && (
                                                         <div className="text-xs text-red-500">
-                                                            -₱{totalDiscount.toFixed(2)}
+                                                            ₱{totalDiscount.toFixed(2)}
                                                         </div>
                                                     )}
                                                 </div>
