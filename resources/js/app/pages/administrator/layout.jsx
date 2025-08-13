@@ -69,7 +69,7 @@ export default function AdminLayout({ children }) {
             ? [{
                 name: "Shopee",
                 href: "/administrator/shopee",
-                icon: ShoppingCartIcon,
+                icon: () => <img src="/images/shopee-b&w.png" alt="Shopee" className="w-6 h-6" />,
                 current: path == "shopee",
             }]
             : []),
