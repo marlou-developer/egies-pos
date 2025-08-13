@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCarts } from "@/app/redux/product-slice";
 import PaySection from "./pay-section";
 import CreditPurchaseSection from "./credit-purchase-section";
-import { UserIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { UserIcon, XMarkIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
 import PrintReceiptSection from "./print-receipt-section";
 import moment from "moment";
 
@@ -193,8 +193,11 @@ export default function PosSection() {
                                     Current Order
                                 </div>
                                 <div className="flex gap-3 ">
-                                    <div class="font-bold text-3xl text-red-500">
-                                        ({carts.length})
+                                    <div className="relative inline-block">
+                                        <ShoppingCartIcon className="h-8 w-12 text-pink-400" />
+                                        <div className="absolute -top-2 -right-2 bg-pink-500 text-white rounded-full h-6 w-6 flex items-center justify-center text-xs font-bold">
+                                            {carts.length}
+                                        </div>
                                     </div>
 
                                     <button
@@ -210,7 +213,7 @@ export default function PosSection() {
                                     console.log("resres", res);
                                     return (
                                         <>
-                                            <div className="flex flex-col md:flex-row gap-2 bg-pink-100 border-pink-300 border p-3 rounded-lg shadow-md mb-4 overflow-hidden">
+                                            <div className="flex flex-col md:flex-row gap-2 bg-pink-50 border-pink-300 border p-3 rounded-lg shadow-md mb-4 overflow-hidden">
                                                 {/* Product Info Section */}
                                                 <div className="flex flex-col md:flex-1 gap-2 min-w-0">
                                                     <div className="flex items-center gap-2">
@@ -219,7 +222,7 @@ export default function PosSection() {
                                                                 res?.uploads[0]
                                                                     ?.file
                                                             }
-                                                            className="w-10 h-10 object-cover rounded-md flex-shrink-0"
+                                                            className="border border-pink-300 w-10 h-10 object-cover rounded-md flex-shrink-0"
                                                             alt=""
                                                         />
                                                         <div className="flex-1 min-w-0">

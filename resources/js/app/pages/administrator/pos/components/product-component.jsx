@@ -55,7 +55,7 @@ export default function ProductComponent({ product, storeName }) {
         <>
             <button
                 onClick={() => add_to_cart(product)}
-                className={`relative px-2 sm:px-3 py-2 sm:py-3 flex flex-col border rounded-md min-h-[6rem] sm:min-h-[8rem] justify-between shadow-lg transition bg-pink-100 border-pink-300 w-full
+                className={`relative px-2 sm:px-3 py-2 sm:py-3 flex flex-col border rounded-md min-h-[6rem] sm:min-h-[8rem] justify-between shadow-lg transition bg-pink-50 border-pink-300 w-full
                     ${product.quantity == 0
                         ? "border-gray-300 cursor-not-allowed"
                         : "border-gray-200"
@@ -100,7 +100,7 @@ export default function ProductComponent({ product, storeName }) {
                     </div>
                     <img
                         src={product?.uploads[0]?.file}
-                        className="h-12 w-16 sm:h-16 sm:w-20 md:h-20 md:w-24 object-cover rounded-md flex-shrink-0"
+                        className="border border-pink-300 h-12 w-16 sm:h-16 sm:w-20 md:h-20 md:w-24 object-cover rounded-md flex-shrink-0"
                         alt=""
                     />
                 </div>
