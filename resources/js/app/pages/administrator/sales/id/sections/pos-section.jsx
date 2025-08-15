@@ -210,6 +210,9 @@ export default function PosSection({ setIsModalOpen }) {
                                                                         )
                                                                     )
                                                                 }
+                                                                onWheel={(e) =>
+                                                                    e.target.blur()
+                                                                }
                                                                 value={res?.pcs}
                                                                 className="block text-center w-full rounded-md bg-white py-1.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm"
                                                             />
@@ -375,6 +378,9 @@ export default function PosSection({ setIsModalOpen }) {
                                                         ? 0
                                                         : e.target.value
                                                 )
+                                            }
+                                            onWheel={(e) =>
+                                                e.target.blur()
                                             }
                                             className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pl-3 pr-1 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                         />
