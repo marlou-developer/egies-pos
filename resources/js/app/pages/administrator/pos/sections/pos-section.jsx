@@ -330,6 +330,9 @@ export default function PosSection() {
                                                                     )
                                                                 )
                                                             }
+                                                            onWheel={(e) =>
+                                                                e.target.blur()
+                                                            }
                                                             value={res?.pcs}
                                                             className="block text-center w-12 rounded-md bg-white py-1 text-xs text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300"
                                                         />
@@ -490,6 +493,9 @@ export default function PosSection() {
                                                         ? 0
                                                         : e.target.value
                                                 )
+                                            }
+                                            onWheel={(e) =>
+                                                e.target.blur()
                                             }
                                             className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pl-3 pr-1 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                         />
