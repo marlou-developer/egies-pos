@@ -1016,7 +1016,7 @@ class CartController extends Controller
 
         $current_credit = Cart::whereDate('created_at', $today)
             ->whereIn('status', ['Pending', 'Partial'])
-            ->where('is_credit', 'true')  // boolean true, or use 1 if stored as integer
+            ->where('is_credit', 1)  // boolean true, or use 1 if stored as integer
             ->sum('total_price');
 
 
