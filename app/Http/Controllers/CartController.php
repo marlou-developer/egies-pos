@@ -928,7 +928,7 @@ class CartController extends Controller
 
 
         $current_sales = CartItem::whereHas('cart', function ($query) {
-            $today = Carbon::today();
+            $today = Carbon::now('Asia/Manila')->toDateString();
             $query->whereDate('created_at', $today);
             $query->where('status', 'Paid');
         })
@@ -1001,7 +1001,7 @@ class CartController extends Controller
 
         // 
         $current_profit = CartItem::whereHas('cart', function ($query) {
-            $today = Carbon::today();
+            $today = Carbon::now('Asia/Manila')->toDateString();;
             $query->whereDate('created_at', $today);
             $query->where('status', 'Paid');
         })
