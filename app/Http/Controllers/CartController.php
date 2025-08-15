@@ -51,12 +51,12 @@ class CartController extends Controller
 
         // Check if notifications exist and handle both array and object cases
         $notifications = $request->input('notifications', []);
-        
+
         if (!empty($notifications)) {
             foreach ($notifications as $value) {
                 // Handle both array and object notation
                 $notificationId = is_array($value) ? $value['id'] : $value->id;
-                
+
                 if ($notificationId) {
                     $notif = Notification::where('id', $notificationId)
                         ->where('user_id', $user->id)
@@ -929,7 +929,7 @@ class CartController extends Controller
 
         $current_sales = CartItem::whereHas('cart', function ($query) {
             $today = Carbon::today();
-            $query->whereDate('updated_at', $today);
+            $query->whereDate('created_at', $today);
             $query->where('status', 'Paid');
         })
             ->sum(DB::raw('total'));
@@ -1002,7 +1002,7 @@ class CartController extends Controller
         // 
         $current_profit = CartItem::whereHas('cart', function ($query) {
             $today = Carbon::today();
-            $query->whereDate('updated_at', $today);
+            $query->whereDate('created_at', $today);
             $query->where('status', 'Paid');
         })
             ->sum(DB::raw('profit'));
@@ -1107,7 +1107,7 @@ class CartController extends Controller
     public function get_cart_credit(Request $request)
     {
 
-        $carts = Cart::where('is_credit', 'true')->with(['customer', 'cart_items', 'credit_payments']);
+        $carts = Cart::where('is_credit', 'true')->orderBy('id', 'desc')->with(['customer', 'cart_items', 'credit_payments']);
         if ($request->filled('search')) {
             $carts->where(function ($query) use ($request) {
                 $query->where('cart_id', 'like', '%' . $request->search . '%')
