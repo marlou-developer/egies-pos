@@ -894,7 +894,7 @@ class CartController extends Controller
 
     public function get_over_due(Request $request)
     {
-        $today = Carbon::today();
+        $today = Carbon::now('Asia/Manila')->toDateString();
         $query = Cart::where('due_date', '<', Carbon::now())
             ->whereIn('status', ['Pending', 'Partial'])
             ->with(['customer']);
@@ -1014,13 +1014,12 @@ class CartController extends Controller
         })->sum(DB::raw('profit'));
 
 
-        $current_credit = Cart::whereDate(
-            DB::raw("CONVERT_TZ(created_at, '+00:00', '+08:00')"), // adjust from UTC to PH time
-            Carbon::now('Asia/Manila')->toDateString()
-        )
+        $current_credit = Cart::whereDate('created_at', $today)
             ->whereIn('status', ['Pending', 'Partial'])
-            ->where('is_credit', true) // use actual boolean
+            ->where('is_credit', 'true')  // boolean true, or use 1 if stored as integer
             ->sum('total_price');
+
+
 
         $total_credit = Cart::where('is_credit', '=', 'true')
             ->whereIn('status', ['Pending', 'Partial'])
