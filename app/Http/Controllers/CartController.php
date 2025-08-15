@@ -1014,9 +1014,12 @@ class CartController extends Controller
         })->sum(DB::raw('profit'));
 
 
-        $current_credit = Cart::whereDate('created_at', $today)
+        $current_credit = Cart::whereDate(
+            DB::raw("CONVERT_TZ(created_at, '+00:00', '+08:00')"), // adjust from UTC to PH time
+            Carbon::now('Asia/Manila')->toDateString()
+        )
             ->whereIn('status', ['Pending', 'Partial'])
-            ->where('is_credit', 'true')  // boolean true, or use 1 if stored as integer
+            ->where('is_credit', true) // use actual boolean
             ->sum('total_price');
 
         $total_credit = Cart::where('is_credit', '=', 'true')
