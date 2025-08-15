@@ -1006,6 +1006,7 @@ class CartController extends Controller
             $query->where('status', 'Paid');
         })
             ->sum(DB::raw('profit'));
+
         $total_sales = CartItem::whereHas('cart', function ($query) {
             $query->where('status', 'Paid');
         })->sum(DB::raw('total'));
