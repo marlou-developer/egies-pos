@@ -927,12 +927,12 @@ class CartController extends Controller
 
 
 
-        $current_sales = CartItem::whereHas('cart', function ($query) {
-            $today = Carbon::now('Asia/Manila')->toDateString();
-            $query->whereDate('created_at', $today);
-            $query->where('status', 'Paid');
-        })
-            ->sum(DB::raw('total'));
+        $today = Carbon::now('Asia/Manila')->toDateString();
+
+        $current_sales = Cart::whereDate('created_at', $today)
+            ->where('status', 'Paid')
+            ->sum(DB::raw('total_price'));
+
 
         $users = User::all();
 
@@ -1016,7 +1016,7 @@ class CartController extends Controller
 
         $current_credit = Cart::whereDate('created_at', $today)
             ->whereIn('status', ['Pending', 'Partial'])
-            ->where('is_credit', 1)  // boolean true, or use 1 if stored as integer
+            ->where('is_credit', 'true')  // boolean true, or use 1 if stored as integer
             ->sum('total_price');
 
 
