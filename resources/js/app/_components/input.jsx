@@ -12,6 +12,7 @@ export default function Input({
     iconRight,
     error,
 }) {
+    const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
     return (
         <div className="w-full">
             <div className="relative">
@@ -31,6 +32,7 @@ export default function Input({
                     type={type}
                     id={name}
                     name={name}
+                    min={type === "date" ? today : undefined} // 🚀 restrict past dates
                     className={`peer text-black placeholder-transparent focus:ring-pink-300 focus:border-pink-300 w-full py-2.5 px-5 border bg-white rounded-md focus:outline-none transition-all
             ${iconLeft ? "pl-10" : ""}
             ${iconRight ? "pr-10" : ""}

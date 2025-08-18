@@ -154,6 +154,12 @@ export default function PrintReceiptSection({
                                 {peso_value(Number(data.sub_total))}
                             </span>
                         </div>
+                        <div className="flex justify-between">
+                            <span>Discount:</span>
+                            <span>
+                                {peso_value(Number(data.total_discount))}
+                            </span>
+                        </div>
                         <div className="flex justify-between font-bold">
                             <span>TOTAL:</span>
                             <span>
@@ -184,7 +190,7 @@ export default function PrintReceiptSection({
                     <div className="text-center border border-black mb-1 p-2 font-bold">
                         THANK YOU!
                     </div>
-                    <div style={{height: "15mm"}}></div>
+                    <div style={{ height: "15mm" }}></div>
                 </div>
             </div>
         </div>

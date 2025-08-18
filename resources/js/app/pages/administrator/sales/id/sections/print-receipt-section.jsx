@@ -113,6 +113,12 @@ export default function PrintReceiptSection({
                                     {peso_value(Number(data.sub_total))}
                                 </span>
                             </div>
+                            <div className="flex justify-between">
+                                <span>Discount:</span>
+                                <span>
+                                    {peso_value(Number(data.total_discount))}
+                                </span>
+                            </div>
                             <div className="flex justify-between font-bold">
                                 <span>TOTAL:</span>
                                 <span>

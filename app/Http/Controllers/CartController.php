@@ -174,6 +174,15 @@ class CartController extends Controller
                 'due_date' => $request->due_date
             ]);
         }
+        if (Carbon::parse($request->due_date)->gt(Carbon::now())) {
+            $cart = Cart::where('cart_id', $request->cart_id)->first();
+            if ($cart) {
+                Notification::where('cp_id', $cart->id)
+                    ->where('is_read', 'true')
+                    ->where('type', 'cart')
+                    ->delete();
+            }
+        }
     }
     public function get_report(Request $request)
     {
