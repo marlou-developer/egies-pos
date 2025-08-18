@@ -116,6 +116,7 @@ export default function EditPaymentSection({ data }) {
                                 due_date: e.target.value,
                             })
                         }
+                        isNotDateBack={true}
                         value={form.due_date}
                         type="date"
                         label="Date"
