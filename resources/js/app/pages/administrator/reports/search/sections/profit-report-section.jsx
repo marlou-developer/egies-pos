@@ -279,8 +279,9 @@ const ProfitReportSection = () => {
                     </View>
 
                     {/* Table Rows */}
-                    {sortedShopee.map((item, idx) => (
-                        <View style={styles.tableRow} key={idx}>
+                    {sortedShopee.map((item, idx) => {
+                        console.log("Item:", item);
+                        return <View style={styles.tableRow} key={idx}>
                             <Text style={styles.colSmall}>{item.code}</Text>
                             <Text style={styles.col}>{item?.product}</Text>
                             <Text style={styles.colSmall}>{item.quantity}</Text>
@@ -288,7 +289,7 @@ const ProfitReportSection = () => {
                                 {peso_value(item.cost)}
                             </Text>
                             <Text style={styles.colSmall}>
-                                {peso_value(item.total)}
+                                {peso_value(item.total??0)}
                             </Text>
                             <Text style={styles.colSmall}>
                                 {peso_value(item.profit)}
@@ -305,7 +306,7 @@ const ProfitReportSection = () => {
                             </Text> */}
                             {/* <Text style={styles.colSmall}>{item.margin}</Text> */}
                         </View>
-                    ))}
+                    })}
 
                     <View style={styles.summary}>
                         <Text>Total Cost: {peso_value(total_cost_shopee)}</Text>

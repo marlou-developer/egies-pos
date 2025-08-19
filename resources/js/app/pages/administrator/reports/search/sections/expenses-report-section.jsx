@@ -199,7 +199,7 @@ const ExpensesReportSection = () => {
                                 </Text>
                                 <Text style={styles.col}> {res.qty}</Text>
                                 <Text style={styles.col}>
-                                    {moment(res.date).format("LLL")}
+                                    {moment(res.date).format("LL")}
                                 </Text>
                             </View>
                         );
