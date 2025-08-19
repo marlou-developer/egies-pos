@@ -401,7 +401,8 @@ class CartController extends Controller
                     DB::raw('SUM(quantity) as quantity'),
                     DB::raw('SUM(cost) as cost'),
                     DB::raw('SUM(profit) as profit'),
-                    DB::raw('SUM(total) as total')
+                    DB::raw('SUM(fixed_price * quantity) as total'),
+
                 )
                     ->whereBetween('cart_items.created_at', [$start, $end])
                     ->when(!empty($request->customer) && $request->customer !== 'all', function ($query) use ($request) {
