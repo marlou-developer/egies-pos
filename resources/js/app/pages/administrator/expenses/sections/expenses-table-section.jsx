@@ -1,4 +1,4 @@
-import { FaBook, FaDollarSign, FaFilter, FaPercent, FaPlus, FaTruck, FaUserPlus, FaUsers } from "react-icons/fa6";
+import { FaBook, FaDollarSign, FaFilter, FaList, FaPercent, FaPlus, FaTruck, FaUserPlus, FaUsers } from "react-icons/fa6";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import SearchSection from "./search-section";
@@ -11,6 +11,7 @@ import FilterExpensesComponent from "../components/filter-expenses-component";
 import PaginationSection from "./pagination-section";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPesetaSign, faPesoSign } from "@fortawesome/free-solid-svg-icons";
+import AddExpenseCategoryComponent from "../components/add-expense-category-component";
 
 
 function classNames(...classes) {
@@ -19,14 +20,16 @@ function classNames(...classes) {
 
 export default function ExpensesTableSection() {
     const { expenses } = useSelector((state) => state.expenses)
+    const { expense_categories } = useSelector((state) => state.expense_categories);
 
     const [openExpenses, setOpenExpenses] = useState(false);
+    const [openExpenseCategory, setOpenExpenseCategory] = useState(false);
     const [openSFilter, setOpenSFilter] = useState(false);
 
     // Get current data - handle paginated data structure
     const currentExpenses = expenses?.data || [];
 
-    console.log('expenses', expenses)
+    console.log('expenses', expense_categories)
 
     return (
         <div className="px-4 sm:px-6 lg:px-8">
@@ -39,7 +42,7 @@ export default function ExpensesTableSection() {
                 </div>
                 <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                     <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                        <span className="isolate inline-flex rounded-md shadow-xs">
+                        <span className="isolate inline-flex rounded-md shadow-xs gap-3">
                             <button
                                 type="button"
                                 onClick={() => setOpenExpenses(true)}
@@ -48,6 +51,15 @@ export default function ExpensesTableSection() {
                                 {/* <FaDollarSign className="mr-1 text-pink-500" /> */}
                                 <FontAwesomeIcon icon={faPesoSign} className="h-4 items-center mr-1 " />
                                 ADD EXPENSE
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => setOpenExpenseCategory(true)}
+                                className="relative inline-flex items-center rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
+                            >
+                                {/* <FaDollarSign className="mr-1 text-pink-500" /> */}
+                                <FaList icon={faPesoSign} className="h-4 items-center mr-1 " />
+                                ADD EXPENSE CATEGORY
                             </button>
                             {/* <button
                                 type="button"
@@ -62,6 +74,10 @@ export default function ExpensesTableSection() {
                             open={openExpenses}
                             setOpenExpenses={setOpenExpenses}
                         />
+                        <AddExpenseCategoryComponent
+                            open={openExpenseCategory}
+                            setOpenCategory={setOpenExpenseCategory}
+                        />
                         {/* <FilterCustomersComponent
                             open={openSFilter}
                             setOpenSFilter={setOpenSFilter}
@@ -72,7 +88,7 @@ export default function ExpensesTableSection() {
             <div className="mt-4 flex items-start justify-between">
                 <SearchSection />
                 <div>
-                    <FilterExpensesComponent />
+                    <FilterExpensesComponent expense_categories={expense_categories} />
                 </div>
             </div>
             <div className="mt-8 flow-root">

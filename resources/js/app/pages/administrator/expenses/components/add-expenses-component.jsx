@@ -18,6 +18,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export default function AddExpensesComponent({ open, setOpenExpenses }) {
     const [loading, setLoading] = useState(false);
     const { expense } = useSelector((state) => state.expenses);
+    const { expense_categories } = useSelector((state) => state.expense_categories);
     const dispatch = useDispatch();
 
     function data_handler(eOrKey, value) {
@@ -120,16 +121,12 @@ export default function AddExpensesComponent({ open, setOpenExpenses }) {
                                             value={expense?.category ?? ""}
                                             className="w-full rounded-md border border-gray-500 bg-white py-3 text-gray-900 focus:border-pink-400 focus:ring-pink-300"
                                         >
-                                            <option disabled selected>Select Expense Category</option>
-                                            <option value="N/A">N/A</option>
-                                            <option value="Maintenance & Repair Expense">Maintenance & Repair Expense</option>
-                                            <option value="Miscellaneous Expense">Miscellaneous Expense</option>
-                                            <option value="Operating Expenses">Operating Expenses</option>
-                                            <option value="Permits & Licenses Expense">Permits & Licenses Expense</option>
-                                            <option value="Rent Expense">Rent Expense</option>
-                                            <option value="Salary Expenses">Salary Expenses</option>
-                                            <option value="Supplies Expense">Supplies Expense</option>
-                                            <option value="Utilities Expenses">Utilities Expenses</option>
+                                            <option value="">Select Expense Category</option>
+                                            {expense_categories?.map((category, index) => (
+                                                <option key={index} value={category.category}>
+                                                    {category.category}
+                                                </option>
+                                            ))}
                                         </select>
                                     </div>
                                     <div>

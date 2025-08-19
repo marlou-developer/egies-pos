@@ -8,11 +8,13 @@ import stockSlice from "../redux/stock-slice";
 import userSlice from "../redux/user-slice";
 import supplierSlice from "../redux/supplier-slice";
 import expenseSlice from "../redux/expense-slice";
+import expenseCategorySlice from "../redux/expense-category-slice";
 
 const store = configureStore({
     reducer: {
         app: appSlice,
         categories: categorySlice,
+        expense_categories: expenseCategorySlice,
         products: productSlice,
         customers: customerSlice,
         suppliers: supplierSlice,
