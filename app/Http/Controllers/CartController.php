@@ -1208,7 +1208,7 @@ class CartController extends Controller
                 'cost' => $item['cost'] * $quantity,
                 'profit' =>  $total - ($item['cost'] * $quantity),
                 'price' => $price,
-                'fixed_price' => number_format($total / $quantity, 2),
+                'fixed_price' => $total / $quantity,
                 'total' => $total,
             ]);
 
