@@ -10,7 +10,7 @@ class ExpenseController extends Controller
 
     public function index(Request $request)
     {
-        $expenses = Expense::orderBy('id', 'desc');
+        $expenses = Expense::orderBy('date', 'desc');
 
         if ($request->filled('search')) {
             if ($request->search === 'N/A') {

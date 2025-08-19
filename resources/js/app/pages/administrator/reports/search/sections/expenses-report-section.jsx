@@ -90,7 +90,7 @@ const ExpensesReportSection = () => {
             <Document>
                 <Page size="A4" style={styles.page}>
                     <View style={styles.header}>
-                        <Text style={styles.title}>PAYMENT TYPES BY USERS</Text>
+                        <Text style={styles.title}>EXPENSES REPORT</Text>
 
                         <View
                             style={{

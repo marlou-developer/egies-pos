@@ -827,9 +827,10 @@ class CartController extends Controller
                 'product' => $product,
             ]);
         } else if ($request->type == 'Expenses') {
-            $carts = Expense::whereBetween('created_at', [$start, $end])
+            $carts = Expense::whereBetween('date', [$start, $end])
                 ->get();
             return response()->json([
+
                 'data' => $carts,
                 'customer' => $customer,
                 'user' => $user,
