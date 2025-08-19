@@ -263,7 +263,7 @@ const ProfitReportSection = () => {
                             Total Sales: {peso_value(total_sales_store)}
                         </Text>
                         <Text>
-                            Total Profit: {peso_value(total_profit_store)}
+                            Total Profit: {peso_value(total_sales_store - total_cost_store)}
                         </Text>
                     </View>
                     <Text style={styles.title}>Shopee</Text>
@@ -314,7 +314,7 @@ const ProfitReportSection = () => {
                             Total Sales: {peso_value(total_sales_shopee)}
                         </Text>
                         <Text>
-                            Total Profit: {peso_value(total_profit_shopee)}
+                            Total Profit: {peso_value(total_sales_shopee - total_cost_shopee)}
                         </Text>
                     </View>
 
@@ -365,7 +365,7 @@ const ProfitReportSection = () => {
                             Total Sales: {peso_value(total_sales_credit)}
                         </Text>
                         <Text>
-                            Total Profit: {peso_value(total_profit_credit)}
+                            Total Profit: {peso_value(total_sales_credit - total_cost_credit)}
                         </Text>
                     </View>
                     {/* Summary */}
