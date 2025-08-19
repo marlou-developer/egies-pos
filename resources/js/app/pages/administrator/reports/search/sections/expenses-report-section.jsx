@@ -184,7 +184,7 @@ const ExpensesReportSection = () => {
                         <Text style={styles.col}>Category</Text>
                         <Text style={styles.col}>Cost</Text>
                         <Text style={styles.col}>Quantity</Text>
-                        <Text style={styles.col}>Total</Text>
+                        <Text style={styles.col}>Date</Text>
                     </View>
 
                     {/* Table Rows */}
@@ -199,7 +199,7 @@ const ExpensesReportSection = () => {
                                 </Text>
                                 <Text style={styles.col}> {res.qty}</Text>
                                 <Text style={styles.col}>
-                                    {moment(res.created_at).format("LLL")}
+                                    {moment(res.date).format("LLL")}
                                 </Text>
                             </View>
                         );
