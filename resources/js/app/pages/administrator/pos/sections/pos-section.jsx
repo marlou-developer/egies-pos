@@ -228,7 +228,7 @@ export default function PosSection() {
                                                             alt=""
                                                         />
                                                         <div className="flex-1 min-w-0">
-                                                            <span className="font-semibold text-xs md:text-sm block truncate">
+                                                            <span className="font-medium text-[8px] sm:text-[10px] md:text-xs block break-words leading-tight">
                                                                 {res?.name}
                                                             </span>
                                                         </div>
