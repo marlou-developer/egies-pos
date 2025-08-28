@@ -1178,7 +1178,7 @@ class CartController extends Controller
             ]);
         }
 
-
+        $split_discount = $request->discount_per_order / count($request->cart_items);
         foreach ($request->cart_items as $item) {
             $subPrice = $item['sub_price'];
             $pricing_type = match (true) {
@@ -1201,14 +1201,14 @@ class CartController extends Controller
             CartItem::create([
                 'cart_id' => $request->cart_id ?? $cart->cart_id,
                 'product_id' => $item['id'],
-                'discount' => $discount,
+                'discount' => $discount + $split_discount,
                 'customer_discount' => $customer_discount * $quantity,
                 'pricing_type' => $pricing_type,
                 'quantity' => $quantity,
                 'cost' => $item['cost'] * $quantity,
                 'profit' =>  $total - ($item['cost'] * $quantity),
                 'price' => $price,
-                'fixed_price' => $total / $quantity,
+                'fixed_price' => ($total / $quantity) - $split_discount,
                 'total' => $total,
             ]);
 

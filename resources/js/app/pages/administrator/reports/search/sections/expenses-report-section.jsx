@@ -80,10 +80,12 @@ const ExpensesReportSection = () => {
     const params = new URLSearchParams(window.location.search);
     const initialStart = params.get("start");
     const initialEnd = params.get("end");
-    const total_cost = reports?.data?.reduce(
-        (sum, item) => sum + Number(item.cost),
-        0
-    );
+    const total_cost = reports?.data
+        ?.filter((res) => res.category != "Shopee Expenses")
+        .reduce((sum, item) => sum + Number(item.cost), 0);
+    const shopee_total_cost = reports?.data
+        ?.filter((res) => res.category == "Shopee Expenses")
+        .reduce((sum, item) => sum + Number(item.cost), 0);
     console.log("reportsreports", reports?.data);
     return (
         <PDFViewer style={{ width: "100%", height: "100vh" }}>
@@ -178,6 +180,17 @@ const ExpensesReportSection = () => {
                         </View>
                     </View>
 
+                    <Text
+                        style={{
+                            textAlign: "center",
+                            marginTop: 10,
+                            marginBottom: 10,
+                            fontWeight: "bold",
+                        }}
+                    >
+                        {" "}
+                        EXPENSES
+                    </Text>
                     {/* Table Header */}
                     <View style={styles.tableHeader}>
                         <Text style={styles.col}>Item</Text>
@@ -188,25 +201,73 @@ const ExpensesReportSection = () => {
                     </View>
 
                     {/* Table Rows */}
-                    {reports?.data?.map((res, idx) => {
-                        return (
-                            <View style={styles.tableRow} key={idx}>
-                                <Text style={styles.col}>{res?.item}</Text>
-                                <Text style={styles.col}>{res?.category}</Text>
-                                <Text style={styles.col}>
-                                    {" "}
-                                    {peso_value(res?.cost)}
-                                </Text>
-                                <Text style={styles.col}> {res.qty}</Text>
-                                <Text style={styles.col}>
-                                    {moment(res.date).format("LL")}
-                                </Text>
-                            </View>
-                        );
-                    })}
+                    {reports?.data
+                        ?.filter((res) => res.category != "Shopee Expenses")
+                        ?.map((res, idx) => {
+                            return (
+                                <View style={styles.tableRow} key={idx}>
+                                    <Text style={styles.col}>{res?.item}</Text>
+                                    <Text style={styles.col}>
+                                        {res?.category}
+                                    </Text>
+                                    <Text style={styles.col}>
+                                        {" "}
+                                        {peso_value(res?.cost)}
+                                    </Text>
+                                    <Text style={styles.col}> {res.qty}</Text>
+                                    <Text style={styles.col}>
+                                        {moment(res.date).format("LL")}
+                                    </Text>
+                                </View>
+                            );
+                        })}
+
+                    <View style={styles.tableHeader}>
+                        <Text style={styles.col}>Item</Text>
+                        <Text style={styles.col}>Category</Text>
+                        <Text style={styles.col}>Cost</Text>
+                        <Text style={styles.col}>Quantity</Text>
+                        <Text style={styles.col}>Date</Text>
+                    </View>
                     <View style={styles.summary}>
                         {/* <Text>Total Cost: 42,048.60</Text> */}
                         <Text>Total Cost: {peso_value(total_cost)}</Text>
+                        {/* <Text>Total Profit: 10,830.40</Text> */}
+                    </View>
+                    <Text
+                        style={{
+                            textAlign: "center",
+                            marginTop: 10,
+                            marginBottom: 10,
+                            fontWeight: "bold",
+                        }}
+                    >
+                        SHOPEE EXPENSES
+                    </Text>
+                    {/* Table Rows */}
+                    {reports?.data
+                        ?.filter((res) => res.category == "Shopee Expenses")
+                        .map((res, idx) => {
+                            return (
+                                <View style={styles.tableRow} key={idx}>
+                                    <Text style={styles.col}>{res?.item}</Text>
+                                    <Text style={styles.col}>
+                                        {res?.category}
+                                    </Text>
+                                    <Text style={styles.col}>
+                                        {" "}
+                                        {peso_value(res?.cost)}
+                                    </Text>
+                                    <Text style={styles.col}> {res.qty}</Text>
+                                    <Text style={styles.col}>
+                                        {moment(res.date).format("LL")}
+                                    </Text>
+                                </View>
+                            );
+                        })}
+                    <View style={styles.summary}>
+                        {/* <Text>Total Cost: 42,048.60</Text> */}
+                        <Text>Total Cost: {peso_value(shopee_total_cost)}</Text>
                         {/* <Text>Total Profit: 10,830.40</Text> */}
                     </View>
                 </Page>

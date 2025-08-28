@@ -25,7 +25,9 @@ function classNames(...classes) {
 
 export default function ShopeeSection() {
     const dispatch = useDispatch();
-    const { shopees, selectedProducts, loading } = useSelector((store) => store.carts);
+    const { shopees, selectedProducts, loading } = useSelector(
+        (store) => store.carts
+    );
     const [selectAll, setSelectAll] = useState(false);
 
     // Fetch Shopee orders on component mount
@@ -66,14 +68,18 @@ export default function ShopeeSection() {
     if (loading) {
         return <LoadingComponent />;
     }
-
+    console.log("shopees", shopees);
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             <div className="sm:flex sm:items-center">
                 <div className="sm:flex-auto flex justify-between items-center gap-2">
                     <div>
                         <h1 className="text-base flex font-semibold text-orange-500">
-                            <img src="/images/shopee.png" className="h-6" alt="" />
+                            <img
+                                src="/images/shopee.png"
+                                className="h-6"
+                                alt=""
+                            />
                             Shopee Section
                         </h1>
                     </div>
@@ -111,7 +117,7 @@ export default function ShopeeSection() {
                                     </th>
                                     {[
                                         "Invoice No.",
-                                        // "Order ID",
+                                        "Shopee Store",
                                         "Total",
                                         "Status",
                                         "Date",
@@ -122,7 +128,7 @@ export default function ShopeeSection() {
                                             className={classNames(
                                                 "sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 px-3 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter",
                                                 idx === 5 &&
-                                                "pr-4 sm:pr-6 lg:pr-8"
+                                                    "pr-4 sm:pr-6 lg:pr-8"
                                             )}
                                         >
                                             {header || (
@@ -155,6 +161,9 @@ export default function ShopeeSection() {
                                             </td>
                                             <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm font-medium text-gray-900">
                                                 {res.cart_id}
+                                            </td>
+                                            <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
+                                                {res.shopee_store}
                                             </td>
                                             {/* <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
                                                 {res.order_id}
@@ -197,7 +206,6 @@ export default function ShopeeSection() {
                                                     <UpdateStatusSection
                                                         data={res}
                                                     />
-
                                                 </div>
                                             </td>
                                         </tr>
