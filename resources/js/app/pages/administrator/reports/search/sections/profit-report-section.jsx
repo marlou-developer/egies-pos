@@ -85,11 +85,26 @@ const ProfitReportSection = () => {
         0
     );
     const total_sales_store = reports?.data?.store?.reduce(
-        (sum, item) => sum + Number(item.total),
+        (sum, item) => sum + Number(item.sales),
         0
     );
+    const total_discount_store = reports?.data?.store?.reduce(
+        (sum, item) => sum + Number(item.discount ?? 0),
+        0
+    );
+
     const total_profit_store = reports?.data?.store?.reduce(
-        (sum, item) => sum + Number(item.profit),
+        (sum, item) => sum + Number(item.profit ?? 0),
+        0
+    );
+
+    const total_profit_shopee = reports?.data?.shopee?.reduce(
+        (sum, item) => sum + Number(item.profit ?? 0),
+        0
+    );
+
+    const total_profit_credit = reports?.data?.credit?.reduce(
+        (sum, item) => sum + Number(item.profit ?? 0),
         0
     );
 
@@ -98,11 +113,11 @@ const ProfitReportSection = () => {
         0
     );
     const total_sales_shopee = reports?.data?.shopee?.reduce(
-        (sum, item) => sum + Number(item.total),
+        (sum, item) => sum + Number(item.sales),
         0
     );
-    const total_profit_shopee = reports?.data?.shopee?.reduce(
-        (sum, item) => sum + Number(item.profit),
+    const total_discount_shopee = reports?.data?.shopee?.reduce(
+        (sum, item) => sum + Number(item.discount ?? 0),
         0
     );
 
@@ -111,17 +126,23 @@ const ProfitReportSection = () => {
         0
     );
     const total_sales_credit = reports?.data?.credit?.reduce(
-        (sum, item) => sum + Number(item.total),
+        (sum, item) => sum + Number(item.sales),
         0
     );
-    const total_profit_credit = reports?.data?.credit?.reduce(
-        (sum, item) => sum + Number(item.profit),
+    const total_discount_credit = reports?.data?.credit?.reduce(
+        (sum, item) => sum + Number(item.discount ?? 0),
         0
     );
     // Sort data by product name
-    const sortedStore = (reports?.data?.store || []).slice().sort((a, b) => (a?.product || '').localeCompare(b?.product || ''));
-    const sortedShopee = (reports?.data?.shopee || []).slice().sort((a, b) => (a?.product || '').localeCompare(b?.product || ''));
-    const sortedCredit = (reports?.data?.credit || []).slice().sort((a, b) => (a?.product || '').localeCompare(b?.product || ''));
+    const sortedStore = (reports?.data?.store || [])
+        .slice()
+        .sort((a, b) => (a?.product || "").localeCompare(b?.product || ""));
+    const sortedShopee = (reports?.data?.shopee || [])
+        .slice()
+        .sort((a, b) => (a?.product || "").localeCompare(b?.product || ""));
+    const sortedCredit = (reports?.data?.credit || [])
+        .slice()
+        .sort((a, b) => (a?.product || "").localeCompare(b?.product || ""));
 
     return (
         <PDFViewer style={{ width: "100%", height: "100vh" }}>
@@ -238,22 +259,12 @@ const ProfitReportSection = () => {
                                 {peso_value(item.cost)}
                             </Text>
                             <Text style={styles.colSmall}>
-                                {peso_value(item.total)}
+                                {peso_value(item.sales)}
                             </Text>
                             <Text style={styles.colSmall}>
                                 {peso_value(item.profit)}
                             </Text>
                             <Text style={styles.colSmall}>{item.margin}</Text>
-                            {/* <Text style={styles.colSmall}>
-                                {item.cost.toLocaleString()}
-                            </Text> */}
-                            {/* <Text style={styles.colSmall}>
-                                {item.total.toLocaleString()}
-                            </Text> */}
-                            {/* <Text style={styles.colSmall}>
-                                {item.profit.toLocaleString()}
-                            </Text> */}
-                            {/* <Text style={styles.colSmall}>{item.margin}</Text> */}
                         </View>
                     ))}
 
@@ -262,8 +273,12 @@ const ProfitReportSection = () => {
                         <Text>
                             Total Sales: {peso_value(total_sales_store)}
                         </Text>
+                        {/* <Text>
+                            Total Discount: {peso_value(total_discount_store)}
+                        </Text> */}
                         <Text>
-                            Total Profit: {peso_value(total_sales_store - total_cost_store)}
+                            Total Profit:{" "}
+                            {peso_value(total_sales_store - total_cost_store)}
                         </Text>
                     </View>
                     <Text style={styles.title}>Shopee</Text>
@@ -281,31 +296,37 @@ const ProfitReportSection = () => {
                     {/* Table Rows */}
                     {sortedShopee.map((item, idx) => {
                         console.log("Item:", item);
-                        return <View style={styles.tableRow} key={idx}>
-                            <Text style={styles.colSmall}>{item.code}</Text>
-                            <Text style={styles.col}>{item?.product}</Text>
-                            <Text style={styles.colSmall}>{item.quantity}</Text>
-                            <Text style={styles.colSmall}>
-                                {peso_value(item.cost)}
-                            </Text>
-                            <Text style={styles.colSmall}>
-                                {peso_value(item.total??0)}
-                            </Text>
-                            <Text style={styles.colSmall}>
-                                {peso_value(item.profit)}
-                            </Text>
-                            <Text style={styles.colSmall}>{item.margin}</Text>
-                            {/* <Text style={styles.colSmall}>
+                        return (
+                            <View style={styles.tableRow} key={idx}>
+                                <Text style={styles.colSmall}>{item.code}</Text>
+                                <Text style={styles.col}>{item?.product}</Text>
+                                <Text style={styles.colSmall}>
+                                    {item.quantity}
+                                </Text>
+                                <Text style={styles.colSmall}>
+                                    {peso_value(item.cost)}
+                                </Text>
+                                <Text style={styles.colSmall}>
+                                    {peso_value(item.sales ?? 0)}
+                                </Text>
+                                <Text style={styles.colSmall}>
+                                    {peso_value(item.profit)}
+                                </Text>
+                                <Text style={styles.colSmall}>
+                                    {item.margin}
+                                </Text>
+                                {/* <Text style={styles.colSmall}>
                                 {item.cost.toLocaleString()}
                             </Text> */}
-                            {/* <Text style={styles.colSmall}>
-                                {item.total.toLocaleString()}
+                                {/* <Text style={styles.colSmall}>
+                                {item.sales.toLocaleString()}
                             </Text> */}
-                            {/* <Text style={styles.colSmall}>
+                                {/* <Text style={styles.colSmall}>
                                 {item.profit.toLocaleString()}
                             </Text> */}
-                            {/* <Text style={styles.colSmall}>{item.margin}</Text> */}
-                        </View>
+                                {/* <Text style={styles.colSmall}>{item.margin}</Text> */}
+                            </View>
+                        );
                     })}
 
                     <View style={styles.summary}>
@@ -313,8 +334,12 @@ const ProfitReportSection = () => {
                         <Text>
                             Total Sales: {peso_value(total_sales_shopee)}
                         </Text>
+                        {/* <Text>
+                            Total Discount: {peso_value(total_discount_shopee)}
+                        </Text> */}
                         <Text>
-                            Total Profit: {peso_value(total_sales_shopee - total_cost_shopee)}
+                            Total Profit:{" "}
+                            {peso_value(total_sales_shopee - total_cost_shopee)}
                         </Text>
                     </View>
 
@@ -340,7 +365,7 @@ const ProfitReportSection = () => {
                                 {peso_value(item.cost)}
                             </Text>
                             <Text style={styles.colSmall}>
-                                {peso_value(item.total)}
+                                {peso_value(item.sales)}
                             </Text>
                             <Text style={styles.colSmall}>
                                 {peso_value(item.profit)}
@@ -350,7 +375,7 @@ const ProfitReportSection = () => {
                                 {item.cost.toLocaleString()}
                             </Text> */}
                             {/* <Text style={styles.colSmall}>
-                                {item.total.toLocaleString()}
+                                {item.sales.toLocaleString()}
                             </Text> */}
                             {/* <Text style={styles.colSmall}>
                                 {item.profit.toLocaleString()}
@@ -364,8 +389,12 @@ const ProfitReportSection = () => {
                         <Text>
                             Total Sales: {peso_value(total_sales_credit)}
                         </Text>
+                        {/* <Text>
+                            Total Discount: {peso_value(total_discount_credit)}
+                        </Text> */}
                         <Text>
-                            Total Profit: {peso_value(total_sales_credit - total_cost_credit)}
+                            Total Profit:{" "}
+                            {peso_value(total_sales_credit - total_cost_credit)}
                         </Text>
                     </View>
                     {/* Summary */}

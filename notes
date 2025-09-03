@@ -1,31 +1,12 @@
--refund
--expenses
-
-php artisan serve --host=192.168.123.34  --port=8080
-
-
-In report Invoices
-Item Count, QUantity & total?
-
-carts
-
--   is_read
-
-all
--stock movement
--sales by cystomer
--sales by products
--purchase by product
--suppliers
--purchase invoice
--refunds
--invoice
--profit & margin
-
-product & categories
-
--   daily sales
--   Sales By Payment Types
--   Unpaid Sales
--   payment Types by user
--   payment by customer
+UPDATE cart_items ci
+JOIN carts c ON ci.cart_id = c.cart_id
+JOIN (
+    SELECT cart_id, COUNT(*) AS item_count
+    FROM cart_items
+    GROUP BY cart_id
+) x ON ci.cart_id = x.cart_id
+SET 
+    ci.discount = ci.discount + (c.discount_per_order / x.item_count),
+    ci.total = ci.total - (ci.discount + (c.discount_per_order / x.item_count)),
+    ci.profit = (ci.total - (ci.discount + (c.discount_per_order / x.item_count))) - ci.cost
+WHERE c.discount_per_order != 0;

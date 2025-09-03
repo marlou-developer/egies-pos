@@ -21,7 +21,27 @@ use Illuminate\Support\Collection;
 
 class CartController extends Controller
 {
+    public function change_discount_per_order()
+    {
+        $carts = Cart::where('discount_per_order', '!=', 0)->orderBy('id', 'desc')->get();
 
+        foreach ($carts as $cart) {
+            $cart_items = CartItem::where('cart_id', $cart->cart_id)->get();
+
+            $split_discount = $cart->discount_per_order / count($cart_items);
+
+            foreach ($cart_items as $item) {
+                $item->update([
+                    'discount' => $item->discount + $split_discount,
+                    'total' => ($item->price * $item->quantity) - ($item->discount + $split_discount),
+                    'profit' => ($item->price * $item->quantity) - ($item->discount + $split_discount) - $item['cost'],
+                ]);
+            }
+        }
+        return response()->json([
+            'carts' => $carts,
+        ], 200);
+    }
     public function report_items()
     {
 
@@ -401,7 +421,8 @@ class CartController extends Controller
                     DB::raw('SUM(quantity) as quantity'),
                     DB::raw('SUM(cost) as cost'),
                     DB::raw('SUM(profit) as profit'),
-                    DB::raw('SUM(fixed_price * quantity) as total'),
+                    DB::raw('SUM(total) as sales'),
+                    DB::raw('SUM(discount) as discount'),
 
                 )
                     ->whereBetween('cart_items.created_at', [$start, $end])
@@ -434,8 +455,8 @@ class CartController extends Controller
                     ->with(['product:id,name'])
                     ->get()
                     ->map(function ($item) {
-                        $margin = $item->total > 0
-                            ? round(($item->profit / $item->total) * 100, 2)
+                        $margin = $item->sales > 0
+                            ? round(($item->profit / $item->sales) * 100, 2)
                             : 0;
 
                         return [
@@ -443,8 +464,9 @@ class CartController extends Controller
                             'product' => $item->product->name ?? 'N/A',
                             'quantity' => $item->quantity,
                             'cost' => $item->cost,
-                            'total' => $item->total,
+                            'sales' => $item->sales,
                             'profit' => $item->profit,
+                            'discount' => $item->discount,
                             'margin' => $margin . '%',
                         ];
                     });
@@ -452,15 +474,27 @@ class CartController extends Controller
 
             // Generate each cart item collection with specific cart condition
             $cart_items_store = $baseCartItemsQuery(function ($q) {
-                $q->where('shop', 'Store');
+                $q->where([
+                    ['is_credit', '<>', 'true'],
+                    ['shop', '=', 'Store'],
+                    ['status', '=', 'Paid']
+                ]);
             });
 
             $cart_items_shopee = $baseCartItemsQuery(function ($q) {
-                $q->where('shop', 'Shopee');
+                $q->where([
+                    ['is_credit', '<>', 'true'],
+                    ['shop', '=', 'Shopee'],
+                    ['status', '=', 'Paid']
+                ]);
             });
 
             $cart_items_credit = $baseCartItemsQuery(function ($q) {
-                $q->where('is_credit', 'true');
+                $q->where([
+                    ['is_credit', '=', 'true'],
+                    ['shop', '=', 'Store'],
+                    ['status', '=', 'Paid']
+                ]);
             });
 
             // Final response
@@ -939,10 +973,6 @@ class CartController extends Controller
 
         $today = Carbon::now('Asia/Manila')->toDateString();
 
-        $current_sales = Cart::whereDate('created_at', $today)
-            ->where('status', 'Paid')
-            ->sum(DB::raw('total_price'));
-
 
         $users = User::all();
 
@@ -1009,27 +1039,36 @@ class CartController extends Controller
             }
         }
 
-        // 
-        $current_profit = CartItem::whereHas('cart', function ($query) {
-            $today = Carbon::now('Asia/Manila')->toDateString();;
-            $query->whereDate('created_at', $today);
-            $query->where('status', 'Paid');
-        })
-            ->sum(DB::raw('profit'));
+
+        $current_sales = CartItem::whereDate('created_at', $today)
+            ->whereHas('cart', function ($query) {
+                $query->where('status', 'Paid');
+            })
+            ->sum('total');
+
+        $current_profit = CartItem::whereDate('created_at', $today)
+            ->whereHas('cart', function ($query) {
+                $query->where('status', 'Paid');
+            })
+            ->sum('profit');
+
 
         $total_sales = CartItem::whereHas('cart', function ($query) {
             $query->where('status', 'Paid');
-        })->sum(DB::raw('total'));
+        })->sum('total');
+
         $total_profit = CartItem::whereHas('cart', function ($query) {
             $query->where('status', 'Paid');
-        })->sum(DB::raw('profit'));
+        })->sum('profit');
 
+        $total_cost = CartItem::whereHas('cart', function ($query) {
+            $query->where('status', 'Paid');
+        })->sum('cost');
 
         $current_credit = Cart::whereDate('created_at', $today)
             ->whereIn('status', ['Pending', 'Partial'])
-            ->where('is_credit', 'true')  // boolean true, or use 1 if stored as integer
+            ->where('is_credit', 'true')
             ->sum('total_price');
-
 
 
         $total_credit = Cart::where('is_credit', '=', 'true')
@@ -1068,6 +1107,7 @@ class CartController extends Controller
             ->value('total');
         $notification = Notification::where('user_id', $userAuth->id)->with(['cart', 'product'])->orderBy('id', 'desc')
             ->limit(100)->get();
+
         return response()->json([
             'notification' => $notification, //
             'over_due' => $over_due, //
@@ -1075,6 +1115,7 @@ class CartController extends Controller
             'out_stocks' => $out_stocks, //
             'dashboard' => [
                 'current_sales' => $current_sales,
+                'total_cost' => $total_cost,
                 'current_profit' => $current_profit,
                 'total_sales' => $total_sales,
                 'total_profit' => $total_profit,
@@ -1196,7 +1237,6 @@ class CartController extends Controller
             $discount = $item['discount'] ?? 0;
             $customer_discount = $item['customer_discount'] ?? 0;
             $price = $subPrice;
-            $total = ($quantity * $price) - $discounted;
 
             CartItem::create([
                 'cart_id' => $request->cart_id ?? $cart->cart_id,
@@ -1206,10 +1246,10 @@ class CartController extends Controller
                 'pricing_type' => $pricing_type,
                 'quantity' => $quantity,
                 'cost' => $item['cost'] * $quantity,
-                'profit' =>  $total - ($item['cost'] * $quantity),
+                'profit' => ($price * $quantity) - ($discount + $split_discount) - ($item['cost'] * $quantity),
                 'price' => $price,
-                'fixed_price' => ($total / $quantity) - $split_discount,
-                'total' => $total,
+                'fixed_price' => (($price * $quantity) - ($discount + $split_discount))  / $quantity,
+                'total' => ($price * $quantity) - ($discount + $split_discount),
             ]);
 
             $product = Product::where('id', $item['id'])->first();

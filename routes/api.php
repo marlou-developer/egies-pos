@@ -7,7 +7,6 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CreditPaymentController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductDiscountController;
@@ -20,6 +19,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+    Route::get('change_discount_per_order', [CartController::class, 'change_discount_per_order']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('account', AccountController::class);
     Route::get('product/search-by-code', [ProductController::class, 'searchByCode']);
@@ -30,7 +31,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('stock', StockController::class);
     Route::get('get_stock_by_products_id/{id}', [StockController::class, 'get_stock_by_products_id']);
     Route::resource('category', CategoryController::class);
-    Route::resource('expense_category', ExpenseCategoryController::class);
     Route::get('get_customers', [CustomerController::class, 'get_customers']);
     Route::resource('customer', CustomerController::class);
     Route::put('update_customer/{id}', [CartController::class, 'update_customer']);

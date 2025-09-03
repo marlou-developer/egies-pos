@@ -4,7 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { setCarts } from "@/app/redux/product-slice";
 import PaySection from "./pay-section";
 import CreditPurchaseSection from "./credit-purchase-section";
-import { UserIcon, XMarkIcon, ShoppingCartIcon } from "@heroicons/react/24/outline";
+import {
+    UserIcon,
+    XMarkIcon,
+    ShoppingCartIcon,
+} from "@heroicons/react/24/outline";
 import PrintReceiptSection from "./print-receipt-section";
 import moment from "moment";
 
@@ -29,7 +33,7 @@ export default function PosSection() {
             const updatedCarts = carts.map((item) => ({
                 ...item,
                 sub_price: item.shopee || 0, // Use shopee price if exists, otherwise 0
-                type_item_discount: "shopee"
+                type_item_discount: "shopee",
             }));
             dispatch(setCarts(updatedCarts));
         } else if (newStore === "Store") {
@@ -37,7 +41,7 @@ export default function PosSection() {
             const updatedCarts = carts.map((item) => ({
                 ...item,
                 sub_price: item.srp || 0,
-                type_item_discount: "srp"
+                type_item_discount: "srp",
             }));
             dispatch(setCarts(updatedCarts));
         }
@@ -78,10 +82,10 @@ export default function PosSection() {
         const updated = carts.map((item) =>
             item.id === result.id
                 ? {
-                    ...item,
-                    sub_price: result[value],
-                    type_item_discount: value,
-                }
+                      ...item,
+                      sub_price: result[value],
+                      type_item_discount: value,
+                  }
                 : item
         );
         dispatch(setCarts(updated));
@@ -176,7 +180,9 @@ export default function PosSection() {
                                 <div className="w-full">
                                     <select
                                         value={store}
-                                        onChange={(e) => handleStoreChange(e.target.value)}
+                                        onChange={(e) =>
+                                            handleStoreChange(e.target.value)
+                                        }
                                         className="w-full rounded-md"
                                         name=""
                                         disabled={user?.user_type === "Shopee"} // Optional: disable dropdown for Shopee users
@@ -276,8 +282,12 @@ export default function PosSection() {
                                                                                     .value
                                                                             )
                                                                         )
-                                                                    } value={
-                                                                        res?.sub_price === 0 ? "" : res?.sub_price
+                                                                    }
+                                                                    value={
+                                                                        res?.sub_price ===
+                                                                        0
+                                                                            ? ""
+                                                                            : res?.sub_price
                                                                     }
                                                                     onWheel={(
                                                                         e
@@ -324,8 +334,7 @@ export default function PosSection() {
                                                                 update_pcs(
                                                                     res,
                                                                     Number(
-                                                                        e
-                                                                            .target
+                                                                        e.target
                                                                             .value
                                                                     )
                                                                 )
@@ -363,45 +372,50 @@ export default function PosSection() {
                                                         >
                                                             {store !=
                                                                 "Store" && (
-                                                                    <option
-                                                                        value="shopee"
-                                                                        selected
-                                                                    >
-                                                                        Shopee Price
-                                                                    </option>
-                                                                )}
+                                                                <option
+                                                                    value="shopee"
+                                                                    selected
+                                                                >
+                                                                    Shopee Price
+                                                                </option>
+                                                            )}
                                                             {store ==
                                                                 "Store" && (
-                                                                    <>
-                                                                        <option
-                                                                            value="srp"
-                                                                            selected
-                                                                        >
-                                                                            SRP Price
-                                                                        </option>
+                                                                <>
+                                                                    <option
+                                                                        value="srp"
+                                                                        selected
+                                                                    >
+                                                                        SRP
+                                                                        Price
+                                                                    </option>
 
-                                                                        {res.reseller && (
-                                                                            <option value="reseller">
-                                                                                Reseller Price
-                                                                            </option>
-                                                                        )}
-                                                                        {res.city_distributor && (
-                                                                            <option value="city_distributor">
-                                                                                City Distributor
-                                                                            </option>
-                                                                        )}
-                                                                        {res.district_distributor && (
-                                                                            <option value="district_distributor">
-                                                                                District Distributor
-                                                                            </option>
-                                                                        )}
-                                                                        {res.district_distributor && (
-                                                                            <option value="district_distributor">
-                                                                                Provincial Distributor
-                                                                            </option>
-                                                                        )}
-                                                                    </>
-                                                                )}
+                                                                    {res.reseller && (
+                                                                        <option value="reseller">
+                                                                            Reseller
+                                                                            Price
+                                                                        </option>
+                                                                    )}
+                                                                    {res.city_distributor && (
+                                                                        <option value="city_distributor">
+                                                                            City
+                                                                            Distributor
+                                                                        </option>
+                                                                    )}
+                                                                    {res.district_distributor && (
+                                                                        <option value="district_distributor">
+                                                                            District
+                                                                            Distributor
+                                                                        </option>
+                                                                    )}
+                                                                    {res.district_distributor && (
+                                                                        <option value="district_distributor">
+                                                                            Provincial
+                                                                            Distributor
+                                                                        </option>
+                                                                    )}
+                                                                </>
+                                                            )}
                                                         </select>
                                                     </div>
                                                 </div>
@@ -416,14 +430,18 @@ export default function PosSection() {
                                                                 Number(
                                                                     res.sub_price
                                                                 ) *
-                                                                Number(
-                                                                    res.pcs ??
-                                                                    "1"
-                                                                ) -
-                                                                Number(
-                                                                    res.discount ??
-                                                                    "0"
-                                                                )
+                                                                    Number(
+                                                                        res.pcs ??
+                                                                            "1"
+                                                                    ) -
+                                                                    Number(
+                                                                        res.discount ??
+                                                                            "0"
+                                                                    ) -
+                                                                    (Number(
+                                                                        overallDiscount
+                                                                    ) /
+                                                                        carts.length)
                                                             ).toFixed(2)}
                                                         </div>
                                                         {/* Delete button for desktop */}
@@ -494,9 +512,7 @@ export default function PosSection() {
                                                         : e.target.value
                                                 )
                                             }
-                                            onWheel={(e) =>
-                                                e.target.blur()
-                                            }
+                                            onWheel={(e) => e.target.blur()}
                                             className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1 pl-3 pr-1 text-base text-gray-900 outline-none focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
                                         />
                                     </div>
@@ -527,8 +543,8 @@ export default function PosSection() {
                                             {isNaN(parseFloat(overallDiscount))
                                                 ? "0.00"
                                                 : parseFloat(
-                                                    overallDiscount
-                                                ).toFixed(2)}
+                                                      overallDiscount
+                                                  ).toFixed(2)}
                                         </span>
                                     </div>
 

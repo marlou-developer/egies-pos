@@ -10,7 +10,10 @@ import EditDIscountSection from "../../../credits/id/ids/sections/edit-discount-
 import ReturnItemSection from "./return-item-section";
 import UpdateBillToSection from "./update-bill-to-section";
 import store from "@/app/store/store";
-import { get_all_customers_thunk, get_customer_thunk } from "@/app/redux/customer-thunk";
+import {
+    get_all_customers_thunk,
+    get_customer_thunk,
+} from "@/app/redux/customer-thunk";
 
 const people = [
     {
@@ -89,21 +92,23 @@ export default function SalesIdTableSection() {
                                             />
                                         </td>
                                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                                            {peso_value(Number(res?.price ?? 0))}
+                                            {peso_value(
+                                                Number(res?.price ?? 0)
+                                            )}
                                         </td>
                                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                                            {peso_value(Number(res?.total ?? 0))}
+                                            {peso_value(
+                                                Number(res?.total ?? 0)
+                                            )}
                                         </td>
                                         <td className="px-3 py-4 gap-2 flex  text-sm whitespace-nowrap text-gray-500">
                                             {/* {Number(res.quantity) != 0 && ( */}
-                                                <>
-                                                    <RemoveProductSection
-                                                        data={res}
-                                                    />
-                                                    <ReturnItemSection
-                                                        data={res}
-                                                    />
-                                                </>
+                                            <>
+                                                <RemoveProductSection
+                                                    data={res}
+                                                />
+                                                <ReturnItemSection data={res} />
+                                            </>
                                             {/* )} */}
                                         </td>
                                     </tr>
@@ -116,51 +121,91 @@ export default function SalesIdTableSection() {
                                     <div className="flex flex-col sm:flex-row sm:justify-between">
                                         <span>Bill To:</span>
                                         <div className="flex gap-1 justify-end">
-                                            {cart?.customer?.name ?? "Walk-In Customer"}
+                                            {cart?.customer?.name ??
+                                                "Walk-In Customer"}
                                             <UpdateBillToSection data={cart} />
                                         </div>
                                     </div>
-
+                                    <div className="flex flex-col sm:flex-row sm:justify-between">
+                                        {cart?.shop == "Shopee" && (
+                                            <>
+                                                <span>{cart?.shop}:</span>
+                                                <div className="text-right">
+                                                    {cart?.shopee_store ??
+                                                        "Loading..."}
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
                                     <div className="flex flex-col sm:flex-row sm:justify-between">
                                         <span>Payment Status:</span>
-                                        <div className="text-right">{cart?.status ?? "Loading..."}</div>
+                                        <div className="text-right">
+                                            {cart?.status ?? "Loading..."}
+                                        </div>
                                     </div>
 
                                     <div className="flex flex-col sm:flex-row sm:justify-between">
                                         <span>Subtotal Price:</span>
                                         <div className="text-right">
-                                            {peso_value(Number(cart?.sub_total ?? 0))}
+                                            {peso_value(
+                                                Number(cart?.sub_total ?? 0)
+                                            )}
                                         </div>
                                     </div>
 
                                     <div className="flex flex-col sm:flex-row sm:justify-between">
                                         <span>Customer Total Discount:</span>
                                         <div className="text-right">
-                                            {peso_value(Number(cart?.customer_total_discount ?? 0))}
+                                            {peso_value(
+                                                Number(
+                                                    cart?.customer_total_discount ??
+                                                        0
+                                                )
+                                            )}
                                         </div>
                                     </div>
 
                                     <div className="flex flex-col sm:flex-row sm:justify-between">
                                         <span>Total Discount Per Item:</span>
                                         <div className="text-right">
-                                            {peso_value(Number(cart?.discount_per_item ?? 0))}
+                                            {peso_value(
+                                                Number(
+                                                    cart?.discount_per_item ?? 0
+                                                )
+                                            )}
                                         </div>
                                     </div>
 
                                     <div className="flex flex-col sm:flex-row sm:justify-between">
                                         <span>Total Discount Per Order:</span>
                                         <div className="text-right">
-                                            {peso_value(Number(cart?.discount_per_order ?? 0))}
+                                            {peso_value(
+                                                Number(
+                                                    cart?.discount_per_order ??
+                                                        0
+                                                )
+                                            )}
                                         </div>
                                     </div>
 
                                     <div className="flex flex-col sm:flex-row sm:justify-between">
-                                        <span>Overall Total Discount Price:</span>
+                                        <span>
+                                            Overall Total Discount Price:
+                                        </span>
                                         <div className="text-right">
                                             {peso_value(
-                                                Number(cart?.customer_total_discount ?? 0) +
-                                                Number(cart?.discount_per_item ?? 0) +
-                                                Number(cart?.discount_per_order ?? 0)
+                                                Number(
+                                                    cart?.customer_total_discount ??
+                                                        0
+                                                ) +
+                                                    Number(
+                                                        cart?.discount_per_item ??
+                                                            0
+                                                    ) +
+                                                    Number(
+                                                        cart?.discount_per_order ??
+                                                            0
+                                                    )
                                             )}
                                         </div>
                                     </div>
@@ -170,13 +215,14 @@ export default function SalesIdTableSection() {
                                     <div className="flex flex-col sm:flex-row sm:justify-between font-semibold">
                                         <span>Total:</span>
                                         <div className="text-right">
-                                            {peso_value(Number(cart?.total_price ?? 0))}
+                                            {peso_value(
+                                                Number(cart?.total_price ?? 0)
+                                            )}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
