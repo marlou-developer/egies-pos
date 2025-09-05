@@ -184,7 +184,7 @@ const InvoicePDF = () => {
                                     {item.quantity}
                                 </Text>
                                 <Text style={[styles.tableCol, { flex: 0.8 }]}>
-                                    {peso_value(Number(item.price))}
+                                    {peso_value(Number(item.fixed_price))}
                                 </Text>
                                 <Text style={[styles.tableCol, { flex: 1 }]}>
                                     {peso_value(Number(item.total))}
