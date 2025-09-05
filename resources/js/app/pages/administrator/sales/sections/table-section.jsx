@@ -73,6 +73,7 @@ export default function TableSection() {
                                 <tr>
                                     {[
                                         "Invoice",
+                                        "Cost",
                                         "Total",
                                         "Customer Name",
                                         "Customer Discount",
@@ -111,6 +112,16 @@ export default function TableSection() {
                                         <td className="border-b border-gray-200 px-3 pl-8 py-4 text-gray-500 whitespace-nowrap">
                                             {res.cart_id}
                                         </td>
+                                        <td className="border-b border-gray-200 px-3 pl-8 py-4 text-gray-500 whitespace-nowrap">
+                                            {peso_value(
+                                                res?.cart_items?.reduce(
+                                                    (acc, item) =>
+                                                        acc +
+                                                        Number(item.cost || 0),
+                                                    0
+                                                )
+                                            )}
+                                        </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap lg:table-cell">
                                             <b>
                                                 {peso_value(
@@ -147,9 +158,6 @@ export default function TableSection() {
                                                             item.profit || 0
                                                         ),
                                                     0
-                                                ) -
-                                                Number(
-                                                    res.discount_per_order
                                                 )
                                             )}
                                         </td>
@@ -177,7 +185,6 @@ export default function TableSection() {
                                                         <FaPenToSquare className=" text-white" />
                                                     </a>
                                                 </Tooltip>
-
                                             </div>
                                         </td>
                                     </tr>
