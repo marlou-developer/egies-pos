@@ -495,6 +495,16 @@ class CartController extends Controller
                     ['shop', '=', 'Store'],
                     ['status', '=', 'Paid']
                 ]);
+                $q->orWhere([
+                    ['is_credit', '=', 'true'],
+                    ['shop', '=', 'Store'],
+                    ['status', '=', 'Pending']
+                ]);
+                $q->orWhere([
+                    ['is_credit', '=', 'true'],
+                    ['shop', '=', 'Store'],
+                    ['status', '=', 'Partial']
+                ]);
             });
 
             // Final response
