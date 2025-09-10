@@ -507,12 +507,43 @@ class CartController extends Controller
                 ]);
             });
 
+            // Get expenses for the period
+            $expenses = Expense::where(function ($query) use ($start, $end) {
+                $query->whereBetween('date', [$start->toDateString(), $end->toDateString()])
+                    ->orWhereBetween('date', [$start, $end]);
+            })
+                ->get()
+                ->map(function ($expense) {
+                    return [
+                        'category' => $expense->category ?? 'N/A',
+                        'item' => $expense->item ?? 'N/A',
+                        'date' => $expense->date ?? 'N/A',
+                        'total_cost' => (float)$expense->cost * (float)$expense->qty,
+                        'total_qty' => (float)$expense->qty,
+                    ];
+                })
+                ->groupBy(function ($item) {
+                    return $item['category'] . '|' . $item['item'];
+                })
+                ->map(function ($expenseGroup) {
+                    $first = $expenseGroup->first();
+                    return [
+                        'category' => $first['category'],
+                        'item' => $first['item'],
+                        'date' => $first['date'],
+                        'total_cost' => $expenseGroup->sum('total_cost'),
+                        'total_qty' => $expenseGroup->sum('total_qty'),
+                    ];
+                })
+                ->values();
+
             // Final response
             return response()->json([
                 'data' => [
                     'store' => $cart_items_store,
                     'shopee' => $cart_items_shopee,
                     'credit' => $cart_items_credit,
+                    'expenses' => $expenses,
                 ],
                 'customer' => $customer,
                 'user' => $user,
@@ -871,11 +902,14 @@ class CartController extends Controller
                 'product' => $product,
             ]);
         } else if ($request->type == 'Expenses') {
-            $carts = Expense::whereBetween('date', [$start, $end])
+            $expenses = Expense::where(function ($query) use ($start, $end) {
+                $query->whereBetween('date', [$start->toDateString(), $end->toDateString()])
+                    ->orWhereBetween('date', [$start, $end]);
+            })
                 ->get();
             return response()->json([
 
-                'data' => $carts,
+                'data' => $expenses,
                 'customer' => $customer,
                 'user' => $user,
                 'product' => $product,

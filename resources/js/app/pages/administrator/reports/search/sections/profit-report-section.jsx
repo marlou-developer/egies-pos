@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
     Page,
     Text,
@@ -42,6 +42,12 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
         marginBottom: 10,
+        marginTop: 10,
+    },
+    summary_title: {
+        fontSize: 18,
+        fontWeight: "bold",
+        marginTop: 10,
     },
     infoRow: {
         flexDirection: "row",
@@ -72,13 +78,56 @@ const styles = StyleSheet.create({
         marginTop: 10,
         alignItems: "flex-end",
     },
+    summary_all: {
+        marginTop: 10,
+        alignItems: "flex-start",
+        fontWeight: "bold",
+    },
+    loadingContainer: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        backgroundColor: "#f5f5f5",
+    },
+    loadingContent: {
+        textAlign: "center",
+        padding: 20,
+        backgroundColor: "white",
+        borderRadius: 8,
+        boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+    },
+    spinner: {
+        border: "4px solid #f3f3f3",
+        borderTop: "4px solid #3498db",
+        borderRadius: "50%",
+        width: 40,
+        height: 40,
+        animation: "spin 1s linear infinite",
+        margin: "0 auto 16px",
+    },
 });
 
 const ProfitReportSection = () => {
     const { reports } = useSelector((store) => store.carts);
+    const [isLoading, setIsLoading] = useState(true);
     const params = new URLSearchParams(window.location.search);
     const initialStart = params.get("start");
     const initialEnd = params.get("end");
+
+    // Simulate loading time for PDF generation
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 1500); // 1.5 seconds loading time
+
+        return () => clearTimeout(timer);
+    }, [reports]);
+
+    // Reset loading when reports data changes
+    useEffect(() => {
+        setIsLoading(true);
+    }, [reports]);
 
     const total_cost_store = reports?.data?.store?.reduce(
         (sum, item) => sum + Number(item.cost),
@@ -116,6 +165,10 @@ const ProfitReportSection = () => {
         (sum, item) => sum + Number(item.sales),
         0
     );
+    const total_expenses = reports?.data?.expenses?.reduce(
+        (sum, item) => sum + Number(item.total_cost),
+        0
+    );
     const total_discount_shopee = reports?.data?.shopee?.reduce(
         (sum, item) => sum + Number(item.discount ?? 0),
         0
@@ -133,6 +186,29 @@ const ProfitReportSection = () => {
         (sum, item) => sum + Number(item.discount ?? 0),
         0
     );
+
+    const total_summary_cost =
+        Number(total_cost_credit) +
+        Number(total_cost_shopee) +
+        (Array.isArray(total_cost_store)
+            ? total_cost_store.reduce((sum, item) => sum + Number(item.cost), 0)
+            : Number(total_cost_store) || 0);
+
+    const total_summary_sales =
+        Number(total_sales_credit) +
+        Number(total_sales_shopee) +
+        (Array.isArray(total_sales_store)
+            ? total_sales_store.reduce(
+                  (sum, item) => sum + Number(item.cost),
+                  0
+              )
+            : Number(total_sales_store) || 0);
+
+
+    const total_summary_profit =
+        Number(total_summary_sales) -
+        Number(total_summary_cost) -
+        Number(total_expenses);
     // Sort data by product name
     const sortedStore = (reports?.data?.store || [])
         .slice()
@@ -143,6 +219,36 @@ const ProfitReportSection = () => {
     const sortedCredit = (reports?.data?.credit || [])
         .slice()
         .sort((a, b) => (a?.product || "").localeCompare(b?.product || ""));
+    const sortedExpenses = (reports?.data?.expenses || [])
+        .slice()
+        .sort((a, b) => (a?.category || "").localeCompare(b?.category || ""));
+
+    // Show loading spinner while generating report
+    if (isLoading) {
+        return (
+            <>
+                <style>
+                    {`
+                        @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    `}
+                </style>
+                <div style={styles.loadingContainer}>
+                    <div style={styles.loadingContent}>
+                        <div style={styles.spinner}></div>
+                        <h3 style={{ margin: 0, color: "#333" }}>
+                            Generating Report...
+                        </h3>
+                        <p style={{ margin: "8px 0 0", color: "#666" }}>
+                            Please wait while we prepare your profit report
+                        </p>
+                    </div>
+                </div>
+            </>
+        );
+    }
 
     return (
         <PDFViewer style={{ width: "100%", height: "100vh" }}>
@@ -397,7 +503,52 @@ const ProfitReportSection = () => {
                             {peso_value(total_sales_credit - total_cost_credit)}
                         </Text>
                     </View>
-                    {/* Summary */}
+
+                    {/* <Text style={styles.title}>Expenses</Text>
+                    <View style={styles.tableHeader}>
+                        <Text style={styles.col}>Category</Text>
+                        <Text style={styles.col}>Item</Text>
+                        <Text style={styles.colSmall}>Quantity</Text>
+                        <Text style={styles.colSmall}>Date</Text>
+                        <Text style={styles.colSmall}>Total Cost</Text>
+                    </View>
+
+                    {sortedExpenses.map((item, idx) => (
+                        <View style={styles.tableRow} key={idx}>
+                            <Text style={styles.col}>{item.category}</Text>
+                            <Text style={styles.col}>{item.item}</Text>
+                            <Text style={styles.colSmall}>
+                                {item.total_qty}
+                            </Text>
+                            <Text style={styles.col}>{item.date}</Text>
+                            <Text style={styles.colSmall}>
+                                {peso_value(item.total_cost)}
+                            </Text>
+                        </View>
+                    ))}
+
+                    <View style={styles.summary}>
+                        <Text>
+                            Total Expenses: {peso_value(total_expenses)}
+                        </Text>
+                    </View> */}
+
+                    <Text style={styles.summary_title}>Summary</Text>
+
+                    <View style={styles.summary_all}>
+                        <Text>
+                            Total Cost: {peso_value(total_summary_cost)}
+                        </Text>
+                        <Text>
+                            Total Sales: {peso_value(total_summary_sales)}
+                        </Text>
+                        <Text>
+                            Total Expenses: {peso_value(total_expenses)}
+                        </Text>
+                        <Text>
+                            Total Profit: {peso_value(total_summary_profit)}
+                        </Text>
+                    </View>
                 </Page>
             </Document>
         </PDFViewer>
