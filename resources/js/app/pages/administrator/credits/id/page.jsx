@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
     bold: {
         fontWeight: "bold",
     },
+    accounts: { color: "cornflowerblue", fontStyle: "italic" },
 });
 
 const InvoicePDF = () => {
@@ -147,8 +148,7 @@ const InvoicePDF = () => {
                         {/* <Text>Terms: Net 15</Text> */}
                         {cart?.due_date && (
                             <Text>
-                                Due Date:{" "}
-                                {moment(cart?.due_date).format("LL")}
+                                Due Date: {moment(cart?.due_date).format("LL")}
                             </Text>
                         )}
                     </View>
@@ -196,36 +196,20 @@ const InvoicePDF = () => {
                     {/* Totals */}
                     <View style={styles.totalSection}>
                         <View style={styles.totalRow}>
-                            <Text>
-                                Payment Status:
-                            </Text>
-                            <Text>
-                                &nbsp;{cart?.status}
-                            </Text>
+                            <Text>Payment Status:</Text>
+                            <Text>&nbsp;{cart?.status}</Text>
                         </View>
                         <View style={styles.totalRow}>
-                            <Text>
-                                Subtotal Price:{" "}
-                            </Text>
-                            <Text>
-                                {peso_value(Number(cart?.sub_total))}
-                            </Text>
+                            <Text>Subtotal Price: </Text>
+                            <Text>{peso_value(Number(cart?.sub_total))}</Text>
                         </View>
                         <View style={styles.totalRow}>
-                            <Text>
-                                Discount Price:{" "}
-                            </Text>
+                            <Text>Discount Price: </Text>
                             <Text>
                                 {peso_value(
-                                    Number(
-                                        cart?.customer_total_discount ?? 0
-                                    ) +
-                                    Number(
-                                        cart?.discount_per_item ?? 0
-                                    ) +
-                                    Number(
-                                        cart?.discount_per_order ?? 0
-                                    )
+                                    Number(cart?.customer_total_discount ?? 0) +
+                                        Number(cart?.discount_per_item ?? 0) +
+                                        Number(cart?.discount_per_order ?? 0)
                                 )}
                             </Text>
                         </View>
@@ -244,9 +228,7 @@ const InvoicePDF = () => {
                         />
 
                         <View style={styles.totalRow}>
-                            <Text style={styles.bold}>
-                                Total:{" "}
-                            </Text>
+                            <Text style={styles.bold}>Total: </Text>
                             <Text style={styles.bold}>
                                 {peso_value(Number(cart?.total_price))}
                             </Text>
@@ -259,9 +241,27 @@ const InvoicePDF = () => {
                     </View>
 
                     {/* Notes */}
-                    <Text style={styles.notes}>
-                        Notes: Thanks for your business.
-                    </Text>
+                    <View>
+                        <Text style={styles.notes}>Accounts:</Text>
+                        <View style={{ flexDirection: "row" }}>
+                            <Text
+                                style={[styles.accounts, { marginRight: 30 }]}
+                            >
+                                BDO:{"\n"}
+                                Glennie Doig{"\n"}
+                                003080117454
+                            </Text>
+                            <Text style={styles.accounts}>
+                                GCASH:{"\n"}
+                                Glennie B.{"\n"}
+                                09298788827
+                            </Text>
+                        </View>
+                        <Text style={[styles.notes, { marginTop: 15 }]}>
+                            Notes:{"\n"}
+                            Thanks for your business.
+                        </Text>
+                    </View>
                 </Page>
             </Document>
         </PDFViewer>

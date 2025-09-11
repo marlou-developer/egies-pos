@@ -7,11 +7,13 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CreditPaymentController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductDiscountController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\SupplierController;
+use App\Models\Expense;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -55,6 +57,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('dashboard', DashboardController::class);
     Route::resource('supplier', SupplierController::class);
     Route::resource('expense', ExpenseController::class);
+    Route::resource('expense_category', ExpenseCategoryController::class);
 
     Route::resource('product_discount', ProductDiscountController::class);
     Route::post('update_product', [ProductController::class, 'update_product']);
