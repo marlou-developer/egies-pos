@@ -532,7 +532,7 @@ const ProfitReportSection = () => {
                         </Text>
                     </View> */}
 
-                    <Text style={[styles.summary_title, { marginTop: 30 }]}>
+                    <Text style={[styles.summary_title, { marginTop: 40 }]}>
                         Summary
                     </Text>
 
