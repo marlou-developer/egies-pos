@@ -204,7 +204,6 @@ const ProfitReportSection = () => {
               )
             : Number(total_sales_store) || 0);
 
-
     const total_summary_profit =
         Number(total_summary_sales) -
         Number(total_summary_cost) -
@@ -533,20 +532,24 @@ const ProfitReportSection = () => {
                         </Text>
                     </View> */}
 
-                    <Text style={styles.summary_title}>Summary</Text>
+                    <Text style={[styles.summary_title, { marginTop: 30 }]}>
+                        Summary
+                    </Text>
 
                     <View style={styles.summary_all}>
                         <Text>
-                            Total Cost: {peso_value(total_summary_cost)}
+                            Total Overall Cost: {peso_value(total_summary_cost)}
                         </Text>
                         <Text>
-                            Total Sales: {peso_value(total_summary_sales)}
+                            Total Overall Sales:{" "}
+                            {peso_value(total_summary_sales)}
                         </Text>
                         <Text>
                             Total Expenses: {peso_value(total_expenses)}
                         </Text>
                         <Text>
-                            Total Profit: {peso_value(total_summary_profit)}
+                            Total Overall Profit:{" "}
+                            {peso_value(total_summary_profit)}
                         </Text>
                     </View>
                 </Page>
