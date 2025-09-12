@@ -82,10 +82,10 @@ const ExpensesReportSection = () => {
     const initialEnd = params.get("end");
     const total_cost = reports?.data
         ?.filter((res) => res.category != "Shopee Expenses")
-        .reduce((sum, item) => sum + Number(item.cost), 0);
+        .reduce((sum, item) => sum + Number(String(item.cost).replace(/,/g, '')), 0);
     const shopee_total_cost = reports?.data
         ?.filter((res) => res.category == "Shopee Expenses")
-        .reduce((sum, item) => sum + Number(item.cost), 0);
+        .reduce((sum, item) => sum + Number(String(item.cost).replace(/,/g, '')), 0);
     console.log("reportsreports", reports?.data);
     return (
         <PDFViewer style={{ width: "100%", height: "100vh" }}>
