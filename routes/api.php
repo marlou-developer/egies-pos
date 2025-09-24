@@ -41,6 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('edit_discount', [CartController::class, 'edit_discount']);
     Route::get('get_cart_credit', [CartController::class, 'get_cart_credit']);
     Route::get('get_shopee', [CartController::class, 'get_shopee']);
+    Route::get('get_sales', [CartController::class, 'get_sales']);
     Route::get('get_over_due', [CartController::class, 'get_over_due']);
     Route::post('update_status', [CartController::class, 'update_status']);
     Route::post('return_per_item', [CartController::class, 'return_per_item']);

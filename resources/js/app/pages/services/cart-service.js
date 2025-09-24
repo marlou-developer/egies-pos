@@ -100,6 +100,14 @@ export function get_shopee_service() {
         return result;
     } catch (error) { }
 }
+export function get_sales_service() {
+    try {
+        const result = axios.get(
+            "/api/get_sales" + window.location.search
+        );
+        return result;
+    } catch (error) { }
+}
 export function get_cart_credit_service() {
     try {
         const result = axios.get(

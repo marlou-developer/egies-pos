@@ -1,4 +1,4 @@
-import { add_payment_service, create_cart_service, delete_cart_item_service, delete_cart_service, get_cart_by_id_service, get_cart_service, get_over_due_service, get_report_items_service, get_report_service, get_shopee_service, update_cart_service, update_customer_service, update_status_service } from "../pages/services/cart-service";
+import { add_payment_service, create_cart_service, delete_cart_item_service, delete_cart_service, get_cart_by_id_service, get_cart_service, get_over_due_service, get_report_items_service, get_report_service, get_sales_service, get_shopee_service, update_cart_service, update_customer_service, update_status_service } from "../pages/services/cart-service";
 import { cartSlice } from "./cart-slice";
 
 export function create_cart_thunk(data) {
@@ -57,6 +57,21 @@ export function get_shopee_thunk() {
         }
     };
 }
+
+export function get_sales_thunk() {
+    return async function (dispatch, getState) {
+        try {
+            dispatch(cartSlice.actions.setLoading(true));
+            const res = await get_sales_service();
+            dispatch(cartSlice.actions.setSales(res.data));
+        } catch (error) {
+            console.error("Error fetching sales:", error);
+            dispatch(cartSlice.actions.setError(error.message));
+            dispatch(cartSlice.actions.setLoading(false));
+        }
+    };
+}
+
 
 
 export function get_cart_thunk() {
