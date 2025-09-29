@@ -491,7 +491,7 @@ export default function ProductsSection() {
                                                             Number(
                                                                 product.cost
                                                             ) === 0
-                                                                ? "₱ -------"
+                                                                ? "———"
                                                                 : `₱${Number(
                                                                       product.cost
                                                                   ).toFixed(
@@ -509,7 +509,7 @@ export default function ProductsSection() {
                                                             Number(
                                                                 product.srp
                                                             ) === 0
-                                                                ? "₱ -------"
+                                                                ? "———"
                                                                 : `₱${Number(
                                                                       product.srp
                                                                   ).toFixed(
@@ -522,7 +522,7 @@ export default function ProductsSection() {
                                                             Number(
                                                                 product.reseller
                                                             ) === 0
-                                                                ? "₱ -------"
+                                                                ? "———"
                                                                 : `₱${Number(
                                                                       product.reseller
                                                                   ).toFixed(
@@ -535,7 +535,7 @@ export default function ProductsSection() {
                                                             Number(
                                                                 product.city_distributor
                                                             ) === 0
-                                                                ? "₱ -------"
+                                                                ? "———"
                                                                 : `₱${Number(
                                                                       product.city_distributor
                                                                   ).toFixed(
@@ -548,7 +548,7 @@ export default function ProductsSection() {
                                                             Number(
                                                                 product.district_distributor
                                                             ) === 0
-                                                                ? "₱ -------"
+                                                                ? "———"
                                                                 : `₱${Number(
                                                                       product.district_distributor
                                                                   ).toFixed(
@@ -561,7 +561,7 @@ export default function ProductsSection() {
                                                             Number(
                                                                 product.provincial_distributor
                                                             ) === 0
-                                                                ? "₱ -------"
+                                                                ? "———"
                                                                 : `₱${Number(
                                                                       product.provincial_distributor
                                                                   ).toFixed(
