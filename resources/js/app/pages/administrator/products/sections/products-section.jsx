@@ -57,11 +57,10 @@ export default function ProductsSection() {
     const [searchResults, setSearchResults] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
     const dispatch = useDispatch();
-    const { products, selectedProducts, selectAll, loading, error } = useSelector(
-        (state) => state.products
-    ) || {
-        products: { data: [], total: 0, last_page: 1 },
-    };
+    const { products, selectedProducts, selectAll, loading, error } =
+        useSelector((state) => state.products) || {
+            products: { data: [], total: 0, last_page: 1 },
+        };
 
     const [openProduct, setOpenProduct] = useState(false);
     const [openCategory, setOpenCategory] = useState(false);
@@ -132,7 +131,9 @@ export default function ProductsSection() {
         setIsSearching(true);
         try {
             // Call the specific product code search API
-            const response = await search_product_by_code_service(searchCode.trim());
+            const response = await search_product_by_code_service(
+                searchCode.trim()
+            );
             setSearchResults(response.data.data || []);
         } catch (error) {
             console.error("Error searching by product code:", error);
@@ -186,8 +187,13 @@ export default function ProductsSection() {
                 </div>
                 <div className="flex gap-3">
                     <PrintSection />
-                    <button type="button" onClick={() => (router.visit('stocks/soft_deleted'))} className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-pink-500 hover:bg-pink-600 p-3 text-sm font-semibold text-white shadow-xs ring-1 ring-gray-300 ring-inset">
-                        View Removed Products<ArrowRightIcon className="h-5" />
+                    <button
+                        type="button"
+                        onClick={() => router.visit("stocks/soft_deleted")}
+                        className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-pink-500 hover:bg-pink-600 p-3 text-sm font-semibold text-white shadow-xs ring-1 ring-gray-300 ring-inset"
+                    >
+                        View Removed Products
+                        <ArrowRightIcon className="h-5" />
                     </button>
                 </div>
             </div>
@@ -204,7 +210,9 @@ export default function ProductsSection() {
                                 className="inline-flex items-center rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
                             >
                                 <FaClipboardList className="mr-1 text-pink-500" />
-                                <span className="hidden sm:inline">ADD NEW PRODUCT</span>
+                                <span className="hidden sm:inline">
+                                    ADD NEW PRODUCT
+                                </span>
                                 <span className="sm:hidden">ADD PRODUCT</span>
                             </button>
                             <button
@@ -213,7 +221,9 @@ export default function ProductsSection() {
                                 className="inline-flex items-center rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-200 focus:z-10"
                             >
                                 <FaList className="mr-1 text-pink-500" />
-                                <span className="hidden sm:inline">ADD CATEGORY</span>
+                                <span className="hidden sm:inline">
+                                    ADD CATEGORY
+                                </span>
                                 <span className="sm:hidden">CATEGORY</span>
                             </button>
                             <button
@@ -222,7 +232,9 @@ export default function ProductsSection() {
                                 className="inline-flex items-center rounded-md bg-pink-100 px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-pink-50 focus:z-10"
                             >
                                 <FaFilter className="mr-1 text-pink-500" />
-                                <span className="hidden sm:inline">FILTER PRODUCTS</span>
+                                <span className="hidden sm:inline">
+                                    FILTER PRODUCTS
+                                </span>
                                 <span className="sm:hidden">FILTER</span>
                             </button>
                         </div>
@@ -239,16 +251,11 @@ export default function ProductsSection() {
                             setOpenFilter={setOpenFilter}
                         />
                     </div>
-
                 </div>
-
             </div>
-
-
 
             {/* Product Table */}
             <div className="mt-8 flow-root">
-
                 <MobileCardProductComponent
                     data={products}
                     selectedData={selectedProducts}
@@ -275,11 +282,20 @@ export default function ProductsSection() {
                                                     type="checkbox"
                                                     checked={selectAll}
                                                     onChange={(e) => {
-                                                        const isChecked = e.target.checked;
-                                                        dispatch(setSelectAll(isChecked));
+                                                        const isChecked =
+                                                            e.target.checked;
+                                                        dispatch(
+                                                            setSelectAll(
+                                                                isChecked
+                                                            )
+                                                        );
                                                         dispatch(
                                                             setSelectedProducts(
-                                                                isChecked ? [...products.all] : []
+                                                                isChecked
+                                                                    ? [
+                                                                          ...products.all,
+                                                                      ]
+                                                                    : []
                                                             )
                                                         );
                                                     }}
@@ -292,7 +308,11 @@ export default function ProductsSection() {
                                                 <div className="flex gap-1 items-center">
                                                     ID/Code
                                                     <button
-                                                        onClick={() => setShowSearchModal(true)}
+                                                        onClick={() =>
+                                                            setShowSearchModal(
+                                                                true
+                                                            )
+                                                        }
                                                         className="text-gray-500 hover:text-pink-500 transition-colors"
                                                         title="Search by Product Code/ID"
                                                     >
@@ -370,108 +390,193 @@ export default function ProductsSection() {
                                                 scope="col"
                                                 className="relative py-3.5 pl-3 pr-4 sm:pr-6"
                                             >
-                                                <span className="sr-only">Edit</span>
+                                                <span className="sr-only">
+                                                    Edit
+                                                </span>
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-200 bg-white">
-                                        {products?.data?.data?.map((product, productIdx) => {
-                                            let quantityy = product?.quantity; // Default status
-                                            let statusClass =
-                                                "inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20";
+                                        {products?.data?.data?.map(
+                                            (product, productIdx) => {
+                                                let quantityy =
+                                                    product?.quantity; // Default status
+                                                let statusClass =
+                                                    "inline-flex items-center rounded-md bg-green-50 px-2 py-1 text-xs font-medium text-green-700 ring-1 ring-inset ring-green-600/20";
 
-                                            if (product.quantity == 0) {
-                                                statusClass =
-                                                    "inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20";
-                                            } else if (
-                                                product.quantity >= 1 &&
-                                                product.quantity <= 10
-                                            ) {
-                                                statusClass =
-                                                    "inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20";
-                                            }
+                                                if (product.quantity == 0) {
+                                                    statusClass =
+                                                        "inline-flex items-center rounded-md bg-red-50 px-2 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/20";
+                                                } else if (
+                                                    product.quantity >= 1 &&
+                                                    product.quantity <= 10
+                                                ) {
+                                                    statusClass =
+                                                        "inline-flex items-center rounded-md bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-600/20";
+                                                }
 
-                                            return (
-                                                <tr key={product.id || product.name} className="hover:bg-gray-50">
-                                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={selectedProducts.some(
-                                                                (p) => p.id === product.id
-                                                            )}
-                                                            onChange={(e) => {
-                                                                const isChecked = e.target.checked;
-                                                                const updatedSelected = isChecked
-                                                                    ? [...selectedProducts, product]
-                                                                    : selectedProducts.filter(
-                                                                        (p) => p.id !== product.id
+                                                return (
+                                                    <tr
+                                                        key={
+                                                            product.id ||
+                                                            product.name
+                                                        }
+                                                        className="hover:bg-gray-50"
+                                                    >
+                                                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+                                                            <input
+                                                                type="checkbox"
+                                                                checked={selectedProducts.some(
+                                                                    (p) =>
+                                                                        p.id ===
+                                                                        product.id
+                                                                )}
+                                                                onChange={(
+                                                                    e
+                                                                ) => {
+                                                                    const isChecked =
+                                                                        e.target
+                                                                            .checked;
+                                                                    const updatedSelected =
+                                                                        isChecked
+                                                                            ? [
+                                                                                  ...selectedProducts,
+                                                                                  product,
+                                                                              ]
+                                                                            : selectedProducts.filter(
+                                                                                  (
+                                                                                      p
+                                                                                  ) =>
+                                                                                      p.id !==
+                                                                                      product.id
+                                                                              );
+                                                                    dispatch(
+                                                                        setSelectedProducts(
+                                                                            updatedSelected
+                                                                        )
                                                                     );
-                                                                dispatch(setSelectedProducts(updatedSelected));
-                                                            }}
-                                                        />
-                                                    </td>
-                                                    <td className="whitespace-nowrap py-4 pl-3 pr-3 text-center text-sm font-bold text-gray-700 bg-slate-100">
-                                                        {product.id}
-                                                    </td>
-                                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-pink-500 sm:pl-6">
-                                                        {product.name}
-                                                    </td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                        <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
-                                                            {product?.brand}
-                                                        </span>
-                                                    </td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                        <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
-                                                            {product?.delivery_receipt_no}
-                                                        </span>
-                                                    </td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                        <span className="inline-flex items-center rounded-full bg-pink-50 px-2 py-1 text-xs font-medium text-pink-800 ring-1 ring-pink-600/20 ring-inset">
-                                                            {product?.categories?.name}
-                                                        </span>
-                                                    </td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
-                                                        {(product.cost == null || Number(product.cost) === 0)
-                                                            ? "₱None"
-                                                            : `₱${Number(product.cost).toFixed(2)}`}
-                                                    </td>
-                                                    {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
+                                                                }}
+                                                            />
+                                                        </td>
+                                                        <td className="whitespace-nowrap py-4 pl-3 pr-3 text-center text-sm font-bold text-gray-700 bg-slate-100">
+                                                            {product.id}
+                                                        </td>
+                                                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-bold text-pink-500 sm:pl-6">
+                                                            {product.name}
+                                                        </td>
+                                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                            <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
+                                                                {product?.brand}
+                                                            </span>
+                                                        </td>
+                                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                            <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-1 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
+                                                                {
+                                                                    product?.delivery_receipt_no
+                                                                }
+                                                            </span>
+                                                        </td>
+                                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                                            <span className="inline-flex items-center rounded-full bg-pink-50 px-2 py-1 text-xs font-medium text-pink-800 ring-1 ring-pink-600/20 ring-inset">
+                                                                {
+                                                                    product
+                                                                        ?.categories
+                                                                        ?.name
+                                                                }
+                                                            </span>
+                                                        </td>
+                                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
+                                                            {product.cost ==
+                                                                null ||
+                                                            Number(
+                                                                product.cost
+                                                            ) === 0
+                                                                ? "₱ --------"
+                                                                : `₱${Number(
+                                                                      product.cost
+                                                                  ).toFixed(
+                                                                      2
+                                                                  )}`}
+                                                        </td>
+                                                        {/* <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
                                                         {(product.shopee == null || Number(product.shopee) === 0)
-                                                            ? "₱None"
+                                                            ? "₱ --------"
                                                             : `₱${Number(product.shopee).toFixed(2)}`}
                                                     </td> */}
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
-                                                        {(product.srp == null || Number(product.srp) === 0)
-                                                            ? "₱None"
-                                                            : `₱${Number(product.srp).toFixed(2)}`}
-                                                    </td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
-                                                        {(product.reseller == null || Number(product.reseller) === 0)
-                                                            ? "₱None"
-                                                            : `₱${Number(product.reseller).toFixed(2)}`}
-                                                    </td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
-                                                        {(product.city_distributor == null || Number(product.city_distributor) === 0)
-                                                            ? "₱None"
-                                                            : `₱${Number(product.city_distributor).toFixed(2)}`}
-                                                    </td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
-                                                        {(product.district_distributor == null || Number(product.district_distributor) === 0)
-                                                            ? "₱None"
-                                                            : `₱${Number(product.district_distributor).toFixed(2)}`}
-                                                    </td>
-                                                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
-                                                        {(product.provincial_distributor == null || Number(product.provincial_distributor) === 0)
-                                                            ? "₱None"
-                                                            : `₱${Number(product.provincial_distributor).toFixed(2)}`}
-                                                    </td>
-                                                    <td className="relative py-4 pl-3 pr-4 text-sm font-medium sm:pr-6">
-                                                        <ProductOptionMenuSection data={product} />
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
+                                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
+                                                            {product.srp ==
+                                                                null ||
+                                                            Number(
+                                                                product.srp
+                                                            ) === 0
+                                                                ? "₱ --------"
+                                                                : `₱${Number(
+                                                                      product.srp
+                                                                  ).toFixed(
+                                                                      2
+                                                                  )}`}
+                                                        </td>
+                                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
+                                                            {product.reseller ==
+                                                                null ||
+                                                            Number(
+                                                                product.reseller
+                                                            ) === 0
+                                                                ? "₱ --------"
+                                                                : `₱${Number(
+                                                                      product.reseller
+                                                                  ).toFixed(
+                                                                      2
+                                                                  )}`}
+                                                        </td>
+                                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
+                                                            {product.city_distributor ==
+                                                                null ||
+                                                            Number(
+                                                                product.city_distributor
+                                                            ) === 0
+                                                                ? "₱ --------"
+                                                                : `₱${Number(
+                                                                      product.city_distributor
+                                                                  ).toFixed(
+                                                                      2
+                                                                  )}`}
+                                                        </td>
+                                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
+                                                            {product.district_distributor ==
+                                                                null ||
+                                                            Number(
+                                                                product.district_distributor
+                                                            ) === 0
+                                                                ? "₱ --------"
+                                                                : `₱${Number(
+                                                                      product.district_distributor
+                                                                  ).toFixed(
+                                                                      2
+                                                                  )}`}
+                                                        </td>
+                                                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-700 font-bold">
+                                                            {product.provincial_distributor ==
+                                                                null ||
+                                                            Number(
+                                                                product.provincial_distributor
+                                                            ) === 0
+                                                                ? "₱ --------"
+                                                                : `₱${Number(
+                                                                      product.provincial_distributor
+                                                                  ).toFixed(
+                                                                      2
+                                                                  )}`}
+                                                        </td>
+                                                        <td className="relative py-4 pl-3 pr-4 text-sm font-medium sm:pr-6">
+                                                            <ProductOptionMenuSection
+                                                                data={product}
+                                                            />
+                                                        </td>
+                                                    </tr>
+                                                );
+                                            }
+                                        )}
                                     </tbody>
                                 </table>
                             </div>
@@ -487,7 +592,10 @@ export default function ProductsSection() {
             {showSearchModal && (
                 <div className="fixed inset-0 z-50 overflow-y-auto">
                     <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-                        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={() => setShowSearchModal(false)}></div>
+                        <div
+                            className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                            onClick={() => setShowSearchModal(false)}
+                        ></div>
 
                         <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                             <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -498,7 +606,9 @@ export default function ProductsSection() {
                                                 Search by Product Code/ID
                                             </h3>
                                             <button
-                                                onClick={() => setShowSearchModal(false)}
+                                                onClick={() =>
+                                                    setShowSearchModal(false)
+                                                }
                                                 className="text-gray-400 hover:text-gray-600"
                                             >
                                                 <FaXmark className="h-5 w-5" />
@@ -511,17 +621,29 @@ export default function ProductsSection() {
                                                     type="text"
                                                     placeholder="Enter product code or ID..."
                                                     value={searchCode}
-                                                    onChange={(e) => setSearchCode(e.target.value)}
-                                                    onKeyPress={(e) => e.key === 'Enter' && handleCodeSearch()}
+                                                    onChange={(e) =>
+                                                        setSearchCode(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    onKeyPress={(e) =>
+                                                        e.key === "Enter" &&
+                                                        handleCodeSearch()
+                                                    }
                                                     className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-500 focus:border-pink-500"
                                                     autoFocus
                                                 />
                                                 <button
                                                     onClick={handleCodeSearch}
-                                                    disabled={isSearching || !searchCode.trim()}
+                                                    disabled={
+                                                        isSearching ||
+                                                        !searchCode.trim()
+                                                    }
                                                     className="px-4 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
                                                 >
-                                                    {isSearching ? "Searching..." : "Search"}
+                                                    {isSearching
+                                                        ? "Searching..."
+                                                        : "Search"}
                                                 </button>
                                             </div>
                                         </div>
@@ -531,47 +653,82 @@ export default function ProductsSection() {
                                             {isSearching && (
                                                 <div className="flex justify-center items-center py-8">
                                                     <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-pink-500"></div>
-                                                    <span className="ml-2 text-gray-600">Searching...</span>
+                                                    <span className="ml-2 text-gray-600">
+                                                        Searching...
+                                                    </span>
                                                 </div>
                                             )}
 
-                                            {!isSearching && searchResults.length === 0 && searchCode && (
-                                                <div className="text-center py-8 text-gray-500">
-                                                    No products found with code "{searchCode}"
-                                                </div>
-                                            )}
+                                            {!isSearching &&
+                                                searchResults.length === 0 &&
+                                                searchCode && (
+                                                    <div className="text-center py-8 text-gray-500">
+                                                        No products found with
+                                                        code "{searchCode}"
+                                                    </div>
+                                                )}
 
-                                            {!isSearching && searchResults.length > 0 && (
-                                                <div className="space-y-2">
-                                                    <h4 className="font-medium text-gray-900 mb-2">Results:</h4>
-                                                    {searchResults.map((product) => (
-                                                        <div
-                                                            key={product.id}
-                                                            onClick={() => handleSelectProduct(product)}
-                                                            className="p-3 border rounded-md hover:bg-gray-50 cursor-pointer"
-                                                        >
-                                                            <div className="flex justify-between items-start">
-                                                                <div>
-                                                                    <div className="font-medium text-gray-900">
-                                                                        ID: {product.id}
-                                                                    </div>
-                                                                    <div className="text-sm text-pink-600 font-medium">
-                                                                        {product.name}
-                                                                    </div>
-                                                                    <div className="text-xs text-gray-500">
-                                                                        {product.categories?.name} • {product.brand}
+                                            {!isSearching &&
+                                                searchResults.length > 0 && (
+                                                    <div className="space-y-2">
+                                                        <h4 className="font-medium text-gray-900 mb-2">
+                                                            Results:
+                                                        </h4>
+                                                        {searchResults.map(
+                                                            (product) => (
+                                                                <div
+                                                                    key={
+                                                                        product.id
+                                                                    }
+                                                                    onClick={() =>
+                                                                        handleSelectProduct(
+                                                                            product
+                                                                        )
+                                                                    }
+                                                                    className="p-3 border rounded-md hover:bg-gray-50 cursor-pointer"
+                                                                >
+                                                                    <div className="flex justify-between items-start">
+                                                                        <div>
+                                                                            <div className="font-medium text-gray-900">
+                                                                                ID:{" "}
+                                                                                {
+                                                                                    product.id
+                                                                                }
+                                                                            </div>
+                                                                            <div className="text-sm text-pink-600 font-medium">
+                                                                                {
+                                                                                    product.name
+                                                                                }
+                                                                            </div>
+                                                                            <div className="text-xs text-gray-500">
+                                                                                {
+                                                                                    product
+                                                                                        .categories
+                                                                                        ?.name
+                                                                                }{" "}
+                                                                                •{" "}
+                                                                                {
+                                                                                    product.brand
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="text-right text-sm">
+                                                                            <div className="font-medium text-gray-900">
+                                                                                ₱
+                                                                                {Number(
+                                                                                    product.srp ||
+                                                                                        0
+                                                                                ).toFixed(
+                                                                                    2
+                                                                                )}
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                                <div className="text-right text-sm">
-                                                                    <div className="font-medium text-gray-900">
-                                                                        ₱{Number(product.srp || 0).toFixed(2)}
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
+                                                            )
+                                                        )}
+                                                    </div>
+                                                )}
                                         </div>
                                     </div>
                                 </div>
