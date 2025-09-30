@@ -31,8 +31,13 @@ Font.register({
         },
         {
             src: "/fonts/Noto_Sans/static/NotoSans-ExtraBold.ttf",
-            fontWeight: "normal",
-            fontStyle: "bold",
+            fontWeight: "extrabold",
+            fontStyle: "normal",
+        },
+        {
+            src: "/fonts/Noto_Sans/static/NotoSans-Bold.ttf",
+            fontWeight: "bold",
+            fontStyle: "normal",
         },
     ],
 });
@@ -79,10 +84,15 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 2,
     },
-    notes: {
-        marginTop: 20,
+    notes_text: {
+        marginTop: 24,
         fontStyle: "italic",
     },
+
+    notes: {
+        fontStyle: "italic",
+    },
+
     totalSection: {
         marginTop: 10,
         width: "32%",
@@ -97,7 +107,12 @@ const styles = StyleSheet.create({
     bold: {
         fontWeight: "bold",
     },
-    accounts: { color: "cornflowerblue", fontStyle: "italic" },
+    accounts: { fontStyle: "italic" },
+    accountsBold: {
+        fontSize: 12,
+        marginTop: 5,
+        fontWeight: "bold",
+    },
 });
 
 const InvoicePDF = () => {
@@ -242,25 +257,33 @@ const InvoicePDF = () => {
 
                     {/* Notes */}
                     <View>
-                        <Text style={styles.notes}>Accounts:</Text>
+                        <Text style={styles.notes_text}>Accounts:</Text>
                         <View style={{ flexDirection: "row" }}>
                             <Text
-                                style={[styles.accounts, { marginRight: 30 }]}
+                                style={[
+                                    styles.accountsBold,
+                                    { marginRight: 30 },
+                                ]}
                             >
                                 BDO:{"\n"}
                                 Glennie Doig{"\n"}
                                 003080117454
                             </Text>
-                            <Text style={styles.accounts}>
+                            <Text style={styles.accountsBold}>
                                 GCASH:{"\n"}
                                 Glennie B.{"\n"}
                                 09298788827
                             </Text>
                         </View>
-                        <Text style={[styles.notes, { marginTop: 15 }]}>
-                            Notes:{"\n"}
-                            Thanks for your business.
-                        </Text>
+
+                        {/* <Text style={styles.notes_text}>Notes:{"\n"}</Text> */}
+                        <View style={{ flexDirection: "row" }}>
+                            <Text style={[styles.notes, { marginTop: 24 }]}>
+                                Notes: Thanks for your business! We truly appreciate
+                                your support and look forward to serving you
+                                again.
+                            </Text>
+                        </View>
                     </View>
                 </Page>
             </Document>
