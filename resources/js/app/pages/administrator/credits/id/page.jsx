@@ -143,7 +143,7 @@ const InvoicePDF = () => {
                     {/* Company Info */}
                     <View style={styles.section}>
                         <Text style={styles.bold}>Egie’s Beauty Boutique</Text>
-                        <Text>Rizal Street</Text>
+                        <Text>Sacatel Bldg. V.Gustillo St. Brgy 5</Text>
                         <Text>San Carlos City, Negros Occidental 6127</Text>
                         <Text>Philippines</Text>
                     </View>
