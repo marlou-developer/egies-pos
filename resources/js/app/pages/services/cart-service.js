@@ -2,6 +2,15 @@ import axios from "axios";
 
 
 
+export function update_cart_created_at_service(data) {
+    try {
+        const result = axios.post("/api/update_cart_created_at", data);
+
+        return result;
+    } catch (error) { }
+}
+
+
 export function return_per_item_service(data) {
     try {
         const result = axios.post("/api/return_per_item", data);

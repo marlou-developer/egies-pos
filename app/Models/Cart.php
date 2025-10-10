@@ -30,7 +30,8 @@ class Cart extends Model
         'shopee_store',
         'balance',
         'due_date',
-        'is_read'
+        'is_read',
+        'created_at'
     ];
 
     public function customer(): HasOne

@@ -40,6 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('cart_item', CartItemController::class);
     Route::post('edit_discount', [CartController::class, 'edit_discount']);
     Route::get('get_cart_credit', [CartController::class, 'get_cart_credit']);
+    Route::post('update_cart_created_at', [CartController::class, 'update_cart_created_at']);
     Route::get('get_shopee', [CartController::class, 'get_shopee']);
     Route::get('get_sales', [CartController::class, 'get_sales']);
     Route::get('get_over_due', [CartController::class, 'get_over_due']);

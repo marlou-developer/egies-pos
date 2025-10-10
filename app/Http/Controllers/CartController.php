@@ -21,6 +21,22 @@ use Illuminate\Support\Collection;
 
 class CartController extends Controller
 {
+    public function update_cart_created_at(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|integer|exists:carts,id',
+            'created_at' => 'required|date_format:Y-m-d H:i:s',
+        ]);
+
+        $cart = Cart::find($request->id);
+
+        $cart->update([
+            'created_at' => $request->created_at,
+        ]);
+
+        return response()->json(['status' => 'success'], 200);
+    }
+
     public function change_discount_per_order()
     {
         $carts = Cart::where('discount_per_order', '!=', 0)->orderBy('id', 'desc')->get();
