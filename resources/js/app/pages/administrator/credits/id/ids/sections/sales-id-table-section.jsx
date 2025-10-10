@@ -125,7 +125,7 @@ export default function SalesIdTableSection() {
                                         <span>Invoice Date:</span>
                                         <div className="flex gap-1 justify-end">
                                             {moment(cart?.created_at).format(
-                                                "LL"
+                                                "LLL"
                                             )}
                                             <UpdateCreatedAt data={cart} />
                                         </div>

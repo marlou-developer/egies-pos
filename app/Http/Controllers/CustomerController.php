@@ -87,4 +87,14 @@ class CustomerController extends Controller
             $customer->update($request->all());
         }
     }
+
+    public function destroy($id)
+    {
+        $customer = Customer::where('id', $id)->first();
+        if ($customer) {
+            $customer->delete();
+        }
+
+        return response()->json(['message' => 'Customer deleted successfully']);
+    }
 }

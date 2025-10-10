@@ -51,6 +51,7 @@ export function delete_customer_service(id) {
     }
 }
 
+
 export function update_customer_service(data) {
     try {
         const result = axios.put(`/api/customer/${data.id}`, data)
