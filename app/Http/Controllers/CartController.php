@@ -157,15 +157,27 @@ class CartController extends Controller
 
     public function edit_discount(Request $request)
     {
-        $cart = Cart::where('cart_id', $request->cart_id)->first();
-        $total_price = CartItem::where('cart_id', $request->cart_id)->sum('total');
-        if ($cart) {
-            $cart->update([
-                'discount_per_order' => $request->discount_per_order,
-                'total_price' => $total_price - ($request->discount_per_order ?? 0 + $cart->discount_per_item ?? 0 + $cart->customer_total_discount ?? 0)
+        $cart_item = CartItem::where('id', $request->id)->first();
+        $total = ($cart_item->price * $cart_item->quantity) - $request->discount_per_item;
+        $fixed_price = $total / $cart_item->quantity;
+        $profit = $total - $cart_item->cost;
+        if ($cart_item) {
+            $cart_item->update([
+                'discount' => $request->discount_per_item,
+                'fixed_price' => $fixed_price,
+                'total' => $total,
+                'profit' => $profit,
             ]);
         }
-        return response()->json($request, 200);
+        // $cart = Cart::where('cart_id', $request->cart_id)->first();
+        // $total_price = CartItem::where('cart_id', $request->cart_id)->sum('total');
+        // if ($cart) {
+        //     $cart->update([
+        //         'discount_per_order' => $request->discount_per_order,
+        //         'total_price' => $total_price - ($request->discount_per_order ?? 0 + $cart->discount_per_item ?? 0 + $cart->customer_total_discount ?? 0)
+        //     ]);
+        // }
+        // return response()->json($request, 200);
     }
     public function edit_quantity(Request $request)
     {

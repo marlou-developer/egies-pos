@@ -21,22 +21,27 @@ import { message, Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
 import { FaPercent, FaTrashCan } from "react-icons/fa6";
 
-export default function EditDIscountSection({ data }) {
+export default function EditDiscountSection({ data }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => setIsModalOpen(true);
     const [loading, setLoading] = useState(false);
-    const cart_id = window.location.pathname.split("/")[4] ?? window.location.pathname.split("/")[3];
+    const cart_id =
+        window.location.pathname.split("/")[4] ??
+        window.location.pathname.split("/")[3];
     const [form, setForm] = useState({});
 
     useEffect(() => {
-        setForm(data)
-    }, [isModalOpen])
+        setForm({
+            ...data,
+            discount_per_item: form?.discount ?? 0,
+        });
+    }, [isModalOpen]);
 
     const deleteUser = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            await edit_discount_service(form)
+            await edit_discount_service(form);
             // await store.dispatch(delete_cart_item_thunk(data.id));
             await store.dispatch(get_cart_by_id_thunk(cart_id));
             message.success("Edit Successfully!");
@@ -70,20 +75,18 @@ export default function EditDIscountSection({ data }) {
                 onClose={() => setIsModalOpen(false)}
                 width="w-1/4"
             >
-                <h2 className="text-xl font-semibold mb-4">
-                    Update Discount
-                </h2>
+                <h2 className="text-xl font-semibold mb-4">Update Discount</h2>
                 <form action="" onSubmit={deleteUser}>
                     <div className="flex flex-col w-full gap-5">
                         <Input
                             label="Discount Per Order"
-                            name="discount_per_order"
+                            name="discount_per_item"
                             type="number"
-                            value={form?.discount_per_order ?? 0}
+                            value={form?.discount_per_item ?? 0}
                             onChange={(e) =>
                                 setForm({
                                     ...data,
-                                    discount_per_order: e.target.value,
+                                    discount_per_item: e.target.value,
                                 })
                             }
                         />

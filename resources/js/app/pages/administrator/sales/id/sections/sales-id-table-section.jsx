@@ -6,7 +6,7 @@ import { peso_value } from "@/app/lib/peso";
 import SalesEditQuantitySection from "./sales-edit-quantity-section";
 import AddProductSection from "./add-product-section";
 import RemoveProductSection from "./remove-product-section";
-import EditDIscountSection from "../../../credits/id/ids/sections/edit-discount-section";
+import EditDiscountSection from "../../../credits/id/ids/sections/edit-discount-section";
 import ReturnItemSection from "./return-item-section";
 import UpdateBillToSection from "./update-bill-to-section";
 import store from "@/app/store/store";
@@ -44,7 +44,6 @@ export default function SalesIdTableSection() {
                     </p>
                 </div>
                 <div className="flex gap-3">
-                    <EditDIscountSection data={cart} />
                     <AddProductSection />
                 </div>
             </div>
@@ -59,6 +58,12 @@ export default function SalesIdTableSection() {
                                         className="py-3.5 pr-3 pl-4 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                                     >
                                         Product Name
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                    >
+                                        Discount
                                     </th>
                                     <th
                                         scope="col"
@@ -86,6 +91,12 @@ export default function SalesIdTableSection() {
                                         <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">
                                             {res.product?.name}
                                         </td>
+
+                                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                                            {peso_value(
+                                                Number(res?.discount ?? 0)
+                                            )}
+                                        </td>
                                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                                             <SalesEditQuantitySection
                                                 data={res}
@@ -108,6 +119,9 @@ export default function SalesIdTableSection() {
                                                     data={res}
                                                 />
                                                 <ReturnItemSection data={res} />
+                                                <EditDiscountSection
+                                                    data={res}
+                                                />
                                             </>
                                             {/* )} */}
                                         </td>
