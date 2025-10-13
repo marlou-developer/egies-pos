@@ -520,17 +520,14 @@ class CartController extends Controller
             $cart_items_credit = $baseCartItemsQuery(function ($q) {
                 $q->where([
                     ['is_credit', '=', 'true'],
-                    ['shop', '=', 'Store'],
                     ['status', '=', 'Paid']
                 ]);
                 $q->orWhere([
                     ['is_credit', '=', 'true'],
-                    ['shop', '=', 'Store'],
                     ['status', '=', 'Pending']
                 ]);
                 $q->orWhere([
                     ['is_credit', '=', 'true'],
-                    ['shop', '=', 'Store'],
                     ['status', '=', 'Partial']
                 ]);
             });
