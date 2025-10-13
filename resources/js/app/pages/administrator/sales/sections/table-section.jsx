@@ -130,7 +130,10 @@ export default function TableSection() {
                                             </b>
                                         </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
-                                            {res?.customer?.name}
+                                            {res?.customer?.name == null || res?.customer?.name === 0
+                                                ? "———"
+                                                : res?.customer?.name}
+                                            {/* {res?.customer?.name} */}
                                         </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
                                             {peso_value(
@@ -152,14 +155,14 @@ export default function TableSection() {
                                         <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
                                             {peso_value(
                                                 Number(res.total_price) -
-                                                    res?.cart_items?.reduce(
-                                                        (acc, item) =>
-                                                            acc +
-                                                            Number(
-                                                                item.cost || 0
-                                                            ),
-                                                        0
-                                                    )
+                                                res?.cart_items?.reduce(
+                                                    (acc, item) =>
+                                                        acc +
+                                                        Number(
+                                                            item.cost || 0
+                                                        ),
+                                                    0
+                                                )
                                             )}
                                         </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">

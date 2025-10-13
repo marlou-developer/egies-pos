@@ -176,13 +176,26 @@ export default function CustomerSection() {
                                                 "whitespace-nowrap border-b border-gray-200 py-4 pr-3 text-sm text-gray-900 sm:pl-3"
                                             )}
                                         >
-                                            {[
+                                            {/* {[
                                                 customer.street,
                                                 customer.postal,
                                                 customer.brgy,
                                                 customer.city,
                                                 customer.province
-                                            ].filter(Boolean).join(', ')}
+                                            ].filter(Boolean).join(', ')} */}
+                                            {(() => {
+                                                const fullAddress = [
+                                                    customer.street,
+                                                    customer.postal,
+                                                    customer.brgy,
+                                                    customer.city,
+                                                    customer.province
+                                                ]
+                                                    .filter(Boolean)
+                                                    .join(', ');
+
+                                                return fullAddress ? fullAddress : "———";
+                                            })()}
                                         </td>
                                         <td
                                             className={classNames(
@@ -192,7 +205,9 @@ export default function CustomerSection() {
                                                 "whitespace-nowrap border-b border-gray-200 py-4 pr-3 text-sm text-gray-900 sm:pl-3"
                                             )}
                                         >
-                                            {customer.mobile_no}
+                                            {customer.mobile_no == null || customer.mobile_no === 0
+                                                ? "———"
+                                                : customer.mobile_no}
                                         </td>
                                         <td
                                             className={classNames(
@@ -202,7 +217,9 @@ export default function CustomerSection() {
                                                 "whitespace-nowrap border-b border-gray-200 py-4 pr-3 text-sm text-gray-900 sm:pl-3"
                                             )}
                                         >
-                                            {customer.email}
+                                            {customer.email == null || customer.email === 0
+                                                ? "———"
+                                                : customer.email}
                                         </td>
                                         {/* <td
                                             className={classNames(

@@ -154,7 +154,9 @@ export default function SupplierSection() {
                                                     "whitespace-nowrap border-b border-gray-200 py-4 pr-3 text-sm text-gray-900 sm:pl-3"
                                                 )}
                                             >
-                                                {supplier.address}
+                                                {supplier.address == null || supplier.address === 0
+                                                    ? "———"
+                                                    : supplier.address}
                                             </td>
                                             <td
                                                 className={classNames(
@@ -162,7 +164,9 @@ export default function SupplierSection() {
                                                     "whitespace-nowrap border-b border-gray-200 py-4 pr-3 text-sm text-gray-900 sm:pl-3"
                                                 )}
                                             >
-                                                {supplier.contact_person}
+                                                {supplier.contact_person == null || supplier.contact_person === 0
+                                                    ? "———"
+                                                    : supplier.contact_person}
                                             </td>
                                             <td
                                                 className={classNames(
@@ -170,7 +174,9 @@ export default function SupplierSection() {
                                                     "whitespace-nowrap border-b border-gray-200 py-4 pr-3 text-sm text-gray-900 sm:pl-3"
                                                 )}
                                             >
-                                                {supplier.contact_no}
+                                                {supplier.contact_no == null || supplier.contact_no === 0
+                                                    ? "———"
+                                                    : supplier.contact_no}
                                             </td>
                                             <td
                                                 className={classNames(
@@ -178,7 +184,9 @@ export default function SupplierSection() {
                                                     "whitespace-nowrap border-b border-gray-200 py-4 pr-3 text-sm text-gray-900 sm:pl-3"
                                                 )}
                                             >
-                                                {supplier.email}
+                                                {supplier.email == null || supplier.email === 0
+                                                    ? "———"
+                                                    : supplier.email}
                                             </td>
                                             <td
                                                 className={classNames(

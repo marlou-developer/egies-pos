@@ -1232,7 +1232,7 @@ class CartController extends Controller
         $carts = Cart::where([
             ['shop', 'Store'],
             ['is_credit', '<>', 'true']
-        ])->with(['cart_items', 'credit_payments']);
+        ])->with(['cart_items', 'credit_payments', 'customer']);
         if ($request->filled('search')) {
             $carts->where(function ($query) use ($request) {
                 $query->where('cart_id', 'like', '%' . $request->search . '%')
