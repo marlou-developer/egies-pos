@@ -17,7 +17,9 @@ export default function EditExpenseSection({ data }) {
 
     useEffect(() => {
         setForm(data)
-    }, [])
+    }, [data])
+
+    console.log("expense data:", data);
 
     const editUser = async (e) => {
         e.preventDefault();
