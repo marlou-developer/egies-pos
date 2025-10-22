@@ -46,7 +46,7 @@ export default function AddProductComponent({ open, setOpenProduct }) {
     }
 
     async function handleSubmit(e) {
-        // e.preventDefault(e);
+        // e.preventDefault();
         setLoading(true);
 
         const fd = new FormData();
