@@ -46,7 +46,7 @@ export default function AddProductComponent({ open, setOpenProduct }) {
     }
 
     async function handleSubmit(e) {
-        // e.preventDefault();
+        e.preventDefault();
         setLoading(true);
 
         const fd = new FormData();
@@ -84,6 +84,7 @@ export default function AddProductComponent({ open, setOpenProduct }) {
             await store.dispatch(get_product_thunk());
             message.success("Product successfully saved!");
             setOpenProduct(false);
+            dispatch(setProduct({}));
         } catch (error) {
             message.error("Failed to add Product. Please try again.");
         } finally {

@@ -171,9 +171,9 @@ export default function ProductsSection() {
         );
     };
 
-    if (loading) {
-        return <LoadingComponent />;
-    }
+    // if (loading) {
+    //     return <LoadingComponent />;
+    // }
 
     return (
         <div className="px-4 sm:px-6 lg:px-8">

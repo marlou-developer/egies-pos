@@ -20,13 +20,13 @@ export function create_product_thunk(data) {
 export function get_product_thunk() {
     return async function (dispatch) {
         try {
-            dispatch(productSlice.actions.setLoading(true));
+            // dispatch(productSlice.actions.setLoading(true));
             const res = await get_product_service();
             console.log('resres', res.data)
             dispatch(productSlice.actions.setProducts(res.data));
         } catch (error) {
             console.error("Error fetching products:", error);
-            dispatch(productSlice.actions.setLoading(false));
+            // dispatch(productSlice.actions.setLoading(false));
         }
     };
 }
