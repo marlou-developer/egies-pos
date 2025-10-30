@@ -9,6 +9,7 @@ class CreditPayment extends Model
     protected $fillable = [
         'cart_id',
         'amount',
+        'created_at',
         'payment_type'
     ];
 }

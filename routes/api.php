@@ -21,7 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-    Route::get('change_discount_per_order', [CartController::class, 'change_discount_per_order']);
+Route::get('change_discount_per_order', [CartController::class, 'change_discount_per_order']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('account', AccountController::class);
@@ -48,6 +48,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('return_per_item', [CartController::class, 'return_per_item']);
     Route::post('update_all_status', [CartController::class, 'update_all_status']);
     Route::post('edit_payment', [CartController::class, 'edit_payment']);
+    Route::post('update_payment', [CartController::class, 'update_payment']);
     Route::post('edit_quantity', [CartController::class, 'edit_quantity']);
     Route::post('update_is_read', [CartController::class, 'update_is_read']);
 

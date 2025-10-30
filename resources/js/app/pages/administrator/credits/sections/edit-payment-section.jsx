@@ -2,7 +2,9 @@ import Button from "@/app/_components/button";
 import Input from "@/app/_components/input";
 import Modal from "@/app/_components/modal";
 import { peso_value } from "@/app/lib/peso";
-import { edit_payment_service } from "@/app/pages/services/cart-service";
+import {
+    edit_payment_service,
+} from "@/app/pages/services/cart-service";
 import { get_cart_credit_thunk } from "@/app/redux/app-thunk";
 import { get_over_due_thunk } from "@/app/redux/cart-thunk";
 import store from "@/app/store/store";
@@ -85,7 +87,6 @@ export default function EditPaymentSection({ data }) {
                     <FaCalendarCheck className=" text-white" />
                 </button>
             </Tooltip>
-
 
             <Modal
                 isOpen={open}

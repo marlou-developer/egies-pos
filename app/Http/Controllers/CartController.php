@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Category;
+use App\Models\CreditPayment;
 use App\Models\Customer;
 use App\Models\Expense;
 use App\Models\Notification;
@@ -232,6 +233,19 @@ class CartController extends Controller
             }
         }
     }
+
+    public function update_payment(Request $request)
+    {
+        $credit_payment = CreditPayment::where('cart_id', $request->cart_id)->first();
+        if ($credit_payment) {
+            $credit_payment->update([
+                'amount' => $request->amount,
+                'created_at' => $request->date,
+                'payment_type' => $request->payment_type
+            ]);
+        }
+    }
+
     public function get_report(Request $request)
     {
 
