@@ -161,20 +161,6 @@ export default function ProductsSection() {
 
     console.log("products", products);
 
-    // Loading component function
-    const LoadingComponent = ({ message = "Loading products..." }) => {
-        return (
-            <div className="flex justify-center items-center h-64">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                <span className="ml-2 text-gray-600">{message}</span>
-            </div>
-        );
-    };
-
-    // if (loading) {
-    //     return <LoadingComponent />;
-    // }
-
     return (
         <div className="px-4 sm:px-6 lg:px-8">
             {/* Header Section */}

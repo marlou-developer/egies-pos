@@ -1,7 +1,10 @@
 import Button from "@/app/_components/button";
 import Input from "@/app/_components/input";
 import Modal from "@/app/_components/modal";
-import { create_cart_thunk, get_cart_by_id_thunk } from "@/app/redux/cart-thunk";
+import {
+    create_cart_thunk,
+    get_cart_by_id_thunk,
+} from "@/app/redux/cart-thunk";
 import { get_category_thunk } from "@/app/redux/category-thunk";
 import { search_customer_thunk } from "@/app/redux/customer-thunk";
 import { setCarts } from "@/app/redux/product-slice";
@@ -34,7 +37,7 @@ export default function PaySection({
     discount_per_order,
     data,
     shop,
-    setIsModalOpen
+    setIsModalOpen,
 }) {
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -149,9 +152,8 @@ export default function PaySection({
                     setLoading(false);
                 }
             });
-            setIsModalOpen(false)
+            setIsModalOpen(false);
             setId(results?.data?.id);
-
         } catch (error) {
             await Swal.fire({
                 icon: "error",
@@ -230,20 +232,26 @@ export default function PaySection({
             <Modal
                 onClose={() => setIsOpen(false)}
                 isOpen={isOpen}
-                title="Add Product Sales"
+                title={
+                    <h2 className="text-xl font-semibold">
+                        <u>Add Product Sales</u>
+                    </h2>
+                }
             >
                 <div>
-                    <div>
-                        Are you sure to add this product(s) to sales?
-                    </div>
+                    <div>Are you sure to add this product(s) to sales?</div>
                     <div className="flex items-center justify-end gap-4 mt-4">
-                        <button onClick={() => setIsOpen(false)} className="text-sm hover:text-gray-700 text-gray-500">
+                        <button
+                            onClick={() => setIsOpen(false)}
+                            className="text-sm hover:text-gray-700 text-gray-500"
+                        >
                             Cancel
                         </button>
                         <button
                             onClick={() => submit_payment()}
                             disabled={loading}
-                            className="text-sm bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2">
+                            className="text-sm bg-pink-500 text-white px-4 py-2 rounded hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2"
+                        >
                             {loading ? "Saving..." : "Submit"}
                         </button>
                     </div>

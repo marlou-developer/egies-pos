@@ -26,8 +26,10 @@ export default function ProductsPage() {
             <div className="w-full flex items-center justify-center">
                 {loading ? (
                     <div className="flex justify-center items-center h-64">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                        <span className="ml-2 text-gray-600">Loading products...</span>
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-600"></div>
+                        <span className="ml-2 text-gray-600">
+                            Loading products...
+                        </span>
                     </div>
                 ) : (
                     <ProductsSection

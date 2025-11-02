@@ -25,6 +25,7 @@ export default function UpdatePaymentSection({ data }) {
     const [loading, setLoading] = useState(false);
     useEffect(() => {
         setForm({
+            id: data?.id || "",
             cart_id: data?.cart_id,
             date: data?.created_at
                 ? moment(data.created_at).format("YYYY-MM-DDTHH:mm")

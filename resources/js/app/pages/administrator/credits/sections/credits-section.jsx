@@ -73,9 +73,9 @@ export default function CreditsSection() {
                                             className={classNames(
                                                 "sticky top-0 z-10 border-b border-gray-300 bg-white/75 py-3.5 px-3 text-left text-sm font-semibold text-gray-900 backdrop-blur-sm backdrop-filter",
                                                 idx === 0 &&
-                                                "pl-4 sm:pl-6 lg:pl-8",
+                                                    "pl-4 sm:pl-6 lg:pl-8",
                                                 idx === 6 &&
-                                                "pr-4 sm:pr-6 lg:pr-8"
+                                                    "pr-4 sm:pr-6 lg:pr-8"
                                             )}
                                         >
                                             {header || (
@@ -90,7 +90,11 @@ export default function CreditsSection() {
                             <tbody>
                                 {(carts?.data ?? [])
                                     .slice()
-                                    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                                    .sort(
+                                        (a, b) =>
+                                            new Date(b.created_at) -
+                                            new Date(a.created_at)
+                                    )
                                     .map((res, idx) => (
                                         <tr key={idx}>
                                             <td className="whitespace-nowrap border-b border-gray-200 py-4 pr-3 pl-4 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
@@ -101,25 +105,41 @@ export default function CreditsSection() {
                                             </td>
                                             <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
                                                 <b>
-                                                    {peso_value(Number(
-                                                        res.total_price
-                                                    ))}
+                                                    {peso_value(
+                                                        Number(res.total_price)
+                                                    )}
                                                 </b>
                                             </td>
                                             <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
                                                 <b>
-                                                    {peso_value(Number(res.balance))}
+                                                    {peso_value(
+                                                        Number(res.balance)
+                                                    )}
                                                 </b>
                                             </td>
                                             <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
                                                 {res.due_date
-                                                    ? moment(res.due_date).format(
-                                                        "LL"
-                                                    )
+                                                    ? moment(
+                                                          res.due_date
+                                                      ).format("LL")
                                                     : "No due date"}
                                             </td>
                                             <td className="whitespace-nowrap border-b border-gray-200 px-3 py-4 text-sm text-gray-500">
-                                                {res.status}
+                                                <span
+                                                    className={classNames(
+                                                        "px-2 py-1 rounded-full text-xs font-medium",
+                                                        res.status ===
+                                                            "Pending" &&
+                                                            "bg-orange-100 text-orange-800",
+                                                        res.status ===
+                                                            "Partial" &&
+                                                            "bg-pink-100 text-pink-800",
+                                                        res.status === "Paid" &&
+                                                            "bg-green-100 text-green-800"
+                                                    )}
+                                                >
+                                                    {res.status}
+                                                </span>
                                             </td>
                                             <td className="border-b border-gray-200 px-3 py-4 text-sm text-gray-700">
                                                 <div className="flex items-center justify-center gap-2">
@@ -137,8 +157,12 @@ export default function CreditsSection() {
                                                             data={res}
                                                         />
                                                     )}
-                                                    <HistorySection data={res} />
-                                                    <EditPaymentSection data={res} />
+                                                    <HistorySection
+                                                        data={res}
+                                                    />
+                                                    <EditPaymentSection
+                                                        data={res}
+                                                    />
                                                     <Tooltip title="Edit Credit Invoice">
                                                         <a
                                                             href={`/administrator/credits/id/${res.cart_id}`}

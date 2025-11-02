@@ -29,68 +29,65 @@ export default function HistorySection({ data }) {
                 isOpen={open}
                 onClose={() => setOpen(false)}
                 title={
-                    <h2 class="text-2xl font-semibold mb-4">Payment History</h2>
+                    <h2 class="text-2xl font-semibold">
+                        <u>Payment History</u>
+                    </h2>
                 }
                 width="max-w-3xl"
             >
-                <div>
-                    <div className="flex justify-between">
-                        <div className="font-bold">
-                            Invoice #: {data.cart_id}
-                        </div>
-                        <div className="font-bold">Status: {data.status}</div>
+                <div className="flex justify-between">
+                    <div className="font-bold">Invoice #: {data.cart_id}</div>
+                    <div className="font-bold">
+                        Total: {peso_value(Number(data.total_price))}
                     </div>
-                    <div className="flex justify-between mb-4">
-                        <div className="font-bold">
-                            Customer Name: {data.customer?.name}
-                        </div>
-                        <div className="font-bold">
-                            Balance: {peso_value(Number(data.balance))}
-                        </div>
-
-                        <div className="font-bold">
-                            Total: {peso_value(Number(data.total_price))}
-                        </div>
+                </div>
+                <div className="flex justify-between">
+                    <div className="font-bold">
+                        Customer Name: {data.customer?.name}
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full text-sm text-left border border-gray-200 rounded-lg">
-                            <thead class="bg-gray-100 text-gray-700">
-                                <tr>
-                                    <th class="px-4 py-2 border-b">Date</th>
-                                    <th class="px-4 py-2 border-b">Amount</th>
-                                    <th class="px-4 py-2 border-b">Method</th>
-                                    <th class="px-4 py-2 border-b">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {data?.credit_payments?.map((res) => {
-                                    return (
-                                        <tr class="hover:bg-gray-50">
-                                            <td class="px-4 py-2 border-b">
-                                                {moment(res.created_at).format(
-                                                    "LLL"
-                                                )}
-                                            </td>
-                                            <td class="px-4 py-2 border-b">
-                                                {peso_value(Number(res.amount))}
-                                            </td>
-                                            <td class="px-4 py-2 border-b">
-                                                {res.payment_type}
-                                            </td>
-                                            <td class="py-2 flex text-center justify-center items-center">
-                                                <UpdatePaymentSection
-                                                    data={res}
-                                                />
-                                                <Tooltip title="Delete Payment">
-                                                    <TrashIcon className="w-5 h-5 inline-block ml-2 text-red-500 cursor-pointer" />
-                                                </Tooltip>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
+                    <div className="font-bold">
+                        Balance: {peso_value(Number(data.balance))}
                     </div>
+                </div>
+                <div className="font-bold mb-4 flex gap-1">
+                    Status: <p className="uppercase">{data.status}</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-sm text-left border border-gray-200 rounded-lg">
+                        <thead class="bg-gray-100 text-gray-700">
+                            <tr>
+                                <th class="px-4 py-2 border-b">Date</th>
+                                <th class="px-4 py-2 border-b">Amount</th>
+                                <th class="px-4 py-2 border-b">Method</th>
+                                <th class="px-4 py-2 border-b">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data?.credit_payments?.map((res) => {
+                                return (
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-4 py-2 border-b">
+                                            {moment(res.created_at).format(
+                                                "LLL"
+                                            )}
+                                        </td>
+                                        <td class="px-4 py-2 border-b">
+                                            {peso_value(Number(res.amount))}
+                                        </td>
+                                        <td class="px-4 py-2 border-b">
+                                            {res.payment_type}
+                                        </td>
+                                        <td class="py-2 flex text-center justify-center items-center">
+                                            <UpdatePaymentSection data={res} />
+                                            <Tooltip title="Delete Payment">
+                                                <TrashIcon className="w-5 h-5 inline-block ml-2 text-red-500 cursor-pointer" />
+                                            </Tooltip>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
                 </div>
             </Modal>
         </>

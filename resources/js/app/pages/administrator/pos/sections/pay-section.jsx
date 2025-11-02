@@ -242,23 +242,30 @@ export default function PaySection({
             <Modal
                 onClose={() => setIsOpen(false)}
                 isOpen={isOpen}
-                title="PAYMENT METHOD"
+                title={
+                    <h2 className="text-xl font-semibold">
+                        <u>PAYMENT METHOD</u>
+                    </h2>
+                }
             >
                 <div className="flex flex-col gap-3">
                     {/* Cart Products Display */}
                     {data && data.length > 0 && (
                         <div className="p-4 bg-gray-50 border border-gray-300 rounded-md">
                             <div className="font-black text-gray-800 mb-3">
-                                Cart Products ({data.length} {data.length === 1 ? 'Product' : 'Products'})
+                                Cart Products ({data.length}{" "}
+                                {data.length === 1 ? "Product" : "Products"})
                             </div>
                             <div className="max-h-40 overflow-y-auto">
                                 <div className="flex flex-col gap-2">
                                     {data.map((item, i) => {
-                                        const price = Number(item.sub_price) || 0;
+                                        const price =
+                                            Number(item.sub_price) || 0;
                                         const quantity = Number(item.pcs) || 0;
-                                        const discount = Number(item.discount) || 0;
+                                        const discount =
+                                            Number(item.discount) || 0;
                                         const totalPrice = quantity * price;
-                                        const totalDiscount =discount;
+                                        const totalDiscount = discount;
 
                                         return (
                                             <div
@@ -267,10 +274,12 @@ export default function PaySection({
                                             >
                                                 <div className="flex-1">
                                                     <div className="font-medium text-sm">
-                                                        {item.name || 'Unknown Product'}
+                                                        {item.name ||
+                                                            "Unknown Product"}
                                                     </div>
                                                     <div className="text-xs text-gray-500">
-                                                        Qty: {quantity} × ₱{price.toFixed(2)}
+                                                        Qty: {quantity} × ₱
+                                                        {price.toFixed(2)}
                                                     </div>
                                                 </div>
                                                 <div className="text-right">
@@ -279,7 +288,10 @@ export default function PaySection({
                                                     </div>
                                                     {discount > 0 && (
                                                         <div className="text-xs text-red-500">
-                                                            ₱{totalDiscount.toFixed(2)}
+                                                            ₱
+                                                            {totalDiscount.toFixed(
+                                                                2
+                                                            )}
                                                         </div>
                                                     )}
                                                 </div>
@@ -364,8 +376,8 @@ export default function PaySection({
                                     {isNaN(parseFloat(discount_per_order))
                                         ? "0.00"
                                         : parseFloat(
-                                            discount_per_order
-                                        ).toFixed(2)}
+                                              discount_per_order
+                                          ).toFixed(2)}
                                 </span>
                             </div>
 
@@ -494,60 +506,64 @@ export default function PaySection({
                                     <div className="max-h-40 overflow-y-auto px-2 border border-gray-200 rounded-md">
                                         <table className="min-w-full divide-y divide-gray-300">
                                             <tbody className="divide-y divide-gray-200">
-                                                {customer?.map((customer, i) => (
-                                                    <tr key={i}>
-                                                        <td className="capitalize pr-3 py-2 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">
-                                                            {customer.name}
-                                                        </td>
-                                                        <td className="relative pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
-                                                            {form?.customer?.id ==
-                                                                customer.id && (
-                                                                <div className="flex items-end justify-end gap-6 w-full">
-                                                                    <button className="flex gap-1">
-                                                                        <CheckIcon className="h-4 w-4 text-green-500" />
-                                                                        <div className=" text-green-500">
-                                                                            SELECTED
-                                                                        </div>{" "}
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={() =>
-                                                                            setForm(
-                                                                                {
-                                                                                    ...form,
-                                                                                    customer:
-                                                                                        null,
-                                                                                }
-                                                                            )
-                                                                        }
-                                                                        className="text-pink-600 hover:text-pink-900"
-                                                                    >
-                                                                        REMOVE
-                                                                    </button>
-                                                                </div>
-                                                            )}
+                                                {customer?.map(
+                                                    (customer, i) => (
+                                                        <tr key={i}>
+                                                            <td className="capitalize pr-3 py-2 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">
+                                                                {customer.name}
+                                                            </td>
+                                                            <td className="relative pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
+                                                                {form?.customer
+                                                                    ?.id ==
+                                                                    customer.id && (
+                                                                    <div className="flex items-end justify-end gap-6 w-full">
+                                                                        <button className="flex gap-1">
+                                                                            <CheckIcon className="h-4 w-4 text-green-500" />
+                                                                            <div className=" text-green-500">
+                                                                                SELECTED
+                                                                            </div>{" "}
+                                                                        </button>
+                                                                        <button
+                                                                            onClick={() =>
+                                                                                setForm(
+                                                                                    {
+                                                                                        ...form,
+                                                                                        customer:
+                                                                                            null,
+                                                                                    }
+                                                                                )
+                                                                            }
+                                                                            className="text-pink-600 hover:text-pink-900"
+                                                                        >
+                                                                            REMOVE
+                                                                        </button>
+                                                                    </div>
+                                                                )}
 
-                                                            {form?.customer?.id !=
-                                                                customer.id && (
-                                                                <>
-                                                                    <button
-                                                                        onClick={() =>
-                                                                            setForm(
-                                                                                {
-                                                                                    ...form,
-                                                                                    customer:
-                                                                                        customer,
-                                                                                }
-                                                                            )
-                                                                        }
-                                                                        className="text-pink-600 hover:text-pink-900"
-                                                                    >
-                                                                        SELECT
-                                                                    </button>
-                                                                </>
-                                                            )}
-                                                        </td>
-                                                    </tr>
-                                                ))}
+                                                                {form?.customer
+                                                                    ?.id !=
+                                                                    customer.id && (
+                                                                    <>
+                                                                        <button
+                                                                            onClick={() =>
+                                                                                setForm(
+                                                                                    {
+                                                                                        ...form,
+                                                                                        customer:
+                                                                                            customer,
+                                                                                    }
+                                                                                )
+                                                                            }
+                                                                            className="text-pink-600 hover:text-pink-900"
+                                                                        >
+                                                                            SELECT
+                                                                        </button>
+                                                                    </>
+                                                                )}
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                )}
                                             </tbody>
                                         </table>
                                     </div>

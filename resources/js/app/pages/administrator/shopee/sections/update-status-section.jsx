@@ -51,7 +51,11 @@ export default function UpdateStatusSection({ data }) {
             <Modal
                 isOpen={open}
                 onClose={() => setOpen(false)}
-                title="Update Status"
+                title={
+                    <h2 className="text-xl font-semibold">
+                        <u>Update Status</u>
+                    </h2>
+                }
                 width="max-w-lg"
             >
                 <div className="text-red-500">

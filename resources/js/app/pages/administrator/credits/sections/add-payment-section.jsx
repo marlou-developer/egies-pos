@@ -81,11 +81,14 @@ export default function AddPaymentSection({ data }) {
                 </button>
             </Tooltip>
 
-
             <Modal
                 isOpen={open}
                 onClose={() => setOpen(false)}
-                title="Add Payment"
+                title={
+                    <h2 className="text-2xl font-semibold">
+                        <u>Add Payment</u>
+                    </h2>
+                }
                 width="max-w-lg"
             >
                 <div className=" flex flex-col gap-3">
@@ -103,7 +106,7 @@ export default function AddPaymentSection({ data }) {
                             )}
                         </div>
                     </div>
-                    <div className="flex gap-3">
+                    <div className="flex gap-2">
                         <input
                             id="is_customer"
                             name="is_customer"
@@ -112,7 +115,7 @@ export default function AddPaymentSection({ data }) {
                             onChange={(e) => setIsPartial(e.target.checked)}
                             className="h-5 w-5 rounded border-pink-500 text-pink-600 focus:ring-pink-500 checked:bg-pink-600 checked:hover:bg-pink-600"
                         />
-                        <span>Is Partial?</span>
+                        <span>Partial Payment</span>
                     </div>
                     {isPartial && (
                         <Input
@@ -129,18 +132,35 @@ export default function AddPaymentSection({ data }) {
                     )}
 
                     <div>
-                        <Input
-                            label="Amount"
-                            name=""
-                            value={form.amount}
-                            onChange={(e) =>
-                                setForm({
-                                    ...form,
-                                    amount: e.target.value,
-                                })
-                            }
-                            type="number"
-                        />
+                        <div className="flex flex-col gap-2">
+                            <Input
+                                label="Amount"
+                                name=""
+                                value={form.amount}
+                                onChange={(e) =>
+                                    setForm({
+                                        ...form,
+                                        amount: e.target.value,
+                                    })
+                                }
+                                type="number"
+                            />
+                            {!isPartial && (
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        setForm({
+                                            ...form,
+                                            amount: data.balance,
+                                        })
+                                    }
+                                    className="self-start px-3 py-1 text-xs font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+                                >
+                                    Pay Full Amount (
+                                    {peso_value(Number(data.balance))})
+                                </button>
+                            )}
+                        </div>
                     </div>
                     <select
                         onChange={(e) =>
