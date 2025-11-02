@@ -243,32 +243,25 @@ class CartController extends Controller
             return response()->json(['error' => 'Cart or payment not found'], 404);
         }
 
-        // Store old amount before updating
         $oldAmount = $credit_payment->amount;
         $newAmount = $request->amount;
 
-        // Update payment details
         $credit_payment->update([
             'amount' => $newAmount,
             'created_at' => $request->date,
             'payment_type' => $request->payment_type,
         ]);
 
-        // Calculate the difference between new and old amounts
         $difference = $newAmount - $oldAmount;
 
-        // Adjust the cart balance
         $newBalance = $cart->balance - $difference;
 
-        // Prevent negative balances
         if ($newBalance < 0) {
             $newBalance = 0;
         }
 
-        // Update status based on new balance
         $status = $newBalance <= 0 ? 'Paid' : 'Partial';
 
-        // Save updated balance and status
         $cart->update([
             'balance' => $newBalance,
             'status' => $status,

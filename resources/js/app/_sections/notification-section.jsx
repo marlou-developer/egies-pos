@@ -16,6 +16,7 @@ export default function NotificationSection() {
     const { user } = useSelector((store) => store.app);
     const [open, setOpen] = useState(false);
     const [isMarkingAsRead, setIsMarkingAsRead] = useState(false);
+    const [navigatingItems, setNavigatingItems] = useState(new Set());
     const dropdownRef = useRef(null);
 
     // Close dropdown when clicking outside
@@ -35,7 +36,12 @@ export default function NotificationSection() {
     }, []);
 
     async function route_page(item, routing) {
+        const itemKey = `${item.id || item.type}_${item.cart?.id || item.product?.id}`;
+        
         try {
+            // Set loading state for this specific item
+            setNavigatingItems(prev => new Set(prev).add(itemKey));
+            
             // Send notification in the same format as markAllAsRead
             await update_is_read_service({
                 notifications: [item],
@@ -46,6 +52,13 @@ export default function NotificationSection() {
             console.error('Error marking notification as read:', error);
             // Still navigate even if marking as read fails
             router.visit(routing);
+        } finally {
+            // Remove loading state after navigation starts
+            setNavigatingItems(prev => {
+                const newSet = new Set(prev);
+                newSet.delete(itemKey);
+                return newSet;
+            });
         }
     }
 
@@ -115,7 +128,7 @@ export default function NotificationSection() {
                 onClick={() => setOpen((prev) => !prev)}
             >
                 {filteredNotifications.length > 0 && (
-                    <span className="absolute -top-1 -right-1 inline-flex items-center justify-center h-4 w-4 rounded-full bg-red-500 text-white text-xs font-semibold">
+                    <span className={`absolute -top-1 -right-1 inline-flex items-center justify-center ${filteredNotifications.length > 9 ? 'h-5 w-5' : 'h-4 w-4'} rounded-full bg-red-500 text-white text-xs font-semibold`}>
                         {filteredNotifications.length}
                     </span>
                 )}
@@ -223,8 +236,17 @@ export default function NotificationSection() {
                                     <div key={index} className={` w-full  underline`}>
                                         <button
                                             onClick={() => route_page(item, onClickUrl)}
-                                            className={`flex text-left  w-full py-2 px-1 border-b ${color}`}
+                                            disabled={navigatingItems.has(`${item.id || item.type}_${item.cart?.id || item.product?.id}`)}
+                                            className={`flex text-left  w-full py-2 px-1 border-b ${color} disabled:opacity-60 disabled:cursor-not-allowed relative`}
                                         >
+                                            {navigatingItems.has(`${item.id || item.type}_${item.cart?.id || item.product?.id}`) && (
+                                                <div className="absolute inset-0 bg-white bg-opacity-50 flex items-center justify-center">
+                                                    <svg className="animate-spin h-4 w-4 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+                                                    </svg>
+                                                </div>
+                                            )}
                                             {icon}
                                             {content}
                                         </button>
