@@ -26,4 +26,38 @@ class CreditPaymentController extends Controller
         }
         return response()->json('success', 200);
     }
+
+    public function destroy($id)
+    {
+        $creditPayment = CreditPayment::where('id', $id)->first();
+        
+        if (!$creditPayment) {
+            return response()->json(['error' => 'Credit payment not found'], 404);
+        }
+
+        $cartId = $creditPayment->cart_id;
+        $paymentAmount = $creditPayment->amount;
+
+        $creditPayment->delete();
+
+        $cart = Cart::where('cart_id', $cartId)->first();
+        if ($cart) {
+            $newBalance = $cart->balance + $paymentAmount;
+            
+            if ($newBalance <= 0) {
+                $newStatus = 'Paid'; 
+            } else if ($newBalance < $cart->total_price) {
+                $newStatus = 'Partial'; 
+            } else {
+                $newStatus = 'Pending'; 
+            }
+
+            $cart->update([
+                'status' => $newStatus,
+                'balance' => $newBalance,
+            ]);
+        }
+
+        return response()->json(['message' => 'Credit payment deleted successfully']);
+    }
 }

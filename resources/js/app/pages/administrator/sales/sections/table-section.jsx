@@ -112,7 +112,7 @@ export default function TableSection() {
                                         <td className="border-b border-gray-200 px-3 pl-8 py-4 text-gray-500 whitespace-nowrap">
                                             {res.cart_id}
                                         </td>
-                                        <td className="border-b border-gray-200 px-3 pl-8 py-4 text-gray-500 whitespace-nowrap">
+                                        <td className="border-b border-gray-200 px-3 py-4 text-gray-500  whitespace-nowrap">
                                             {peso_value(
                                                 res?.cart_items?.reduce(
                                                     (acc, item) =>
@@ -165,7 +165,7 @@ export default function TableSection() {
                                                 )
                                             )}
                                         </td>
-                                        <td className="border-b border-gray-200 px-3 py-4 text-gray-500 whitespace-nowrap">
+                                        <td className="border-b border-gray-200 px-3 py-4 text-gray-500 text-center whitespace-nowrap">
                                             {res.status}
                                         </td>
                                         <td className="border-b border-gray-200 px-3 py-4 text-gray-700 whitespace-nowrap text-right">

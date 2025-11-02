@@ -38,6 +38,13 @@ export function update_payment_service(data) {
     } catch (error) {}
 }
 
+export function delete_credit_payment_service(id) {
+    try {
+        const result = axios.delete(`/api/credit_payment/${id}`);
+        return result;
+    } catch (error) {}
+}
+
 export function edit_discount_service(data) {
     try {
         const result = axios.post("/api/edit_discount", data);

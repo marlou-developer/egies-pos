@@ -10,6 +10,7 @@ import moment from "moment";
 import React, { useState } from "react";
 import { FaClockRotateLeft } from "react-icons/fa6";
 import UpdatePaymentSection from "./update-payment-section";
+import DeletePaymentSection from "./delete-payment-section";
 
 export default function HistorySection({ data }) {
     const [open, setOpen] = useState(false);
@@ -79,9 +80,7 @@ export default function HistorySection({ data }) {
                                         </td>
                                         <td class="py-2 flex text-center justify-center items-center">
                                             <UpdatePaymentSection data={res} />
-                                            <Tooltip title="Delete Payment">
-                                                <TrashIcon className="w-5 h-5 inline-block ml-2 text-red-500 cursor-pointer" />
-                                            </Tooltip>
+                                            <DeletePaymentSection data={res} />
                                         </td>
                                     </tr>
                                 );
