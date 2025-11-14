@@ -73,9 +73,15 @@ export default function SalesIdTableSection() {
                                     </th>
                                     <th
                                         scope="col"
+                                        className="px-3 py-3.5 text-left text-sm text-gray-900"
+                                    >
+                                        <b>Fixed Price</b>
+                                    </th>
+                                    <th
+                                        scope="col"
                                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                     >
-                                        Price
+                                        Cost Price
                                     </th>
                                     <th
                                         scope="col"
@@ -101,6 +107,11 @@ export default function SalesIdTableSection() {
                                             <SalesEditQuantitySection
                                                 data={res}
                                             />
+                                        </td>
+                                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                                            {peso_value(
+                                                Number(res?.fixed_price ?? 0)
+                                            )}
                                         </td>
                                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                                             {peso_value(
