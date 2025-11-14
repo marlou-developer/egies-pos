@@ -63,12 +63,6 @@ export default function SalesIdTableSection() {
                                         scope="col"
                                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                     >
-                                        Discount
-                                    </th>
-                                    <th
-                                        scope="col"
-                                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                                    >
                                         Quantity
                                     </th>
                                     <th
@@ -87,6 +81,12 @@ export default function SalesIdTableSection() {
                                         scope="col"
                                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                     >
+                                        Discount
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                    >
                                         Amount
                                     </th>
                                 </tr>
@@ -96,12 +96,6 @@ export default function SalesIdTableSection() {
                                     <tr key={res?.email}>
                                         <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">
                                             {res.product?.name}
-                                        </td>
-
-                                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
-                                            {peso_value(
-                                                Number(res?.discount ?? 0)
-                                            )}
                                         </td>
                                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                                             <SalesEditQuantitySection
@@ -116,6 +110,11 @@ export default function SalesIdTableSection() {
                                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                                             {peso_value(
                                                 Number(res?.price ?? 0)
+                                            )}
+                                        </td>
+                                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                                            {peso_value(
+                                                Number(res?.discount ?? 0)
                                             )}
                                         </td>
                                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">

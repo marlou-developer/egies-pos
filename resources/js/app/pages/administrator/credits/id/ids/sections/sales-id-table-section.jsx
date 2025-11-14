@@ -15,6 +15,7 @@ import {
 import ReturnItemSection from "./return-item-section";
 import UpdateBillToSection from "./update-bill-to-section";
 import UpdateCreatedAt from "./update-created-at";
+import EditDiscountSection from "./edit-discount-section";
 
 const people = [
     {
@@ -45,7 +46,6 @@ export default function SalesIdTableSection() {
                     </p>
                 </div>
                 <div className="flex gap-3">
-                    <EditDIscountSection data={cart} />
                     <AddProductSection />
                 </div>
             </div>
@@ -83,6 +83,12 @@ export default function SalesIdTableSection() {
                                         scope="col"
                                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                                     >
+                                        Discount
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                                    >
                                         Amount
                                     </th>
                                 </tr>
@@ -110,6 +116,11 @@ export default function SalesIdTableSection() {
                                         </td>
                                         <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                                             {peso_value(
+                                                Number(res?.discount ?? 0)
+                                            )}
+                                        </td>
+                                        <td className="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
+                                            {peso_value(
                                                 Number(res?.total ?? 0)
                                             )}
                                         </td>
@@ -120,6 +131,9 @@ export default function SalesIdTableSection() {
                                                         data={res}
                                                     />
                                                     <ReturnItemSection
+                                                        data={res}
+                                                    />
+                                                    <EditDiscountSection
                                                         data={res}
                                                     />
                                                 </>
