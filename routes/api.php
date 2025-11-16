@@ -69,4 +69,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/get_discounted_products_by_id/{customer_id}', [ProductDiscountController::class, 'get_discounted_products_by_id']);
 });
 
-Route::get('update_users_notifications', [CartItemController::class, 'update_users_notifications']);
+Route::get('update_users_notifications', [CartController::class, 'update_users_notifications']);
