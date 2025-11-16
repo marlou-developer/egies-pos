@@ -1246,7 +1246,7 @@ class CartController extends Controller
         $total_expenses = Expense::selectRaw('SUM(cost * qty) as total')
             ->value('total');
         $notification = Notification::where('user_id', $userAuth->id)->with(['cart', 'product'])->orderBy('id', 'desc')
-            ->limit(100)->get();
+            ->limit(200)->get();
 
         return response()->json([
             'notification' => $notification, //
