@@ -53,7 +53,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('update_is_read', [CartController::class, 'update_is_read']);
 
     Route::post('cart_item', [CartItemController::class, 'cart_item']);
-    Route::get('update_users_notifications', [CartItemController::class, 'update_users_notifications']);
 
     Route::get('get_report', [CartController::class, 'get_report']);
     Route::get('report_items', [CartController::class, 'report_items']);
@@ -69,3 +68,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('search_customer', [CustomerController::class, 'search_customer']);
     Route::get('/get_discounted_products_by_id/{customer_id}', [ProductDiscountController::class, 'get_discounted_products_by_id']);
 });
+
+Route::get('update_users_notifications', [CartItemController::class, 'update_users_notifications']);
