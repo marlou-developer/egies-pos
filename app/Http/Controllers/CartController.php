@@ -1138,6 +1138,8 @@ class CartController extends Controller
                 }
             }
         }
+
+        return response()->json('success', 200);
     }
     public function get_over_due(Request $request)
     {
