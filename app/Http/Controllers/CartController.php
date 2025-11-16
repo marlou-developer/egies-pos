@@ -1092,7 +1092,6 @@ class CartController extends Controller
                     ['cp_id', '=', $value->id],
                     ['type', '=', 'product'],
                     ['status', '=', 'out_stocks'],
-                    ['is_read', '=', 'false'],
                 ])->whereDate('date', Carbon::now()->toDateString())->first();
                 
                 if (!$notif) {
@@ -1114,7 +1113,6 @@ class CartController extends Controller
                     ['cp_id', '=', $value->id],
                     ['type', '=', 'product'],
                     ['status', '=', 'low_stock'],
-                    ['is_read', '=', 'false'],
                 ])->whereDate('date', Carbon::now()->toDateString())->first();
 
                 if (!$notif) {
@@ -1136,7 +1134,6 @@ class CartController extends Controller
                     ['cp_id', '=', $value->id],
                     ['type', '=', 'cart'],
                     ['status', '=', 'over_due'],
-                    ['is_read', '=', 'false'],
                 ])->whereDate('date', Carbon::now()->toDateString())->first();
                 
                 if (!$notif) {
