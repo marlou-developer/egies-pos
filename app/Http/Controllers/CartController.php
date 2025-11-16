@@ -1044,6 +1044,101 @@ class CartController extends Controller
         return response()->json($carts, 200);
     }
 
+
+    public function update_users_notifications()
+    {
+
+        $query = Cart::where('due_date', '<', Carbon::now())
+            ->whereIn('status', ['Pending', 'Partial'])
+            ->with(['customer']);
+
+        $over_due = $query->get();
+
+        $out_stocks = Product::where('quantity', 0)
+            ->notSoftDeleted()
+            ->get()
+            ->map(function ($product) {
+                $product->stock_status = 'Out of Stock';
+                return $product;
+            });
+
+        $stocks = Product::whereBetween('quantity', [1, 10])
+            ->notSoftDeleted()
+            ->get()
+            ->map(function ($product) {
+                $product->stock_status = 'Low Stock';
+                return $product;
+            });
+
+        $users = User::all();
+        foreach ($users as $key => $user) {
+            // Handle out of stock notifications
+            foreach ($out_stocks as $key => $value) {
+                $notif = Notification::where([
+                    ['user_id', '=', $user->id],
+                    ['cp_id', '=', $value->id],
+                    ['type', '=', 'product'],
+                    ['status', '=', 'out_stocks'],
+                    ['is_read', '=', 'false'],
+                ])->whereDate('date', Carbon::now()->toDateString())->first();
+
+                if (!$notif) {
+                    Notification::create([
+                        'user_id' => $user->id,
+                        'cp_id' => $value->id,
+                        'type' => "product",
+                        'status' => "out_stocks",
+                        'date' => Carbon::now(),
+                        'is_read' => "false",
+                    ]);
+                }
+            }
+
+            // Handle low stock notifications
+            foreach ($stocks as $key => $value) {
+                $notif = Notification::where([
+                    ['user_id', '=', $user->id],
+                    ['cp_id', '=', $value->id],
+                    ['type', '=', 'product'],
+                    ['status', '=', 'low_stock'],
+                    ['is_read', '=', 'false'],
+                ])->whereDate('date', Carbon::now()->toDateString())->first();
+
+                if (!$notif) {
+                    Notification::create([
+                        'user_id' => $user->id,
+                        'cp_id' => $value->id,
+                        'type' => "product",
+                        'status' => "low_stock",
+                        'date' => Carbon::now(),
+                        'is_read' => "false",
+                    ]);
+                }
+            }
+
+            // Handle overdue notifications
+            foreach ($over_due as $key => $value) {
+                $notif = Notification::where([
+                    ['user_id', '=', $user->id],
+                    ['cp_id', '=', $value->id],
+                    ['type', '=', 'cart'],
+                    ['status', '=', 'over_due'],
+                    ['is_read', '=', 'false'],
+                ])->whereDate('date', Carbon::now()->toDateString())->first();
+
+                if (!$notif) {
+                    Notification::create([
+                        'user_id' => $user->id,
+                        'cp_id' => $value->id,
+                        'type' => "cart",
+                        'status' => "over_due",
+                        'date' => Carbon::now(),
+                        'is_read' => "false",
+                    ]);
+                }
+            }
+        }
+    }
     public function get_over_due(Request $request)
     {
         $today = Carbon::now('Asia/Manila')->toDateString();
@@ -1081,73 +1176,6 @@ class CartController extends Controller
 
         $today = Carbon::now('Asia/Manila')->toDateString();
 
-
-        $users = User::all();
-
-        foreach ($users as $key => $user) {
-            // Handle out of stock notifications
-            foreach ($out_stocks as $key => $value) {
-                $notif = Notification::where([
-                    ['user_id', '=', $user->id],
-                    ['cp_id', '=', $value->id],
-                    ['type', '=', 'product'],
-                    ['status', '=', 'out_stocks'],
-                ])->whereDate('date', Carbon::now()->toDateString())->first();
-                
-                if (!$notif) {
-                    Notification::create([
-                        'user_id' => $user->id,
-                        'cp_id' => $value->id,
-                        'type' => "product",
-                        'status' => "out_stocks",
-                        'date' => Carbon::now(),
-                        'is_read' => "false",
-                    ]);
-                }
-            }
-
-            // Handle low stock notifications
-            foreach ($stocks as $key => $value) {
-                $notif = Notification::where([
-                    ['user_id', '=', $user->id],
-                    ['cp_id', '=', $value->id],
-                    ['type', '=', 'product'],
-                    ['status', '=', 'low_stock'],
-                ])->whereDate('date', Carbon::now()->toDateString())->first();
-
-                if (!$notif) {
-                    Notification::create([
-                        'user_id' => $user->id,
-                        'cp_id' => $value->id,
-                        'type' => "product",
-                        'status' => "low_stock",
-                        'date' => Carbon::now(),
-                        'is_read' => "false",
-                    ]);
-                }
-            }
-
-            // Handle overdue notifications
-            foreach ($over_due as $key => $value) {
-                $notif = Notification::where([
-                    ['user_id', '=', $user->id],
-                    ['cp_id', '=', $value->id],
-                    ['type', '=', 'cart'],
-                    ['status', '=', 'over_due'],
-                ])->whereDate('date', Carbon::now()->toDateString())->first();
-                
-                if (!$notif) {
-                    Notification::create([
-                        'user_id' => $user->id,
-                        'cp_id' => $value->id,
-                        'type' => "cart",
-                        'status' => "over_due",
-                        'date' => Carbon::now(),
-                        'is_read' => "false",
-                    ]);
-                }
-            }
-        }
 
 
         $current_sales = CartItem::whereDate('created_at', $today)
