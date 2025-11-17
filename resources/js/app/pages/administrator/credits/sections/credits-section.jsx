@@ -18,6 +18,7 @@ import { peso_value } from "@/app/lib/peso";
 import PaginationSection from "./pagination-section";
 import EditPaymentSection from "./edit-payment-section";
 import { Tooltip } from "antd";
+import FilterCreditsSection from "./filter-credits-section";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -48,8 +49,9 @@ export default function CreditsSection() {
                 </div> */}
             </div>
 
-            <div className="mt-4 flex items-start justify-start">
+            <div className="mt-4 flex items-start justify-between">
                 <SearchSection />
+                <FilterCreditsSection />
             </div>
 
             <div className="mt-8 flow-root">

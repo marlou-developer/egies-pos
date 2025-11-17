@@ -1323,6 +1323,7 @@ class CartController extends Controller
         if ($request->filled('search')) {
             $carts->where(function ($query) use ($request) {
                 $query->where('cart_id', 'like', '%' . $request->search . '%')
+                    ->orWhere('status', 'like', '%' . $request->search . '%')
                     ->orWhereHas('customer', function ($q) use ($request) {
                         $q->where('name', 'like', '%' . $request->search . '%');
                     });
