@@ -170,16 +170,30 @@ class CartController extends Controller
                 'profit' => $profit,
             ]);
         }
-        // $cart = Cart::where('cart_id', $request->cart_id)->first();
-        // $total_price = CartItem::where('cart_id', $request->cart_id)->sum('total');
-        // if ($cart) {
-        //     $cart->update([
-        //         'discount_per_order' => $request->discount_per_order,
-        //         'total_price' => $total_price - ($request->discount_per_order ?? 0 + $cart->discount_per_item ?? 0 + $cart->customer_total_discount ?? 0)
-        //     ]);
-        // }
-        // return response()->json($request, 200);
+        $cart = Cart::where('cart_id', $request->cart_id)->first();
+        if ($cart) {
+            // Recalculate cart totals based on all cart items
+            $cart_items = CartItem::where('cart_id', $request->cart_id)->get();
+            
+            $sub_total = $cart_items->sum(function ($item) {
+                return $item->price * $item->quantity;
+            });
+            
+            $total_item_discounts = $cart_items->sum('discount');
+            
+            $new_total_price = $sub_total - $total_item_discounts - ($request->discount_per_order ?? 0) - ($cart->customer_total_discount ?? 0);
+            
+            $cart->update([
+                'discount_per_order' => $request->discount_per_order ?? $cart->discount_per_order,
+                'discount_per_item' => $total_item_discounts,
+                'sub_total' => $sub_total,
+                'total_price' => $new_total_price,
+            ]);
+        }
+        return response()->json($request, 200);
     }
+
+
     public function edit_quantity(Request $request)
     {
         $cart = Cart::where('cart_id', $request->cart_id)->first();
@@ -197,9 +211,15 @@ class CartController extends Controller
                     ]);
                 }
             }
+            $total = $request->quantity * $request->price - $cart_item->discount;
+            $fixed_price = $total / $request->quantity;
+            $profit = $total - ($cart_item->cost / $cart_item->quantity * $request->quantity);
+            
             $cart_item->update([
                 'quantity' => $request->quantity,
-                'total' => $request->quantity * $request->price
+                'total' => $total,
+                'fixed_price' => $fixed_price,
+                'profit' => $profit,
             ]);
             $cart_items = CartItem::where('cart_id', $request->cart_id)->get();
 
@@ -207,10 +227,29 @@ class CartController extends Controller
                 return $item->price * $item->quantity;
             });
 
+            $new_total_price = $total - ($cart->discount_per_order + $cart->discount_per_item + $cart->customer_total_discount);
+
             $cart->update([
                 'sub_total' => $total,
-                'total_price' => $total - $cart->discount_per_order + $cart->discount_per_item + $cart->customer_total_discount,
+                'total_price' => $new_total_price,
             ]);
+
+            if ($cart->is_credit == 'true') {
+                // Calculate the new balance: new total price minus any payments already made
+                $total_payments = $cart->credit_payments()->sum('amount');
+                $new_balance = $new_total_price - $total_payments;
+                
+                // Ensure balance doesn't go below 0
+                $new_balance = max(0, $new_balance);
+                
+                // Update status based on balance
+                $status = $new_balance <= 0 ? 'Paid' : ($total_payments > 0 ? 'Partial' : 'Pending');
+                
+                $cart->update([
+                    'balance' => $new_balance,
+                    'status' => $status,
+                ]);
+            }
         }
         return response()->json($cart, 200);
     }

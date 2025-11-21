@@ -15,7 +15,7 @@ export default function SalesEditQuantitySection({ data }) {
                 ...data,
                 quantity: value,
             });
-            await store.dispatch(get_cart_by_id_thunk(cart_id));
+            await store.dispatch(get_cart_by_id_thunk(data?.cart_id));
             await Swal.fire({
                 icon: "success",
                 title: "Your work has been saved",
