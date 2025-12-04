@@ -38,7 +38,10 @@ export default function DeleteSelectedSection() {
                         date: new Date().toISOString().split("T")[0],
                         delivery_id: new Date()
                             .toISOString()
-                            .replace(/[-:T.]/g, "")
+                            .replaceAll("-", "")
+                            .replaceAll(":", "")
+                            .replaceAll("T", "")
+                            .replaceAll(".", "")
                             .slice(0, 12),
                         quantity: String(product?.quantity || 0),
                         supplier_id: product?.supplier_id || null,
