@@ -26,6 +26,7 @@ import PaginationSection from "./pagination-section";
 import MobileCardProductComponent from "../components/mobile-card-product-component";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { router } from "@inertiajs/react";
+import DeleteSelectedSection from "./delete-selected-section";
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
@@ -172,6 +173,7 @@ export default function ProductsSection() {
                     </h1>
                 </div>
                 <div className="flex gap-3">
+                    <DeleteSelectedSection />
                     <PrintSection />
                     <button
                         type="button"
