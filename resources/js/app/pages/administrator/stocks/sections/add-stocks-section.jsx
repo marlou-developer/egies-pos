@@ -14,7 +14,7 @@ export default function AddStocksSection({ data }) {
     const [costOption, setCostOption] = useState("same");
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({});
-    const { suppliers } = useSelector((store) => store.suppliers)
+    const { suppliers } = useSelector((store) => store.suppliers);
     const addStock = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -30,6 +30,7 @@ export default function AddStocksSection({ data }) {
             await store.dispatch(get_over_due_thunk());
             await store.dispatch(get_product_thunk());
             message.success("Successfully added!");
+            setLoading(false);
             setModalOpen(false);
             setForm({});
             setCostOption("same");
@@ -40,7 +41,13 @@ export default function AddStocksSection({ data }) {
         }
     };
 
-    console.log('suppliers', suppliers)
+    console.log("suppliers", suppliers);
+
+    const isDisabled = () => {
+        if (loading) return true;
+        if (costOption === "different") return true;
+        return false;
+    };
     return (
         <div>
             <Tooltip title="Add Stock">
@@ -53,7 +60,6 @@ export default function AddStocksSection({ data }) {
                     {/* Add Stocks */}
                 </button>
             </Tooltip>
-
 
             <Modal open={modalOpen} setOpen={setModalOpen}>
                 <form onSubmit={addStock}>
@@ -121,14 +127,13 @@ export default function AddStocksSection({ data }) {
                                 <option disabled selected>
                                     Select Supplier
                                 </option>
-                                {
-                                    suppliers.map((res, i) => {
-                                        return <option key={i} value={res.id}>
+                                {suppliers.map((res, i) => {
+                                    return (
+                                        <option key={i} value={res.id}>
                                             {res.name}
                                         </option>
-                                    })
-                                }
-
+                                    );
+                                })}
                             </select>
                         </div>
                         <div>
@@ -171,12 +176,13 @@ export default function AddStocksSection({ data }) {
                         <div className="flex items-center justify-end">
                             <button
                                 type="submit"
-                                disabled={costOption === "different"}
+                                disabled={isDisabled()}
                                 className={`rounded-md p-2 text-white transition 
-        ${costOption === "different"
-                                        ? "bg-gray-300 cursor-not-allowed"
-                                        : "bg-pink-400 hover:bg-pink-500"
-                                    }
+        ${
+            isDisabled()
+                ? "bg-gray-300 cursor-not-allowed"
+                : "bg-pink-400 hover:bg-pink-500"
+        }
     `}
                             >
                                 Add Stock

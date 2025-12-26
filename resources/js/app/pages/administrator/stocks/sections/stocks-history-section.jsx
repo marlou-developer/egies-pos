@@ -32,6 +32,7 @@ export default function StocksHistorySection({ data }) {
                         <table class="min-w-full text-sm text-left border border-gray-200 rounded-lg">
                             <thead class="bg-gray-100 text-gray-700">
                                 <tr>
+                                    <th class="px-4 py-2 border-b">Processed by</th>
                                     <th class="px-4 py-2 border-b">Delivery Receipt</th>
                                     <th class="px-4 py-2 border-b">Supplier</th>
                                     <th class="px-4 py-2 border-b">Quantity</th>
@@ -46,6 +47,7 @@ export default function StocksHistorySection({ data }) {
                                     .map((res) => {
                                         return (
                                             <tr className="hover:bg-gray-50" key={res.delivery_id}>
+                                                <td className="px-4 py-2 border-b">{res?.user?.name}</td>
                                                 <td className="px-4 py-2 border-b">{res.delivery_id}</td>
                                                 <td className="px-4 py-2 border-b">{res?.supplier?.name}</td>
                                                 <td className="px-4 py-2 border-b">{res.quantity}</td>

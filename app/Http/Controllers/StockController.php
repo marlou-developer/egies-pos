@@ -5,10 +5,38 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Stock;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class StockController extends Controller
 {
 
+    public function minus_stock(Request $request)
+    {
+        $product = Product::where('id', $request->product_id)->first();
+        $user = Auth::user();
+        if ($product) {
+            $product->update([
+                'quantity' => $product->quantity - $request->quantity
+            ]);
+        }
+
+
+        Stock::create([
+            'product_id' => $request->product_id,
+            'user_id' => $user->id,
+            'date' => now()->format('Y-m-d'),
+            'delivery_id' => "N/A",
+            'quantity' => $request->quantity,
+            'remaining' => "deducted",
+            'price' => $request->price,
+            'supplier_id' => 'N/A',
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Stock minus successfully',
+        ], 200);
+    }
     public function update(Request $request, $id)
     {
 
@@ -50,8 +78,8 @@ class StockController extends Controller
             'price' => 'nullable',
             'supplier_id' => 'nullable',
         ]);
-
-        $stocks = Stock::create($data);
+        $user = Auth::user();
+        $stocks = Stock::create(array_merge($data, ['user_id' => $user->id]));
 
         $product = Product::find($data['product_id']);
         if ($product) {

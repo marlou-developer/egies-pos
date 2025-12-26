@@ -32,16 +32,23 @@ class AuthenticatedSessionController extends Controller
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
-
-        $request->session()->regenerate();
-        if (Auth::user()->user_type == 1) {
-            return redirect()->intended(RouteServiceProvider::ADMIN);
-        } elseif (Auth::user()->user_type == 2) {
-            return redirect()->intended(RouteServiceProvider::STAFF);
+        if (Auth::user()->user_type == "NA") {
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return redirect()->intended('/');
+        } else {
+            $request->session()->regenerate();
+            return redirect()->intended('/');
         }
+        // if (Auth::user()->user_type == 1) {
+        //     return redirect()->intended(RouteServiceProvider::ADMIN);
+        // } elseif (Auth::user()->user_type == 2) {
+        //     return redirect()->intended(RouteServiceProvider::STAFF);
+        // }
 
         // Optional fallback if user_type is something else
-        return redirect()->intended('/'); // or to a default dashboard
+        // or to a default dashboard
     }
 
 

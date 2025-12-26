@@ -9,6 +9,14 @@ export function create_stock_service(data) {
     }
 }
 
+export function minus_stock_service(data) {
+    try {
+        const result = axios.post('/api/minus_stock', data)
+        return result
+    } catch (error) {
+
+    }
+}
 export function get_stock_by_products_id_service(product_id) {
     try {
         const id = product_id || window.location.pathname.split('/')[3];

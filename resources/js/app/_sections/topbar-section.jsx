@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSidebarOpen } from "../redux/app-slice";
 import {
     Bars3Icon,
@@ -14,6 +14,7 @@ import store from "../store/store";
 
 export default function TopbarSection({ userNavigation }) {
     const dispatch = useDispatch();
+    const { user } = useSelector((store) => store.app);
     const [isFullscreen, setIsFullscreen] = React.useState(false);
 
     const toggleFullscreen = () => {
@@ -27,7 +28,7 @@ export default function TopbarSection({ userNavigation }) {
             }
         }
     };
-
+    console.log("useruseruser", user.user_type);
 
     return (
         <div className="sticky top-0 z-40 lg:mx-auto w-full lg:px-0">
@@ -43,7 +44,10 @@ export default function TopbarSection({ userNavigation }) {
                 </button>
 
                 {/* Separator */}
-                <div aria-hidden="true" className="h-6 w-px bg-gray-200 lg:hidden" />
+                <div
+                    aria-hidden="true"
+                    className="h-6 w-px bg-gray-200 lg:hidden"
+                />
 
                 <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 px-8">
                     <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6 justify-end">
@@ -66,13 +70,16 @@ export default function TopbarSection({ userNavigation }) {
                                 ) : (
                                     <ArrowsPointingOutIcon className="size-6" />
                                 )}
-                                <span className="sr-only">Toggle fullscreen</span>
+                                <span className="sr-only">
+                                    Toggle fullscreen
+                                </span>
                             </button>
                         </div>
                     </div>
 
                     <div className="flex items-center gap-x-4 lg:gap-x-6">
-                        <NotificationSection />
+                        {user.user_type !== "NA" && <NotificationSection />}
+
                         <HeaderMenuSection userNavigation={userNavigation} />
                     </div>
                 </div>

@@ -16,7 +16,7 @@ export default function ProductOptionMenuSection({ data }) {
                 <Menu as="div" className="relative inline-block text-left">
                     <MenuItems className="absolute z-50 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none right-0">
                         <div className="py-1">
-                            <MenuItem>
+                            {/* <MenuItem>
                                 {({ active }) => (
                                     <button
                                         onClick={() => setIsEditOpen(true)}
@@ -28,7 +28,7 @@ export default function ProductOptionMenuSection({ data }) {
                                         <b>Edit Product</b>
                                     </button>
                                 )}
-                            </MenuItem>
+                            </MenuItem> */}
                             {/* <MenuItem as="a" href="#" className="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900">
                             <FaCirclePlus className="mr-3 size-5 text-gray-400" />
                             <b>Add Stock</b>

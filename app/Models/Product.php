@@ -37,7 +37,7 @@ class Product extends Model
     }
     public function stocks(): HasMany
     {
-        return $this->hasMany(Stock::class, 'product_id', 'id')->with('supplier');
+        return $this->hasMany(Stock::class, 'product_id', 'id')->with(['supplier', 'user']);
     }
     public function categories(): HasOne
     {
@@ -47,7 +47,7 @@ class Product extends Model
     {
         return $this->hasOne(Supplier::class, 'id', 'supplier_id');
     }
-    
+
     /**
      * Check if the product is soft deleted
      */
@@ -63,7 +63,7 @@ class Product extends Model
     {
         return $query->where(function ($q) {
             $q->where('is_soft_deleted', '!=', '1')
-              ->orWhereNull('is_soft_deleted');
+                ->orWhereNull('is_soft_deleted');
         });
     }
 
