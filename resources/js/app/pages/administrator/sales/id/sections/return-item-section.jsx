@@ -17,31 +17,42 @@ export default function ReturnItemSection({ data }) {
 
     useEffect(() => {
         setQuantity(data.quantity);
-    }, []);
-    const deleteUser = async (e) => {
+    }, [data.quantity]);
+    const handleReturn = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            await return_per_item_service({
+            const response = await return_per_item_service({
                 ...data,
                 quantity: quantity,
             });
-            await store.dispatch(get_cart_by_id_thunk(cart_id));
-            await store.dispatch(get_product_thunk());
-            message.success("Return Successfully!");
-            setIsModalOpen(false);
+            
+            if (response.data.result === 'success') {
+                // Small delay to ensure backend processing is complete
+                await new Promise(resolve => setTimeout(resolve, 200));
+                
+                // Update cart and product data
+                await store.dispatch(get_cart_by_id_thunk(cart_id));
+                await store.dispatch(get_product_thunk());
+                
+                message.success("Return Successfully!");
+                setIsModalOpen(false);
+                
+                // Reset quantity to reflect the new available quantity after return
+                const newQuantity = data.quantity - quantity;
+                setQuantity(newQuantity > 0 ? 1 : 0);
+            }
         } catch (error) {
-            message.error("Failed to Return Item. Please try again."); // Show error message
+            message.error("Failed to Return Item. Please try again.");
         } finally {
-            setLoading(false); // Always reset loading state
+            setLoading(false);
         }
     };
 
     const handleClose = () => {
         setIsModalOpen(false);
     };
-    const isExceeded = Number(data.quantity) < quantity;
-    console.log("datadata", Number(data.quantity));
+    const isExceeded = Number(data.quantity) < quantity || quantity <= 0;
     return (
         <>
             <Tooltip title="Return Product on Sales">
@@ -64,16 +75,20 @@ export default function ReturnItemSection({ data }) {
 
                 {isExceeded && (
                     <div className="text-red-500">
-                        The quantity of {data?.product?.name} is exceeded.
+                        {quantity <= 0 
+                            ? "Quantity must be greater than 0." 
+                            : `The quantity of ${data?.product?.name} is exceeded.`
+                        }
                     </div>
                 )}
 
-                <form className="flex flex-col gap-5" onSubmit={deleteUser}>
+                <form className="flex flex-col gap-5" onSubmit={handleReturn}>
                     <input
                         type="number"
+                        min="1"
+                        max={data.quantity}
                         defaultValue={quantity}
                         onChange={(e) => setQuantity(Number(e.target.value))}
-                        // onKeyDown={handleKeyDown}
                         autoFocus
                         placeholder="Quantity"
                         className="border px-2 py-1 w-full"
