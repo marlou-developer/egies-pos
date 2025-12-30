@@ -1,5 +1,6 @@
 import { return_per_item_service } from "@/app/pages/services/cart-service";
 import { get_cart_by_id_thunk } from "@/app/redux/cart-thunk";
+import { get_product_thunk } from "@/app/redux/product-thunk";
 
 import store from "@/app/store/store";
 import Modal from "@/Components/Modal";
@@ -11,23 +12,46 @@ export default function ReturnItemSection({ data }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => setIsModalOpen(true);
     const [loading, setLoading] = useState(false);
-    const cart_id = window.location.pathname.split("/")[4];
+    const cart_id = data?.cart_id || window.location.pathname.split("/")[4];
     const [quantity, setQuantity] = useState(0);
+    const [forceUpdate, setForceUpdate] = useState(0);
 
     useEffect(() => {
         setQuantity(data.quantity);
-    }, []);
+        console.log("Return section data updated:", data);
+    }, [data.quantity, data, forceUpdate]);
     const deleteUser = async (e) => {
         e.preventDefault();
         setLoading(true);
         try {
-            await return_per_item_service({
+            const response = await return_per_item_service({
                 ...data,
                 quantity: quantity,
             });
-            await store.dispatch(get_cart_by_id_thunk(cart_id));
-            message.success("Return Successfully!");
-            setIsModalOpen(false);
+            
+            if (response.data.result === 'success') {
+                console.log("Return successful, updating cart...");
+                
+                // First update the cart
+                await store.dispatch(get_cart_by_id_thunk(cart_id));
+                
+                console.log("Cart updated, waiting for state propagation...");
+                // Small delay to ensure state propagation
+                await new Promise(resolve => setTimeout(resolve, 200));
+                
+                // Update products
+                await store.dispatch(get_product_thunk());
+                
+                console.log("Products updated");
+                
+                message.success("Return Successfully!");
+                setIsModalOpen(false);
+                
+                // Force component re-render by updating local quantity
+                setQuantity(data.quantity - quantity);
+                setForceUpdate(prev => prev + 1);
+            }
+            
         } catch (error) {
             message.error("Failed to Return Item. Please try again."); // Show error message
         } finally {

@@ -1377,6 +1377,7 @@ class CartController extends Controller
         $cart = Cart::where('cart_id', $id)->with(['customer', 'cart_items'])->first();
         return response()->json($cart, 200);
     }
+    
     public function store(Request $request)
     {
         $cart_id = Carbon::now()->format('mdyHisv');

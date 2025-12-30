@@ -1,5 +1,6 @@
 import { return_per_item_service } from "@/app/pages/services/cart-service";
 import { get_cart_by_id_thunk } from "@/app/redux/cart-thunk";
+import { get_product_thunk } from "@/app/redux/product-thunk";
 
 import store from "@/app/store/store";
 import Modal from "@/Components/Modal";
@@ -26,6 +27,7 @@ export default function ReturnItemSection({ data }) {
                 quantity: quantity,
             });
             await store.dispatch(get_cart_by_id_thunk(cart_id));
+            await store.dispatch(get_product_thunk());
             message.success("Return Successfully!");
             setIsModalOpen(false);
         } catch (error) {

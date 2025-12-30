@@ -95,7 +95,7 @@ export default function SalesIdTableSection() {
                             </thead>
                             <tbody className="divide-y divide-gray-200">
                                 {cart?.cart_items?.map((res, index) => (
-                                    <tr key={res?.email}>
+                                    <tr key={`${res?.id}-${res?.quantity}-${index}`}>
                                         <td className="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">
                                             {res.product.name}
                                         </td>
