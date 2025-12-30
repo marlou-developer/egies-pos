@@ -72,19 +72,20 @@ export default function MinusStockSection({ data }) {
                         <h1 className="font-bold text-xl text-pink-500">
                             Minus Stock(s)
                         </h1>
-
                         <Input
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                if (/^\d*\.?\d*$/.test(value)) {
+                                    setForm({
+                                        ...form,
+                                        quantity: e.target.value,
+                                    });
+                                }
+                            }}
+                            // value={form?.quantity}
+                            name="quantity"
                             label="Quantity"
                             type="number"
-                            name="quantity"
-                            required
-                            value={form.quantity ?? ""}
-                            onChange={(e) =>
-                                setForm({
-                                    ...form,
-                                    quantity: e.target.value,
-                                })
-                            }
                         />
                     </div>
 

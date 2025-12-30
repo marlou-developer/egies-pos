@@ -45,8 +45,13 @@ export default function StocksHistorySection({ data }) {
                                     ?.slice()
                                     .sort((a, b) => new Date(b.date) - new Date(a.date))
                                     .map((res) => {
+                                        const isDeduction = res.delivery_id === 'N/A' || res.remaining === 'deducted';
+                                        const rowBgClass = isDeduction 
+                                            ? "bg-red-100 hover:bg-red-100" 
+                                            : "bg-green-100 hover:bg-green-100";
+                                        
                                         return (
-                                            <tr className="hover:bg-gray-50" key={res.delivery_id}>
+                                            <tr className={rowBgClass} key={res.delivery_id || Math.random()}>
                                                 <td className="px-4 py-2 border-b">{res?.user?.name}</td>
                                                 <td className="px-4 py-2 border-b">{res.delivery_id}</td>
                                                 <td className="px-4 py-2 border-b">{res?.supplier?.name}</td>
