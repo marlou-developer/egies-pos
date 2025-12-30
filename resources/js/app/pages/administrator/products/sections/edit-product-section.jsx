@@ -237,7 +237,7 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                             </select>
                                         </div>
                                     </div>
-                                    {(user?.user_type === "Admin") && (
+                                    {/* {(user?.user_type === "Admin") && (
                                         <div>
                                             <Input
                                                 onChange={(e) => {
@@ -255,7 +255,7 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                                 type="text"
                                             />
                                         </div>
-                                    )}
+                                    )} */}
                                     <div>
                                         <div className="mt-2">
                                             <select

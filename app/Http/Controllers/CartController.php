@@ -1377,7 +1377,7 @@ class CartController extends Controller
         $cart = Cart::where('cart_id', $id)->with(['customer', 'cart_items'])->first();
         return response()->json($cart, 200);
     }
-    
+
     public function store(Request $request)
     {
         $cart_id = Carbon::now()->format('mdyHisv');
@@ -1451,10 +1451,20 @@ class CartController extends Controller
                 'total' => ($price * $quantity) - ($discount + $split_discount),
             ]);
 
-            $product = Product::where('id', $item['id'])->first();
+            // Try to find product by product_id first, fallback to id if needed
+            $productId = $item['product_id'] ?? $item['id'];
+            $product = Product::where('id', $productId)->first();
+            
             if ($product) {
                 $product->update([
-                    'quantity' => $product->quantity -  $quantity
+                    'quantity' => $product->quantity - $quantity
+                ]);
+            } else {
+                // Log error if product not found
+                Log::warning('Product not found when updating quantity', [
+                    'item_id' => $item['id'] ?? null,
+                    'product_id' => $item['product_id'] ?? null,
+                    'cart_id' => $request->cart_id ?? $cart->cart_id
                 ]);
             }
         }
