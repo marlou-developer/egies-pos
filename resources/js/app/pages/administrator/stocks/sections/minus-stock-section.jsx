@@ -73,6 +73,32 @@ export default function MinusStockSection({ data }) {
                             Minus Stock(s)
                         </h1>
                         <Input
+                            onChange={(e) =>
+                                setForm({
+                                    ...form,
+                                    date: e.target.value,
+                                })
+                            }
+                            // value={form.date || ""}
+                            name="date"
+                            label="Delivery Date"
+                            type="date"
+                            required
+                        />
+                        <Input
+                            onChange={(e) =>
+                                setForm({
+                                    ...form,
+                                    delivery_id: e.target.value,
+                                })
+                            }
+                            // value={form.delivery_id || ""}
+                            name="delivery_id"
+                            label="Delivery ID"
+                            type="text"
+                            required
+                        />
+                        <Input
                             onChange={(e) => {
                                 const value = e.target.value;
                                 if (/^\d*\.?\d*$/.test(value)) {
@@ -87,6 +113,7 @@ export default function MinusStockSection({ data }) {
                             label="Quantity"
                             type="number"
                         />
+                        ''
                     </div>
 
                     <div className="mt-4 flex justify-end">

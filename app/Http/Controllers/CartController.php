@@ -174,15 +174,15 @@ class CartController extends Controller
         if ($cart) {
             // Recalculate cart totals based on all cart items
             $cart_items = CartItem::where('cart_id', $request->cart_id)->get();
-            
+
             $sub_total = $cart_items->sum(function ($item) {
                 return $item->price * $item->quantity;
             });
-            
+
             $total_item_discounts = $cart_items->sum('discount');
-            
+
             $new_total_price = $sub_total - $total_item_discounts - ($request->discount_per_order ?? 0) - ($cart->customer_total_discount ?? 0);
-            
+
             $cart->update([
                 'discount_per_order' => $request->discount_per_order ?? $cart->discount_per_order,
                 'discount_per_item' => $total_item_discounts,
@@ -214,7 +214,7 @@ class CartController extends Controller
             $total = $request->quantity * $request->price - $cart_item->discount;
             $fixed_price = $total / $request->quantity;
             $profit = $total - ($cart_item->cost / $cart_item->quantity * $request->quantity);
-            
+
             $cart_item->update([
                 'quantity' => $request->quantity,
                 'total' => $total,
@@ -238,13 +238,13 @@ class CartController extends Controller
                 // Calculate the new balance: new total price minus any payments already made
                 $total_payments = $cart->credit_payments()->sum('amount');
                 $new_balance = $new_total_price - $total_payments;
-                
+
                 // Ensure balance doesn't go below 0
                 $new_balance = max(0, $new_balance);
-                
+
                 // Update status based on balance
                 $status = $new_balance <= 0 ? 'Paid' : ($total_payments > 0 ? 'Partial' : 'Pending');
-                
+
                 $cart->update([
                     'balance' => $new_balance,
                     'status' => $status,
@@ -1233,6 +1233,33 @@ class CartController extends Controller
             $query->where('status', 'Paid');
         })->sum('total');
 
+
+        $monthlySales = CartItem::whereHas('cart', function ($query) {
+            $query->where('status', 'Paid');
+        })
+            ->whereYear('created_at', now()->year)
+            ->select(
+                DB::raw('MONTH(created_at) as month_number'),       // month number for ordering
+                DB::raw('DATE_FORMAT(created_at, "%M") as month'), // month name
+                DB::raw('SUM(total) as total_sales')               // sum of total
+            )
+            ->groupBy(DB::raw('month_number'), DB::raw('month'))
+            ->orderBy('month_number')
+            ->get();
+
+        $monthlyProfits = CartItem::whereHas('cart', function ($query) {
+            $query->where('status', 'Paid');
+        })
+            ->whereYear('created_at', now()->year)
+            ->select(
+                DB::raw('MONTH(created_at) as month_number'),       // month number for ordering
+                DB::raw('DATE_FORMAT(created_at, "%M") as month'), // month name
+                DB::raw('SUM(profit) as total_profit')
+            )
+            ->groupBy(DB::raw('month_number'), DB::raw('month'))
+            ->orderBy('month_number')
+            ->get();
+
         $total_profit = CartItem::whereHas('cart', function ($query) {
             $query->where('status', 'Paid');
         })->sum('profit');
@@ -1290,6 +1317,8 @@ class CartController extends Controller
             'stocks' => $stocks, //
             'out_stocks' => $out_stocks, //
             'dashboard' => [
+                "monthly_profits" => $monthlyProfits,
+                "monthly_sales"=>$monthlySales,
                 'current_sales' => $current_sales,
                 'total_cost' => $total_cost,
                 'current_profit' => $current_profit,
@@ -1454,7 +1483,7 @@ class CartController extends Controller
             // Try to find product by product_id first, fallback to id if needed
             $productId = $item['product_id'] ?? $item['id'];
             $product = Product::where('id', $productId)->first();
-            
+
             if ($product) {
                 $product->update([
                     'quantity' => $product->quantity - $quantity

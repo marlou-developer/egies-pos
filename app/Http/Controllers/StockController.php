@@ -24,8 +24,8 @@ class StockController extends Controller
         Stock::create([
             'product_id' => $request->product_id,
             'user_id' => $user->id,
-            'date' => now()->format('Y-m-d'),
-            'delivery_id' => "N/A",
+            'date' => $request->date,
+            'delivery_id' => $request->delivery_id,
             'quantity' => $request->quantity,
             'remaining' => "deducted",
             'price' => $request->price,

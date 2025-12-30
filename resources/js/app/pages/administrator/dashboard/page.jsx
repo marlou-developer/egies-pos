@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 import { peso_value } from "@/app/lib/peso";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPesetaSign, faPesoSign } from "@fortawesome/free-solid-svg-icons";
+import LineGraphSection from "./sections/line-graph-section";
 
 export default function Page() {
     const { over_dues } = useSelector((store) => store.carts);
@@ -41,6 +42,9 @@ export default function Page() {
                 <div>
                     <div className="p-1 mb-2 text-2xl font-black">
                         Sales Section
+                    </div>
+                    <div>
+                        <LineGraphSection />
                     </div>
                     <div className="flex gap-6 mb-3">
                         <DashboardCardSections
