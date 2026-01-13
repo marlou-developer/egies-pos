@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\RenderData;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Category;
@@ -1318,7 +1319,7 @@ class CartController extends Controller
             'out_stocks' => $out_stocks, //
             'dashboard' => [
                 "monthly_profits" => $monthlyProfits,
-                "monthly_sales"=>$monthlySales,
+                "monthly_sales" => $monthlySales,
                 'current_sales' => $current_sales,
                 'total_cost' => $total_cost,
                 'current_profit' => $current_profit,
@@ -1497,7 +1498,7 @@ class CartController extends Controller
                 ]);
             }
         }
-
+        event(new RenderData('success'));
         return $cart;
     }
 

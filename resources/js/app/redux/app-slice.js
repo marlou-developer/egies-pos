@@ -11,6 +11,7 @@ export const appSlice = createSlice({
             result: []
         },
         collapsed:false,
+        reload:0,
     },
     reducers: {
         setDashboard: (state, action) => {
@@ -34,7 +35,10 @@ export const appSlice = createSlice({
         setCollapsed(state, action) {
             state.collapsed = action.payload;
         },
-        
+        setReload(state, action) {
+            state.reload = action.payload;
+        }
+
     },
 });
 export const {
@@ -43,7 +47,8 @@ export const {
     toggleSidebarCollapsed,
     setSidebarCollapsed,
     setDashboard,
-    setCollapsed
+    setCollapsed,
+    setReload
 } = appSlice.actions;
 
 export default appSlice.reducer;
