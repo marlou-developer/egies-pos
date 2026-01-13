@@ -17,7 +17,6 @@ export default function RealtimeSection() {
         const channel = pusher.subscribe("data-channel");
 
         channel.bind("data-sent", (response) => {
-           alert("Data received: " + response.data);
            dispatch(setReload(Math.random()));
         });
 
