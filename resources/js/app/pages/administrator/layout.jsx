@@ -24,11 +24,11 @@ import { faPesetaSign, faPesoSign } from "@fortawesome/free-solid-svg-icons";
 import RealtimeSection from "./_section/realtime-section";
 
 export default function AdminLayout({ children }) {
-    const { collapsed } = useSelector((store) => store.app);
+    const { collapsed, reload } = useSelector((store) => store.app);
     const { user } = useSelector((store) => store.app);
     useEffect(() => {
         store.dispatch(get_over_due_thunk());
-    }, []);
+    }, [reload]);
     console.log("User Data:", user);
     const PesoIcon = (props) => (
         <FontAwesomeIcon icon={faPesetaSign} {...props} />
