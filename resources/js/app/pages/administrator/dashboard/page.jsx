@@ -63,7 +63,7 @@ export default function Page() {
                                 <>{formatValue(dashboard?.current_profit)}</>
                             }
                         />
-                        <DashboardCardSections
+                        {/* <DashboardCardSections
                             title="Total Sales"
                             icon={
                                 <PresentationChartLineIcon className="h-14 text-pink-600" />
@@ -76,7 +76,7 @@ export default function Page() {
                                 <PresentationChartBarIcon className="h-14 text-pink-600" />
                             }
                             count={<>{formatValue(dashboard?.total_profit)}</>}
-                        />
+                        /> */}
                     </div>
                     {/* <div className="flex gap-6 mb-3">
                         <DashboardCardSections
