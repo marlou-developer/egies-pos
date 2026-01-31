@@ -89,9 +89,7 @@ export default function FilteringSection({ setForm, form }) {
                                 value: res.id,
                             })),
                         ],
-                        disabled:
-                            reports.includes(form.type) ||
-                            form.type == "Expenses",
+                        disabled: form.type == "Expenses",
                     },
                     {
                         label: "Product group",
@@ -106,9 +104,7 @@ export default function FilteringSection({ setForm, form }) {
                                 value: res.id,
                             })),
                         ],
-                        disabled:
-                            reports.includes(form.type) ||
-                            form.type == "Expenses",
+                        disabled: form.type == "Expenses",
                     },
                 ].map(({ label, id, options, disabled }) => {
                     return (

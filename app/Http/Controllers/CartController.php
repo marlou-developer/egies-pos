@@ -429,6 +429,15 @@ class CartController extends Controller
                 ->when(!empty($request->user) && $request->user !== 'all', function ($query) use ($request) {
                     return $query->where('carts.user_id', $request->user);
                 })
+                ->when($request->product && $request->product !== 'all', function ($query) use ($request) {
+
+                    return $query->join('cart_items', 'cart_items.cart_id', '=', 'carts.cart_id')
+                        ->where('cart_items.product_id', $request->product)
+                        ->when($request->category && $request->category !== 'all', function ($query) use ($request) {
+                            return $query->join('products', 'products.id', '=', 'cart_items.product_id')
+                                ->where('products.category_id', $request->category);
+                        });
+                })
                 ->pluck('total_sales', 'date'); // result: ['2025-06-13' => 2000, ...]
 
             // Generate full date range
