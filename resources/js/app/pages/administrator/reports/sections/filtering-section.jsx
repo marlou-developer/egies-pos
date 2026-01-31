@@ -85,7 +85,7 @@ export default function FilteringSection({ setForm, form }) {
                                 value: "all",
                             },
                             ...report_items?.products?.map((res) => ({
-                                label: <div>{res.name}</div>,
+                                label: res.name+` (₱${res.cost})`,
                                 value: res.id,
                             })),
                         ],
