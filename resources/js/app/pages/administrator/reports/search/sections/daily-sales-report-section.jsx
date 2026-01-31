@@ -75,7 +75,6 @@ const styles = StyleSheet.create({
     },
 });
 
-
 const DailySalesReportSection = () => {
     const { reports } = useSelector((store) => store.carts);
     const params = new URLSearchParams(window.location.search);
@@ -84,10 +83,10 @@ const DailySalesReportSection = () => {
 
     const total_sales = reports?.data?.reduce(
         (sum, item) => sum + Number(item.total_sales),
-        0
+        0,
     );
-    
-    console.log("reportsreports", total_sales);
+
+    console.log("reportsreports", reports.data);
     return (
         <PDFViewer style={{ width: "100%", height: "100vh" }}>
             <Document>
@@ -105,49 +104,49 @@ const DailySalesReportSection = () => {
                         >
                             {/* Left Side: Labels and Values */}
                             <View style={{ flex: 1 }}>
-                                                           <View
-                                                               style={{
-                                                                   flexDirection: "row",
-                                                                   marginBottom: 2,
-                                                               }}
-                                                           >
-                                                               <Text style={{ width: 60 }}>Period:</Text>
-                                                               <Text>
-                                                                   {initialStart} - {initialEnd}
-                                                               </Text>
-                                                           </View>
-                                                           <View
-                                                               style={{
-                                                                   flexDirection: "row",
-                                                                   marginBottom: 2,
-                                                               }}
-                                                           >
-                                                               <Text style={{ width: 60 }}>Customer:</Text>
-                                                               <Text>
-                                                                   {reports?.customer?.name ?? "All"}
-                                                               </Text>
-                                                           </View>
-                                                           <View
-                                                               style={{
-                                                                   flexDirection: "row",
-                                                                   marginBottom: 2,
-                                                               }}
-                                                           >
-                                                               <Text style={{ width: 60 }}>User:</Text>
-                                                               <Text>{reports?.user?.name ?? "All"}</Text>
-                                                           </View>
-                                                           <View
-                                                               style={{
-                                                                   flexDirection: "row",
-                                                                   marginBottom: 2,
-                                                               }}
-                                                           >
-                                                               <Text style={{ width: 60 }}>Product:</Text>
-                                                               <Text>
-                                                                   {reports?.product?.name ?? "All"}
-                                                               </Text>
-                                                           </View>
-                                                       </View>
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        marginBottom: 2,
+                                    }}
+                                >
+                                    <Text style={{ width: 60 }}>Period:</Text>
+                                    <Text>
+                                        {initialStart} - {initialEnd}
+                                    </Text>
+                                </View>
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        marginBottom: 2,
+                                    }}
+                                >
+                                    <Text style={{ width: 60 }}>Customer:</Text>
+                                    <Text>
+                                        {reports?.customer?.name ?? "All"}
+                                    </Text>
+                                </View>
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        marginBottom: 2,
+                                    }}
+                                >
+                                    <Text style={{ width: 60 }}>User:</Text>
+                                    <Text>{reports?.user?.name ?? "All"}</Text>
+                                </View>
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        marginBottom: 2,
+                                    }}
+                                >
+                                    <Text style={{ width: 60 }}>Product:</Text>
+                                    <Text>
+                                        {reports?.product?.name ?? "All"}
+                                    </Text>
+                                </View>
+                            </View>
 
                             {/* Right Side: Company Info */}
                             <View style={{ flex: 1, textAlign: "left" }}>
@@ -183,16 +182,115 @@ const DailySalesReportSection = () => {
 
                     {/* Table Header */}
                     <View style={styles.tableHeader}>
-                        <Text style={styles.colSmall}>Date</Text>
+                        <Text style={styles.colSmall}>Product ID</Text>
+                        <Text style={styles.colSmall}>Product</Text>
+                        <Text style={styles.colSmall}>Quantity</Text>
                         <Text style={styles.colSmall}>Total</Text>
+                        <Text style={styles.colSmall}>Date</Text>
                     </View>
 
                     {/* Table Rows */}
                     {reports?.data?.map((item, idx) => {
                         return (
-                            <View style={styles.tableRow} key={idx}>
-                                <Text style={styles.colSmall}>{moment(item.date).format('LL')}</Text>
-                                <Text style={styles.colSmall}>{peso_value(item.total_sales)}</Text>
+                            <View key={idx}>
+                                <View>
+                                    {item?.carts.length != 0 &&
+                                        item?.carts?.map((res, i) => {
+                                            return (
+                                                <View key={i}>
+                                                    {res.cart_items.length !=
+                                                        0 &&
+                                                        res.cart_items.map(
+                                                            (result) => {
+                                                                console.log(
+                                                                    "waaassssss",
+                                                                    result,
+                                                                );
+                                                                return (
+                                                                    <View
+                                                                        style={
+                                                                            styles.tableRow
+                                                                        }
+                                                                        key={
+                                                                            idx
+                                                                        }
+                                                                    >
+                                                                        <Text
+                                                                            style={
+                                                                                styles.colSmall
+                                                                            }
+                                                                        >
+                                                                            {
+                                                                                result
+                                                                                    ?.product
+                                                                                    .id
+                                                                            }
+                                                                        </Text>
+                                                                        <Text
+                                                                            style={
+                                                                                styles.colSmall
+                                                                            }
+                                                                        >
+                                                                            {
+                                                                                result
+                                                                                    ?.product
+                                                                                    .name
+                                                                            }
+                                                                        </Text>
+                                                                        <Text
+                                                                            style={
+                                                                                styles.colSmall
+                                                                            }
+                                                                        >
+                                                                            {
+                                                                                result?.quantity
+                                                                            }
+                                                                        </Text>
+                                                                        <Text
+                                                                            style={
+                                                                                styles.colSmall
+                                                                            }
+                                                                        >
+                                                                            {peso_value(
+                                                                                result?.total,
+                                                                            )}
+                                                                        </Text>
+                                                                        <Text
+                                                                            style={
+                                                                                styles.colSmall
+                                                                            }
+                                                                        >
+                                                                            {moment(
+                                                                                result.created_at,
+                                                                            ).format(
+                                                                                "LLL",
+                                                                            )}
+                                                                        </Text>
+                                                                    </View>
+                                                                );
+                                                            },
+                                                        )}
+                                                </View>
+                                            );
+                                        })}
+                                </View>
+                                <View
+                                    style={{
+                                        ...styles.tableRow,
+                                        backgroundColor: "black",
+                                        color: "white",
+                                    }}
+                                    key={idx}
+                                >
+                                    <Text style={styles.colSmall}>
+                                        {moment(item.date).format("LL")}
+                                    </Text>
+                                    <Text style={styles.colSmall}>&nbsp;</Text>
+                                    <Text style={styles.colSmall}>&nbsp;</Text>
+                                    <Text style={styles.colSmall}>
+                                        Total: {peso_value(item.total_sales)}
+                                    </Text>
+                                </View>
                             </View>
                         );
                     })}

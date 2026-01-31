@@ -85,7 +85,7 @@ export default function FilteringSection({ setForm, form }) {
                                 value: "all",
                             },
                             ...report_items?.products?.map((res) => ({
-                                label: res.name,
+                                label: <div>{res.name}</div>,
                                 value: res.id,
                             })),
                         ],

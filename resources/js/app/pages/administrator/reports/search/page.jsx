@@ -25,11 +25,8 @@ export default function Page() {
     const type = params.get("type");
     const [loading, setLoading] = useState(true);
     useEffect(() => {
-        // store.dispatch(get_dashboard_thunk("Daily"));
-        // store.dispatch(get_product_thunk());
-        async function get_data(params) {
+        async function get_data() {
             await store.dispatch(get_report_thunk());
-
             setLoading(false);
         }
         get_data();

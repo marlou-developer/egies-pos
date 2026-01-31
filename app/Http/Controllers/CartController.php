@@ -414,47 +414,59 @@ class CartController extends Controller
                 'product' => $product
             ], 200);
         } else if ($request->type == "Daily Sales") {
+            $start = Carbon::parse($request->start)->startOfDay();
+            $end = Carbon::parse($request->end)->endOfDay();
 
-            // Fetch sales grouped by date
-            $sales = DB::table('carts')
-                ->select(DB::raw("DATE(carts.created_at) as date"), DB::raw("SUM(total_price) as total_sales"))
-                ->whereBetween('carts.created_at', [$start, $end])
-                ->groupBy(DB::raw("DATE(carts.created_at)"))
-                ->orderBy('date', 'ASC')
+            $sales = Cart::with(['cart_items' => function ($q) use ($request) {
+                if (!empty($request->product) && $request->product !== 'all') {
+                    $q->where('product_id', $request->product);
+                }
+                // Always include product relationship
+                $q->with('product');
+            }])
+                ->whereBetween('created_at', [$start, $end])
                 ->when(!empty($request->customer) && $request->customer !== 'all', function ($query) use ($request) {
-                    return $request->customer == '1'
-                        ? $query->whereNull('carts.customer_id')
-                        : $query->where('carts.customer_id', $request->customer);
+                    if ($request->customer == '1') {
+                        return $query->whereNull('customer_id');
+                    }
+                    return $query->where('customer_id', $request->customer);
                 })
                 ->when(!empty($request->user) && $request->user !== 'all', function ($query) use ($request) {
-                    return $query->where('carts.user_id', $request->user);
+                    return $query->where('user_id', $request->user);
                 })
-                ->when($request->product && $request->product !== 'all', function ($query) use ($request) {
+                ->when(!empty($request->product) && $request->product !== 'all', function ($query) use ($request) {
+                    return $query->whereHas('cart_items', function ($q) use ($request) {
+                        $q->where('product_id', $request->product);
+                    });
+                })
+                ->orderBy('created_at', 'ASC')
+                ->get();
 
-                    return $query->join('cart_items', 'cart_items.cart_id', '=', 'carts.cart_id')
-                        ->where('cart_items.product_id', $request->product)
-                        ->when($request->category && $request->category !== 'all', function ($query) use ($request) {
-                            return $query->join('products', 'products.id', '=', 'cart_items.product_id')
-                                ->where('products.category_id', $request->category);
-                        });
-                })
-                ->pluck('total_sales', 'date'); // result: ['2025-06-13' => 2000, ...]
+            // Group by date
+            $salesByDate = $sales->groupBy(function ($cart) {
+                return $cart->created_at->toDateString();
+            });
 
             // Generate full date range
-            $dateRange = new Collection();
+            $dateRange = collect();
             for ($date = $start->copy(); $date <= $end; $date->addDay()) {
                 $dateStr = $date->toDateString();
+                $items = $salesByDate->get($dateStr, collect());
+                $totalSales = $items->sum('total_price');
+
                 $dateRange->push([
                     'date' => $dateStr,
-                    'total_sales' => $sales[$dateStr] ?? 0
+                    'total_sales' => $totalSales,
+                    'carts' => $items, // carts with cart_items included
                 ]);
             }
 
             return response()->json([
+                'sales' => $sales,
                 'data' => $dateRange,
-                'customer' => $customer,
-                'user' => $user,
-                'product' => $product
+                'customer' => $customer ?? null,
+                'user' => $request->user ?? null,
+                'product' => $product ?? null,
             ], 200);
         } else if ($request->type == "Invoices") {
             $Invoice = Cart::with(['customer',    'cart_items' => function ($q) use ($request) {
