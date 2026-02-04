@@ -182,6 +182,7 @@ const DailySalesReportSection = () => {
 
                     {/* Table Header */}
                     <View style={styles.tableHeader}>
+                        <Text style={styles.colSmall}>Customer</Text>
                         <Text style={styles.colSmall}>Product ID</Text>
                         <Text style={styles.colSmall}>Product</Text>
                         <Text style={styles.colSmall}>Quantity</Text>
@@ -204,7 +205,7 @@ const DailySalesReportSection = () => {
                                                             (result) => {
                                                                 console.log(
                                                                     "waaassssss",
-                                                                    result,
+                                                                    res?.customer?.name??"Walk-in",
                                                                 );
                                                                 return (
                                                                     <View
@@ -215,6 +216,13 @@ const DailySalesReportSection = () => {
                                                                             idx
                                                                         }
                                                                     >
+                                                                        <Text
+                                                                            style={
+                                                                                styles.colSmall
+                                                                            }
+                                                                        >
+                                                                          {res?.customer?.name??"Walk-in"}
+                                                                        </Text>
                                                                         <Text
                                                                             style={
                                                                                 styles.colSmall

@@ -42,7 +42,7 @@ class Cart extends Model
     {
         return $this->hasMany(CartItem::class, 'cart_id', 'cart_id')->with(['product']);
     }
-      public function credit_payments(): HasMany
+    public function credit_payments(): HasMany
     {
         return $this->hasMany(CreditPayment::class, 'cart_id', 'cart_id');
     }

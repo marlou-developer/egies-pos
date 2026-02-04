@@ -28,6 +28,6 @@ class CartItem extends Model
     }
      public function cart(): HasOne
     {
-        return $this->hasOne(Cart::class, 'cart_id', 'cart_id')->with(['customer']);
+        return $this->hasOne(Cart::class, 'cart_id', 'cart_id')->with(['customers']);
     }
 }

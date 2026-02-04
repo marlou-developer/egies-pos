@@ -423,6 +423,10 @@ class CartController extends Controller
                 }
                 // Always include product relationship
                 $q->with('product');
+            }, 'customer' => function ($q) use ($request) {
+                if (!empty($request->customer) && $request->customer !== 'all') {
+                    $q->where('id', $request->customer);
+                }
             }])
                 ->whereBetween('created_at', [$start, $end])
                 ->when(!empty($request->customer) && $request->customer !== 'all', function ($query) use ($request) {
@@ -469,7 +473,7 @@ class CartController extends Controller
                 'product' => $product ?? null,
             ], 200);
         } else if ($request->type == "Invoices") {
-            $Invoice = Cart::with(['customer',    'cart_items' => function ($q) use ($request) {
+            $Invoice = Cart::with(['customer', 'cart_items' => function ($q) use ($request) {
                 if (!empty($request->product) && $request->product !== 'all') {
                     $q->where('product_id', $request->product);
                 }
