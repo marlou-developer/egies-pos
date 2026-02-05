@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
     Page,
     Text,
@@ -73,6 +73,34 @@ const styles = StyleSheet.create({
         marginTop: 10,
         alignItems: "flex-end",
     },
+    loadingContainer: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "rgba(255, 255, 255, 0.9)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 1000,
+    },
+    loadingContent: {
+        textAlign: "center",
+        padding: "20px",
+        backgroundColor: "white",
+        borderRadius: "8px",
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+    },
+    spinner: {
+        border: "4px solid #f3f3f3",
+        borderTop: "4px solid #3498db",
+        borderRadius: "50%",
+        width: "40px",
+        height: "40px",
+        animation: "spin 1s linear infinite",
+        margin: "0 auto 10px auto",
+    },
 });
 
 const DailySalesReportSection = () => {
@@ -81,14 +109,110 @@ const DailySalesReportSection = () => {
     const initialStart = params.get("start");
     const initialEnd = params.get("end");
 
+    const [isLoading, setIsLoading] = useState(true);
+    const [pdfReady, setPdfReady] = useState(false);
+
+    // Set initial loading state based on reports availability
+    useEffect(() => {
+        if (!reports) {
+            setIsLoading(true);
+            setPdfReady(false);
+        }
+    }, []);
+
     const total_sales = reports?.data?.reduce(
         (sum, item) => sum + Number(item.total_sales),
         0,
     );
 
+    // Handle loading state
+    useEffect(() => {
+        if (reports?.data && reports.data.length > 0) {
+            // Show loading initially
+            setIsLoading(true);
+            
+            // Simulate PDF rendering time - you can adjust this based on your needs
+            const timer = setTimeout(() => {
+                setIsLoading(false);
+                setPdfReady(true);
+            }, 1500); // 1.5 seconds to allow PDF to render
+
+            return () => clearTimeout(timer);
+        } else if (reports?.data) {
+            // If no data but reports object exists, show immediately
+            setIsLoading(false);
+            setPdfReady(true);
+        }
+    }, [reports]);
+
     console.log("reportsreports", reports.data);
+    
+    // Inline styles for spinner animation
+    const spinnerKeyframes = `
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    `;
+    
+    // Add keyframes to document if not already added
+    React.useEffect(() => {
+        const styleElement = document.createElement("style");
+        styleElement.type = "text/css";
+        styleElement.innerHTML = spinnerKeyframes;
+        document.getElementsByTagName("head")[0].appendChild(styleElement);
+        
+        return () => {
+            // Cleanup: remove the style element when component unmounts
+            const existingStyle = document.querySelector('style[data-spinner="true"]');
+            if (existingStyle) {
+                existingStyle.remove();
+            }
+        };
+    }, []);
+    
     return (
-        <PDFViewer style={{ width: "100%", height: "100vh" }}>
+        <div style={{ position: "relative" }}>
+            {/* Loading Overlay */}
+            {isLoading && (
+                <div style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: "rgba(255, 255, 255, 0.9)",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    zIndex: 1000,
+                }}>
+                    <div style={{
+                        textAlign: "center",
+                        padding: "20px",
+                        backgroundColor: "white",
+                        borderRadius: "8px",
+                        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                    }}>
+                        <div style={{
+                            border: "4px solid #f3f3f3",
+                            borderTop: "4px solid #3498db",
+                            borderRadius: "50%",
+                            width: "40px",
+                            height: "40px",
+                            animation: "spin 1s linear infinite",
+                            margin: "0 auto 10px auto",
+                        }}></div>
+                        <p style={{ margin: 0, color: "#666" }}>
+                            Generating Daily Sales report...
+                            {/* {reports?.data?.length > 0 && ` (${reports.data.length} records)`} */}
+                        </p>
+                    </div>
+                </div>
+            )}
+            
+            {/* PDF Viewer */}
+            <PDFViewer style={{ width: "100%", height: "100vh", opacity: isLoading ? 0.3 : 1 }}>
             <Document>
                 <Page size="A4" style={styles.page}>
                     <View style={styles.header}>
@@ -312,6 +436,7 @@ const DailySalesReportSection = () => {
                 </Page>
             </Document>
         </PDFViewer>
+        </div>
     );
 };
 
