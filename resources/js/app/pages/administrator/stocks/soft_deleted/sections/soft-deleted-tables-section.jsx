@@ -16,8 +16,9 @@ function SoftDeletedTablesSection() {
     }, [dispatch]);
 
     // Handle different API response structures
-    const productsData = products?.products || products?.data || products;
-    const productList = productsData?.data || [];
+    // Backend returns: { all: allData, data: paginatedData }
+    // Use 'all' to display all soft deleted products without pagination
+    const productList = products?.all || products?.data?.data || [];
 
     const handleRestoreClick = (product) => {
         setSelectedProduct(product);
@@ -37,7 +38,10 @@ function SoftDeletedTablesSection() {
     };
 
 
-    console.log('Soft Deleted Products:', productList);
+    console.log('Full products response:', products);
+    console.log('Soft Deleted Products (all):', products?.all);
+    console.log('Product List Count:', productList?.length);
+    
     if (loading) {
         return (
             <div className="flex justify-center items-center h-64">
@@ -81,6 +85,13 @@ function SoftDeletedTablesSection() {
 
     return (
         <div className="space-y-6">
+            {/* Header with count */}
+            <div className="flex justify-between items-center">
+                <h3 className="text-lg font-medium text-gray-900">
+                    Soft Deleted Products ({productList.length})
+                </h3>
+            </div>
+
             {/* Desktop Table */}
             <div className="hidden md:block">
                 <div className="bg-white shadow-sm rounded-lg overflow-hidden">
