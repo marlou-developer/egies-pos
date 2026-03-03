@@ -232,7 +232,7 @@ class ProductController extends Controller
             $query->where('name', $request->name);
         }
 
-        $products = $query->paginate(100);
+        $products = $query->paginate();
 
         return response()->json([
             'products' => $products,
