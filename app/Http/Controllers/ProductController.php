@@ -234,7 +234,7 @@ class ProductController extends Controller
 
         return response()->json([
             'all' => $query->get(),
-            'data' => $query->get(), // Return all soft deleted products without pagination
+            'data' => $query->get(), 
         ]);
     }
 
