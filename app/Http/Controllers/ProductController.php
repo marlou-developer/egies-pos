@@ -8,6 +8,7 @@ use App\Models\Upload;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -232,9 +233,15 @@ class ProductController extends Controller
             $query->where('name', $request->name);
         }
 
+        // Get all soft deleted products (should be 162 based on DB check)
+        $allProducts = $query->get();
+        
+        Log::info('Soft Deleted Products Count: ' . $allProducts->count());
+        
         return response()->json([
-            'all' => $query->get(),
-            'data' => $query->paginate(100), // Increased pagination limit
+            'all' => $allProducts,
+            'data' => $query->paginate(100), // Keep pagination for potential future use
+            'total_count' => $allProducts->count()
         ]);
     }
 
