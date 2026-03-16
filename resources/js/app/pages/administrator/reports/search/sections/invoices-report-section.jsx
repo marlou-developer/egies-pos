@@ -195,6 +195,7 @@ const InvoiceReportSection = () => {
                         <Text style={styles.colSmall}>Documents #</Text>
                         <Text style={styles.colSmall}>Customer</Text>
                         <Text style={styles.colSmall}>Shop</Text>
+                        <Text style={styles.colSmall}>Shopee Store</Text>
                         <Text style={styles.colSmall}>Items Count</Text>
                         <Text style={styles.colSmall}>Quantity</Text>
                         <Text style={styles.colSmall}>Total</Text>
@@ -226,6 +227,9 @@ const InvoiceReportSection = () => {
                                 </Text>
                                 <Text style={styles.colSmall}>
                                     {item?.shop ?? ""}
+                                </Text>
+                                <Text style={styles.colSmall}>
+                                    {item?.shopee_store ?? "N/A"}
                                 </Text>
                                 <Text style={styles.colSmall}>
                                     {item?.cart_items.length}
