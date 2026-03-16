@@ -216,7 +216,7 @@ const InvoiceReportSection = () => {
                             <View style={styles.tableRow} key={idx}>
                                 <Text style={styles.colSmall}>{idx + 1}</Text>
                                 <Text style={styles.colSmall}>
-                                    {moment(item?.created_at).format("LL")}
+                                    {moment(item?.created_at).format("LLL")}
                                 </Text>
                                 <Text style={styles.colSmall}>
                                     {item.cart_id}
