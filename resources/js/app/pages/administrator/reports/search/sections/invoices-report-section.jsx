@@ -194,6 +194,7 @@ const InvoiceReportSection = () => {
                         <Text style={styles.colSmall}>Date</Text>
                         <Text style={styles.colSmall}>Documents #</Text>
                         <Text style={styles.colSmall}>Customer</Text>
+                        <Text style={styles.colSmall}>Shop</Text>
                         <Text style={styles.colSmall}>Items Count</Text>
                         <Text style={styles.colSmall}>Quantity</Text>
                         <Text style={styles.colSmall}>Total</Text>
@@ -203,13 +204,14 @@ const InvoiceReportSection = () => {
                     {reports?.data?.map((item, idx) => {
                         const sum_quantity = item?.cart_items?.reduce(
                             (sum, item) => sum + Number(item.quantity),
-                            0
+                            0,
                         );
                         const sum_total = item?.cart_items?.reduce(
                             (sum, item) =>
                                 sum + Number(item.fixed_price) * item.quantity,
-                            0
+                            0,
                         );
+                        console.log("itemitemitem", item);
                         return (
                             <View style={styles.tableRow} key={idx}>
                                 <Text style={styles.colSmall}>{idx + 1}</Text>
@@ -221,6 +223,9 @@ const InvoiceReportSection = () => {
                                 </Text>
                                 <Text style={styles.colSmall}>
                                     {item?.customer?.name ?? "Walk-In Customer"}
+                                </Text>
+                                <Text style={styles.colSmall}>
+                                    {item?.shop ?? ""}
                                 </Text>
                                 <Text style={styles.colSmall}>
                                     {item?.cart_items.length}

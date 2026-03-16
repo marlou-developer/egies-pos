@@ -26,7 +26,7 @@ export default function MinusStockSection({ data }) {
             product_id: String(data.id),
             quantity: data.quantity,
         });
-    }, [data]);
+    }, [data, modalOpen]);
 
     const minusStock = async (e) => {
         e.preventDefault();
