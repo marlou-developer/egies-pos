@@ -39,6 +39,21 @@ class CartController extends Controller
         return response()->json(['status' => 'success'], 200);
     }
 
+    public function update_cart_items_created_at(Request $request)
+    {
+        $request->validate([
+            'cart_id' => 'required|string',
+            'created_at' => 'required|date_format:Y-m-d H:i:s',
+        ]);
+
+        CartItem::where('cart_id', $request->cart_id)
+            ->update([
+                'created_at' => $request->created_at,
+            ]);
+
+        return response()->json(['status' => 'success'], 200);
+    }
+
     public function change_discount_per_order()
     {
         $carts = Cart::where('discount_per_order', '!=', 0)->orderBy('id', 'desc')->get();
@@ -1504,6 +1519,7 @@ class CartController extends Controller
                 'price' => $price,
                 'fixed_price' => (($price * $quantity) - ($discount + $split_discount))  / $quantity,
                 'total' => ($price * $quantity) - ($discount + $split_discount),
+                
             ]);
 
             // Try to find product by product_id first, fallback to id if needed

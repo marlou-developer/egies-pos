@@ -11,6 +11,8 @@ import {
     get_report_service,
     get_sales_service,
     get_shopee_service,
+    update_cart_created_at_service,
+    update_cart_items_created_at_service,
     update_cart_service,
     update_customer_service,
     update_status_service,
@@ -20,6 +22,20 @@ import { cartSlice } from "./cart-slice";
 export function create_cart_thunk(data) {
     return async function (dispatch, getState) {
         const res = await create_cart_service(data);
+        return res;
+    };
+}
+
+export function update_cart_created_at_thunk(data) {
+    return async function (dispatch, getState) {
+        const res = await update_cart_created_at_service(data);
+        return res;
+    };
+}
+
+export function update_cart_items_created_at_thunk(data) {
+    return async function (dispatch, getState) {
+        const res = await update_cart_items_created_at_service(data);
         return res;
     };
 }

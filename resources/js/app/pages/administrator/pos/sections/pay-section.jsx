@@ -1,7 +1,7 @@
 import Button from "@/app/_components/button";
 import Input from "@/app/_components/input";
 import Modal from "@/app/_components/modal";
-import { create_cart_thunk } from "@/app/redux/cart-thunk";
+import { create_cart_thunk, update_cart_created_at_thunk, update_cart_items_created_at_thunk } from "@/app/redux/cart-thunk";
 import { get_category_thunk } from "@/app/redux/category-thunk";
 import { search_customer_thunk } from "@/app/redux/customer-thunk";
 import { setCarts } from "@/app/redux/product-slice";
@@ -45,10 +45,29 @@ export default function PaySection({
         customer_amount: null,
         change: 0,
         payment_type: null,
+        datetime: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16), // Current local datetime
     });
     const [productId, setProductId] = useState(null);
     const dispatch = useDispatch();
     const [id, setId] = useState(0);
+    const [isDatetimeEditing, setIsDatetimeEditing] = useState(false); // Track if user is editing datetime
+    const [blurTimeout, setBlurTimeout] = useState(null); // Track timeout ID
+
+    // Real-time clock update
+    useEffect(() => {
+        const interval = setInterval(() => {
+            // Only update datetime if user is not currently editing it
+            if (!isDatetimeEditing) {
+                setForm(prevForm => ({
+                    ...prevForm,
+                    datetime: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)
+                }));
+            }
+        }, 1000); // Update every second
+
+        return () => clearInterval(interval); // Cleanup on unmount
+    }, [isDatetimeEditing]);
+
     const discounts = form?.customer?.discounts ?? [];
 
     const discountMap = discounts.reduce((acc, curr) => {
@@ -67,7 +86,7 @@ export default function PaySection({
 
     const customer_total_discount = list_of_available_discount.reduce(
         (sum, item) => sum + Number(item.customer_discount) * Number(item.pcs),
-        0
+        0,
     );
     const overall_total = total_price - customer_total_discount;
 
@@ -88,8 +107,15 @@ export default function PaySection({
             customer_amount: null,
             change: 0,
             payment_type: null,
+            datetime: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16), // Reset to current local datetime
         });
         setCustomer(null);
+        // Clear any existing timeout when resetting
+        if (blurTimeout) {
+            clearTimeout(blurTimeout);
+            setBlurTimeout(null);
+        }
+        setIsDatetimeEditing(false);
     }
     useEffect(() => {
         if (!isOpen) {
@@ -115,6 +141,7 @@ export default function PaySection({
         order_id: form.order_id ?? null,
         customer_name: form.customer_name ?? null,
         shopee_store: form.shopee_store ?? null,
+        datetime: form.datetime, // Include the datetime for created_at
     };
     async function submit_payment(params) {
         try {
@@ -123,6 +150,23 @@ export default function PaySection({
             setProductId(results?.data?.cart_id ?? "");
             await store.dispatch(get_category_thunk());
             setId(results?.data?.id);
+
+            // Update the cart's created_at with the custom datetime
+            if (results?.data?.id && form.datetime) {
+                const datetimeFormatted = form.datetime.replace('T', ' ') + ':00'; // Convert to Y-m-d H:i:s format
+                await store.dispatch(update_cart_created_at_thunk({
+                    id: results.data.id,
+                    created_at: datetimeFormatted
+                }));
+
+                // Also update cart items' created_at with the same datetime
+                if (results?.data?.cart_id) {
+                    await store.dispatch(update_cart_items_created_at_thunk({
+                        cart_id: results.data.cart_id,
+                        created_at: datetimeFormatted
+                    }));
+                }
+            }
 
             if (shop == "Store") {
                 Swal.fire({
@@ -175,7 +219,7 @@ export default function PaySection({
     async function search_customer(e) {
         setIsSearchLoading(true);
         const search = await store.dispatch(
-            search_customer_thunk(e.target.value)
+            search_customer_thunk(e.target.value),
         );
         setCustomer(search.data);
         setIsSearchLoading(false);
@@ -250,6 +294,58 @@ export default function PaySection({
             >
                 <div className="flex flex-col gap-3">
                     {/* Cart Products Display */}
+                    <div>
+                        <Input
+                            onChange={(e) => {
+                                // Immediately set editing mode when user types
+                                setIsDatetimeEditing(true);
+                                // Clear any existing timeout
+                                if (blurTimeout) {
+                                    clearTimeout(blurTimeout);
+                                    setBlurTimeout(null);
+                                }
+                                setForm({
+                                    ...form,
+                                    datetime: e.target.value,
+                                });
+                            }}
+                            onFocus={() => {
+                                // Clear any existing timeout when user focuses
+                                if (blurTimeout) {
+                                    clearTimeout(blurTimeout);
+                                    setBlurTimeout(null);
+                                }
+                                setIsDatetimeEditing(true);
+                            }}
+                            onBlur={() => {
+                                // Set a timeout to resume live clock after user stops editing
+                                const timeoutId = setTimeout(() => {
+                                    setIsDatetimeEditing(false);
+                                }, 5000); // 5 seconds delay
+                                setBlurTimeout(timeoutId);
+                            }}
+                            onClick={() => {
+                                // Also pause on click (for better UX)
+                                if (blurTimeout) {
+                                    clearTimeout(blurTimeout);
+                                    setBlurTimeout(null);
+                                }
+                                setIsDatetimeEditing(true);
+                            }}
+                            onKeyDown={() => {
+                                // Pause on any key press
+                                setIsDatetimeEditing(true);
+                                if (blurTimeout) {
+                                    clearTimeout(blurTimeout);
+                                    setBlurTimeout(null);
+                                }
+                            }}
+                            value={form?.datetime}
+                            name="datetime"
+                            label="Date & Time"
+                            type="datetime-local"
+                        />
+                    </div>
                     {data && data.length > 0 && (
                         <div className="p-4 bg-gray-50 border border-gray-300 rounded-md">
                             <div className="font-black text-gray-800 mb-3">
@@ -290,7 +386,7 @@ export default function PaySection({
                                                         <div className="text-xs text-red-500">
                                                             ₱
                                                             {totalDiscount.toFixed(
-                                                                2
+                                                                2,
                                                             )}
                                                         </div>
                                                     )}
@@ -328,12 +424,12 @@ export default function PaySection({
                                                         Discounted Price:₱{" "}
                                                         {Number(res.pcs) *
                                                             Number(
-                                                                res.customer_discount
+                                                                res.customer_discount,
                                                             ).toFixed(2)}
                                                     </div>
                                                 </div>
                                             );
-                                        }
+                                        },
                                     )}
                                 </div>
                             </div>
@@ -376,7 +472,7 @@ export default function PaySection({
                                     {isNaN(parseFloat(discount_per_order))
                                         ? "0.00"
                                         : parseFloat(
-                                              discount_per_order
+                                              discount_per_order,
                                           ).toFixed(2)}
                                 </span>
                             </div>
@@ -530,7 +626,7 @@ export default function PaySection({
                                                                                         ...form,
                                                                                         customer:
                                                                                             null,
-                                                                                    }
+                                                                                    },
                                                                                 )
                                                                             }
                                                                             className="text-pink-600 hover:text-pink-900"
@@ -551,7 +647,7 @@ export default function PaySection({
                                                                                         ...form,
                                                                                         customer:
                                                                                             customer,
-                                                                                    }
+                                                                                    },
                                                                                 )
                                                                             }
                                                                             className="text-pink-600 hover:text-pink-900"
@@ -562,7 +658,7 @@ export default function PaySection({
                                                                 )}
                                                             </td>
                                                         </tr>
-                                                    )
+                                                    ),
                                                 )}
                                             </tbody>
                                         </table>
@@ -593,7 +689,7 @@ export default function PaySection({
                                                 parseFloat(
                                                     e.target.value == ""
                                                         ? 0
-                                                        : e.target.value
+                                                        : e.target.value,
                                                 ) - overall_total,
                                         })
                                     }
