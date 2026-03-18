@@ -32,6 +32,25 @@ export default function FilteringSection({ setForm, form }) {
             <div className="space-y-4">
                 {[
                     {
+                        label: "Shopee Store",
+                        id: "shopee_store",
+                        options: [
+                            {
+                                label: "N/A",
+                                value: "N/A",
+                            },
+                            {
+                                label: "Beauty In Pink",
+                                value: "beauty_in_pink",
+                            },
+                            {
+                                label: "You Glow Darling PH",
+                                value: "you_glow_darling_ph",
+                            },
+                        ],
+                        disabled: form.type == "Expenses",
+                    },
+                    {
                         label: "Customers",
                         id: "customer",
                         options: [
@@ -85,7 +104,7 @@ export default function FilteringSection({ setForm, form }) {
                                 value: "all",
                             },
                             ...report_items?.products?.map((res) => ({
-                                label: res.name+` (₱${res.cost})`,
+                                label: res.name + ` (₱${res.cost})`,
                                 value: res.id,
                             })),
                         ],
