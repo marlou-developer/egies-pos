@@ -254,6 +254,15 @@ export default function NotificationSection() {
                                 );
                             })}
                     </div>
+                    {/* Footer: View All button */}
+                    <div className="w-full px-4 py-2 border-t border-gray-300 bg-pink-50 flex justify-center">
+                        <button
+                            onClick={() => { setOpen(false); router.visit('/administrator/notifications'); }}
+                            className="text-xs text-blue-600 hover:text-blue-800 underline font-medium"
+                        >
+                            View all notifications
+                        </button>
+                    </div>
                 </div>
             )}
 

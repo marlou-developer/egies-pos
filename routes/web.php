@@ -99,6 +99,9 @@ Route::middleware('auth:sanctum')->prefix('administrator')->group(function () {
     Route::get('settings', function () {
         return Inertia::render('administrator/settings/page');
     });
+    Route::get('notifications', function () {
+        return Inertia::render('administrator/notifications/page');
+    });
 });
 
 Route::prefix('administrator')->group(function () {
