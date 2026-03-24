@@ -2,16 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ProductComponent from "../../../pos/components/product-component";
 
-
 export default function ProductsSection({ storeName }) {
     const { categories } = useSelector((store) => store.categories);
     const [activeCategory, setActiveCategory] = useState("");
     const { carts } = useSelector((store) => store.products);
     const [searchTerm, setSearchTerm] = useState("");
 
-    const activeProducts = categories.find(
-        (category) => category.name === activeCategory
-    )?.products;
+    const activeProducts = categories
+        .find((category) => category.name === activeCategory)
+        ?.products?.filter((product) => product.is_soft_deleted !== "1");
 
     useEffect(() => {
         if (categories.length > 0) {
@@ -22,12 +21,14 @@ export default function ProductsSection({ storeName }) {
     const mergedProducts = categories.flatMap((category) =>
         category.products.map((product) => ({
             ...product,
-        }))
+        })),
     );
 
-    const filteredProducts = mergedProducts.filter((product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredProducts = mergedProducts
+        .filter((product) => product.is_soft_deleted !== "1")
+        .filter((product) =>
+            product.name.toLowerCase().includes(searchTerm.toLowerCase()),
+        );
     console.log("waaaaa", filteredProducts);
     return (
         <div className="w-full flex-col">
@@ -56,10 +57,11 @@ export default function ProductsSection({ storeName }) {
                                 key={category.name}
                                 onClick={() => setActiveCategory(category.name)}
                                 className={`cursor-pointer flex-shrink-0 bg-pink-400 justify-center px-5 py-2 rounded-lg text-sm mb-4 
-                    ${activeCategory === category.name
-                                        ? "bg-pink-600 text-white"
-                                        : "font-semibold text-white hover:bg-pink-200 hover:text-gray-500"
-                                    }`}
+                    ${
+                        activeCategory === category.name
+                            ? "bg-pink-600 text-white"
+                            : "font-semibold text-white hover:bg-pink-200 hover:text-gray-500"
+                    }`}
                             >
                                 {category.name}
                             </div>
@@ -67,14 +69,14 @@ export default function ProductsSection({ storeName }) {
                 </div>
             </div>
 
-            <div className="px-5 mt-4 h-[62vh] overflow-y-auto">
+            <div className="px-5 mt-4 h-[66vh] overflow-y-auto">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4">
                     {searchTerm &&
                         filteredProducts
                             .sort(
                                 (a, b) =>
                                     new Date(a.created_at) -
-                                    new Date(b.created_at)
+                                    new Date(b.created_at),
                             ) // Sort by created_at ASC
                             .map((product, index) => {
                                 return (
@@ -86,8 +88,8 @@ export default function ProductsSection({ storeName }) {
                                 );
                             })}
                     {!searchTerm &&
-                        activeProducts &&
-                        activeProducts.length > 0 ? (
+                    activeProducts &&
+                    activeProducts.length > 0 ? (
                         activeProducts.map((product, index) => (
                             <ProductComponent
                                 storeName={storeName}

@@ -40,7 +40,7 @@ export default function PosSection({ setIsModalOpen }) {
             .map((item) =>
                 item.id === value.id ? { ...item, pcs: item.pcs - 1 } : item
             )
-            .filter((item) => item.pcs > 0); // ⬅️ Remove items with 0 pcs
+            .filter((item) => item.pcs > 0);
 
         dispatch(setCarts(updated));
     };
