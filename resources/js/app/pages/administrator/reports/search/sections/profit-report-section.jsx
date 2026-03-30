@@ -131,76 +131,88 @@ const ProfitReportSection = () => {
 
     const total_cost_store = reports?.data?.store?.reduce(
         (sum, item) => sum + Number(item.cost),
-        0
+        0,
     );
     const total_sales_store = reports?.data?.store?.reduce(
         (sum, item) => sum + Number(item.sales),
-        0
+        0,
     );
     const total_discount_store = reports?.data?.store?.reduce(
         (sum, item) => sum + Number(item.discount ?? 0),
-        0
+        0,
     );
 
     const total_profit_store = reports?.data?.store?.reduce(
         (sum, item) => sum + Number(item.profit ?? 0),
-        0
+        0,
     );
 
-    const total_profit_shopee = reports?.data?.shopee?.reduce(
+    const total_profit_shopee_bip = reports?.data?.shopee_bip?.reduce(
         (sum, item) => sum + Number(item.profit ?? 0),
-        0
+        0,
+    );
+
+    const total_profit_shopee_ygd = reports?.data?.shopee_ygd?.reduce(
+        (sum, item) => sum + Number(item.profit ?? 0),
+        0,
     );
 
     const total_profit_credit = reports?.data?.credit?.reduce(
         (sum, item) => sum + Number(item.profit ?? 0),
-        0
+        0,
     );
 
-    const total_cost_shopee = reports?.data?.shopee?.reduce(
+    const total_cost_shopee_bip = reports?.data?.shopee_bip?.reduce(
         (sum, item) => sum + Number(item.cost),
-        0
+        0,
     );
-    const total_sales_shopee = reports?.data?.shopee?.reduce(
+    const total_sales_shopee_bip = reports?.data?.shopee_bip?.reduce(
         (sum, item) => sum + Number(item.sales),
-        0
+        0,
+    );
+
+    const total_cost_shopee_ygd = reports?.data?.shopee_ygd?.reduce(
+        (sum, item) => sum + Number(item.cost),
+        0,
+    );
+    const total_sales_shopee_ygd = reports?.data?.shopee_ygd?.reduce(
+        (sum, item) => sum + Number(item.sales),
+        0,
     );
     const total_expenses = reports?.data?.expenses?.reduce(
         (sum, item) => sum + Number(item.total_cost),
-        0
-    );
-    const total_discount_shopee = reports?.data?.shopee?.reduce(
-        (sum, item) => sum + Number(item.discount ?? 0),
-        0
+        0,
     );
 
     const total_cost_credit = reports?.data?.credit?.reduce(
         (sum, item) => sum + Number(item.cost),
-        0
+        0,
     );
     const total_sales_credit = reports?.data?.credit?.reduce(
         (sum, item) => sum + Number(item.sales),
-        0
+        0,
     );
     const total_discount_credit = reports?.data?.credit?.reduce(
         (sum, item) => sum + Number(item.discount ?? 0),
-        0
+        0,
     );
 
     const total_summary_cost =
         Number(total_cost_credit) +
-        Number(total_cost_shopee) +
+        Number(total_cost_shopee_bip) +
+        Number(total_cost_shopee_ygd) +
         (Array.isArray(total_cost_store)
             ? total_cost_store.reduce((sum, item) => sum + Number(item.cost), 0)
             : Number(total_cost_store) || 0);
 
     const total_summary_sales =
         Number(total_sales_credit) +
-        Number(total_sales_shopee) +
+        Number(total_sales_shopee_bip) +
+        Number(total_sales_shopee_ygd) +
         (Array.isArray(total_sales_store)
             ? total_sales_store.reduce(
                   (sum, item) => sum + Number(item.cost),
-                  0
+                  0,
               )
             : Number(total_sales_store) || 0);
 
@@ -212,7 +224,10 @@ const ProfitReportSection = () => {
     const sortedStore = (reports?.data?.store || [])
         .slice()
         .sort((a, b) => (a?.product || "").localeCompare(b?.product || ""));
-    const sortedShopee = (reports?.data?.shopee || [])
+    const sortedShopeeBip = (reports?.data?.shopee_bip || [])
+        .slice()
+        .sort((a, b) => (a?.product || "").localeCompare(b?.product || ""));
+    const sortedShopeeYgd = (reports?.data?.shopee_ygd || [])
         .slice()
         .sort((a, b) => (a?.product || "").localeCompare(b?.product || ""));
     const sortedCredit = (reports?.data?.credit || [])
@@ -345,6 +360,7 @@ const ProfitReportSection = () => {
                     <Text style={styles.title}>Store</Text>
                     {/* Table Header */}
                     <View style={styles.tableHeader}>
+                        <Text style={styles.col}>Cart ID</Text>
                         <Text style={styles.colSmall}>Code</Text>
                         <Text style={styles.col}>Product</Text>
                         <Text style={styles.colSmall}>Quantity</Text>
@@ -357,6 +373,7 @@ const ProfitReportSection = () => {
                     {/* Table Rows */}
                     {sortedStore.map((item, idx) => (
                         <View style={styles.tableRow} key={idx}>
+                            <Text style={styles.col}>{item.cart_id}</Text>
                             <Text style={styles.colSmall}>{item.code}</Text>
                             <Text style={styles.col}>{item?.product}</Text>
                             <Text style={styles.colSmall}>{item.quantity}</Text>
@@ -386,9 +403,10 @@ const ProfitReportSection = () => {
                             {peso_value(total_sales_store - total_cost_store)}
                         </Text>
                     </View>
-                    <Text style={styles.title}>Shopee</Text>
+                    <Text style={styles.title}>Shopee — Beauty In Pink</Text>
                     {/* Table Header */}
                     <View style={styles.tableHeader}>
+                        <Text style={styles.col}>Cart ID</Text>
                         <Text style={styles.colSmall}>Code</Text>
                         <Text style={styles.col}>Product</Text>
                         <Text style={styles.colSmall}>Quantity</Text>
@@ -399,10 +417,61 @@ const ProfitReportSection = () => {
                     </View>
 
                     {/* Table Rows */}
-                    {sortedShopee.map((item, idx) => {
-                        console.log("Item:", item);
+                    {sortedShopeeBip.map((item, idx) => (
+                        <View style={styles.tableRow} key={idx}>
+                            <Text style={styles.col}>{item.cart_id}</Text>
+                            <Text style={styles.colSmall}>{item.code}</Text>
+                            <Text style={styles.col}>{item?.product}</Text>
+                            <Text style={styles.colSmall}>{item.quantity}</Text>
+                            <Text style={styles.colSmall}>
+                                {peso_value(item.cost)}
+                            </Text>
+                            <Text style={styles.colSmall}>
+                                {peso_value(item.sales ?? 0)}
+                            </Text>
+                            <Text style={styles.colSmall}>
+                                {peso_value(item.profit)}
+                            </Text>
+                            <Text style={styles.colSmall}>{item.margin}</Text>
+                        </View>
+                    ))}
+
+                    <View style={styles.summary}>
+                        <Text>
+                            Total Cost: {peso_value(total_cost_shopee_bip)}
+                        </Text>
+                        <Text>
+                            Total Sales: {peso_value(total_sales_shopee_bip)}
+                        </Text>
+                        <Text>
+                            Total Profit:{" "}
+                            {peso_value(
+                                total_sales_shopee_bip - total_cost_shopee_bip,
+                            )}
+                        </Text>
+                    </View>
+
+                    <Text style={styles.title}>
+                        Shopee — You Glow Darling PH
+                    </Text>
+                    {/* Table Header */}
+                    <View style={styles.tableHeader}>
+                        <Text style={styles.col}>Cart ID</Text>
+                        <Text style={styles.colSmall}>Code</Text>
+                        <Text style={styles.col}>Product</Text>
+                        <Text style={styles.colSmall}>Quantity</Text>
+                        <Text style={styles.colSmall}>Cost</Text>
+                        <Text style={styles.colSmall}>Total</Text>
+                        <Text style={styles.colSmall}>Profit</Text>
+                        <Text style={styles.colSmall}>Margin</Text>
+                    </View>
+
+                    {/* Table Rows */}
+                    {sortedShopeeYgd.map((item, idx) => {
+                        console.log("sortedShopeeYgd item:", item);
                         return (
                             <View style={styles.tableRow} key={idx}>
+                                <Text style={styles.col}>{item.cart_id}</Text>
                                 <Text style={styles.colSmall}>{item.code}</Text>
                                 <Text style={styles.col}>{item?.product}</Text>
                                 <Text style={styles.colSmall}>
@@ -420,37 +489,29 @@ const ProfitReportSection = () => {
                                 <Text style={styles.colSmall}>
                                     {item.margin}
                                 </Text>
-                                {/* <Text style={styles.colSmall}>
-                                {item.cost.toLocaleString()}
-                            </Text> */}
-                                {/* <Text style={styles.colSmall}>
-                                {item.sales.toLocaleString()}
-                            </Text> */}
-                                {/* <Text style={styles.colSmall}>
-                                {item.profit.toLocaleString()}
-                            </Text> */}
-                                {/* <Text style={styles.colSmall}>{item.margin}</Text> */}
                             </View>
                         );
                     })}
 
                     <View style={styles.summary}>
-                        <Text>Total Cost: {peso_value(total_cost_shopee)}</Text>
                         <Text>
-                            Total Sales: {peso_value(total_sales_shopee)}
+                            Total Cost: {peso_value(total_cost_shopee_ygd)}
                         </Text>
-                        {/* <Text>
-                            Total Discount: {peso_value(total_discount_shopee)}
-                        </Text> */}
+                        <Text>
+                            Total Sales: {peso_value(total_sales_shopee_ygd)}
+                        </Text>
                         <Text>
                             Total Profit:{" "}
-                            {peso_value(total_sales_shopee - total_cost_shopee)}
+                            {peso_value(
+                                total_sales_shopee_ygd - total_cost_shopee_ygd,
+                            )}
                         </Text>
                     </View>
 
                     <Text style={styles.title}>Credits</Text>
                     {/* Table Header */}
                     <View style={styles.tableHeader}>
+                        <Text style={styles.col}>Cart ID</Text>
                         <Text style={styles.colSmall}>Code</Text>
                         <Text style={styles.col}>Product</Text>
                         <Text style={styles.colSmall}>Quantity</Text>
@@ -463,6 +524,7 @@ const ProfitReportSection = () => {
                     {/* Table Rows */}
                     {sortedCredit.map((item, idx) => (
                         <View style={styles.tableRow} key={idx}>
+                            <Text style={styles.col}>{item.cart_id}</Text>
                             <Text style={styles.colSmall}>{item.code}</Text>
                             <Text style={styles.col}>{item?.product}</Text>
                             <Text style={styles.colSmall}>{item.quantity}</Text>

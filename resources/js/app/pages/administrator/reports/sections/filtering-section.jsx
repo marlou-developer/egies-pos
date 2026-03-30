@@ -31,25 +31,25 @@ export default function FilteringSection({ setForm, form }) {
 
             <div className="space-y-4">
                 {[
-                    {
-                        label: "Shopee Store",
-                        id: "shopee_store",
-                        options: [
-                            {
-                                label: "N/A",
-                                value: "N/A",
-                            },
-                            {
-                                label: "Beauty In Pink",
-                                value: "beauty_in_pink",
-                            },
-                            {
-                                label: "You Glow Darling PH",
-                                value: "you_glow_darling_ph",
-                            },
-                        ],
-                        disabled: form.type == "Expenses",
-                    },
+                    // {
+                    //     label: "Shopee Store",
+                    //     id: "shopee_store",
+                    //     options: [
+                    //         {
+                    //             label: "N/A",
+                    //             value: "N/A",
+                    //         },
+                    //         {
+                    //             label: "Beauty In Pink",
+                    //             value: "beauty_in_pink",
+                    //         },
+                    //         {
+                    //             label: "You Glow Darling PH",
+                    //             value: "you_glow_darling_ph",
+                    //         },
+                    //     ],
+                    //     disabled: form.type == "Expenses",
+                    // },
                     {
                         label: "Customers",
                         id: "customer",

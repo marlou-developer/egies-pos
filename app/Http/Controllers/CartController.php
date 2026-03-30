@@ -564,6 +564,7 @@ class CartController extends Controller
 
             $baseCartItemsQuery = function ($shopConditionCallback) use ($start, $end, $request) {
                 return CartItem::select(
+                    'cart_id',
                     'product_id',
                     DB::raw('SUM(quantity) as quantity'),
                     DB::raw('SUM(cost) as cost'),
@@ -598,7 +599,7 @@ class CartController extends Controller
                         });
                     })
                     ->whereHas('cart', $shopConditionCallback)
-                    ->groupBy('product_id')
+                    ->groupBy('cart_id', 'product_id')
                     ->with(['product:id,name'])
                     ->get()
                     ->map(function ($item) {
@@ -607,6 +608,7 @@ class CartController extends Controller
                             : 0;
 
                         return [
+                            'cart_id' => $item->cart_id,
                             'code' => $item->product_id,
                             'product' => $item->product->name ?? 'N/A',
                             'quantity' => $item->quantity,
@@ -628,12 +630,20 @@ class CartController extends Controller
                 ]);
             });
 
-            $cart_items_shopee = $baseCartItemsQuery(function ($q) {
+            $cart_items_shopee_bip = $baseCartItemsQuery(function ($q) {
                 $q->where([
                     ['is_credit', '<>', 'true'],
                     ['shop', '=', 'Shopee'],
                     ['status', '=', 'Paid']
-                ]);
+                ])->where('shopee_store', 'Beauty In Pink');
+            });
+
+            $cart_items_shopee_ygd = $baseCartItemsQuery(function ($q) {
+                $q->where([
+                    ['is_credit', '<>', 'true'],
+                    ['shop', '=', 'Shopee'],
+                    ['status', '=', 'Paid']
+                ])->where('shopee_store', 'You Glow Darling PH');
             });
 
             $cart_items_credit = $baseCartItemsQuery(function ($q) {
@@ -685,7 +695,8 @@ class CartController extends Controller
             return response()->json([
                 'data' => [
                     'store' => $cart_items_store,
-                    'shopee' => $cart_items_shopee,
+                    'shopee_bip' => $cart_items_shopee_bip,
+                    'shopee_ygd' => $cart_items_shopee_ygd,
                     'credit' => $cart_items_credit,
                     'expenses' => $expenses,
                 ],
