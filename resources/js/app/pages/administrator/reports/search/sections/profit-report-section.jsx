@@ -125,7 +125,7 @@ const loadingUI = (
                     Generating Report...
                 </h3>
                 <p style={{ margin: "8px 0 0", color: "#666" }}>
-                    Please wait while we prepare your profit report
+                    Please wait while we prepare your profit & margin report
                 </p>
             </div>
         </div>
@@ -347,7 +347,7 @@ const ProfitReportSection = () => {
                     <Text style={styles.title}>Store</Text>
                     {/* Table Header */}
                     <View style={styles.tableHeader}>
-                        <Text style={styles.col}>Cart ID</Text>
+                        <Text style={styles.col}>Invoice No.</Text>
                         <Text style={styles.colSmall}>Code</Text>
                         <Text style={styles.col}>Product</Text>
                         <Text style={styles.colSmall}>Quantity</Text>
@@ -393,7 +393,7 @@ const ProfitReportSection = () => {
                     <Text style={styles.title}>Shopee — Beauty In Pink</Text>
                     {/* Table Header */}
                     <View style={styles.tableHeader}>
-                        <Text style={styles.col}>Cart ID</Text>
+                        <Text style={styles.col}>Invoice No.</Text>
                         <Text style={styles.colSmall}>Code</Text>
                         <Text style={styles.col}>Product</Text>
                         <Text style={styles.colSmall}>Quantity</Text>
@@ -443,7 +443,7 @@ const ProfitReportSection = () => {
                     </Text>
                     {/* Table Header */}
                     <View style={styles.tableHeader}>
-                        <Text style={styles.col}>Cart ID</Text>
+                        <Text style={styles.col}>Invoice No.</Text>
                         <Text style={styles.colSmall}>Code</Text>
                         <Text style={styles.col}>Product</Text>
                         <Text style={styles.colSmall}>Quantity</Text>
@@ -498,7 +498,7 @@ const ProfitReportSection = () => {
                     <Text style={styles.title}>Credits</Text>
                     {/* Table Header */}
                     <View style={styles.tableHeader}>
-                        <Text style={styles.col}>Cart ID</Text>
+                        <Text style={styles.col}>Invoice No.</Text>
                         <Text style={styles.colSmall}>Code</Text>
                         <Text style={styles.col}>Product</Text>
                         <Text style={styles.colSmall}>Quantity</Text>
