@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
     Page,
     Text,
     View,
     Document,
     StyleSheet,
-    PDFViewer,
+    BlobProvider,
     Font,
 } from "@react-pdf/renderer";
 import { useSelector } from "react-redux";
@@ -108,26 +108,35 @@ const styles = StyleSheet.create({
     },
 });
 
+const loadingUI = (
+    <>
+        <style>
+            {`
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            `}
+        </style>
+        <div style={styles.loadingContainer}>
+            <div style={styles.loadingContent}>
+                <div style={styles.spinner}></div>
+                <h3 style={{ margin: 0, color: "#333" }}>
+                    Generating Report...
+                </h3>
+                <p style={{ margin: "8px 0 0", color: "#666" }}>
+                    Please wait while we prepare your profit report
+                </p>
+            </div>
+        </div>
+    </>
+);
+
 const ProfitReportSection = () => {
     const { reports } = useSelector((store) => store.carts);
-    const [isLoading, setIsLoading] = useState(true);
     const params = new URLSearchParams(window.location.search);
     const initialStart = params.get("start");
     const initialEnd = params.get("end");
-
-    // Simulate loading time for PDF generation
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsLoading(false);
-        }, 1500); // 1.5 seconds loading time
-
-        return () => clearTimeout(timer);
-    }, [reports]);
-
-    // Reset loading when reports data changes
-    useEffect(() => {
-        setIsLoading(true);
-    }, [reports]);
 
     const total_cost_store = reports?.data?.store?.reduce(
         (sum, item) => sum + Number(item.cost),
@@ -237,35 +246,13 @@ const ProfitReportSection = () => {
         .slice()
         .sort((a, b) => (a?.category || "").localeCompare(b?.category || ""));
 
-    // Show loading spinner while generating report
-    if (isLoading) {
-        return (
-            <>
-                <style>
-                    {`
-                        @keyframes spin {
-                            0% { transform: rotate(0deg); }
-                            100% { transform: rotate(360deg); }
-                        }
-                    `}
-                </style>
-                <div style={styles.loadingContainer}>
-                    <div style={styles.loadingContent}>
-                        <div style={styles.spinner}></div>
-                        <h3 style={{ margin: 0, color: "#333" }}>
-                            Generating Report...
-                        </h3>
-                        <p style={{ margin: "8px 0 0", color: "#666" }}>
-                            Please wait while we prepare your profit report
-                        </p>
-                    </div>
-                </div>
-            </>
-        );
+    if (!reports?.data) {
+        return loadingUI;
     }
 
     return (
-        <PDFViewer style={{ width: "100%", height: "100vh" }}>
+        <BlobProvider
+            document={
             <Document>
                 <Page orientation="landscape" size="A4" style={styles.page}>
                     <View style={styles.header}>
@@ -616,7 +603,18 @@ const ProfitReportSection = () => {
                     </View>
                 </Page>
             </Document>
-        </PDFViewer>
+            }
+        >
+            {({ url, loading }) => {
+                if (loading) return loadingUI;
+                return (
+                    <iframe
+                        src={url}
+                        style={{ width: "100%", height: "100vh", border: "none" }}
+                    />
+                );
+            }}
+        </BlobProvider>
     );
 };
 

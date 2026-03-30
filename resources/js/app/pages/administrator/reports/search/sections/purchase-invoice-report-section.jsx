@@ -5,7 +5,7 @@ import {
     View,
     Document,
     StyleSheet,
-    PDFViewer,
+    BlobProvider,
     Font,
 } from "@react-pdf/renderer";
 import { useSelector } from "react-redux";
@@ -75,6 +75,26 @@ const styles = StyleSheet.create({
     },
 });
 
+const loadingUI = (
+    <>
+        <style>
+            {`
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            `}
+        </style>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", backgroundColor: "#f5f5f5" }}>
+            <div style={{ textAlign: "center", padding: 20, backgroundColor: "white", borderRadius: 8, boxShadow: "0 2px 10px rgba(0,0,0,0.1)" }}>
+                <div style={{ border: "4px solid #f3f3f3", borderTop: "4px solid #3498db", borderRadius: "50%", width: 40, height: 40, animation: "spin 1s linear infinite", margin: "0 auto 16px" }}></div>
+                <h3 style={{ margin: 0, color: "#333" }}>Generating Report...</h3>
+                <p style={{ margin: "8px 0 0", color: "#666" }}>Please wait while we prepare your purchase invoice report</p>
+            </div>
+        </div>
+    </>
+);
+
 const PurchaseInvoiceReportSection = () => {
     const { reports } = useSelector((store) => store.carts);
     const params = new URLSearchParams(window.location.search);
@@ -83,8 +103,13 @@ const PurchaseInvoiceReportSection = () => {
 
     const total = reports?.data?.reduce((sum, item) => sum + Number(item.total), 0);
 
+    if (!reports?.data) {
+        return loadingUI;
+    }
+
     return (
-        <PDFViewer style={{ width: "100%", height: "100vh" }}>
+        <BlobProvider
+            document={
             <Document>
                 <Page size="A4" style={styles.page}>
                     <View style={styles.header}>
@@ -216,7 +241,18 @@ const PurchaseInvoiceReportSection = () => {
                     </View>
                 </Page>
             </Document>
-        </PDFViewer>
+            }
+        >
+            {({ url, loading }) => {
+                if (loading) return loadingUI;
+                return (
+                    <iframe
+                        src={url}
+                        style={{ width: "100%", height: "100vh", border: "none" }}
+                    />
+                );
+            }}
+        </BlobProvider>
     );
 };
 

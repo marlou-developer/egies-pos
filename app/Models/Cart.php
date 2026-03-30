@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -34,9 +35,9 @@ class Cart extends Model
         'created_at'
     ];
 
-    public function customer(): HasOne
+    public function customer(): BelongsTo
     {
-        return $this->hasOne(Customer::class, 'id', 'customer_id');
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
     public function cart_items(): HasMany
     {
