@@ -7,6 +7,7 @@ use App\Models\Stock;
 use App\Models\Upload;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -30,8 +31,8 @@ class ProductController extends Controller
                 $query->where('quantity', '<', 0);
             } else {
                 $query->where(function ($q) use ($request) {
-                        $q->where('name', '=', $request->search)
-                    // ->orWhere('id', $request->search)
+                    $q->where('name', '=', $request->search)
+                        // ->orWhere('id', $request->search)
                         ->orWhere('id', 'like', '%' . $request->search . '%')
                         ->orWhere('name', 'like', '%' . $request->search . '%')
                         ->orWhere('brand', 'like', '%' . $request->search . '%')
@@ -104,11 +105,12 @@ class ProductController extends Controller
         $product = Product::create($data);
 
         Stock::create([
+            'user_id' => Auth::id(),
             'product_id' => $product->id,
             'date' => $date->format('Y-m-d'),
             'delivery_id' => $date->format('mdyHis'), // H = 24-hour format
             'quantity' => $request->quantity,
-            'remaining' => $request->quantity,
+            'remaining' => 0,
             'price' => $request->price,
             'supplier_id' => $request->supplier_id,
         ]);
@@ -234,7 +236,7 @@ class ProductController extends Controller
 
         return response()->json([
             'all' => $query->get(),
-            'data' => $query->get(), 
+            'data' => $query->get(),
         ]);
     }
 

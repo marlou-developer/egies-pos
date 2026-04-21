@@ -41,10 +41,7 @@ export default function StocksHistorySection({ data }) {
                                 </tr>
                             </thead>
                             <tbody>
-                                {data?.stocks
-                                    ?.slice()
-                                    .sort((a, b) => new Date(b.date) - new Date(a.date))
-                                    .map((res) => {
+                                {data?.stocks?.map((res) => {
                                         const isDeduction = res.delivery_id === 'N/A' || res.remaining === 'deducted';
                                         const rowBgClass = isDeduction 
                                             ? "bg-red-100 hover:bg-red-100" 

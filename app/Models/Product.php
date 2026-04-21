@@ -37,7 +37,7 @@ class Product extends Model
     }
     public function stocks(): HasMany
     {
-        return $this->hasMany(Stock::class, 'product_id', 'id')->with(['supplier', 'user']);
+        return $this->hasMany(Stock::class, 'product_id', 'id')->orderBy('id', 'desc')->with(['supplier', 'user']);
     }
     public function categories(): HasOne
     {
