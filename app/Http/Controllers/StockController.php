@@ -27,8 +27,9 @@ class StockController extends Controller
             'date' => $request->date,
             'delivery_id' => $request->delivery_id,
             'quantity' => $request->quantity,
-            'remaining' => "deducted",
+            'remaining' => $request->remaining,
             'price' => $request->price,
+            'status' => 'deducted',
             'supplier_id' => 'N/A',
         ]);
 
@@ -37,6 +38,7 @@ class StockController extends Controller
             'message' => 'Stock minus successfully',
         ], 200);
     }
+
     public function update(Request $request, $id)
     {
 
@@ -79,7 +81,7 @@ class StockController extends Controller
             'supplier_id' => 'nullable',
         ]);
         $user = Auth::user();
-        $stocks = Stock::create(array_merge($data, ['user_id' => $user->id]));
+        $stocks = Stock::create(array_merge($data, ['user_id' => $user->id, 'status' => 'added']));
 
         $product = Product::find($data['product_id']);
         if ($product) {

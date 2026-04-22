@@ -6,7 +6,7 @@ import { FaClockRotateLeft } from "react-icons/fa6";
 
 export default function StocksHistorySection({ data }) {
     const [open, setOpen] = useState(false);
-    console.log('datass', data)
+    console.log("datass", data);
     return (
         <>
             <Tooltip title="View Stock History">
@@ -32,32 +32,59 @@ export default function StocksHistorySection({ data }) {
                         <table class="min-w-full text-sm text-left border border-gray-200 rounded-lg">
                             <thead class="bg-gray-100 text-gray-700">
                                 <tr>
-                                    <th class="px-4 py-2 border-b">Processed by</th>
-                                    <th class="px-4 py-2 border-b">Delivery Receipt</th>
+                                    <th class="px-4 py-2 border-b">
+                                        Processed by
+                                    </th>
+                                    <th class="px-4 py-2 border-b">
+                                        Delivery Receipt
+                                    </th>
                                     <th class="px-4 py-2 border-b">Supplier</th>
                                     <th class="px-4 py-2 border-b">Quantity</th>
-                                    <th class="px-4 py-2 border-b">Remaining Stocks Before Delivery</th>
+                                    <th class="px-4 py-2 border-b">
+                                        Remaining Stocks Before
+                                        <br />
+                                        Delivery/Deduction
+                                    </th>
                                     <th class="px-4 py-2 border-b">Date</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {data?.stocks?.map((res) => {
-                                        const isDeduction = res.delivery_id === 'N/A' || res.remaining === 'deducted';
-                                        const rowBgClass = isDeduction 
-                                            ? "bg-red-100 hover:bg-red-100" 
-                                            : "bg-green-100 hover:bg-green-100";
-                                        
-                                        return (
-                                            <tr className={rowBgClass} key={res.delivery_id || Math.random()}>
-                                                <td className="px-4 py-2 border-b">{res?.user?.name}</td>
-                                                <td className="px-4 py-2 border-b">{res.delivery_id}</td>
-                                                <td className="px-4 py-2 border-b">{res?.supplier?.name}</td>
-                                                <td className="px-4 py-2 border-b">{res.quantity}</td>
-                                                <td className="px-4 py-2 border-b">{res.remaining}</td>
-                                                <td className="px-4 py-2 border-b">{res.date}</td>
-                                            </tr>
-                                        );
-                                    })}
+                                    const isDeduction =
+                                        res.remaining === "deducted" ||
+                                        res.status === "deducted";
+                                    const rowBgClass = isDeduction
+                                        ? "bg-red-100 hover:bg-red-100"
+                                        : "bg-green-100 hover:bg-green-100";
+
+                                    return (
+                                        <tr
+                                            className={rowBgClass}
+                                            key={
+                                                res.delivery_id || Math.random()
+                                            }
+                                        >
+                                            <td className="px-4 py-2 border-b">
+                                                {res?.user?.name}
+                                            </td>
+                                            <td className="px-4 py-2 border-b">
+                                                {res.delivery_id}
+                                            </td>
+                                            <td className="px-4 py-2 border-b">
+                                                {res?.supplier?.name}
+                                            </td>
+                                            <td className="px-4 py-2 border-b">
+                                                {res.quantity}
+                                            </td>
+                                            <td className="px-4 py-2 border-b">
+                                                {res.remaining}
+                                            </td>
+                                            <td className="px-4 py-2 border-b">
+                                                {moment(res.date).format("LL")}
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                             </tbody>
                         </table>
                     </div>

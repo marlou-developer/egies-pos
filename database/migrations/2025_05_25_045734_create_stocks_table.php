@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('quantity')->nullable();
             $table->string('remaining')->nullable();
             $table->string('price')->nullable();
+            $table->string('status')->nullable();
             $table->timestamps();
         });
     }

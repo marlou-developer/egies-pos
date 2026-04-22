@@ -25,8 +25,11 @@ export default function MinusStockSection({ data }) {
             ...data,
             product_id: String(data.id),
             quantity: data.quantity,
+            remaining: data.quantity,
         });
     }, [data, modalOpen]);
+
+    console.log("dataaaa", data);
 
     const minusStock = async (e) => {
         e.preventDefault();
@@ -113,7 +116,6 @@ export default function MinusStockSection({ data }) {
                             label="Quantity"
                             type="number"
                         />
-                        ''
                     </div>
 
                     <div className="mt-4 flex justify-end">
