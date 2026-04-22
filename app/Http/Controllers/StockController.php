@@ -81,7 +81,18 @@ class StockController extends Controller
             'supplier_id' => 'nullable',
         ]);
         $user = Auth::user();
-        $stocks = Stock::create(array_merge($data, ['user_id' => $user->id, 'status' => 'added']));
+
+        Stock::create([
+            'product_id' => $request->product_id,
+            'user_id' => $user->id,
+            'date' => $request->date,
+            'delivery_id' => $request->delivery_id,
+            'quantity' => $request->quantity,
+            'remaining' => $request->remaining,
+            'price' => $request->price,
+            'status' => 'added',
+            'supplier_id' => $request->supplier_id,
+        ]);
 
         $product = Product::find($data['product_id']);
         if ($product) {
@@ -91,7 +102,6 @@ class StockController extends Controller
 
         return response()->json([
             'status' => 'success',
-            'data' => $stocks,
         ], 200);
     }
 

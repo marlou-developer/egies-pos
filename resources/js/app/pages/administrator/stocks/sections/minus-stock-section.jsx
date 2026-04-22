@@ -97,7 +97,7 @@ export default function MinusStockSection({ data }) {
                             }
                             // value={form.delivery_id || ""}
                             name="delivery_id"
-                            label="Delivery ID"
+                            label="Delivery Receipt"
                             type="text"
                             required
                         />
