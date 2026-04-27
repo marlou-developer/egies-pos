@@ -36,7 +36,7 @@ export default function AdminLayout({ children }) {
 
     const path = window.location.pathname.split("/")[2];
     const navigation = [
-        ...(user?.user_type === "Admin"
+        ...(user?.user_type === "Admin" || user?.user_type === "Super Admin"
             ? [
                   {
                       name: "Dashboard",
@@ -47,6 +47,7 @@ export default function AdminLayout({ children }) {
               ]
             : []),
         ...(user?.user_type === "Admin" ||
+        user?.user_type === "Super Admin" ||
         user?.user_type === "Cashier" ||
         user?.user_type === "Encoder" ||
         user?.user_type === "Shopee"
@@ -60,6 +61,7 @@ export default function AdminLayout({ children }) {
               ]
             : []),
         ...(user?.user_type === "Admin" ||
+        user?.user_type === "Super Admin" ||
         user?.user_type === "Inventory" ||
         user?.user_type === "Encoder"
             ? [
@@ -71,7 +73,7 @@ export default function AdminLayout({ children }) {
                   },
               ]
             : []),
-        ...(user?.user_type === "Admin" || user?.user_type === "Inventory"
+        ...(user?.user_type === "Admin" || user?.user_type === "Inventory" || user?.user_type === "Super Admin"
             ? [
                   {
                       name: "Stocks",
@@ -81,7 +83,7 @@ export default function AdminLayout({ children }) {
                   },
               ]
             : []),
-        ...(user?.user_type === "Admin" || user?.user_type === "Shopee"
+        ...(user?.user_type === "Admin" || user?.user_type === "Shopee" || user?.user_type === "Super Admin"
             ? [
                   {
                       name: "Shopee",
@@ -97,7 +99,7 @@ export default function AdminLayout({ children }) {
                   },
               ]
             : []),
-        ...(user?.user_type === "Admin" || user?.user_type === "Cashier"
+        ...(user?.user_type === "Admin" || user?.user_type === "Cashier" || user?.user_type === "Super Admin"
             ? [
                   {
                       name: "Credits",
@@ -107,7 +109,7 @@ export default function AdminLayout({ children }) {
                   },
               ]
             : []),
-        ...(user?.user_type === "Admin"
+        ...(user?.user_type === "Admin" || user?.user_type === "Super Admin"
             ? [
                   {
                       name: "Expenses",
@@ -117,7 +119,7 @@ export default function AdminLayout({ children }) {
                   },
               ]
             : []),
-        ...(user?.user_type === "Admin" || user?.user_type === "Cashier"
+        ...(user?.user_type === "Admin" || user?.user_type === "Cashier" || user?.user_type === "Super Admin"
             ? [
                   {
                       name: "Sales",
@@ -127,7 +129,7 @@ export default function AdminLayout({ children }) {
                   },
               ]
             : []),
-        ...(user?.user_type === "Admin"
+        ...(user?.user_type === "Admin" || user?.user_type === "Super Admin"
             ? [
                   {
                       name: "Report",
@@ -137,7 +139,7 @@ export default function AdminLayout({ children }) {
                   },
               ]
             : []),
-        ...(user?.user_type === "Admin"
+        ...(user?.user_type === "Admin" || user?.user_type === "Super Admin"
             ? [
                   {
                       name: "Supplier",
@@ -147,7 +149,7 @@ export default function AdminLayout({ children }) {
                   },
               ]
             : []),
-        ...(user?.user_type === "Admin"
+        ...(user?.user_type === "Admin" || user?.user_type === "Super Admin"
             ? [
                   {
                       name: "Customer",
@@ -157,7 +159,7 @@ export default function AdminLayout({ children }) {
                   },
               ]
             : []),
-        ...(user?.user_type === "Admin"
+        ...(user?.user_type === "Admin" || user?.user_type === "Super Admin"
             ? [
                   {
                       name: "User Management",

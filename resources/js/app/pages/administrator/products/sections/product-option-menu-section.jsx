@@ -33,7 +33,7 @@ export default function ProductOptionMenuSection({ data }) {
                             <FaCirclePlus className="mr-3 size-5 text-gray-400" />
                             <b>Add Stock</b>
                         </MenuItem> */}
-                            {(user?.user_type === "Admin") && (
+                            {(user?.user_type === "Admin" || user?.user_type === "Super Admin") && (
                                 <DeleteProductSection data={data} />
                             )}
 

@@ -237,7 +237,7 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                                             </select>
                                         </div>
                                     </div>
-                                    {/* {(user?.user_type === "Admin") && (
+                                    {/* {(user?.user_type === "Admin" || user?.user_type === "Super Admin") && (
                                         <div>
                                             <Input
                                                 onChange={(e) => {

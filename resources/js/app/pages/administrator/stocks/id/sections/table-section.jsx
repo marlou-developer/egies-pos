@@ -109,7 +109,7 @@ export default function TableSection() {
                                                 <a href="#" className="text-indigo-600 hover:text-indigo-900">
                                                     <EditQuantitySection data={res} />
                                                 </a>
-                                                {(user?.user_type === "Admin") && (
+                                                {(user?.user_type === "Admin" || user?.user_type === "Super Admin") && (
                                                     <RemoveStockAddedSection data={res} />
                                                 )}
 
