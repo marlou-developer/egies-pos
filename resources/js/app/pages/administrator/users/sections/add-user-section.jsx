@@ -22,7 +22,7 @@ export default function AddUserSection({ open, setOpenUser }) {
             await store.dispatch(
                 create_user_thunk({
                     ...form,
-                })
+                }),
             );
             message.success("Successfully added!");
             await store.dispatch(get_users_thunk());
@@ -73,7 +73,7 @@ export default function AddUserSection({ open, setOpenUser }) {
                                     <hr className="my-2" />
                                 </div>
 
-                                <form onSubmit={createUser} >
+                                <form onSubmit={createUser}>
                                     <div className="flex flex-col gap-4">
                                         <div>
                                             <Input
@@ -179,30 +179,52 @@ export default function AddUserSection({ open, setOpenUser }) {
                                                 onChange={(e) =>
                                                     setForm({
                                                         ...form,
-                                                        user_type: e.target.value,
+                                                        user_type:
+                                                            e.target.value,
                                                     })
                                                 }
                                                 value={form.user_type || ""}
                                                 name="user_type"
                                                 type="text"
-                                                className="block w-full rounded-md bg-white px-3 py-2.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6">
-                                                <option value="">Select User Type</option>
-                                                <option value="Admin">Admin</option>
-                                                <option value="Inventory">Inventory</option>
-                                                <option value="Shopee">Shopee</option>
-                                                <option value="Cashier">Cashier</option>
-                                                <option value="Encoder">Encoder</option>
+                                                className="block w-full rounded-md bg-white px-3 py-2.5 text-base text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300 sm:text-sm/6"
+                                            >
+                                                <option value="">
+                                                    Select User Type
+                                                </option>
+                                                <option value="Admin">
+                                                    Admin
+                                                </option>
+                                                <option value="Inventory">
+                                                    Inventory
+                                                </option>
+                                                <option value="Shopee">
+                                                    Shopee
+                                                </option>
+                                                <option value="Cashier">
+                                                    Cashier
+                                                </option>
+                                                <option value="Encoder">
+                                                    Encoder
+                                                </option>
                                             </select>
                                         </div>
-
+                                        <p className="text-xs text-gray-400">
+                                            <span>
+                                                <i>
+                                                    <b>Note:</b> Default
+                                                    password is "egiespos" and
+                                                    can be changed after the
+                                                    user is created via
+                                                    settings.
+                                                </i>
+                                            </span>
+                                        </p>
                                     </div>
 
                                     <div className="flex justify-end mt-6">
                                         <button
                                             type="button"
-                                            onClick={() =>
-                                                setOpenUser(false)
-                                            }
+                                            onClick={() => setOpenUser(false)}
                                             className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-gray-300 hover:bg-gray-50"
                                         >
                                             Cancel
