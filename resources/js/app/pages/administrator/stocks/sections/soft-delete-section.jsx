@@ -8,10 +8,12 @@ import { message, Tooltip } from "antd";
 import { get_product_thunk } from "@/app/redux/product-thunk";
 import { get_over_due_thunk } from "@/app/redux/cart-thunk";
 import { useSelector } from "react-redux";
+import VerifyPinModal from "@/app/_components/verify-pin-modal";
 import { peso_value } from "@/app/lib/peso";
 
 export default function SoftDeleteSection({ data }) {
     const [modalOpen, setModalOpen] = useState(false);
+    const [pinOpen, setPinOpen] = useState(false);
     const [costOption, setCostOption] = useState("same");
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({});
@@ -49,7 +51,7 @@ export default function SoftDeleteSection({ data }) {
             <Tooltip title="Removed Product">
                 <button
                     type="button"
-                    onClick={() => setModalOpen(true)}
+                    onClick={() => setPinOpen(true)}
                     className="relative inline-flex items-center rounded-md bg-red-400 w-full p-3 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-red-600 "
                 >
                     <FaTrashArrowUp className=" text-red-100" />
@@ -58,6 +60,15 @@ export default function SoftDeleteSection({ data }) {
             </Tooltip>
 
 
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setModalOpen(true);
+                }}
+                actionLabel="remove this product"
+            />
             <Modal open={modalOpen} setOpen={setModalOpen}>
                 <form onSubmit={softDelete}>
                     <div className="mt-6 flex flex-col gap-5">

@@ -1,14 +1,14 @@
-import React, { useState, useRef } from 'react';
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import React, { useState, useRef } from "react";
+import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import {
     ChevronDownIcon,
     PencilSquareIcon,
     TrashIcon,
-} from '@heroicons/react/20/solid';
-import { FaBook, FaPercent } from 'react-icons/fa6';
-import EditCustomerSection from './edit-customer-section';
-import { router } from '@inertiajs/react';
-import DeleteCustomerSection from './delete-customer-section';
+} from "@heroicons/react/20/solid";
+import { FaBook, FaPercent } from "react-icons/fa6";
+import EditCustomerSection from "./edit-customer-section";
+import { router } from "@inertiajs/react";
+import DeleteCustomerSection from "./delete-customer-section";
 
 export default function CustomerMenuSection({ data }) {
     const [isEditOpen, setIsEditOpen] = useState(false);
@@ -48,9 +48,10 @@ export default function CustomerMenuSection({ data }) {
                             absolute z-50 w-56 sm:w-64 md:w-72
                             rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none right-0
                             max-h-[80vh] overflow-y-auto transition-all duration-200 ease-in-out
-                            ${openUp
-                                ? 'bottom-full mb-2 origin-bottom-right'
-                                : 'top-full mt-2 origin-top-right'
+                            ${
+                                openUp
+                                    ? "bottom-full mb-2 origin-bottom-right"
+                                    : "top-full mt-2 origin-top-right"
                             }
                         `}
                     >
@@ -59,8 +60,11 @@ export default function CustomerMenuSection({ data }) {
                                 {({ active }) => (
                                     <button
                                         onClick={() => setIsEditOpen(true)}
-                                        className={`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                                            } group flex items-center px-4 py-2 text-sm w-full`}
+                                        className={`${
+                                            active
+                                                ? "bg-gray-100 text-gray-900"
+                                                : "text-gray-700"
+                                        } group flex items-center px-4 py-2 text-sm w-full`}
                                     >
                                         <PencilSquareIcon
                                             className="mr-3 size-5 text-gray-400"
@@ -75,8 +79,11 @@ export default function CustomerMenuSection({ data }) {
                                 {({ active }) => (
                                     <button
                                         onClick={() => setIsDeleteOpen(true)}
-                                        className={`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                                            } group flex items-center px-4 py-2 text-sm w-full`}
+                                        className={`${
+                                            active
+                                                ? "bg-gray-100 text-gray-900"
+                                                : "text-gray-700"
+                                        } group flex items-center px-4 py-2 text-sm w-full`}
                                     >
                                         <TrashIcon
                                             className="mr-3 size-5 text-gray-400"
@@ -92,10 +99,15 @@ export default function CustomerMenuSection({ data }) {
                                     <button
                                         type="button"
                                         onClick={() =>
-                                            router.visit(`/administrator/credits?search=${data.name}`)
+                                            router.visit(
+                                                `/administrator/credits?search=${data.name}`,
+                                            )
                                         }
-                                        className={`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                                            } group flex items-center px-4 py-2 text-sm w-full`}
+                                        className={`${
+                                            active
+                                                ? "bg-gray-100 text-gray-900"
+                                                : "text-gray-700"
+                                        } group flex items-center px-4 py-2 text-sm w-full`}
                                     >
                                         <FaBook
                                             className="mr-3 size-5 text-gray-400"
@@ -110,8 +122,11 @@ export default function CustomerMenuSection({ data }) {
                                 {({ active }) => (
                                     <a
                                         href={`customer/${data.id}`}
-                                        className={`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                                            } group flex items-center px-4 py-2 text-sm w-full`}
+                                        className={`${
+                                            active
+                                                ? "bg-gray-100 text-gray-900"
+                                                : "text-gray-700"
+                                        } group flex items-center px-4 py-2 text-sm w-full`}
                                     >
                                         <FaPercent
                                             className="mr-3 size-5 text-gray-400"
@@ -126,20 +141,16 @@ export default function CustomerMenuSection({ data }) {
                 </Menu>
             </div>
 
-            {isEditOpen && (
-                <EditCustomerSection
-                    data={data}
-                    isOpen={isEditOpen}
-                    setIsOpen={setIsEditOpen}
-                />
-            )}
-            {isDeleteOpen && (
-                <DeleteCustomerSection
-                    data={data}
-                    isOpen={isDeleteOpen}
-                    setIsOpen={setIsDeleteOpen}
-                />
-            )}
+            <EditCustomerSection
+                data={data}
+                isOpen={isEditOpen}
+                setIsOpen={setIsEditOpen}
+            />
+            <DeleteCustomerSection
+                data={data}
+                isOpen={isDeleteOpen}
+                setIsOpen={setIsDeleteOpen}
+            />
         </>
     );
 }

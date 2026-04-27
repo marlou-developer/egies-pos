@@ -12,10 +12,12 @@ import React, { useEffect, useState } from "react";
 import { FaPenToSquare } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import Swal from "sweetalert2";
+import VerifyPinModal from "@/app/_components/verify-pin-modal";
 
 export default function EditQuantitySection({ data }) {
     const { suppliers } = useSelector((store) => store.suppliers);
     const [open, setOpen] = useState(false);
+    const [pinOpen, setPinOpen] = useState(false);
     const [form, setForm] = useState({});
     const [loading, setLoading] = useState(false);
     useEffect(() => {
@@ -57,10 +59,19 @@ export default function EditQuantitySection({ data }) {
             <Tooltip title="Edit Added Stock(s)">
                 <button
                     className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-orange-400 hover:bg-orange-500 p-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
-                    onClick={() => setOpen(true)}>
+                    onClick={() => setPinOpen(true)}>
                     <FaPenToSquare className="size-3.5 text-white" />
                 </button>
             </Tooltip>
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setOpen(true);
+                }}
+                actionLabel="edit this stock entry"
+            />
             <Modal
                 isOpen={open}
                 width="max-w-xl"

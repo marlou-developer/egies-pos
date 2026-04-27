@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\SecurityController;
 use App\Http\Controllers\CartItemController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CreditPaymentController;
@@ -69,6 +70,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('search_customer', [CustomerController::class, 'search_customer']);
     Route::get('/get_discounted_products_by_id/{customer_id}', [ProductDiscountController::class, 'get_discounted_products_by_id']);
+
+    // Security PIN
+    Route::get('security', [SecurityController::class, 'index']);
+    Route::post('security', [SecurityController::class, 'store']);
+    Route::post('security/verify', [SecurityController::class, 'verify']);
+    Route::delete('security', [SecurityController::class, 'destroy']);
 });
 
 Route::get('update_users_notifications', [CartController::class, 'update_users_notifications']);

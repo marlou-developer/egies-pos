@@ -8,10 +8,11 @@ import Modal from "@/Components/Modal";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { message, Tooltip } from "antd";
 import React, { useState } from "react";
+import VerifyPinModal from "@/app/_components/verify-pin-modal";
 
 export default function DeletePaymentSection({ data }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const openModal = () => setIsModalOpen(true);
+    const [pinOpen, setPinOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const deletePayment = async (e) => {
@@ -37,10 +38,19 @@ export default function DeletePaymentSection({ data }) {
     return (
         <>
             <Tooltip title="Delete Payment">
-                <button type="button" onClick={openModal}>
+                <button type="button" onClick={() => setPinOpen(true)}>
                     <TrashIcon className="w-5 h-5 inline-block ml-2 text-red-500 cursor-pointer" />
                 </button>
             </Tooltip>
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setIsModalOpen(true);
+                }}
+                actionLabel="delete this payment"
+            />
             <Modal
                 open={isModalOpen}
                 setOpen={setIsModalOpen}

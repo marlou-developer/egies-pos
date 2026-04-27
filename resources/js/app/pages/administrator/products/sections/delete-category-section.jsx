@@ -4,10 +4,11 @@ import Modal from "@/Components/Modal";
 import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { message, Tooltip } from "antd";
 import React, { useState } from "react";
+import VerifyPinModal from "@/app/_components/verify-pin-modal";
 
 export default function DeleteCategorySection({ data }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const openModal = () => setIsModalOpen(true);
+    const [pinOpen, setPinOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const deleteCategory = async (e) => {
@@ -36,11 +37,20 @@ export default function DeleteCategorySection({ data }) {
             <Tooltip title="Remove Category">
                 <button
                     className="text-white font-bold ml-1 rounded"
-                    onClick={openModal}
+                    onClick={() => setPinOpen(true)}
                 >
                     <TrashIcon className="h-3.5 w-3 inline-block text-red-600" />
                 </button>
             </Tooltip>
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setIsModalOpen(true);
+                }}
+                actionLabel="delete this category"
+            />
             <Modal open={isModalOpen} setOpen={setIsModalOpen} width="w-1/4">
                 <h2 className="text-xl font-semibold mb-4">
                     Are you sure you want to delete this category?

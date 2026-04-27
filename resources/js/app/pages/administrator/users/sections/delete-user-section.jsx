@@ -7,10 +7,11 @@ import { PencilSquareIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { message, Tooltip } from "antd";
 import React, { useState } from "react";
 import { FaTrashCan } from "react-icons/fa6";
+import VerifyPinModal from "@/app/_components/verify-pin-modal";
 
 export default function DeleteUserSection({ data }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const openModal = () => setIsModalOpen(true);
+    const [pinOpen, setPinOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const deleteUser = async (e) => {
@@ -39,11 +40,20 @@ export default function DeleteUserSection({ data }) {
             <Tooltip title="Remove User">
                 <button
                     className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-red-400 hover:bg-red-500 p-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
-                    onClick={openModal}
+                    onClick={() => setPinOpen(true)}
                 >
                     <FaTrashCan className="size-3.5 text-white" />
                 </button>
             </Tooltip>
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setIsModalOpen(true);
+                }}
+                actionLabel="delete this user"
+            />
             <Modal open={isModalOpen} setOpen={setIsModalOpen} onClose={() => setIsModalOpen(false)} width="w-1/4">
                 <h2 className="text-xl font-semibold mb-4">
                     Are you sure you want to remove this user?

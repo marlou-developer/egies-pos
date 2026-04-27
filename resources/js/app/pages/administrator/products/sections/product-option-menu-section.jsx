@@ -5,9 +5,11 @@ import DeleteProductSection from './delete-product-section';
 import EditProductSection from './edit-product-section';
 import { FaCirclePlus } from 'react-icons/fa6';
 import { useSelector } from 'react-redux';
+import VerifyPinModal from '@/app/_components/verify-pin-modal';
 
 export default function ProductOptionMenuSection({ data }) {
     const [isEditOpen, setIsEditOpen] = useState(false);
+    const [pinOpen, setPinOpen] = useState(false);
     const { user } = useSelector((store) => store.app);
 
     return (
@@ -19,7 +21,7 @@ export default function ProductOptionMenuSection({ data }) {
                             <MenuItem>
                                 {({ active }) => (
                                     <button
-                                        onClick={() => setIsEditOpen(true)}
+                                        onClick={() => setPinOpen(true)}
                                         className={`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                                             } group flex items-center px-4 py-2 text-sm w-full`}
                                         type="button"
@@ -49,6 +51,16 @@ export default function ProductOptionMenuSection({ data }) {
             {isEditOpen && (
                 <EditProductSection data={data} isOpen={isEditOpen} setIsOpen={setIsEditOpen} />
             )}
+
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setIsEditOpen(true);
+                }}
+                actionLabel="edit this product"
+            />
         </>
     );
 }

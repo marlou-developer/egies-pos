@@ -9,9 +9,11 @@ import { get_over_due_thunk } from "@/app/redux/cart-thunk";
 import { setSelectedProducts } from "@/app/redux/product-slice";
 import store from "@/app/store/store";
 import { message } from "antd";
+import VerifyPinModal from "@/app/_components/verify-pin-modal";
 
 export default function DeleteSelectedSection() {
     const [isOpen, setIsOpen] = useState(false);
+    const [pinOpen, setPinOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
 
@@ -70,13 +72,23 @@ export default function DeleteSelectedSection() {
         <>
             {selectedProducts.length != 0 && (
                 <button
-                    onClick={() => setIsOpen(true)}
+                    onClick={() => setPinOpen(true)}
                     className="p-2 flex bg-red-700 rounded-lg hover:bg-red-600 text-white"
                 >
                     {selectedProducts.length} <TrashIcon className="h-5 ml-2" />{" "}
                     Remove
                 </button>
             )}
+
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setIsOpen(true);
+                }}
+                actionLabel="remove selected products"
+            />
 
             <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
                 <div className="p-6">

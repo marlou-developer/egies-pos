@@ -3,6 +3,7 @@ import { get_category_thunk, update_category_thunk } from '@/app/redux/category-
 import { get_all_customers_thunk } from '@/app/redux/customer-thunk';
 import store from '@/app/store/store';
 import Modal from '@/Components/Modal';
+import VerifyPinModal from '@/app/_components/verify-pin-modal';
 import { PencilIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { message, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react'
@@ -11,7 +12,7 @@ import { useSelector } from 'react-redux';
 export default function UpdateBillToSection({ data }) {
     const { customers } = useSelector((state) => state.customers);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const openModal = () => setIsModalOpen(true);
+    const [pinOpen, setPinOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({});
 
@@ -61,8 +62,17 @@ export default function UpdateBillToSection({ data }) {
     return (
         <>
             <Tooltip title="Edit Customer">
-                <button className=" text-blue-500 font-bold " type='button' onClick={openModal}><PencilIcon className="h-4 w-4 mb-1 inline-block" /></button>
+                <button className=" text-blue-500 font-bold " type='button' onClick={() => setPinOpen(true)}><PencilIcon className="h-4 w-4 mb-1 inline-block" /></button>
             </Tooltip>
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setIsModalOpen(true);
+                }}
+                actionLabel="update bill-to customer"
+            />
             <Modal open={isModalOpen} setOpen={setIsModalOpen} width='w-1/4'>
                 <h2 className="text-xl font-semibold mb-4">Edit Customer</h2>
                 <form action="" onSubmit={editCustomer}>

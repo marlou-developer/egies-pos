@@ -5,10 +5,11 @@ import Modal from '@/Components/Modal';
 import { PencilIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { message, Tooltip } from 'antd';
 import React, { useEffect, useState } from 'react'
+import VerifyPinModal from '@/app/_components/verify-pin-modal'
 
 export default function EditExpenseCategorySection({ data }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const openModal = () => setIsModalOpen(true);
+    const [pinOpen, setPinOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({});
 
@@ -36,8 +37,17 @@ export default function EditExpenseCategorySection({ data }) {
     return (
         <>
             <Tooltip title="Edit Expense Category">
-                <button className=" text-blue-500 font-bold " type='button' onClick={openModal}><PencilIcon className="h-3.5 w-3 ml-1 inline-block" /></button>
+                <button className=" text-blue-500 font-bold " type='button' onClick={() => setPinOpen(true)}><PencilIcon className="h-3.5 w-3 ml-1 inline-block" /></button>
             </Tooltip>
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setIsModalOpen(true);
+                }}
+                actionLabel="edit this expense category"
+            />
             <Modal open={isModalOpen} setOpen={setIsModalOpen} width='w-1/4'>
                 <h2 className="text-xl font-semibold mb-4">Edit Category</h2>
                 <form action="" onSubmit={editExpenseCategory}>

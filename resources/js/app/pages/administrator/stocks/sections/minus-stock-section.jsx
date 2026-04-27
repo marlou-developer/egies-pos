@@ -9,9 +9,11 @@ import store from "@/app/store/store";
 import { get_product_thunk } from "@/app/redux/product-thunk";
 import { get_over_due_thunk } from "@/app/redux/cart-thunk";
 import { minus_stock_service } from "@/app/pages/services/stock-service";
+import VerifyPinModal from "@/app/_components/verify-pin-modal";
 
 export default function MinusStockSection({ data }) {
     const [modalOpen, setModalOpen] = useState(false);
+    const [pinOpen, setPinOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({});
 
@@ -62,13 +64,22 @@ export default function MinusStockSection({ data }) {
             <Tooltip title="Minus Stock">
                 <button
                     type="button"
-                    onClick={() => setModalOpen(true)}
+                    onClick={() => setPinOpen(true)}
                     className="relative inline-flex items-center justify-center w-full rounded-md bg-red-400 p-3 text-sm font-semibold text-white ring-1 ring-inset ring-gray-300 hover:bg-red-600"
                 >
                     <FaSquareMinus />
                 </button>
             </Tooltip>
 
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setModalOpen(true);
+                }}
+                actionLabel="minus this stock"
+            />
             <Modal open={modalOpen} setOpen={setModalOpen}>
                 <form onSubmit={minusStock}>
                     <div className="mt-6 flex flex-col gap-5">

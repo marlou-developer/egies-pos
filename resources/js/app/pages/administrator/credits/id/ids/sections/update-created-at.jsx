@@ -3,6 +3,7 @@ import { get_cart_by_id_thunk } from "@/app/redux/cart-thunk";
 import { get_all_customers_thunk } from "@/app/redux/customer-thunk";
 import store from "@/app/store/store";
 import Modal from "@/Components/Modal";
+import VerifyPinModal from "@/app/_components/verify-pin-modal";
 import { PencilIcon } from "@heroicons/react/24/outline";
 import { message, Tooltip } from "antd";
 import moment from "moment";
@@ -12,6 +13,7 @@ import { useSelector } from "react-redux";
 export default function UpdateCreatedAt({ data }) {
     const { customers } = useSelector((state) => state.customers);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [pinOpen, setPinOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({
         date: "",
@@ -36,7 +38,7 @@ export default function UpdateCreatedAt({ data }) {
         });
     }, [data]);
 
-    const openModal = () => setIsModalOpen(true);
+    const openModal = () => setPinOpen(true);
 
     const editCustomer = async (e) => {
         e.preventDefault();
@@ -76,6 +78,15 @@ export default function UpdateCreatedAt({ data }) {
                 </button>
             </Tooltip>
 
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setIsModalOpen(true);
+                }}
+                actionLabel="update invoice date & time"
+            />
             <Modal open={isModalOpen} setOpen={setIsModalOpen} width="w-1/4">
                 <h2 className="text-xl font-semibold mb-4">
                     Edit Invoice Date & Time

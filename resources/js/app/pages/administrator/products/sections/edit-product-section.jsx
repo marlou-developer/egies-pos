@@ -18,6 +18,7 @@ import {
     update_product_thunk,
 } from "@/app/redux/product-thunk";
 import ProductImageSection from "./product-image-section";
+import VerifyPinModal from "@/app/_components/verify-pin-modal";
 
 export default function EditProductSection({ data, isOpen, setIsOpen }) {
     const { product } = useSelector((state) => state.products);
@@ -26,6 +27,7 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
     const [uploadedFile1, setUploadedFile1] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => setIsModalOpen(true);
+    const [pinOpen, setPinOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({});
     const { user } = useSelector((store) => store.app);
@@ -99,7 +101,7 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
             <Tooltip title="Edit Product">
                 <button
                     className="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                    onClick={openModal}
+                    onClick={() => setPinOpen(true)}
                 >
                     <PencilSquareIcon className="mr-3 size-5 text-gray-400" />
                     <b>Edit Product</b>
@@ -465,6 +467,15 @@ export default function EditProductSection({ data, isOpen, setIsOpen }) {
                     </div>
                 </form>
             </DrawerSection>
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setIsOpen(true);
+                }}
+                actionLabel="edit this product"
+            />
             {/* <DrawerSection open={isModalOpen} setOpen={setIsModalOpen} width='w-1/4'>
                 <h2 className="text-xl font-semibold mb-4">Edit Category</h2>
                 <form action="" onSubmit={editCategory}>

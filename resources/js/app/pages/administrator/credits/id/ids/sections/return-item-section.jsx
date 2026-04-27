@@ -1,6 +1,7 @@
 import { return_per_item_service } from "@/app/pages/services/cart-service";
 import { get_cart_by_id_thunk } from "@/app/redux/cart-thunk";
 import { get_product_thunk } from "@/app/redux/product-thunk";
+import VerifyPinModal from "@/app/_components/verify-pin-modal";
 
 import store from "@/app/store/store";
 import Modal from "@/Components/Modal";
@@ -10,7 +11,7 @@ import React, { useEffect, useState } from "react";
 
 export default function ReturnItemSection({ data }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const openModal = () => setIsModalOpen(true);
+    const [pinOpen, setPinOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const cart_id = data?.cart_id || window.location.pathname.split("/")[4];
     const [quantity, setQuantity] = useState(0);
@@ -69,13 +70,21 @@ export default function ReturnItemSection({ data }) {
             <Tooltip title="Return Product on Sales">
                 <button
                     className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-green-400 hover:bg-green-500 p-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
-                    onClick={openModal}
+                    onClick={() => setPinOpen(true)}
                 >
                     <ArrowPathIcon className="size-3.5 text-white" />
                 </button>
             </Tooltip>
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setIsModalOpen(true);
+                }}
+                actionLabel="return this item"
+            />
             <Modal
-                open={isModalOpen}
                 setOpen={setIsModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 width="w-1/4"

@@ -2,25 +2,32 @@ import Input from '@/app/_components/input';
 import DrawerSection from '@/app/_sections/drawer-section';
 import { get_customer_thunk, update_customer_thunk } from '@/app/redux/customer-thunk';
 import store from '@/app/store/store';
-import { PencilSquareIcon } from '@heroicons/react/20/solid';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import { message, Tooltip } from 'antd';
+import { message } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { FaClipboard, FaMoneyBill1Wave, FaUser } from 'react-icons/fa6';
 import { useSelector } from 'react-redux';
+import VerifyPinModal from '@/app/_components/verify-pin-modal';
 
 export default function EditCustomerSection({ data, isOpen, setIsOpen }) {
     const { customer } = useSelector((state) => state.customers)
     const { categories } = useSelector((state) => state.categories)
     const [uploadedFile1, setUploadedFile1] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const openModal = () => setIsModalOpen(true);
+    const [pinOpen, setPinOpen] = useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({});
 
     useEffect(() => {
         setForm(data)
     }, [])
+
+    useEffect(() => {
+        if (isOpen) {
+            setIsOpen(false);
+            setPinOpen(true);
+        }
+    }, [isOpen]);
 
 
     async function editCustomer(e) {
@@ -58,7 +65,7 @@ export default function EditCustomerSection({ data, isOpen, setIsOpen }) {
             const search = params.get('search') || '';
             store.dispatch(get_customer_thunk({ page, search, per_page: 10 }));
             message.success("Updated Successfully!");
-            setIsOpen(false);
+            setDrawerOpen(false);
         } catch (error) {
             message.error("Failed to update Customer. Please try again.");
         } finally {
@@ -70,19 +77,16 @@ export default function EditCustomerSection({ data, isOpen, setIsOpen }) {
 
     return (
         <>
-            <Tooltip title="Edit Customer">
-                <button
-                    className="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                    onClick={openModal}
-                >
-                    <PencilSquareIcon className="mr-3 size-5 text-gray-400" />
-                    <b>Edit Customer</b>
-                </button>
-            </Tooltip>
-            <div>
-
-            </div>
-            <DrawerSection open={isOpen} setOpen={setIsOpen} >
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setDrawerOpen(true);
+                }}
+                actionLabel="edit this customer"
+            />
+            <DrawerSection open={drawerOpen} setOpen={setDrawerOpen} >
                 <form
                     onSubmit={editCustomer}
                     className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
@@ -97,7 +101,7 @@ export default function EditCustomerSection({ data, isOpen, setIsOpen }) {
                                 <div className="ml-3 flex h-7 items-center">
                                     <button
                                         type="button"
-                                        onClick={() => setIsOpen(false)}
+                                        onClick={() => setDrawerOpen(false)}
                                         className="relative rounded-md bg-pink-200 text-gray-400 hover:text-gray-600 focus:ring-2 focus:ring-white focus:outline-hidden"
                                     >
                                         <span className="absolute -inset-2.5" />
@@ -310,7 +314,7 @@ export default function EditCustomerSection({ data, isOpen, setIsOpen }) {
                     <div className="flex shrink-0 justify-end px-4 py-4">
                         <button
                             type="button"
-                            onClick={() => setIsOpen(false)}
+                            onClick={() => setDrawerOpen(false)}
                             className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset hover:bg-gray-50"
                         >
                             Cancel

@@ -2,13 +2,14 @@ import { delete_category_thunk, get_category_thunk } from "@/app/redux/category-
 import { delete_expense_category_thunk, get_expense_category_thunk } from "@/app/redux/expense-category-thunk";
 import store from "@/app/store/store";
 import Modal from "@/Components/Modal";
+import VerifyPinModal from "@/app/_components/verify-pin-modal";
 import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { message, Tooltip } from "antd";
 import React, { useState } from "react";
 
 export default function DeleteExpenseCategorySection({ data }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const openModal = () => setIsModalOpen(true);
+    const [pinOpen, setPinOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const deleteExpenseCategory = async (e) => {
@@ -37,11 +38,20 @@ export default function DeleteExpenseCategorySection({ data }) {
             <Tooltip title="Remove Category">
                 <button
                     className="text-white font-bold ml-1 rounded"
-                    onClick={openModal}
+                    onClick={() => setPinOpen(true)}
                 >
                     <TrashIcon className="h-3.5 w-3 inline-block text-red-600" />
                 </button>
             </Tooltip>
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setIsModalOpen(true);
+                }}
+                actionLabel="delete this expense category"
+            />
             <Modal open={isModalOpen} setOpen={setIsModalOpen} width="w-1/4">
                 <h2 className="text-xl font-semibold mb-4">
                     Are you sure you want to delete this expense category?

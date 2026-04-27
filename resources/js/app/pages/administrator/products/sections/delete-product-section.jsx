@@ -9,10 +9,11 @@ import { message, Tooltip } from "antd";
 import { peso_value } from "@/app/lib/peso";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import VerifyPinModal from "@/app/_components/verify-pin-modal";
 
 export default function DeleteProductSection({ data }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const openModal = () => setIsModalOpen(true);
+    const [pinOpen, setPinOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({});
     const { suppliers } = useSelector((store) => store.suppliers);
@@ -52,7 +53,7 @@ export default function DeleteProductSection({ data }) {
             <Tooltip title="Remove Product">
                 <button
                     className="group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                    onClick={openModal}
+                    onClick={() => setPinOpen(true)}
                 >
                     <TrashIcon className="mr-3 size-5 text-gray-400" />
                     <b>Remove Product</b>
@@ -83,6 +84,15 @@ export default function DeleteProductSection({ data }) {
                     </div>
                 </form>
             </Modal>
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setIsModalOpen(true);
+                }}
+                actionLabel="remove this product"
+            />
         </>
     );
 }

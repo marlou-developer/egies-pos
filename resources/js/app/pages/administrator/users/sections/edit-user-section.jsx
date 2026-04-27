@@ -7,12 +7,14 @@ import { message, Tooltip } from 'antd'
 import React, { useEffect, useState } from 'react'
 import { FaUser, FaUserPen, FaUserPlus } from 'react-icons/fa6'
 import { useSelector } from 'react-redux'
+import VerifyPinModal from '@/app/_components/verify-pin-modal';
 
 export default function EditUserSection({ data }) {
     const { users } = useSelector((state) => state.users);
     const [loading, setLoading] = useState(false);
     const [form, setForm] = useState({});
     const [open, setOpen] = useState(false);
+    const [pinOpen, setPinOpen] = useState(false);
 
     useEffect(() => {
         setForm(data)
@@ -51,10 +53,19 @@ export default function EditUserSection({ data }) {
     return (
         <>
             <Tooltip title="Edit User">
-                <button type='button' onClick={() => setOpen(true)} className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-blue-400 hover:bg-blue-500 p-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset">
+                <button type='button' onClick={() => setPinOpen(true)} className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-blue-400 hover:bg-blue-500 p-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset">
                     <FaUserPen className="size-3.5 text-white" />
                 </button>
             </Tooltip>
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setOpen(true);
+                }}
+                actionLabel="edit this user"
+            />
             <DrawerSection
                 open={open}
                 setOpen={setOpen}

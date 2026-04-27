@@ -11,9 +11,11 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { FaCalendarCheck, FaMoneyBillTransfer } from "react-icons/fa6";
 import Swal from "sweetalert2";
+import VerifyPinModal from "@/app/_components/verify-pin-modal";
 
 export default function EditPaymentSection({ data }) {
     const [open, setOpen] = useState(false);
+    const [pinOpen, setPinOpen] = useState(false);
     const [form, setForm] = useState({});
     const [loading, setLoading] = useState(false);
     const [isPartial, setIsPartial] = useState(false);
@@ -79,13 +81,22 @@ export default function EditPaymentSection({ data }) {
         <>
             <Tooltip title="Edit Due Date">
                 <button
-                    onClick={() => setOpen(true)}
+                    onClick={() => setPinOpen(true)}
                     className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-blue-600 hover:bg-blue-800 p-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
                 >
                     <FaCalendarCheck className=" text-white" />
                 </button>
             </Tooltip>
 
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setOpen(true);
+                }}
+                actionLabel="edit this due date"
+            />
             <Modal
                 isOpen={open}
                 onClose={() => setOpen(false)}

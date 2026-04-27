@@ -20,10 +20,11 @@ import { PencilSquareIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { message, Tooltip } from "antd";
 import React, { useEffect, useState } from "react";
 import { FaPencil, FaPercent } from "react-icons/fa6";
+import VerifyPinModal from "@/app/_components/verify-pin-modal";
 
 export default function EditDiscountSection({ data }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const openModal = () => setIsModalOpen(true);
+    const [pinOpen, setPinOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const cart_id =
         window.location.pathname.split("/")[4] ??
@@ -63,12 +64,21 @@ export default function EditDiscountSection({ data }) {
                 <button
                     // className="inline-flex items-center justify-center gap-x-1.5 text-white rounded-md bg-blue-500 hover:bg-blue-600 p-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
                     className="inline-flex items-center justify-center rounded-md bg-blue-100 hover:bg-blue-200 px-1.5 py-2 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
-                    onClick={openModal}
+                    onClick={() => setPinOpen(true)}
                 >
                     <FaPencil className="text-blue-500 h-3" />
                     <FaPercent className="text-blue-500 h-3" />
                 </button>
             </Tooltip>
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setIsModalOpen(true);
+                }}
+                actionLabel="edit this discount"
+            />
             <Modal
                 open={isModalOpen}
                 setOpen={setIsModalOpen}

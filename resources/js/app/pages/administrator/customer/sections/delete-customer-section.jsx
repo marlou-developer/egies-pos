@@ -1,15 +1,23 @@
 
+import VerifyPinModal from "@/app/_components/verify-pin-modal";
 import { delete_customer_thunk, get_customer_thunk } from "@/app/redux/customer-thunk";
 import store from "@/app/store/store";
 import Modal from "@/Components/Modal";
 import { message, Tooltip } from "antd";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaTrashCan } from "react-icons/fa6";
 
 export default function DeleteCustomerSection({ data, isOpen, setIsOpen }) {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const openModal = () => setIsOpen(true);
+    const [pinOpen, setPinOpen] = useState(false);
+    const [reallyOpen, setReallyOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (isOpen) {
+            setIsOpen(false);
+            setPinOpen(true);
+        }
+    }, [isOpen]);
 
     const deleteCustomer = async (e) => {
         e.preventDefault();
@@ -20,7 +28,7 @@ export default function DeleteCustomerSection({ data, isOpen, setIsOpen }) {
             );
             store.dispatch(get_customer_thunk())
             message.success("Removed Successfully!");
-            setIsOpen(false);
+            setReallyOpen(false);
         } catch (error) {
             message.error("Failed to Removed Customer. Please try again."); // Show error message
         } finally {
@@ -29,12 +37,21 @@ export default function DeleteCustomerSection({ data, isOpen, setIsOpen }) {
     };
 
     const handleClose = () => {
-        setIsOpen(false);
+        setReallyOpen(false);
     };
 
     return (
         <>
-            <Modal open={isOpen} setOpen={setIsOpen} onClose={() => setIsOpen(false)} width="w-1/4">
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setReallyOpen(true);
+                }}
+                actionLabel="delete this customer"
+            />
+            <Modal open={reallyOpen} setOpen={setReallyOpen} onClose={() => setReallyOpen(false)} width="w-1/4">
                 <h2 className="text-xl font-semibold mb-4">
                     Are you sure you want to remove this Customer?
                 </h2>

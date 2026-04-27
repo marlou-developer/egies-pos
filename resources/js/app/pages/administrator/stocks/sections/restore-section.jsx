@@ -8,9 +8,11 @@ import { get_product_thunk, get_soft_deleted_product_thunk } from "@/app/redux/p
 import { get_over_due_thunk } from "@/app/redux/cart-thunk";
 import { peso_value } from "@/app/lib/peso";
 import { FaRepeat } from "react-icons/fa6";
+import VerifyPinModal from "@/app/_components/verify-pin-modal";
 
 export default function RestoreSection({ data, onRestoreSuccess }) {
     const [modalOpen, setModalOpen] = useState(false);
+    const [pinOpen, setPinOpen] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const handleRestore = async (e) => {
@@ -67,7 +69,7 @@ export default function RestoreSection({ data, onRestoreSuccess }) {
             <Tooltip title="Restore Product">
                 <button
                     type="button"
-                    onClick={() => setModalOpen(true)}
+                    onClick={() => setPinOpen(true)}
                     disabled={loading}
                     className="relative inline-flex items-center rounded-md bg-green-400 w-full p-3 text-sm font-semibold text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-green-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
@@ -75,6 +77,15 @@ export default function RestoreSection({ data, onRestoreSuccess }) {
                 </button>
             </Tooltip>
 
+            <VerifyPinModal
+                isOpen={pinOpen}
+                onClose={() => setPinOpen(false)}
+                onVerified={() => {
+                    setPinOpen(false);
+                    setModalOpen(true);
+                }}
+                actionLabel="restore this product"
+            />
             <Modal open={modalOpen} setOpen={setModalOpen}>
                 <form onSubmit={handleRestore}>
                     <div className="mt-6 flex flex-col gap-5">
