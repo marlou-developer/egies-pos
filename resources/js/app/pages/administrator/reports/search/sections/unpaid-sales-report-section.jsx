@@ -267,12 +267,11 @@ const UnpaidSalesReportSection = () => {
                                         justifyContent: "flex-start",
                                     }}
                                 >
-                                    <Text style={{ width: 53 }}>
-                                        Address:&emsp;{" "}
-                                    </Text>
-                                    <Text>
-                                        Rizal Street Brgy V, 6127 San Carlos
-                                        City
+                                    <Text style={{ width: 60 }}>Address:</Text>
+                                    <Text style={{ flex: 1 }}>
+                                        Sacatel Bldg. V. Gustillo St. Brgy 5,
+                                        San Carlos City, Negros Occidental 6127
+                                        Philippines
                                     </Text>
                                 </View>
                             </View>
@@ -284,7 +283,7 @@ const UnpaidSalesReportSection = () => {
                             // const subtotal = group.entries.reduce((sum, e) => sum + e.unpaid, 0);
                             const total_balance = group?.carts?.reduce(
                                 (sum, item) => sum + Number(item.balance),
-                                0
+                                0,
                             );
                             return (
                                 <View key={gIndex} style={{ marginBottom: 10 }}>
@@ -351,7 +350,7 @@ const UnpaidSalesReportSection = () => {
                                                         }}
                                                     >
                                                         {moment(
-                                                            entry.created_at
+                                                            entry.created_at,
                                                         ).format("LLL")}
                                                     </Text>
                                                     <Text
@@ -361,7 +360,7 @@ const UnpaidSalesReportSection = () => {
                                                         }}
                                                     >
                                                         {moment(
-                                                            entry.due_date
+                                                            entry.due_date,
                                                         ).format("LLL")}
                                                     </Text>
                                                     <Text
@@ -372,8 +371,8 @@ const UnpaidSalesReportSection = () => {
                                                     >
                                                         {peso_value(
                                                             Number(
-                                                                entry.total_price
-                                                            )
+                                                                entry.total_price,
+                                                            ),
                                                         )}
                                                     </Text>
                                                     <Text
@@ -384,11 +383,11 @@ const UnpaidSalesReportSection = () => {
                                                     >
                                                         {peso_value(
                                                             Number(
-                                                                entry.total_price
+                                                                entry.total_price,
                                                             ) -
                                                                 Number(
-                                                                    entry.balance
-                                                                )
+                                                                    entry.balance,
+                                                                ),
                                                         )}
                                                     </Text>
                                                     <Text

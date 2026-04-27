@@ -82,10 +82,16 @@ const ExpensesReportSection = () => {
     const initialEnd = params.get("end");
     const total_cost = reports?.data
         ?.filter((res) => res.category != "Shopee Expenses")
-        .reduce((sum, item) => sum + Number(String(item.cost).replace(/,/g, '')), 0);
+        .reduce(
+            (sum, item) => sum + Number(String(item.cost).replace(/,/g, "")),
+            0,
+        );
     const shopee_total_cost = reports?.data
         ?.filter((res) => res.category == "Shopee Expenses")
-        .reduce((sum, item) => sum + Number(String(item.cost).replace(/,/g, '')), 0);
+        .reduce(
+            (sum, item) => sum + Number(String(item.cost).replace(/,/g, "")),
+            0,
+        );
     console.log("reportsreports", reports?.data);
     return (
         <PDFViewer style={{ width: "100%", height: "100vh" }}>
@@ -168,12 +174,11 @@ const ExpensesReportSection = () => {
                                         justifyContent: "flex-start",
                                     }}
                                 >
-                                    <Text style={{ width: 53 }}>
-                                        Address:&emsp;{" "}
-                                    </Text>
-                                    <Text>
-                                        Rizal Street Brgy V, 6127 San Carlos
-                                        City
+                                    <Text style={{ width: 60 }}>Address:</Text>
+                                    <Text style={{ flex: 1 }}>
+                                        Sacatel Bldg. V. Gustillo St. Brgy 5,
+                                        San Carlos City, Negros Occidental 6127
+                                        Philippines
                                     </Text>
                                 </View>
                             </View>

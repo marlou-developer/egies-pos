@@ -81,15 +81,15 @@ const PurchaseBySupplierReportSection = () => {
     const initialEnd = params.get("end");
     const total_sales = reports?.data?.reduce(
         (sum, item) => sum + Number(item.total),
-        0
+        0,
     );
     const total_cost = reports?.data?.reduce(
         (sum, item) => sum + Number(item.cost),
-        0
+        0,
     );
     const total_profit = reports?.data?.reduce(
         (sum, item) => sum + Number(item.profit),
-        0
+        0,
     );
     console.log("reports", reports?.data);
     return (
@@ -173,12 +173,11 @@ const PurchaseBySupplierReportSection = () => {
                                         justifyContent: "flex-start",
                                     }}
                                 >
-                                    <Text style={{ width: 53 }}>
-                                        Address:&emsp;{" "}
-                                    </Text>
-                                    <Text>
-                                        Rizal Street Brgy V, 6127 San Carlos
-                                        City
+                                    <Text style={{ width: 60 }}>Address:</Text>
+                                    <Text style={{ flex: 1 }}>
+                                        Sacatel Bldg. V. Gustillo St. Brgy 5,
+                                        San Carlos City, Negros Occidental 6127
+                                        Philippines
                                     </Text>
                                 </View>
                             </View>

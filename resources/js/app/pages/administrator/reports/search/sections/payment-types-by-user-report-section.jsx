@@ -82,7 +82,7 @@ const PaymentTypesByUserReportSection = () => {
     const total_sales = reports?.data?.reduce((sum, item) => {
         const userTotal = item.payment_types.reduce(
             (subSum, type) => subSum + Number(type.total_amount),
-            0
+            0,
         );
         return sum + userTotal;
     }, 0);
@@ -168,12 +168,11 @@ const PaymentTypesByUserReportSection = () => {
                                         justifyContent: "flex-start",
                                     }}
                                 >
-                                    <Text style={{ width: 53 }}>
-                                        Address:&emsp;{" "}
-                                    </Text>
-                                    <Text>
-                                        Rizal Street Brgy V, 6127 San Carlos
-                                        City
+                                    <Text style={{ width: 60 }}>Address:</Text>
+                                    <Text style={{ flex: 1 }}>
+                                        Sacatel Bldg. V. Gustillo St. Brgy 5,
+                                        San Carlos City, Negros Occidental 6127
+                                        Philippines
                                     </Text>
                                 </View>
                             </View>

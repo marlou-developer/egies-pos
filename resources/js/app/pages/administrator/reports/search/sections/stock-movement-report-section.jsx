@@ -95,11 +95,41 @@ const loadingUI = (
                 }
             `}
         </style>
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", backgroundColor: "#f5f5f5" }}>
-            <div style={{ textAlign: "center", padding: 20, backgroundColor: "white", borderRadius: 8, boxShadow: "0 2px 10px rgba(0,0,0,0.1)" }}>
-                <div style={{ border: "4px solid #f3f3f3", borderTop: "4px solid #3498db", borderRadius: "50%", width: 40, height: 40, animation: "spin 1s linear infinite", margin: "0 auto 16px" }}></div>
-                <h3 style={{ margin: 0, color: "#333" }}>Generating Report...</h3>
-                <p style={{ margin: "8px 0 0", color: "#666" }}>Please wait while we prepare your stock movement report</p>
+        <div
+            style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100vh",
+                backgroundColor: "#f5f5f5",
+            }}
+        >
+            <div
+                style={{
+                    textAlign: "center",
+                    padding: 20,
+                    backgroundColor: "white",
+                    borderRadius: 8,
+                    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+                }}
+            >
+                <div
+                    style={{
+                        border: "4px solid #f3f3f3",
+                        borderTop: "4px solid #3498db",
+                        borderRadius: "50%",
+                        width: 40,
+                        height: 40,
+                        animation: "spin 1s linear infinite",
+                        margin: "0 auto 16px",
+                    }}
+                ></div>
+                <h3 style={{ margin: 0, color: "#333" }}>
+                    Generating Report...
+                </h3>
+                <p style={{ margin: "8px 0 0", color: "#666" }}>
+                    Please wait while we prepare your stock movement report
+                </p>
             </div>
         </div>
     </>
@@ -118,145 +148,162 @@ const FastStockMovementReportSection = () => {
     return (
         <BlobProvider
             document={
-            <Document>
-                <Page size="A4" style={styles.page}>
-                    <View style={styles.header}>
-                        <Text style={styles.title}>FAST STOCK MOVEMENT</Text>
+                <Document>
+                    <Page size="A4" style={styles.page}>
+                        <View style={styles.header}>
+                            <Text style={styles.title}>
+                                FAST STOCK MOVEMENT
+                            </Text>
 
-                        <View
-                            style={{
-                                width: "100%",
-                                flexDirection: "row",
-                                justifyContent: "space-between",
-                                marginBottom: 10,
-                            }}
-                        >
-                            {/* Left Side: Labels and Values */}
-                            <View style={{ flex: 1 }}>
-                                <View
-                                    style={{
-                                        flexDirection: "row",
-                                        marginBottom: 2,
-                                    }}
-                                >
-                                    <Text style={{ width: 60 }}>Period:</Text>
-                                    <Text>
-                                        {initialStart} - {initialEnd}
-                                    </Text>
+                            <View
+                                style={{
+                                    width: "100%",
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    marginBottom: 10,
+                                }}
+                            >
+                                {/* Left Side: Labels and Values */}
+                                <View style={{ flex: 1 }}>
+                                    <View
+                                        style={{
+                                            flexDirection: "row",
+                                            marginBottom: 2,
+                                        }}
+                                    >
+                                        <Text style={{ width: 60 }}>
+                                            Period:
+                                        </Text>
+                                        <Text>
+                                            {initialStart} - {initialEnd}
+                                        </Text>
+                                    </View>
+                                    <View
+                                        style={{
+                                            flexDirection: "row",
+                                            marginBottom: 2,
+                                        }}
+                                    >
+                                        <Text style={{ width: 60 }}>
+                                            Customer:
+                                        </Text>
+                                        <Text>
+                                            {reports?.customer?.name ?? "All"}
+                                        </Text>
+                                    </View>
+                                    <View
+                                        style={{
+                                            flexDirection: "row",
+                                            marginBottom: 2,
+                                        }}
+                                    >
+                                        <Text style={{ width: 60 }}>User:</Text>
+                                        <Text>
+                                            {reports?.user?.name ?? "All"}
+                                        </Text>
+                                    </View>
+                                    <View
+                                        style={{
+                                            flexDirection: "row",
+                                            marginBottom: 2,
+                                        }}
+                                    >
+                                        <Text style={{ width: 60 }}>
+                                            Product:
+                                        </Text>
+                                        <Text>
+                                            {reports?.product?.name ?? "All"}
+                                        </Text>
+                                    </View>
                                 </View>
-                                <View
-                                    style={{
-                                        flexDirection: "row",
-                                        marginBottom: 2,
-                                    }}
-                                >
-                                    <Text style={{ width: 60 }}>Customer:</Text>
-                                    <Text>
-                                        {reports?.customer?.name ?? "All"}
-                                    </Text>
-                                </View>
-                                <View
-                                    style={{
-                                        flexDirection: "row",
-                                        marginBottom: 2,
-                                    }}
-                                >
-                                    <Text style={{ width: 60 }}>User:</Text>
-                                    <Text>{reports?.user?.name ?? "All"}</Text>
-                                </View>
-                                <View
-                                    style={{
-                                        flexDirection: "row",
-                                        marginBottom: 2,
-                                    }}
-                                >
-                                    <Text style={{ width: 60 }}>Product:</Text>
-                                    <Text>
-                                        {reports?.product?.name ?? "All"}
-                                    </Text>
+
+                                {/* Right Side: Company Info */}
+                                <View style={{ flex: 1, textAlign: "left" }}>
+                                    <View
+                                        style={{
+                                            flexDirection: "row",
+                                            justifyContent: "flex-start",
+                                            marginBottom: 2,
+                                        }}
+                                    >
+                                        <Text style={{ width: 60 }}>
+                                            Company: &emsp;{" "}
+                                        </Text>
+                                        <Text>Egie's Beauty Boutique</Text>
+                                    </View>
+                                    <View
+                                        style={{
+                                            flexDirection: "row",
+                                            justifyContent: "flex-start",
+                                        }}
+                                    >
+                                        <Text style={{ width: 60 }}>
+                                            Address:
+                                        </Text>
+                                        <Text style={{ flex: 1 }}>
+                                            Sacatel Bldg. V. Gustillo St. Brgy
+                                            5, San Carlos City, Negros
+                                            Occidental 6127 Philippines
+                                        </Text>
+                                    </View>
                                 </View>
                             </View>
+                        </View>
 
-                            {/* Right Side: Company Info */}
-                            <View style={{ flex: 1, textAlign: "left" }}>
-                                <View
-                                    style={{
-                                        flexDirection: "row",
-                                        justifyContent: "flex-start",
-                                        marginBottom: 2,
-                                    }}
-                                >
-                                    <Text style={{ width: 60 }}>
-                                        Company: &emsp;{" "}
-                                    </Text>
-                                    <Text>Egie's Beauty Boutique</Text>
-                                </View>
-                                <View
-                                    style={{
-                                        flexDirection: "row",
-                                        justifyContent: "flex-start",
-                                    }}
-                                >
-                                    <Text style={{ width: 53 }}>
-                                        Address:&emsp;{" "}
-                                    </Text>
-                                    <Text>
-                                        Rizal Street Brgy V, 6127 San Carlos
-                                        City
-                                    </Text>
-                                </View>
+                        {/* Table Header */}
+                        <View style={styles.tableHeader}>
+                            <Text>#</Text>
+                            <Text style={styles.colSmall}>Products</Text>
+                            {/* <Text style={styles.col}>Fast Moving</Text> */}
+                            <Text style={styles.colSmall}>
+                                Number of Product Sold
+                            </Text>
+                            <Text style={styles.colSmall}>
+                                Total Sales of Product
+                            </Text>
+                        </View>
+
+                        {/* Table Rows */}
+                        {reports.fast_movement.map((item, idx) => (
+                            <View style={styles.tableRow} key={idx}>
+                                <Text>{idx + 1}.</Text>
+                                <Text style={styles.colSmall}>
+                                    {item.product_name}
+                                </Text>
+                                <Text style={styles.colNumber}>
+                                    {item.total_sold}
+                                </Text>
+                                <Text style={styles.colSmall}>
+                                    {peso_value(item.total_sales)}
+                                </Text>
                             </View>
-                        </View>
-                    </View>
+                        ))}
 
-                    {/* Table Header */}
-                    <View style={styles.tableHeader}>
-                        <Text>#</Text>
-                        <Text style={styles.colSmall}>Products</Text>
-                        {/* <Text style={styles.col}>Fast Moving</Text> */}
-                        <Text style={styles.colSmall}>Number of  Product Sold</Text>
-                        <Text style={styles.colSmall}>Total Sales of Product</Text>
-                    </View>
-
-                    {/* Table Rows */}
-                    {reports.fast_movement.map((item, idx) => (
-                        <View style={styles.tableRow} key={idx}>
-                            <Text>{idx + 1}.</Text>
-                            <Text style={styles.colSmall}>
-                                {item.product_name}
-                            </Text>
-                            <Text style={styles.colNumber}>
-                                {item.total_sold}
-                            </Text>
-                            <Text style={styles.colSmall}>
-                                {peso_value(item.total_sales)}
-                            </Text>
-                        </View>
-                    ))}
-
-                    <Text style={styles.slowTitle}>SLOW STOCK MOVEMENT</Text>
-                    {reports.slow_movement.map((item, idx) => (
-                        <View style={styles.tableRow} key={idx}>
-                            <Text>{idx + 1}.</Text>
-                            <Text style={styles.colSmall}>
-                                {item.product_name}
-                            </Text>
-                            <Text style={styles.colNumber}>
-                                {item.total_sold}
-                            </Text>
-                            <Text style={styles.colSmall}>
-                                {peso_value(item.total_sales)}
-                            </Text>
-                        </View>
-                    ))}
-                    {/* Summary */}
-                    <View style={styles.summary}>
-                        {/* <Text>Total Cost: 42,048.60</Text> */}
-                        {/* <Text>Total Sales: {peso_value(total_sold)}</Text>
+                        <Text style={styles.slowTitle}>
+                            SLOW STOCK MOVEMENT
+                        </Text>
+                        {reports.slow_movement.map((item, idx) => (
+                            <View style={styles.tableRow} key={idx}>
+                                <Text>{idx + 1}.</Text>
+                                <Text style={styles.colSmall}>
+                                    {item.product_name}
+                                </Text>
+                                <Text style={styles.colNumber}>
+                                    {item.total_sold}
+                                </Text>
+                                <Text style={styles.colSmall}>
+                                    {peso_value(item.total_sales)}
+                                </Text>
+                            </View>
+                        ))}
+                        {/* Summary */}
+                        <View style={styles.summary}>
+                            {/* <Text>Total Cost: 42,048.60</Text> */}
+                            {/* <Text>Total Sales: {peso_value(total_sold)}</Text>
                         <Text>Total Sold: {total_sold}</Text> */}
-                    </View>
-                </Page>
-            </Document>
+                        </View>
+                    </Page>
+                </Document>
             }
         >
             {({ url, loading }) => {
@@ -264,7 +311,11 @@ const FastStockMovementReportSection = () => {
                 return (
                     <iframe
                         src={url}
-                        style={{ width: "100%", height: "100vh", border: "none" }}
+                        style={{
+                            width: "100%",
+                            height: "100vh",
+                            border: "none",
+                        }}
                     />
                 );
             }}

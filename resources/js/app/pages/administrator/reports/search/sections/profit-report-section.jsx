@@ -163,46 +163,55 @@ const ProfitReportSection = () => {
 
     console.log("reportsss", reports);
 
-    const total_cost_store = reports?.data?.store?.reduce(
-        (sum, item) => sum + Number(item.cost),
-        0,
-    ) ?? 0;
-    const total_sales_store = reports?.data?.store?.reduce(
-        (sum, item) => sum + Number(item.sales),
-        0,
-    ) ?? 0;
+    const total_cost_store =
+        reports?.data?.store?.reduce(
+            (sum, item) => sum + Number(item.cost),
+            0,
+        ) ?? 0;
+    const total_sales_store =
+        reports?.data?.store?.reduce(
+            (sum, item) => sum + Number(item.sales),
+            0,
+        ) ?? 0;
 
-    const total_cost_shopee_bip = reports?.data?.shopee_bip?.reduce(
-        (sum, item) => sum + Number(item.cost),
-        0,
-    ) ?? 0;
-    const total_sales_shopee_bip = reports?.data?.shopee_bip?.reduce(
-        (sum, item) => sum + Number(item.sales),
-        0,
-    ) ?? 0;
+    const total_cost_shopee_bip =
+        reports?.data?.shopee_bip?.reduce(
+            (sum, item) => sum + Number(item.cost),
+            0,
+        ) ?? 0;
+    const total_sales_shopee_bip =
+        reports?.data?.shopee_bip?.reduce(
+            (sum, item) => sum + Number(item.sales),
+            0,
+        ) ?? 0;
 
-    const total_cost_shopee_ygd = reports?.data?.shopee_ygd?.reduce(
-        (sum, item) => sum + Number(item.cost),
-        0,
-    ) ?? 0;
-    const total_sales_shopee_ygd = reports?.data?.shopee_ygd?.reduce(
-        (sum, item) => sum + Number(item.sales),
-        0,
-    ) ?? 0;
+    const total_cost_shopee_ygd =
+        reports?.data?.shopee_ygd?.reduce(
+            (sum, item) => sum + Number(item.cost),
+            0,
+        ) ?? 0;
+    const total_sales_shopee_ygd =
+        reports?.data?.shopee_ygd?.reduce(
+            (sum, item) => sum + Number(item.sales),
+            0,
+        ) ?? 0;
 
-    const total_expenses = reports?.data?.expenses?.reduce(
-        (sum, item) => sum + Number(item.total_cost),
-        0,
-    ) ?? 0;
+    const total_expenses =
+        reports?.data?.expenses?.reduce(
+            (sum, item) => sum + Number(item.total_cost),
+            0,
+        ) ?? 0;
 
-    const total_cost_credit = reports?.data?.credit?.reduce(
-        (sum, item) => sum + Number(item.cost),
-        0,
-    ) ?? 0;
-    const total_sales_credit = reports?.data?.credit?.reduce(
-        (sum, item) => sum + Number(item.sales),
-        0,
-    ) ?? 0;
+    const total_cost_credit =
+        reports?.data?.credit?.reduce(
+            (sum, item) => sum + Number(item.cost),
+            0,
+        ) ?? 0;
+    const total_sales_credit =
+        reports?.data?.credit?.reduce(
+            (sum, item) => sum + Number(item.sales),
+            0,
+        ) ?? 0;
 
     const total_summary_cost =
         Number(total_cost_store) +
@@ -250,265 +259,257 @@ const ProfitReportSection = () => {
             document={
                 <Document>
                     {/* Store section — one Page per chunk */}
-                    {storeChunks.map(
-                        (chunk, pageIdx) => (
-                            <Page
-                                key={`store-${pageIdx}`}
-                                orientation="landscape"
-                                size="A4"
-                                style={styles.page}
-                            >
-                                {/* Report header only on the very first page */}
-                                {pageIdx === 0 && (
-                                    <View style={styles.header}>
-                                        <Text style={styles.title}>
-                                            Profit and Margin
-                                        </Text>
-                                        <View
-                                            style={{
-                                                width: "100%",
-                                                flexDirection: "row",
-                                                justifyContent: "space-between",
-                                                marginBottom: 10,
-                                            }}
-                                        >
-                                            <View style={{ flex: 1 }}>
-                                                <View
-                                                    style={{
-                                                        flexDirection: "row",
-                                                        marginBottom: 2,
-                                                    }}
-                                                >
-                                                    <Text
-                                                        style={{ width: 60 }}
-                                                    >
-                                                        Period:
-                                                    </Text>
-                                                    <Text>
-                                                        {initialStart} -{" "}
-                                                        {initialEnd}
-                                                    </Text>
-                                                </View>
-                                                <View
-                                                    style={{
-                                                        flexDirection: "row",
-                                                        marginBottom: 2,
-                                                    }}
-                                                >
-                                                    <Text
-                                                        style={{ width: 60 }}
-                                                    >
-                                                        Customer:
-                                                    </Text>
-                                                    <Text>
-                                                        {reports?.customer
-                                                            ?.name ?? "All"}
-                                                    </Text>
-                                                </View>
-                                                <View
-                                                    style={{
-                                                        flexDirection: "row",
-                                                        marginBottom: 2,
-                                                    }}
-                                                >
-                                                    <Text
-                                                        style={{ width: 60 }}
-                                                    >
-                                                        User:
-                                                    </Text>
-                                                    <Text>
-                                                        {reports?.user?.name ??
-                                                            "All"}
-                                                    </Text>
-                                                </View>
-                                                <View
-                                                    style={{
-                                                        flexDirection: "row",
-                                                        marginBottom: 2,
-                                                    }}
-                                                >
-                                                    <Text
-                                                        style={{ width: 60 }}
-                                                    >
-                                                        Product:
-                                                    </Text>
-                                                    <Text>
-                                                        {reports?.product
-                                                            ?.name ?? "All"}
-                                                    </Text>
-                                                </View>
+                    {storeChunks.map((chunk, pageIdx) => (
+                        <Page
+                            key={`store-${pageIdx}`}
+                            orientation="landscape"
+                            size="A4"
+                            style={styles.page}
+                        >
+                            {/* Report header only on the very first page */}
+                            {pageIdx === 0 && (
+                                <View style={styles.header}>
+                                    <Text style={styles.title}>
+                                        Profit and Margin
+                                    </Text>
+                                    <View
+                                        style={{
+                                            width: "100%",
+                                            flexDirection: "row",
+                                            justifyContent: "space-between",
+                                            marginBottom: 10,
+                                        }}
+                                    >
+                                        <View style={{ flex: 1 }}>
+                                            <View
+                                                style={{
+                                                    flexDirection: "row",
+                                                    marginBottom: 2,
+                                                }}
+                                            >
+                                                <Text style={{ width: 60 }}>
+                                                    Period:
+                                                </Text>
+                                                <Text>
+                                                    {initialStart} -{" "}
+                                                    {initialEnd}
+                                                </Text>
                                             </View>
                                             <View
                                                 style={{
-                                                    flex: 1,
-                                                    textAlign: "left",
+                                                    flexDirection: "row",
+                                                    marginBottom: 2,
                                                 }}
                                             >
-                                                <View
-                                                    style={{
-                                                        flexDirection: "row",
-                                                        justifyContent:
-                                                            "flex-start",
-                                                        marginBottom: 2,
-                                                    }}
-                                                >
-                                                    <Text
-                                                        style={{ width: 60 }}
-                                                    >
-                                                        Company: &emsp;{" "}
-                                                    </Text>
-                                                    <Text>
-                                                        Egie's Beauty Boutique
-                                                    </Text>
-                                                </View>
-                                                <View
-                                                    style={{
-                                                        flexDirection: "row",
-                                                        justifyContent:
-                                                            "flex-start",
-                                                    }}
-                                                >
-                                                    <Text
-                                                        style={{ width: 53 }}
-                                                    >
-                                                        Address:&emsp;{" "}
-                                                    </Text>
-                                                    <Text>
-                                                        Rizal Street Brgy V,
-                                                        6127 San Carlos City
-                                                    </Text>
-                                                </View>
+                                                <Text style={{ width: 60 }}>
+                                                    Customer:
+                                                </Text>
+                                                <Text>
+                                                    {reports?.customer?.name ??
+                                                        "All"}
+                                                </Text>
+                                            </View>
+                                            <View
+                                                style={{
+                                                    flexDirection: "row",
+                                                    marginBottom: 2,
+                                                }}
+                                            >
+                                                <Text style={{ width: 60 }}>
+                                                    User:
+                                                </Text>
+                                                <Text>
+                                                    {reports?.user?.name ??
+                                                        "All"}
+                                                </Text>
+                                            </View>
+                                            <View
+                                                style={{
+                                                    flexDirection: "row",
+                                                    marginBottom: 2,
+                                                }}
+                                            >
+                                                <Text style={{ width: 60 }}>
+                                                    Product:
+                                                </Text>
+                                                <Text>
+                                                    {reports?.product?.name ??
+                                                        "All"}
+                                                </Text>
+                                            </View>
+                                        </View>
+                                        <View
+                                            style={{
+                                                flex: 1,
+                                                textAlign: "left",
+                                            }}
+                                        >
+                                            <View
+                                                style={{
+                                                    flexDirection: "row",
+                                                    justifyContent:
+                                                        "flex-start",
+                                                    marginBottom: 2,
+                                                }}
+                                            >
+                                                <Text style={{ width: 60 }}>
+                                                    Company: &emsp;{" "}
+                                                </Text>
+                                                <Text>
+                                                    Egie's Beauty Boutique
+                                                </Text>
+                                            </View>
+                                            <View
+                                                style={{
+                                                    flexDirection: "row",
+                                                    justifyContent:
+                                                        "flex-start",
+                                                }}
+                                            >
+                                                <Text style={{ width: 60 }}>
+                                                    Address:
+                                                </Text>
+                                                <Text style={{ flex: 1 }}>
+                                                    Sacatel Bldg. V. Gustillo
+                                                    St. Brgy 5, San Carlos
+                                                    City, Negros Occidental
+                                                    6127 Philippines
+                                                </Text>
                                             </View>
                                         </View>
                                     </View>
-                                )}
+                                </View>
+                            )}
 
-                                <Text style={styles.title}>
-                                    Store
-                                    {storeChunks.length > 1
-                                        ? ` (${pageIdx + 1}/${storeChunks.length})`
-                                        : ""}
-                                </Text>
-                                <TableHeader />
-                                {chunk.map((item, idx) => (
-                                    <View style={styles.tableRow} key={idx}>
-                                        <Text style={styles.col}>
-                                            {item.cart_id}
-                                        </Text>
-                                        <Text style={styles.colSmall}>
-                                            {item.code}
-                                        </Text>
-                                        <Text style={styles.col}>
-                                            {item?.product}
-                                        </Text>
-                                        <Text style={styles.colSmall}>
-                                            {item.quantity}
-                                        </Text>
-                                        <Text style={styles.colSmall}>
-                                            {peso_value(item.cost)}
-                                        </Text>
-                                        <Text style={styles.colSmall}>
-                                            {peso_value(item.sales)}
-                                        </Text>
-                                        <Text style={styles.colSmall}>
-                                            {peso_value(item.profit)}
-                                        </Text>
-                                        <Text style={styles.colSmall}>
-                                            {item.margin}
-                                        </Text>
-                                    </View>
-                                ))}
-                                {/* Section totals on the last chunk only */}
-                                {pageIdx === storeChunks.length - 1 && (
-                                    <View style={styles.summary}>
-                                        <Text>
-                                            Total Cost:{" "}
-                                            {peso_value(total_cost_store)}
-                                        </Text>
-                                        <Text>
-                                            Total Sales:{" "}
-                                            {peso_value(total_sales_store)}
-                                        </Text>
-                                        <Text>
-                                            Total Profit:{" "}
-                                            {peso_value(
-                                                total_sales_store -
-                                                    total_cost_store,
-                                            )}
-                                        </Text>
-                                    </View>
-                                )}
-                            </Page>
-                        ),
-                    )}
+                            <Text style={styles.title}>
+                                Store
+                                {storeChunks.length > 1
+                                    ? ` (${pageIdx + 1}/${storeChunks.length})`
+                                    : ""}
+                            </Text>
+                            <TableHeader />
+                            {chunk.map((item, idx) => (
+                                <View style={styles.tableRow} key={idx}>
+                                    <Text style={styles.col}>
+                                        {item.cart_id}
+                                    </Text>
+                                    <Text style={styles.colSmall}>
+                                        {item.code}
+                                    </Text>
+                                    <Text style={styles.col}>
+                                        {item?.product}
+                                    </Text>
+                                    <Text style={styles.colSmall}>
+                                        {item.quantity}
+                                    </Text>
+                                    <Text style={styles.colSmall}>
+                                        {peso_value(item.cost)}
+                                    </Text>
+                                    <Text style={styles.colSmall}>
+                                        {peso_value(item.sales)}
+                                    </Text>
+                                    <Text style={styles.colSmall}>
+                                        {peso_value(item.profit)}
+                                    </Text>
+                                    <Text style={styles.colSmall}>
+                                        {item.margin}
+                                    </Text>
+                                </View>
+                            ))}
+                            {/* Section totals on the last chunk only */}
+                            {pageIdx === storeChunks.length - 1 && (
+                                <View style={styles.summary}>
+                                    <Text>
+                                        Total Cost:{" "}
+                                        {peso_value(total_cost_store)}
+                                    </Text>
+                                    <Text>
+                                        Total Sales:{" "}
+                                        {peso_value(total_sales_store)}
+                                    </Text>
+                                    <Text>
+                                        Total Profit:{" "}
+                                        {peso_value(
+                                            total_sales_store -
+                                                total_cost_store,
+                                        )}
+                                    </Text>
+                                </View>
+                            )}
+                        </Page>
+                    ))}
 
                     {/* Shopee — Beauty In Pink section */}
                     {(shopeeBipChunks.length > 0 ? shopeeBipChunks : [[]]).map(
                         (chunk, pageIdx) => {
                             console.log("chunkkkbip", chunk);
                             return (
-                            <Page
-                                key={`bip-${pageIdx}`}
-                                orientation="landscape"
-                                size="A4"
-                                style={styles.page}
-                            >
-                                <Text style={styles.title}>
-                                    Shopee — Beauty In Pink
-                                    {shopeeBipChunks.length > 1
-                                        ? ` (${pageIdx + 1}/${shopeeBipChunks.length})`
-                                        : ""}
-                                </Text>
-                                <TableHeader />
-                                {chunk.map((item, idx) => (
-                                    <View style={styles.tableRow} key={idx}>
-                                        <Text style={styles.col}>
-                                            {item.cart_id}
-                                        </Text>
-                                        <Text style={styles.colSmall}>
-                                            {item.code}
-                                        </Text>
-                                        <Text style={styles.col}>
-                                            {item?.product}
-                                        </Text>
-                                        <Text style={styles.colSmall}>
-                                            {item.quantity}
-                                        </Text>
-                                        <Text style={styles.colSmall}>
-                                            {peso_value(item.cost)}
-                                        </Text>
-                                        <Text style={styles.colSmall}>
-                                            {peso_value(item.sales ?? 0)}
-                                        </Text>
-                                        <Text style={styles.colSmall}>
-                                            {peso_value(item.profit)}
-                                        </Text>
-                                        <Text style={styles.colSmall}>
-                                            {item.margin}
-                                        </Text>
-                                    </View>
-                                ))}
-                                {pageIdx === shopeeBipChunks.length - 1 && (
-                                    <View style={styles.summary}>
-                                        <Text>
-                                            Total Cost:{" "}
-                                            {peso_value(total_cost_shopee_bip)}
-                                        </Text>
-                                        <Text>
-                                            Total Sales:{" "}
-                                            {peso_value(total_sales_shopee_bip)}
-                                        </Text>
-                                        <Text>
-                                            Total Profit:{" "}
-                                            {peso_value(
-                                                total_sales_shopee_bip -
+                                <Page
+                                    key={`bip-${pageIdx}`}
+                                    orientation="landscape"
+                                    size="A4"
+                                    style={styles.page}
+                                >
+                                    <Text style={styles.title}>
+                                        Shopee — Beauty In Pink
+                                        {shopeeBipChunks.length > 1
+                                            ? ` (${pageIdx + 1}/${shopeeBipChunks.length})`
+                                            : ""}
+                                    </Text>
+                                    <TableHeader />
+                                    {chunk.map((item, idx) => (
+                                        <View style={styles.tableRow} key={idx}>
+                                            <Text style={styles.col}>
+                                                {item.cart_id}
+                                            </Text>
+                                            <Text style={styles.colSmall}>
+                                                {item.code}
+                                            </Text>
+                                            <Text style={styles.col}>
+                                                {item?.product}
+                                            </Text>
+                                            <Text style={styles.colSmall}>
+                                                {item.quantity}
+                                            </Text>
+                                            <Text style={styles.colSmall}>
+                                                {peso_value(item.cost)}
+                                            </Text>
+                                            <Text style={styles.colSmall}>
+                                                {peso_value(item.sales ?? 0)}
+                                            </Text>
+                                            <Text style={styles.colSmall}>
+                                                {peso_value(item.profit)}
+                                            </Text>
+                                            <Text style={styles.colSmall}>
+                                                {item.margin}
+                                            </Text>
+                                        </View>
+                                    ))}
+                                    {pageIdx === shopeeBipChunks.length - 1 && (
+                                        <View style={styles.summary}>
+                                            <Text>
+                                                Total Cost:{" "}
+                                                {peso_value(
                                                     total_cost_shopee_bip,
-                                            )}
-                                        </Text>
-                                    </View>
-                                )}
-                            </Page>
-                        );
+                                                )}
+                                            </Text>
+                                            <Text>
+                                                Total Sales:{" "}
+                                                {peso_value(
+                                                    total_sales_shopee_bip,
+                                                )}
+                                            </Text>
+                                            <Text>
+                                                Total Profit:{" "}
+                                                {peso_value(
+                                                    total_sales_shopee_bip -
+                                                        total_cost_shopee_bip,
+                                                )}
+                                            </Text>
+                                        </View>
+                                    )}
+                                </Page>
+                            );
                         },
                     )}
 
@@ -580,77 +581,73 @@ const ProfitReportSection = () => {
                     )}
 
                     {/* Credits section */}
-                    {creditChunks.map(
-                        (chunk, pageIdx) => (
-                            <Page
-                                key={`credit-${pageIdx}`}
-                                orientation="landscape"
-                                size="A4"
-                                style={styles.page}
-                            >
-                                <Text style={styles.title}>
-                                    Credits
-                                    {creditChunks.length > 1
-                                        ? ` (${pageIdx + 1}/${creditChunks.length})`
-                                        : ""}
-                                </Text>
-                                <TableHeader />
-                                {chunk.map((item, idx) => (
-                                    <View style={styles.tableRow} key={idx}>
-                                        <Text style={styles.col}>
-                                            {item.cart_id}
-                                        </Text>
-                                        <Text style={styles.colSmall}>
-                                            {item.code}
-                                        </Text>
-                                        <Text style={styles.col}>
-                                            {item?.product}
-                                        </Text>
-                                        <Text style={styles.colSmall}>
-                                            {item.quantity}
-                                        </Text>
-                                        <Text style={styles.colSmall}>
-                                            {peso_value(item.cost)}
-                                        </Text>
-                                        <Text style={styles.colSmall}>
-                                            {peso_value(item.sales)}
-                                        </Text>
-                                        <Text style={styles.colSmall}>
-                                            {peso_value(item.profit)}
-                                        </Text>
-                                        <Text style={styles.colSmall}>
-                                            {item.margin}
-                                        </Text>
-                                    </View>
-                                ))}
-                                {pageIdx === creditChunks.length - 1 && (
-                                    <View style={styles.summary}>
-                                        <Text>
-                                            Total Cost:{" "}
-                                            {peso_value(total_cost_credit)}
-                                        </Text>
-                                        <Text>
-                                            Total Sales:{" "}
-                                            {peso_value(total_sales_credit)}
-                                        </Text>
-                                        <Text>
-                                            Total Profit:{" "}
-                                            {peso_value(
-                                                total_sales_credit -
-                                                    total_cost_credit,
-                                            )}
-                                        </Text>
-                                    </View>
-                                )}
-                            </Page>
-                        ),
-                    )}
+                    {creditChunks.map((chunk, pageIdx) => (
+                        <Page
+                            key={`credit-${pageIdx}`}
+                            orientation="landscape"
+                            size="A4"
+                            style={styles.page}
+                        >
+                            <Text style={styles.title}>
+                                Credits
+                                {creditChunks.length > 1
+                                    ? ` (${pageIdx + 1}/${creditChunks.length})`
+                                    : ""}
+                            </Text>
+                            <TableHeader />
+                            {chunk.map((item, idx) => (
+                                <View style={styles.tableRow} key={idx}>
+                                    <Text style={styles.col}>
+                                        {item.cart_id}
+                                    </Text>
+                                    <Text style={styles.colSmall}>
+                                        {item.code}
+                                    </Text>
+                                    <Text style={styles.col}>
+                                        {item?.product}
+                                    </Text>
+                                    <Text style={styles.colSmall}>
+                                        {item.quantity}
+                                    </Text>
+                                    <Text style={styles.colSmall}>
+                                        {peso_value(item.cost)}
+                                    </Text>
+                                    <Text style={styles.colSmall}>
+                                        {peso_value(item.sales)}
+                                    </Text>
+                                    <Text style={styles.colSmall}>
+                                        {peso_value(item.profit)}
+                                    </Text>
+                                    <Text style={styles.colSmall}>
+                                        {item.margin}
+                                    </Text>
+                                </View>
+                            ))}
+                            {pageIdx === creditChunks.length - 1 && (
+                                <View style={styles.summary}>
+                                    <Text>
+                                        Total Cost:{" "}
+                                        {peso_value(total_cost_credit)}
+                                    </Text>
+                                    <Text>
+                                        Total Sales:{" "}
+                                        {peso_value(total_sales_credit)}
+                                    </Text>
+                                    <Text>
+                                        Total Profit:{" "}
+                                        {peso_value(
+                                            total_sales_credit -
+                                                total_cost_credit,
+                                        )}
+                                    </Text>
+                                </View>
+                            )}
+                        </Page>
+                    ))}
 
                     {/* Summary page */}
                     <Page orientation="landscape" size="A4" style={styles.page}>
-                        <Text
-                            style={[styles.summary_title, { marginTop: 40 }]}
-                        >
+                        <Text style={[styles.summary_title, { marginTop: 40 }]}>
                             Summary
                         </Text>
                         <View style={styles.summary_all}>
@@ -679,7 +676,11 @@ const ProfitReportSection = () => {
                 return (
                     <iframe
                         src={url}
-                        style={{ width: "100%", height: "100vh", border: "none" }}
+                        style={{
+                            width: "100%",
+                            height: "100vh",
+                            border: "none",
+                        }}
                     />
                 );
             }}
