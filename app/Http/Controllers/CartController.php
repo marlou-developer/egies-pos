@@ -1138,94 +1138,103 @@ class CartController extends Controller
 
     public function update_users_notifications()
     {
+        $now = Carbon::now();
+        $today = $now->toDateString();
 
-        $query = Cart::where('due_date', '<', Carbon::now())
+        // 1. Pluck only the IDs. 
+        // (Removed the map() functions from the original code because the 'stock_status' property was never actually used).
+        $overDueIds = Cart::where('due_date', '<', $now)
             ->whereIn('status', ['Pending', 'Partial'])
-            ->with(['customer']);
+            ->pluck('id');
 
-        $over_due = $query->get();
-
-        $out_stocks = Product::where('quantity', 0)
+        $outOfStockIds = Product::where('quantity', 0)
             ->notSoftDeleted()
-            ->get()
-            ->map(function ($product) {
-                $product->stock_status = 'Out of Stock';
-                return $product;
-            });
+            ->pluck('id');
 
-        $stocks = Product::whereBetween('quantity', [1, 10])
+        $lowStockIds = Product::whereBetween('quantity', [1, 10])
             ->notSoftDeleted()
-            ->get()
-            ->map(function ($product) {
-                $product->stock_status = 'Low Stock';
-                return $product;
-            });
+            ->pluck('id');
 
-        $users = User::all();
-        foreach ($users as $key => $user) {
-            // Handle out of stock notifications
-            foreach ($out_stocks as $key => $value) {
-                $notif = Notification::where([
-                    ['user_id', '=', $user->id],
-                    ['cp_id', '=', $value->id],
-                    ['type', '=', 'product'],
-                    ['status', '=', 'out_stocks'],
-                ])->whereDate('date', Carbon::now()->toDateString())->first();
-
-                if (!$notif) {
-                    Notification::create([
-                        'user_id' => $user->id,
-                        'cp_id' => $value->id,
-                        'type' => "product",
-                        'status' => "out_stocks",
-                        'date' => Carbon::now(),
-                        'is_read' => "false",
-                    ]);
-                }
-            }
-
-            // Handle low stock notifications
-            foreach ($stocks as $key => $value) {
-                $notif = Notification::where([
-                    ['user_id', '=', $user->id],
-                    ['cp_id', '=', $value->id],
-                    ['type', '=', 'product'],
-                    ['status', '=', 'low_stock'],
-                ])->whereDate('date', Carbon::now()->toDateString())->first();
-
-                if (!$notif) {
-                    Notification::create([
-                        'user_id' => $user->id,
-                        'cp_id' => $value->id,
-                        'type' => "product",
-                        'status' => "low_stock",
-                        'date' => Carbon::now(),
-                        'is_read' => "false",
-                    ]);
-                }
-            }
-
-            // Handle overdue notifications
-            foreach ($over_due as $key => $value) {
-                $notif = Notification::where([
-                    ['user_id', '=', $user->id],
-                    ['cp_id', '=', $value->id],
-                    ['type', '=', 'cart'],
-                    ['status', '=', 'over_due'],
-                ])->whereDate('date', Carbon::now()->toDateString())->first();
-
-                if (!$notif) {
-                    Notification::create([
-                        'user_id' => $user->id,
-                        'cp_id' => $value->id,
-                        'type' => "cart",
-                        'status' => "over_due",
-                        'date' => Carbon::now(),
-                        'is_read' => "false",
-                    ]);
-                }
-            }
+        // Early exit if there is absolutely nothing to notify anyone about
+        if ($overDueIds->isEmpty() && $outOfStockIds->isEmpty() && $lowStockIds->isEmpty()) {
+            return response()->json('success', 200);
         }
+
+        // 2. Chunk users to prevent memory exhaustion (e.g., 500 at a time)
+        User::chunk(500, function ($users) use ($now, $today, $overDueIds, $outOfStockIds, $lowStockIds) {
+            $userIds = $users->pluck('id');
+
+            // 3. Fetch ALL existing notifications for this chunk of users today in ONE query.
+            // We create a unique string key for O(1) instantaneous memory lookups.
+            $existingNotifs = Notification::whereIn('user_id', $userIds)
+                ->whereDate('date', $today)
+                ->get(['user_id', 'cp_id', 'type', 'status']) // Only fetch what we need
+                ->mapWithKeys(function ($notif) {
+                    $key = "{$notif->user_id}_{$notif->cp_id}_{$notif->type}_{$notif->status}";
+                    return [$key => true];
+                });
+
+            $notificationsToInsert = [];
+
+            foreach ($users as $user) {
+
+                // Handle out of stock notifications
+                foreach ($outOfStockIds as $cp_id) {
+                    $key = "{$user->id}_{$cp_id}_product_out_stocks";
+                    if (!isset($existingNotifs[$key])) {
+                        $notificationsToInsert[] = [
+                            'user_id'    => $user->id,
+                            'cp_id'      => $cp_id,
+                            'type'       => 'product',
+                            'status'     => 'out_stocks',
+                            'date'       => $now,
+                            'is_read'    => "false", // Note: Consider changing to boolean false if your DB column is boolean
+                            'created_at' => $now,
+                            'updated_at' => $now,
+                        ];
+                    }
+                }
+
+                // Handle low stock notifications
+                foreach ($lowStockIds as $cp_id) {
+                    $key = "{$user->id}_{$cp_id}_product_low_stock";
+                    if (!isset($existingNotifs[$key])) {
+                        $notificationsToInsert[] = [
+                            'user_id'    => $user->id,
+                            'cp_id'      => $cp_id,
+                            'type'       => 'product',
+                            'status'     => 'low_stock',
+                            'date'       => $now,
+                            'is_read'    => "false",
+                            'created_at' => $now,
+                            'updated_at' => $now,
+                        ];
+                    }
+                }
+
+                // Handle overdue notifications
+                foreach ($overDueIds as $cp_id) {
+                    $key = "{$user->id}_{$cp_id}_cart_over_due";
+                    if (!isset($existingNotifs[$key])) {
+                        $notificationsToInsert[] = [
+                            'user_id'    => $user->id,
+                            'cp_id'      => $cp_id,
+                            'type'       => 'cart',
+                            'status'     => 'over_due',
+                            'date'       => $now,
+                            'is_read'    => "false",
+                            'created_at' => $now,
+                            'updated_at' => $now,
+                        ];
+                    }
+                }
+            }
+
+            // 4. Bulk insert the new notifications in chunks to respect MySQL/PostgreSQL binding limits
+            foreach (array_chunk($notificationsToInsert, 1000) as $insertChunk) {
+                Notification::insert($insertChunk);
+            }
+        });
 
         return response()->json('success', 200);
     }
@@ -1530,7 +1539,7 @@ class CartController extends Controller
                 'price' => $price,
                 'fixed_price' => (($price * $quantity) - ($discount + $split_discount))  / $quantity,
                 'total' => ($price * $quantity) - ($discount + $split_discount),
-                
+
             ]);
 
             // Try to find product by product_id first, fallback to id if needed
