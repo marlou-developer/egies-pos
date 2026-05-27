@@ -103,6 +103,43 @@ const styles = StyleSheet.create({
     },
 });
 
+const ROWS_PER_PAGE = 30;
+
+const chunkArray = (arr, size) => {
+    const chunks = [];
+    for (let i = 0; i < arr.length; i += size) {
+        chunks.push(arr.slice(i, i + size));
+    }
+    return chunks;
+};
+
+// Flatten nested data into a flat list of rows for pagination
+const flattenReportData = (data) => {
+    const rows = [];
+    if (!data) return rows;
+    data.forEach((dayItem) => {
+        (dayItem.carts ?? []).forEach((cart) => {
+            (cart.cart_items ?? []).forEach((cartItem) => {
+                rows.push({
+                    type: "item",
+                    customerName: cart?.customer?.name ?? "Walk-in",
+                    productId: cartItem?.product?.id,
+                    productName: cartItem?.product?.name,
+                    quantity: cartItem?.quantity,
+                    total: cartItem?.total,
+                    createdAt: cartItem?.created_at,
+                });
+            });
+        });
+        rows.push({
+            type: "summary",
+            date: dayItem.date,
+            totalSales: dayItem.total_sales,
+        });
+    });
+    return rows;
+};
+
 const DailySalesReportSection = () => {
     const { reports } = useSelector((store) => store.carts);
     const params = new URLSearchParams(window.location.search);
@@ -144,6 +181,8 @@ const DailySalesReportSection = () => {
             setPdfReady(true);
         }
     }, [reports]);
+
+    const dataChunks = chunkArray(flattenReportData(reports?.data), ROWS_PER_PAGE);
 
     console.log("reportsreports", reports.data);
 
@@ -228,7 +267,17 @@ const DailySalesReportSection = () => {
                 }}
             >
                 <Document>
-                    <Page size="A4" style={styles.page}>
+                    {dataChunks.length === 0 ? (
+                        <Page size="A4" style={styles.page}>
+                            <View style={styles.header}>
+                                <Text style={styles.title}>DAILY SALES</Text>
+                            </View>
+                            <Text>No data available.</Text>
+                        </Page>
+                    ) : (
+                        dataChunks.map((chunk, pageIdx) => (
+                    <Page key={pageIdx} size="A4" style={styles.page}>
+                        {pageIdx === 0 && (
                         <View style={styles.header}>
                             <Text style={styles.title}>DAILY SALES</Text>
 
@@ -326,6 +375,7 @@ const DailySalesReportSection = () => {
                                 </View>
                             </View>
                         </View>
+                        )}
 
                         {/* Table Header */}
                         <View style={styles.tableHeader}>
@@ -338,136 +388,63 @@ const DailySalesReportSection = () => {
                         </View>
 
                         {/* Table Rows */}
-                        {reports?.data?.map((item, idx) => {
-                            return (
-                                <View key={idx}>
-                                    <View>
-                                        {item?.carts.length != 0 &&
-                                            item?.carts?.map((res, i) => {
-                                                return (
-                                                    <View key={i}>
-                                                        {res.cart_items
-                                                            .length != 0 &&
-                                                            res.cart_items.map(
-                                                                (result) => {
-                                                                    console.log(
-                                                                        "waaassssss",
-                                                                        res
-                                                                            ?.customer
-                                                                            ?.name ??
-                                                                            "Walk-in",
-                                                                    );
-                                                                    return (
-                                                                        <View
-                                                                            style={
-                                                                                styles.tableRow
-                                                                            }
-                                                                            key={
-                                                                                idx
-                                                                            }
-                                                                        >
-                                                                            <Text
-                                                                                style={
-                                                                                    styles.colSmall
-                                                                                }
-                                                                            >
-                                                                                {res
-                                                                                    ?.customer
-                                                                                    ?.name ??
-                                                                                    "Walk-in"}
-                                                                            </Text>
-                                                                            <Text
-                                                                                style={
-                                                                                    styles.colSmall
-                                                                                }
-                                                                            >
-                                                                                {
-                                                                                    result
-                                                                                        ?.product
-                                                                                        .id
-                                                                                }
-                                                                            </Text>
-                                                                            <Text
-                                                                                style={
-                                                                                    styles.colSmall
-                                                                                }
-                                                                            >
-                                                                                {
-                                                                                    result
-                                                                                        ?.product
-                                                                                        .name
-                                                                                }
-                                                                            </Text>
-                                                                            <Text
-                                                                                style={
-                                                                                    styles.colSmall
-                                                                                }
-                                                                            >
-                                                                                {
-                                                                                    result?.quantity
-                                                                                }
-                                                                            </Text>
-                                                                            <Text
-                                                                                style={
-                                                                                    styles.colSmall
-                                                                                }
-                                                                            >
-                                                                                {peso_value(
-                                                                                    result?.total,
-                                                                                )}
-                                                                            </Text>
-                                                                            <Text
-                                                                                style={
-                                                                                    styles.colSmall
-                                                                                }
-                                                                            >
-                                                                                {moment(
-                                                                                    result.created_at,
-                                                                                ).format(
-                                                                                    "LLL",
-                                                                                )}
-                                                                            </Text>
-                                                                        </View>
-                                                                    );
-                                                                },
-                                                            )}
-                                                    </View>
-                                                );
-                                            })}
-                                    </View>
+                        {chunk.map((row, idx) => {
+                            if (row.type === "summary") {
+                                return (
                                     <View
+                                        key={idx}
                                         style={{
                                             ...styles.tableRow,
                                             backgroundColor: "black",
                                             color: "white",
                                         }}
-                                        key={idx}
                                     >
                                         <Text style={styles.colSmall}>
-                                            {moment(item.date).format("LL")}
+                                            {moment(row.date).format("LL")}
                                         </Text>
+                                        <Text style={styles.colSmall}>&nbsp;</Text>
+                                        <Text style={styles.colSmall}>&nbsp;</Text>
                                         <Text style={styles.colSmall}>
-                                            &nbsp;
+                                            Total: {peso_value(row.totalSales)}
                                         </Text>
-                                        <Text style={styles.colSmall}>
-                                            &nbsp;
-                                        </Text>
-                                        <Text style={styles.colSmall}>
-                                            Total:{" "}
-                                            {peso_value(item.total_sales)}
-                                        </Text>
+                                        <Text style={styles.colSmall}>&nbsp;</Text>
+                                        <Text style={styles.colSmall}>&nbsp;</Text>
                                     </View>
+                                );
+                            }
+                            return (
+                                <View style={styles.tableRow} key={idx}>
+                                    <Text style={styles.colSmall}>
+                                        {row.customerName}
+                                    </Text>
+                                    <Text style={styles.colSmall}>
+                                        {row.productId}
+                                    </Text>
+                                    <Text style={styles.colSmall}>
+                                        {row.productName}
+                                    </Text>
+                                    <Text style={styles.colSmall}>
+                                        {row.quantity}
+                                    </Text>
+                                    <Text style={styles.colSmall}>
+                                        {peso_value(row.total)}
+                                    </Text>
+                                    <Text style={styles.colSmall}>
+                                        {moment(row.createdAt).format("LLL")}
+                                    </Text>
                                 </View>
                             );
                         })}
 
-                        {/* Summary */}
+                        {/* Summary on last page only */}
+                        {pageIdx === dataChunks.length - 1 && (
                         <View style={styles.summary}>
-                            {/* <Text>Total Cost: 42,048.60</Text> */}
                             <Text>Total Sales:{peso_value(total_sales)}</Text>
-                            {/* <Text>Total Profit: 10,830.40</Text> */}
                         </View>
+                        )}
                     </Page>
+                        ))
+                    )}
                 </Document>
             </PDFViewer>
         </div>
