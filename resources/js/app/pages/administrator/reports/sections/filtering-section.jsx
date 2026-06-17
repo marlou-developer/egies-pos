@@ -104,11 +104,18 @@ export default function FilteringSection({ setForm, form }) {
                                 value: "all",
                             },
                             ...report_items?.products?.map((res) => ({
-                                label: res.name + ` (₱${res.cost})`,
+                                label: res.name + ` [₱${res.cost}]`,
                                 value: res.id,
+                                softDeleted: res.is_soft_deleted === "1",
                             })),
                         ],
                         disabled: form.type == "Expenses",
+                        formatOptionLabel: (option) => (
+                            <span style={{ color: option.softDeleted ? "red" : "inherit" }}>
+                                {option.label}
+                                {option.softDeleted && " [Soft Deleted]"}
+                            </span>
+                        ),
                     },
                     {
                         label: "Product group",
@@ -125,7 +132,7 @@ export default function FilteringSection({ setForm, form }) {
                         ],
                         disabled: form.type == "Expenses",
                     },
-                ].map(({ label, id, options, disabled }) => {
+                ].map(({ label, id, options, disabled, formatOptionLabel }) => {
                     return (
                         <div key={id}>
                             <label className="block mb-1 text-sm">
@@ -142,6 +149,7 @@ export default function FilteringSection({ setForm, form }) {
                                 }
                                 defaultValue={[options[0]]}
                                 isSearchable
+                                formatOptionLabel={formatOptionLabel}
                                 className="text-black w-full"
                             />
                         </div>
