@@ -27,7 +27,7 @@ export default function AddStocksSection({ data }) {
                     product_id: String(data?.id),
                     price: costOption === "same" ? data?.cost : null,
                     remaining: String(data?.quantity),
-                })
+                }),
             );
             await store.dispatch(get_over_due_thunk());
             await store.dispatch(get_product_thunk());
@@ -75,9 +75,14 @@ export default function AddStocksSection({ data }) {
             <Modal open={modalOpen} setOpen={setModalOpen}>
                 <form onSubmit={addStock}>
                     <div className="mt-6 flex flex-col gap-5">
-                        <h1 className="font-bold text-xl text-pink-500">
-                            Add Stock(s)
-                        </h1>
+                        <div className="flex justify-between">
+                            <h1 className="font-bold text-xl text-pink-500">
+                                Add Stock(s)
+                            </h1>
+                            <div className="mt-1">
+                                <p>Remaining stocks: {data?.quantity}</p>
+                            </div>
+                        </div>
                         <div>
                             <Input
                                 onChange={(e) =>
@@ -103,7 +108,7 @@ export default function AddStocksSection({ data }) {
                                 }
                                 value={form.delivery_id || ""}
                                 name="delivery_id"
-                                label="Delivery ID"
+                                label="Delivery Receipt / Statement"
                                 type="text"
                                 required
                             />
@@ -160,7 +165,7 @@ export default function AddStocksSection({ data }) {
                                     Same cost price = ₱
                                     {parseFloat(data?.cost).toLocaleString(
                                         "en-PH",
-                                        { minimumFractionDigits: 2 }
+                                        { minimumFractionDigits: 2 },
                                     )}
                                 </option>
                                 <option value="different">

@@ -6,32 +6,47 @@ use App\Models\Product;
 use App\Models\Stock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class StockController extends Controller
 {
 
     public function minus_stock(Request $request)
     {
-        $product = Product::where('id', $request->product_id)->first();
         $user = Auth::user();
-        if ($product) {
-            $product->update([
-                'quantity' => $product->quantity - $request->quantity
-            ]);
+
+        try {
+            DB::transaction(function () use ($request, $user) {
+                $product = Product::where('id', $request->product_id)->lockForUpdate()->first();
+
+                if ($product) {
+                    $newQuantity = $product->quantity - $request->quantity;
+
+                    if ($newQuantity < 0) {
+                        throw new \Exception('Insufficient stock. Cannot deduct more than available quantity.');
+                    }
+
+                    $product->update(['quantity' => $newQuantity]);
+                }
+
+                Stock::create([
+                    'product_id' => $request->product_id,
+                    'user_id' => $user->id,
+                    'date' => $request->date,
+                    'delivery_id' => $request->delivery_id,
+                    'quantity' => $request->quantity,
+                    'remaining' => $request->remaining,
+                    'price' => $request->price,
+                    'status' => 'deducted',
+                    'supplier_id' => 'N/A',
+                ]);
+            });
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 422);
         }
-
-
-        Stock::create([
-            'product_id' => $request->product_id,
-            'user_id' => $user->id,
-            'date' => $request->date,
-            'delivery_id' => $request->delivery_id,
-            'quantity' => $request->quantity,
-            'remaining' => $request->remaining,
-            'price' => $request->price,
-            'status' => 'deducted',
-            'supplier_id' => 'N/A',
-        ]);
 
         return response()->json([
             'status' => 'success',

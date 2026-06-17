@@ -83,9 +83,14 @@ export default function MinusStockSection({ data }) {
             <Modal open={modalOpen} setOpen={setModalOpen}>
                 <form onSubmit={minusStock}>
                     <div className="mt-6 flex flex-col gap-5">
-                        <h1 className="font-bold text-xl text-pink-500">
-                            Minus Stock(s)
-                        </h1>
+                        <div className="flex justify-between">
+                            <h1 className="font-bold text-xl text-pink-500">
+                                Minus Stock(s)
+                            </h1>
+                            <div className="mt-1">
+                                <p>Remaining stocks: {data?.quantity}</p>
+                            </div>
+                        </div>
                         <Input
                             onChange={(e) =>
                                 setForm({
@@ -108,7 +113,7 @@ export default function MinusStockSection({ data }) {
                             }
                             // value={form.delivery_id || ""}
                             name="delivery_id"
-                            label="Delivery Receipt"
+                            label="Receipt / Statement"
                             type="text"
                             required
                         />
