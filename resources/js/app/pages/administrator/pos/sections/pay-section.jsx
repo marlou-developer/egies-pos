@@ -11,7 +11,7 @@ import {
     CheckIcon,
     CreditCardIcon,
 } from "@heroicons/react/24/outline";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaCartShopping } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import {
@@ -52,6 +52,18 @@ export default function PaySection({
     const [id, setId] = useState(0);
     const [isDatetimeEditing, setIsDatetimeEditing] = useState(false); // Track if user is editing datetime
     const [blurTimeout, setBlurTimeout] = useState(null); // Track timeout ID
+    const customerDropdownRef = useRef(null);
+
+    // Close customer dropdown when clicking outside
+    useEffect(() => {
+        function handleClickOutside(e) {
+            if (customerDropdownRef.current && !customerDropdownRef.current.contains(e.target)) {
+                setCustomer(null);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     // Real-time clock update
     useEffect(() => {
@@ -582,91 +594,71 @@ export default function PaySection({
                                 )}
 
                                 {form.is_customer && (
-                                    <Input
-                                        onChange={(e) => search_customer(e)}
-                                        name="customer"
-                                        label="Search Customer"
-                                    />
-                                )}
-                                {!isSearchLoading && customer?.length == 0 && (
-                                    <div className="text-red-600">
-                                        Customer not found!
-                                    </div>
-                                )}
-                                {isSearchLoading && customer?.length == 0 && (
-                                    <div className="text-gray-600">
-                                        Loading...
-                                    </div>
-                                )}
-                                {form?.is_customer && customer?.length != 0 && (
-                                    <div className="max-h-40 overflow-y-auto px-2 border border-gray-200 rounded-md">
-                                        <table className="min-w-full divide-y divide-gray-300">
-                                            <tbody className="divide-y divide-gray-200">
-                                                {customer?.map(
-                                                    (customer, i) => (
-                                                        <tr key={i}>
-                                                            <td className="capitalize pr-3 py-2 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-0">
-                                                                {customer.name}
-                                                            </td>
-                                                            <td className="relative pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-0">
-                                                                {form?.customer
-                                                                    ?.id ==
-                                                                    customer.id && (
-                                                                    <div className="flex items-end justify-end gap-6 w-full">
-                                                                        <button className="flex gap-1">
-                                                                            <CheckIcon className="h-4 w-4 text-green-500" />
-                                                                            <div className=" text-green-500">
-                                                                                SELECTED
-                                                                            </div>{" "}
-                                                                        </button>
-                                                                        <button
-                                                                            onClick={() =>
-                                                                                setForm(
-                                                                                    {
-                                                                                        ...form,
-                                                                                        customer:
-                                                                                            null,
-                                                                                    },
-                                                                                )
-                                                                            }
-                                                                            className="text-pink-600 hover:text-pink-900"
-                                                                        >
-                                                                            REMOVE
-                                                                        </button>
-                                                                    </div>
-                                                                )}
-
-                                                                {form?.customer
-                                                                    ?.id !=
-                                                                    customer.id && (
-                                                                    <>
-                                                                        <button
-                                                                            onClick={() =>
-                                                                                setForm(
-                                                                                    {
-                                                                                        ...form,
-                                                                                        customer:
-                                                                                            customer,
-                                                                                    },
-                                                                                )
-                                                                            }
-                                                                            className="text-pink-600 hover:text-pink-900"
-                                                                        >
-                                                                            SELECT
-                                                                        </button>
-                                                                    </>
-                                                                )}
-                                                            </td>
-                                                        </tr>
-                                                    ),
+                                    <div className="relative" ref={customerDropdownRef}>
+                                        {form?.customer ? (
+                                            <div className="mb-1.5">
+                                                <label className="block text-sm font-medium text-gray-700">
+                                                    Customer
+                                                </label>
+                                                <div className="flex items-center gap-2 px-3 py-2 border border-pink-400 rounded-md bg-pink-50">
+                                                    <CheckIcon className="h-4 w-4 text-pink-500 shrink-0" />
+                                                    <span className="flex-1 capitalize text-sm font-medium text-gray-900 truncate">
+                                                        {form.customer.name}
+                                                    </span>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setForm({
+                                                                ...form,
+                                                                customer: null,
+                                                            });
+                                                            setCustomer(null);
+                                                        }}
+                                                        className="shrink-0 text-pink-500 hover:text-pink-700 text-lg leading-none font-bold"
+                                                        title="Remove customer"
+                                                    >
+                                                        &times;
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <>
+                                                <Input
+                                                    onChange={(e) => search_customer(e)}
+                                                    name="customer"
+                                                    label="Search Customer"
+                                                />
+                                                {!isSearchLoading && customer?.length == 0 && customer !== null && (
+                                                    <div className="absolute z-50 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg px-3 py-2 text-red-600 text-sm">
+                                                        Customer not found!
+                                                    </div>
                                                 )}
-                                            </tbody>
-                                        </table>
+                                                {customer?.length > 0 && (
+                                                    <div className="absolute z-50 left-0 right-0 mt-1 max-h-40 overflow-y-auto bg-white border border-gray-200 rounded-md shadow-lg">
+                                                        {customer.map((c, i) => (
+                                                            <button
+                                                                key={i}
+                                                                type="button"
+                                                                onClick={() =>
+                                                                    setForm({
+                                                                        ...form,
+                                                                        customer: c,
+                                                                    })
+                                                                }
+                                                                className="w-full text-left capitalize px-4 py-2 text-sm text-gray-900 hover:bg-pink-50 hover:text-pink-700 border-b border-gray-100 last:border-b-0"
+                                                            >
+                                                                {c.name}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </>
+                                        )}
                                     </div>
                                 )}
                                 {form?.is_credit &&
                                     form?.is_customer &&
-                                    customer?.length != 0 && (
+                                    form?.customer && (
                                         <Input
                                             onChange={(e) =>
                                                 setForm({
@@ -706,7 +698,7 @@ export default function PaySection({
                                                 payment_type: e.target.value,
                                             })
                                         }
-                                        className="rounded-md text-gray-500"
+                                        className="rounded-md"
                                         label="Mode of Payment"
                                     >
                                         <option disabled selected>
