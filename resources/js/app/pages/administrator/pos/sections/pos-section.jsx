@@ -71,7 +71,7 @@ export default function PosSection() {
     const subtractPCS = (value) => {
         const updated = carts
             .map((item) =>
-                item.id === value.id ? { ...item, pcs: item.pcs - 1 } : item
+                item.id === value.id ? { ...item, pcs: item.pcs - 1 } : item,
             )
             .filter((item) => item.pcs > 0); // ⬅️ Remove items with 0 pcs
 
@@ -86,7 +86,7 @@ export default function PosSection() {
                       sub_price: result[value],
                       type_item_discount: value,
                   }
-                : item
+                : item,
         );
         dispatch(setCarts(updated));
     }
@@ -128,7 +128,7 @@ export default function PosSection() {
         const updated = carts.map((item) =>
             item.id === value.id
                 ? { ...item, discount: parseFloat(discountValue) || 0 }
-                : item
+                : item,
         );
         dispatch(setCarts(updated));
     };
@@ -136,12 +136,12 @@ export default function PosSection() {
     const subtotal = carts.reduce(
         (sum, product) =>
             sum + parseFloat(product.sub_price) * parseInt(product.pcs),
-        0
+        0,
     );
 
     const totalItemDiscount = carts.reduce(
         (sum, product) => sum + (parseFloat(product.discount) || 0),
-        0
+        0,
     );
 
     const totalDiscount = totalItemDiscount + parseFloat(overallDiscount || 0);
@@ -152,7 +152,7 @@ export default function PosSection() {
                 sum +
                 (parseFloat(product.sub_price) * parseInt(product.pcs) -
                     (parseFloat(product.discount) || 0)),
-            0
+            0,
         ) - parseFloat(overallDiscount || 0);
 
     return (
@@ -245,15 +245,15 @@ export default function PosSection() {
                                                                     const updated =
                                                                         carts.filter(
                                                                             (
-                                                                                item
+                                                                                item,
                                                                             ) =>
                                                                                 item.id !==
-                                                                                res.id
+                                                                                res.id,
                                                                         );
                                                                     dispatch(
                                                                         setCarts(
-                                                                            updated
-                                                                        )
+                                                                            updated,
+                                                                        ),
                                                                     );
                                                                 }}
                                                                 className="p-1 rounded-md hover:text-gray-700"
@@ -272,15 +272,15 @@ export default function PosSection() {
                                                                     name="sub_price"
                                                                     type="number"
                                                                     onChange={(
-                                                                        e
+                                                                        e,
                                                                     ) =>
                                                                         update_shopee_price(
                                                                             res,
                                                                             Number(
                                                                                 e
                                                                                     .target
-                                                                                    .value
-                                                                            )
+                                                                                    .value,
+                                                                            ),
                                                                         )
                                                                     }
                                                                     value={
@@ -290,7 +290,7 @@ export default function PosSection() {
                                                                             : res?.sub_price
                                                                     }
                                                                     onWheel={(
-                                                                        e
+                                                                        e,
                                                                     ) =>
                                                                         e.target.blur()
                                                                     }
@@ -302,12 +302,12 @@ export default function PosSection() {
                                                             <span className="block truncate">
                                                                 ₱{" "}
                                                                 {parseFloat(
-                                                                    res.sub_price
+                                                                    res.sub_price,
                                                                 ).toLocaleString(
                                                                     "en-PH",
                                                                     {
                                                                         minimumFractionDigits: 2,
-                                                                    }
+                                                                    },
                                                                 )}
                                                             </span>
                                                         )}
@@ -329,20 +329,40 @@ export default function PosSection() {
                                                         <input
                                                             id="pcs"
                                                             name="pcs"
-                                                            type="number"
-                                                            onChange={(e) =>
-                                                                update_pcs(
-                                                                    res,
-                                                                    Number(
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                )
+                                                            type="text"
+                                                            inputMode="numeric"
+                                                            value={
+                                                                res?.pcs ?? ""
                                                             }
+                                                            onChange={(e) => {
+                                                                const value =
+                                                                    e.target
+                                                                        .value;
+                                                                if (
+                                                                    value === ""
+                                                                ) {
+                                                                    update_pcs(
+                                                                        res,
+                                                                        "",
+                                                                    );
+                                                                    return;
+                                                                }
+                                                                if (
+                                                                    /^\d+$/.test(
+                                                                        value,
+                                                                    )
+                                                                ) {
+                                                                    update_pcs(
+                                                                        res,
+                                                                        Number(
+                                                                            value,
+                                                                        ),
+                                                                    );
+                                                                }
+                                                            }}
                                                             onWheel={(e) =>
                                                                 e.target.blur()
                                                             }
-                                                            value={res?.pcs}
                                                             className="block text-center w-12 rounded-md bg-white py-1 text-xs text-gray-900 placeholder:text-gray-400 focus:ring-pink-300 focus:border-pink-300"
                                                         />
                                                         <button
@@ -362,7 +382,7 @@ export default function PosSection() {
                                                                 add_sub_price(
                                                                     res,
                                                                     e.target
-                                                                        .value
+                                                                        .value,
                                                                 )
                                                             }
                                                             id="pricing"
@@ -428,20 +448,20 @@ export default function PosSection() {
                                                             ₱
                                                             {parseFloat(
                                                                 Number(
-                                                                    res.sub_price
+                                                                    res.sub_price,
                                                                 ) *
                                                                     Number(
                                                                         res.pcs ??
-                                                                            "1"
+                                                                            "1",
                                                                     ) -
                                                                     Number(
                                                                         res.discount ??
-                                                                            "0"
+                                                                            "0",
                                                                     ) -
-                                                                    (Number(
-                                                                        overallDiscount
+                                                                    Number(
+                                                                        overallDiscount,
                                                                     ) /
-                                                                        carts.length)
+                                                                        carts.length,
                                                             ).toFixed(2)}
                                                         </div>
                                                         {/* Delete button for desktop */}
@@ -451,15 +471,15 @@ export default function PosSection() {
                                                                     const updated =
                                                                         carts.filter(
                                                                             (
-                                                                                item
+                                                                                item,
                                                                             ) =>
                                                                                 item.id !==
-                                                                                res.id
+                                                                                res.id,
                                                                         );
                                                                     dispatch(
                                                                         setCarts(
-                                                                            updated
-                                                                        )
+                                                                            updated,
+                                                                        ),
                                                                     );
                                                                 }}
                                                                 className="p-1 rounded-md hover:text-gray-700"
@@ -482,7 +502,7 @@ export default function PosSection() {
                                                                 updateDiscount(
                                                                     res,
                                                                     e.target
-                                                                        .value
+                                                                        .value,
                                                                 )
                                                             }
                                                             onWheel={(e) =>
@@ -509,7 +529,7 @@ export default function PosSection() {
                                                 setOverallDiscount(
                                                     e.target.value == ""
                                                         ? 0
-                                                        : e.target.value
+                                                        : e.target.value,
                                                 )
                                             }
                                             onWheel={(e) => e.target.blur()}
@@ -543,7 +563,7 @@ export default function PosSection() {
                                             {isNaN(parseFloat(overallDiscount))
                                                 ? "0.00"
                                                 : parseFloat(
-                                                      overallDiscount
+                                                      overallDiscount,
                                                   ).toFixed(2)}
                                         </span>
                                     </div>
