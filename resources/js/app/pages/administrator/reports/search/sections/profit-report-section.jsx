@@ -75,12 +75,28 @@ const styles = StyleSheet.create({
         paddingHorizontal: 3,
     },
     summary: {
-        marginTop: 10,
-        alignItems: "flex-end",
+        marginTop: 15,
+        alignItems: "flex-start",
+        flexDirection: "column",
+        gap: 2,
+    },
+    summaryRow: {
+        flexDirection: "row",
+        marginBottom: 2,
+    },
+    summaryLabel: {
+        width: 66,
+        fontWeight: "bold",
+    },
+    summaryAmount: {
+        fontWeight: "normal",
     },
     summary_all: {
-        marginTop: 10,
+        marginTop: 15,
         alignItems: "flex-start",
+    },
+    summaryAllLabel: {
+        width: 110,
         fontWeight: "bold",
     },
     loadingContainer: {
@@ -118,9 +134,36 @@ const chunkArray = (arr, size) => {
     return result;
 };
 
+const groupByProduct = (items) => {
+    const map = {};
+    items.forEach((item) => {
+        const key = item?.product || "Unknown";
+        if (!map[key]) {
+            map[key] = {
+                code: item.code,
+                product: item.product,
+                quantity: 0,
+                cost: 0,
+                sales: 0,
+                profit: 0,
+            };
+        }
+        map[key].quantity += Number(item.quantity);
+        map[key].cost += Number(item.cost);
+        map[key].sales += Number(item.sales ?? 0);
+        map[key].profit += Number(item.profit);
+    });
+    return Object.values(map).map((item) => ({
+        ...item,
+        margin:
+            item.sales > 0
+                ? ((item.profit / item.sales) * 100).toFixed(2) + "%"
+                : "0.00%",
+    }));
+};
+
 const TableHeader = () => (
     <View style={styles.tableHeader}>
-        <Text style={styles.col}>Invoice No.</Text>
         <Text style={styles.colSmall}>Code</Text>
         <Text style={styles.col}>Product</Text>
         <Text style={styles.colSmall}>Quantity</Text>
@@ -230,19 +273,19 @@ const ProfitReportSection = () => {
         Number(total_summary_cost) -
         Number(total_expenses);
 
-    // Sort data by product name
-    const sortedStore = (reports?.data?.store || [])
-        .slice()
-        .sort((a, b) => (a?.product || "").localeCompare(b?.product || ""));
-    const sortedShopeeBip = (reports?.data?.shopee_bip || [])
-        .slice()
-        .sort((a, b) => (a?.product || "").localeCompare(b?.product || ""));
-    const sortedShopeeYgd = (reports?.data?.shopee_ygd || [])
-        .slice()
-        .sort((a, b) => (a?.product || "").localeCompare(b?.product || ""));
-    const sortedCredit = (reports?.data?.credit || [])
-        .slice()
-        .sort((a, b) => (a?.product || "").localeCompare(b?.product || ""));
+    // Group by product and sort
+    const sortedStore = groupByProduct(reports?.data?.store || []).sort(
+        (a, b) => (a?.product || "").localeCompare(b?.product || ""),
+    );
+    const sortedShopeeBip = groupByProduct(
+        reports?.data?.shopee_bip || [],
+    ).sort((a, b) => (a?.product || "").localeCompare(b?.product || ""));
+    const sortedShopeeYgd = groupByProduct(
+        reports?.data?.shopee_ygd || [],
+    ).sort((a, b) => (a?.product || "").localeCompare(b?.product || ""));
+    const sortedCredit = groupByProduct(reports?.data?.credit || []).sort(
+        (a, b) => (a?.product || "").localeCompare(b?.product || ""),
+    );
 
     // Chunk into pages to avoid RangeError with large datasets
     const storeChunks = chunkArray(sortedStore, ROWS_PER_PAGE);
@@ -371,9 +414,9 @@ const ProfitReportSection = () => {
                                                 </Text>
                                                 <Text style={{ flex: 1 }}>
                                                     Sacatel Bldg. V. Gustillo
-                                                    St. Brgy 5, San Carlos
-                                                    City, Negros Occidental
-                                                    6127 Philippines
+                                                    St. Brgy 5, San Carlos City,
+                                                    Negros Occidental 6127
+                                                    Philippines
                                                 </Text>
                                             </View>
                                         </View>
@@ -390,9 +433,6 @@ const ProfitReportSection = () => {
                             <TableHeader />
                             {chunk.map((item, idx) => (
                                 <View style={styles.tableRow} key={idx}>
-                                    <Text style={styles.col}>
-                                        {item.cart_id}
-                                    </Text>
                                     <Text style={styles.colSmall}>
                                         {item.code}
                                     </Text>
@@ -416,24 +456,35 @@ const ProfitReportSection = () => {
                                     </Text>
                                 </View>
                             ))}
-                            {/* Section totals on the last chunk only */}
                             {pageIdx === storeChunks.length - 1 && (
                                 <View style={styles.summary}>
-                                    <Text>
-                                        Total Cost:{" "}
-                                        {peso_value(total_cost_store)}
-                                    </Text>
-                                    <Text>
-                                        Total Sales:{" "}
-                                        {peso_value(total_sales_store)}
-                                    </Text>
-                                    <Text>
-                                        Total Profit:{" "}
-                                        {peso_value(
-                                            total_sales_store -
-                                                total_cost_store,
-                                        )}
-                                    </Text>
+                                    <View style={styles.summaryRow}>
+                                        <Text style={styles.summaryLabel}>
+                                            Total Cost:
+                                        </Text>
+                                        <Text style={styles.summaryAmount}>
+                                            {peso_value(total_cost_store)}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.summaryRow}>
+                                        <Text style={styles.summaryLabel}>
+                                            Total Sales:
+                                        </Text>
+                                        <Text style={styles.summaryAmount}>
+                                            {peso_value(total_sales_store)}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.summaryRow}>
+                                        <Text style={styles.summaryLabel}>
+                                            Total Profit:
+                                        </Text>
+                                        <Text style={styles.summaryAmount}>
+                                            {peso_value(
+                                                total_sales_store -
+                                                    total_cost_store,
+                                            )}
+                                        </Text>
+                                    </View>
                                 </View>
                             )}
                         </Page>
@@ -459,9 +510,6 @@ const ProfitReportSection = () => {
                                     <TableHeader />
                                     {chunk.map((item, idx) => (
                                         <View style={styles.tableRow} key={idx}>
-                                            <Text style={styles.col}>
-                                                {item.cart_id}
-                                            </Text>
                                             <Text style={styles.colSmall}>
                                                 {item.code}
                                             </Text>
@@ -475,7 +523,7 @@ const ProfitReportSection = () => {
                                                 {peso_value(item.cost)}
                                             </Text>
                                             <Text style={styles.colSmall}>
-                                                {peso_value(item.sales ?? 0)}
+                                                {peso_value(item.sales)}
                                             </Text>
                                             <Text style={styles.colSmall}>
                                                 {peso_value(item.profit)}
@@ -487,25 +535,49 @@ const ProfitReportSection = () => {
                                     ))}
                                     {pageIdx === shopeeBipChunks.length - 1 && (
                                         <View style={styles.summary}>
-                                            <Text>
-                                                Total Cost:{" "}
-                                                {peso_value(
-                                                    total_cost_shopee_bip,
-                                                )}
-                                            </Text>
-                                            <Text>
-                                                Total Sales:{" "}
-                                                {peso_value(
-                                                    total_sales_shopee_bip,
-                                                )}
-                                            </Text>
-                                            <Text>
-                                                Total Profit:{" "}
-                                                {peso_value(
-                                                    total_sales_shopee_bip -
+                                            <View style={styles.summaryRow}>
+                                                <Text
+                                                    style={styles.summaryLabel}
+                                                >
+                                                    Total Cost:
+                                                </Text>
+                                                <Text
+                                                    style={styles.summaryAmount}
+                                                >
+                                                    {peso_value(
                                                         total_cost_shopee_bip,
-                                                )}
-                                            </Text>
+                                                    )}
+                                                </Text>
+                                            </View>
+                                            <View style={styles.summaryRow}>
+                                                <Text
+                                                    style={styles.summaryLabel}
+                                                >
+                                                    Total Sales:
+                                                </Text>
+                                                <Text
+                                                    style={styles.summaryAmount}
+                                                >
+                                                    {peso_value(
+                                                        total_sales_shopee_bip,
+                                                    )}
+                                                </Text>
+                                            </View>
+                                            <View style={styles.summaryRow}>
+                                                <Text
+                                                    style={styles.summaryLabel}
+                                                >
+                                                    Total Profit:
+                                                </Text>
+                                                <Text
+                                                    style={styles.summaryAmount}
+                                                >
+                                                    {peso_value(
+                                                        total_sales_shopee_bip -
+                                                            total_cost_shopee_bip,
+                                                    )}
+                                                </Text>
+                                            </View>
                                         </View>
                                     )}
                                 </Page>
@@ -531,9 +603,6 @@ const ProfitReportSection = () => {
                                 <TableHeader />
                                 {chunk.map((item, idx) => (
                                     <View style={styles.tableRow} key={idx}>
-                                        <Text style={styles.col}>
-                                            {item.cart_id}
-                                        </Text>
                                         <Text style={styles.colSmall}>
                                             {item.code}
                                         </Text>
@@ -547,7 +616,7 @@ const ProfitReportSection = () => {
                                             {peso_value(item.cost)}
                                         </Text>
                                         <Text style={styles.colSmall}>
-                                            {peso_value(item.sales ?? 0)}
+                                            {peso_value(item.sales)}
                                         </Text>
                                         <Text style={styles.colSmall}>
                                             {peso_value(item.profit)}
@@ -559,21 +628,37 @@ const ProfitReportSection = () => {
                                 ))}
                                 {pageIdx === shopeeYgdChunks.length - 1 && (
                                     <View style={styles.summary}>
-                                        <Text>
-                                            Total Cost:{" "}
-                                            {peso_value(total_cost_shopee_ygd)}
-                                        </Text>
-                                        <Text>
-                                            Total Sales:{" "}
-                                            {peso_value(total_sales_shopee_ygd)}
-                                        </Text>
-                                        <Text>
-                                            Total Profit:{" "}
-                                            {peso_value(
-                                                total_sales_shopee_ygd -
+                                        <View style={styles.summaryRow}>
+                                            <Text style={styles.summaryLabel}>
+                                                Total Cost:
+                                            </Text>
+                                            <Text style={styles.summaryAmount}>
+                                                {peso_value(
                                                     total_cost_shopee_ygd,
-                                            )}
-                                        </Text>
+                                                )}
+                                            </Text>
+                                        </View>
+                                        <View style={styles.summaryRow}>
+                                            <Text style={styles.summaryLabel}>
+                                                Total Sales:
+                                            </Text>
+                                            <Text style={styles.summaryAmount}>
+                                                {peso_value(
+                                                    total_sales_shopee_ygd,
+                                                )}
+                                            </Text>
+                                        </View>
+                                        <View style={styles.summaryRow}>
+                                            <Text style={styles.summaryLabel}>
+                                                Total Profit:
+                                            </Text>
+                                            <Text style={styles.summaryAmount}>
+                                                {peso_value(
+                                                    total_sales_shopee_ygd -
+                                                        total_cost_shopee_ygd,
+                                                )}
+                                            </Text>
+                                        </View>
                                     </View>
                                 )}
                             </Page>
@@ -597,9 +682,6 @@ const ProfitReportSection = () => {
                             <TableHeader />
                             {chunk.map((item, idx) => (
                                 <View style={styles.tableRow} key={idx}>
-                                    <Text style={styles.col}>
-                                        {item.cart_id}
-                                    </Text>
                                     <Text style={styles.colSmall}>
                                         {item.code}
                                     </Text>
@@ -625,21 +707,33 @@ const ProfitReportSection = () => {
                             ))}
                             {pageIdx === creditChunks.length - 1 && (
                                 <View style={styles.summary}>
-                                    <Text>
-                                        Total Cost:{" "}
-                                        {peso_value(total_cost_credit)}
-                                    </Text>
-                                    <Text>
-                                        Total Sales:{" "}
-                                        {peso_value(total_sales_credit)}
-                                    </Text>
-                                    <Text>
-                                        Total Profit:{" "}
-                                        {peso_value(
-                                            total_sales_credit -
-                                                total_cost_credit,
-                                        )}
-                                    </Text>
+                                    <View style={styles.summaryRow}>
+                                        <Text style={styles.summaryLabel}>
+                                            Total Cost:
+                                        </Text>
+                                        <Text style={styles.summaryAmount}>
+                                            {peso_value(total_cost_credit)}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.summaryRow}>
+                                        <Text style={styles.summaryLabel}>
+                                            Total Sales:
+                                        </Text>
+                                        <Text style={styles.summaryAmount}>
+                                            {peso_value(total_sales_credit)}
+                                        </Text>
+                                    </View>
+                                    <View style={styles.summaryRow}>
+                                        <Text style={styles.summaryLabel}>
+                                            Total Profit:
+                                        </Text>
+                                        <Text style={styles.summaryAmount}>
+                                            {peso_value(
+                                                total_sales_credit -
+                                                    total_cost_credit,
+                                            )}
+                                        </Text>
+                                    </View>
                                 </View>
                             )}
                         </Page>
@@ -648,24 +742,41 @@ const ProfitReportSection = () => {
                     {/* Summary page */}
                     <Page orientation="landscape" size="A4" style={styles.page}>
                         <Text style={[styles.summary_title, { marginTop: 40 }]}>
-                            Summary
+                            Overall Summary
                         </Text>
                         <View style={styles.summary_all}>
-                            <Text>
-                                Total Overall Cost:{" "}
-                                {peso_value(total_summary_cost)}
-                            </Text>
-                            <Text>
-                                Total Overall Sales:{" "}
-                                {peso_value(total_summary_sales)}
-                            </Text>
-                            <Text>
-                                Total Expenses: {peso_value(total_expenses)}
-                            </Text>
-                            <Text>
-                                Total Overall Profit:{" "}
-                                {peso_value(total_summary_profit)}
-                            </Text>
+                            <View style={styles.summaryRow}>
+                                <Text style={styles.summaryAllLabel}>
+                                    Total Overall Cost:
+                                </Text>
+                                <Text style={styles.summaryAmount}>
+                                    {peso_value(total_summary_cost)}
+                                </Text>
+                            </View>
+                            <View style={styles.summaryRow}>
+                                <Text style={styles.summaryAllLabel}>
+                                    Total Overall Sales:
+                                </Text>
+                                <Text style={styles.summaryAmount}>
+                                    {peso_value(total_summary_sales)}
+                                </Text>
+                            </View>
+                            <View style={styles.summaryRow}>
+                                <Text style={styles.summaryAllLabel}>
+                                    Total Expenses:
+                                </Text>
+                                <Text style={styles.summaryAmount}>
+                                    {peso_value(total_expenses)}
+                                </Text>
+                            </View>
+                            <View style={styles.summaryRow}>
+                                <Text style={styles.summaryAllLabel}>
+                                    Total Overall Profit:
+                                </Text>
+                                <Text style={styles.summaryAmount}>
+                                    {peso_value(total_summary_profit)}
+                                </Text>
+                            </View>
                         </View>
                     </Page>
                 </Document>
