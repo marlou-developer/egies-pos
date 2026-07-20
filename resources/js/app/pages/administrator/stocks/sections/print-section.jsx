@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
 export default function PrintSection() {
     const [isOpen, setIsOpen] = useState(false);
     const { products, selectedStocks } = useSelector(
-        (state) => state.products
+        (state) => state.products,
     ) || {
         products: { data: [], total: 0, last_page: 1 },
     };
@@ -85,13 +85,16 @@ export default function PrintSection() {
                     onClick={() => setIsOpen(true)}
                     className="p-2 items-center bg-pink-700 rounded-lg flex hover:bg-pink-600 text-white"
                 >
-                    {selectedStocks.length} &nbsp;<FaPrint className="mr-1"/> PRINT
+                    {selectedStocks.length} &nbsp;
+                    <FaPrint className="mr-1" /> PRINT
                 </button>
             )}
 
             <Modal
                 width="max-w-7xl"
-                isOpen={isOpen} onClose={() => setIsOpen(false)}>
+                isOpen={isOpen}
+                onClose={() => setIsOpen(false)}
+            >
                 <div className="p-3">
                     <PDFViewer style={{ width: "100%", height: "85vh" }}>
                         <Document>
@@ -143,6 +146,9 @@ export default function PrintSection() {
                                         Product
                                     </Text>
                                     <Text style={styles.tableCol}>Stocks</Text>
+                                    <Text style={styles.tableCol}>
+                                        Cost Price
+                                    </Text>
                                     <Text
                                         style={[styles.tableCol, { flex: 1 }]}
                                     >
@@ -183,6 +189,10 @@ export default function PrintSection() {
                                             <Text style={styles.tableCol}>
                                                 {item.quantity}
                                             </Text>
+                                            <Text style={styles.tableCol}>
+                                                PHP{" "}
+                                                {Number(item.cost).toFixed(2)}
+                                            </Text>
                                             <Text
                                                 style={[
                                                     styles.tableCol,
@@ -192,8 +202,8 @@ export default function PrintSection() {
                                                 {item.quantity == 0
                                                     ? "Out of Stock"
                                                     : item.quantity <= 10
-                                                        ? "Low Stock"
-                                                        : "In Stock"}
+                                                      ? "Low Stock"
+                                                      : "In Stock"}
                                             </Text>
                                             <Text
                                                 style={[
@@ -203,23 +213,23 @@ export default function PrintSection() {
                                             >
                                                 {item.stocks?.length > 0
                                                     ? new Date(
-                                                        [...item.stocks].sort(
-                                                            (a, b) =>
-                                                                new Date(
-                                                                    b.date
-                                                                ) -
-                                                                new Date(
-                                                                    a.date
-                                                                )
-                                                        )[0].date
-                                                    ).toLocaleDateString(
-                                                        "en-US",
-                                                        {
-                                                            year: "numeric",
-                                                            month: "short",
-                                                            day: "numeric",
-                                                        }
-                                                    )
+                                                          [...item.stocks].sort(
+                                                              (a, b) =>
+                                                                  new Date(
+                                                                      b.date,
+                                                                  ) -
+                                                                  new Date(
+                                                                      a.date,
+                                                                  ),
+                                                          )[0].date,
+                                                      ).toLocaleDateString(
+                                                          "en-US",
+                                                          {
+                                                              year: "numeric",
+                                                              month: "short",
+                                                              day: "numeric",
+                                                          },
+                                                      )
                                                     : "No Stocks Added"}
                                             </Text>
                                             <Text
@@ -228,10 +238,8 @@ export default function PrintSection() {
                                                     { flex: 1 },
                                                 ]}
                                             >
-                                                {peso_value(
-                                                    Number(item.quantity) *
-                                                    Number(item.srp)
-                                                )}
+                                                PHP{" "}{Number(item.quantity) *
+                                                    Number(item.srp)}
                                             </Text>
                                             <Text
                                                 style={[
@@ -239,10 +247,9 @@ export default function PrintSection() {
                                                     { flex: 1 },
                                                 ]}
                                             >
-                                                {peso_value(
-                                                    Number(item.quantity) *
-                                                    Number(item.cost)
-                                                )}
+                                                PHP{" "}
+                                                {Number(item.quantity) *
+                                                    Number(item.cost)}
                                             </Text>
                                         </View>
                                     );
