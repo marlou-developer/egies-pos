@@ -234,16 +234,29 @@ class StockController extends Controller
     public function destroy($id)
     {
         $stock = Stock::where('id', $id)->first();
-        if ($stock) {
-            $stock->delete();
+
+        if (!$stock) {
+            return response()->json(['message' => 'Stock not found'], 404);
         }
 
         $product = Product::where('id', $stock->product_id)->first();
-        if ($product) {
-            $product->update([
-                'quantity' => $product->quantity - $stock->quantity
-            ]);
-        }
+
+        DB::transaction(function () use ($stock, $product) {
+            $stock->delete();
+
+            if ($product) {
+                // Reverse the effect: added stock → subtract back; deducted stock → add back
+                if ($stock->status === 'deducted') {
+                    $product->update([
+                        'quantity' => $product->quantity + $stock->quantity
+                    ]);
+                } else {
+                    $product->update([
+                        'quantity' => $product->quantity - $stock->quantity
+                    ]);
+                }
+            }
+        });
 
         return response()->json(['message' => 'Stock deleted successfully']);
     }

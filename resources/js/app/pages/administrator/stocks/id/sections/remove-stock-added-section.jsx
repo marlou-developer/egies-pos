@@ -1,8 +1,20 @@
-
-import { delete_cart_item_thunk, delete_cart_thunk, get_cart_by_id_thunk } from "@/app/redux/cart-thunk";
-import { delete_product_thunk, get_product_thunk } from "@/app/redux/product-thunk";
-import { delete_stock_thunk, get_stock_by_products_id_thunk } from "@/app/redux/stock-thunk";
-import { delete_supplier_thunk, get_supplier_thunk } from "@/app/redux/supplier-thunk";
+import {
+    delete_cart_item_thunk,
+    delete_cart_thunk,
+    get_cart_by_id_thunk,
+} from "@/app/redux/cart-thunk";
+import {
+    delete_product_thunk,
+    get_product_thunk,
+} from "@/app/redux/product-thunk";
+import {
+    delete_stock_thunk,
+    get_stock_by_products_id_thunk,
+} from "@/app/redux/stock-thunk";
+import {
+    delete_supplier_thunk,
+    get_supplier_thunk,
+} from "@/app/redux/supplier-thunk";
 import { delete_user_thunk, get_users_thunk } from "@/app/redux/user-thunk";
 import store from "@/app/store/store";
 import Modal from "@/Components/Modal";
@@ -18,7 +30,6 @@ export default function RemoveStockAddedSection({ data }) {
     const [loading, setLoading] = useState(false);
     const product_id = window.location.pathname.split("/")[3];
 
-
     const deleteStock = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -28,17 +39,19 @@ export default function RemoveStockAddedSection({ data }) {
                 delete_stock_thunk({
                     id: data.id,
                     quantity: data.quantity,
-                    product_id: data.product_id
-                })
+                    product_id: data.product_id,
+                }),
             );
-            
+
             // Refresh the stock list for this product
             await store.dispatch(get_stock_by_products_id_thunk(product_id));
-            
+
             // Refresh the product data to show updated quantity
             await store.dispatch(get_product_thunk());
-            
-            message.success("Stock removed successfully! Product quantity has been updated.");
+
+            message.success(
+                "Stock removed successfully! Product quantity has been updated.",
+            );
             setIsModalOpen(false);
         } catch (error) {
             console.error("Error removing stock:", error);
@@ -54,7 +67,7 @@ export default function RemoveStockAddedSection({ data }) {
 
     return (
         <>
-            <Tooltip title="Remove Added Stock">
+            <Tooltip title="Remove Stock Entry">
                 <button
                     className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-red-400 hover:bg-red-500 p-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
                     onClick={() => setPinOpen(true)}
@@ -71,7 +84,12 @@ export default function RemoveStockAddedSection({ data }) {
                 }}
                 actionLabel="remove this stock entry"
             />
-            <Modal open={isModalOpen} setOpen={setIsModalOpen} onClose={() => setIsModalOpen(false)} width="w-1/3">
+            <Modal
+                open={isModalOpen}
+                setOpen={setIsModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                width="w-1/3"
+            >
                 <div className="text-center">
                     <h2 className="text-xl font-semibold mb-4">
                         Remove Stock Entry
@@ -81,10 +99,13 @@ export default function RemoveStockAddedSection({ data }) {
                             Are you sure you want to remove this stock entry?
                         </p>
                         <p className="text-sm text-gray-600">
-                            <strong>Quantity to remove:</strong> {data.quantity}
+                            <strong>Quantity:</strong> {data.quantity}
                         </p>
                         <p className="text-sm text-yellow-700 mt-2">
-                            <strong>Note:</strong> This will also decrease the product's total quantity by {data.quantity} units.
+                            <strong>Note:</strong>{" "}
+                            {data.status === "deducted"
+                                ? `This will add back ${data.quantity} units to the product's total quantity (reversing the deduction).`
+                                : `This will decrease the product's total quantity by ${data.quantity} units (reversing the addition).`}
                         </p>
                     </div>
                 </div>
@@ -102,7 +123,7 @@ export default function RemoveStockAddedSection({ data }) {
                             type="submit"
                             className="bg-red-500 p-2 w-full rounded-md text-white hover:bg-red-600 disabled:opacity-50"
                         >
-                            {loading ? 'Removing...' : 'Remove Stock'}
+                            {loading ? "Removing..." : "Remove Stock Entry"}
                         </button>
                     </div>
                 </form>

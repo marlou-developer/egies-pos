@@ -45,7 +45,7 @@ export default function EditQuantitySection({ data }) {
             await store.dispatch(get_stock_by_products_id_thunk());
             await Swal.fire({
                 icon: "success",
-                title: "Added Stock(s) has been updated",
+                title: "Stock Entry has been updated",
                 showConfirmButton: false,
                 timer: 1500,
             });
@@ -56,7 +56,7 @@ export default function EditQuantitySection({ data }) {
     console.log("waaaa", data);
     return (
         <div>
-            <Tooltip title="Edit Added Stock(s)">
+            <Tooltip title="Edit Stock Entry">
                 <button
                     className="inline-flex items-center justify-center gap-x-1.5 rounded-md bg-orange-400 hover:bg-orange-500 p-3 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-gray-300 ring-inset"
                     onClick={() => setPinOpen(true)}>
@@ -76,7 +76,7 @@ export default function EditQuantitySection({ data }) {
                 isOpen={open}
                 width="max-w-xl"
                 onClose={() => setOpen(false)}
-                title="Edit Added Stock(s)"
+                title="Edit Stock Entry"
             >
                 <div className="flex gap-5 flex-col w-full">
                     <Input
