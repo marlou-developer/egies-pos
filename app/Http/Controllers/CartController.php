@@ -142,31 +142,37 @@ class CartController extends Controller
 
     public function return_per_item(Request $request)
     {
+        DB::transaction(function () use ($request) {
+            $cart_item = CartItem::where('id', $request->id)->lockForUpdate()->first();
 
-        $cart_item = CartItem::where('id', $request->id)->first();
-        $remaining_quanity = $cart_item->quantity - $request->quantity;
-        $kaltas_price = $request->quantity * $cart_item->fixed_price;
+            if (!$cart_item) {
+                return;
+            }
 
-        if ($cart_item) {
+            $remaining_quanity = $cart_item->quantity - $request->quantity;
+            $kaltas_price = $request->quantity * $cart_item->fixed_price;
+
             $cart_item->update([
                 'quantity' =>  $remaining_quanity,
                 'total' =>  $remaining_quanity * $cart_item->fixed_price,
             ]);
-        }
-        $cart = Cart::where('cart_id', $cart_item->cart_id)->first();
-        if ($cart) {
-            $cart->update([
-                'total_price' => $cart->total_price - $kaltas_price,
-                'sub_total' => $cart->sub_total - $kaltas_price,
-            ]);
-        }
 
-        $product = Product::where('id', $cart_item->product_id)->first();
-        if ($product) {
-            $product->update([
-                'quantity' => $product->quantity +  $request->quantity
-            ]);
-        }
+            $cart = Cart::where('cart_id', $cart_item->cart_id)->lockForUpdate()->first();
+            if ($cart) {
+                $cart->update([
+                    'total_price' => $cart->total_price - $kaltas_price,
+                    'sub_total' => $cart->sub_total - $kaltas_price,
+                ]);
+            }
+
+            $product = Product::where('id', $cart_item->product_id)->lockForUpdate()->first();
+            if ($product) {
+                $product->update([
+                    'quantity' => $product->quantity + $request->quantity
+                ]);
+            }
+        });
+
         return response()->json([
             'result' => 'success'
         ], 200);
@@ -212,62 +218,73 @@ class CartController extends Controller
 
     public function edit_quantity(Request $request)
     {
-        $cart = Cart::where('cart_id', $request->cart_id)->first();
-        $cart_item = CartItem::where('id', $request->id)->first();
-        $product = Product::where('id', $request->product_id)->first();
-        if ($cart && $cart_item) {
-            if ($product) {
-                if ($request->quantity > $cart_item->quantity) {
-                    $product->update([
-                        'quantity' => $product->quantity - ($request->quantity - $cart_item->quantity)
+        try {
+            $cart = DB::transaction(function () use ($request) {
+                $cart = Cart::where('cart_id', $request->cart_id)->lockForUpdate()->first();
+                $cart_item = CartItem::where('id', $request->id)->lockForUpdate()->first();
+                $product = Product::where('id', $request->product_id)->lockForUpdate()->first();
+                if ($cart && $cart_item) {
+                    if ($product) {
+                        if ($request->quantity > $cart_item->quantity) {
+                            $needed = $request->quantity - $cart_item->quantity;
+                            if ($product->quantity < $needed) {
+                                throw new \Exception("Insufficient stock for '{$product->name}'. Available: {$product->quantity}, Needed: {$needed}.");
+                            }
+                            $product->update([
+                                'quantity' => $product->quantity - $needed
+                            ]);
+                        } else {
+                            $product->update([
+                                'quantity' => $product->quantity + ($cart_item->quantity - $request->quantity)
+                            ]);
+                        }
+                    }
+                    $total = $request->quantity * $request->price - $cart_item->discount;
+                    $fixed_price = $total / $request->quantity;
+                    $profit = $total - ($cart_item->cost / $cart_item->quantity * $request->quantity);
+
+                    $cart_item->update([
+                        'quantity' => $request->quantity,
+                        'total' => $total,
+                        'fixed_price' => $fixed_price,
+                        'profit' => $profit,
                     ]);
-                } else {
-                    $product->update([
-                        'quantity' => $product->quantity +  ($cart_item->quantity - $request->quantity)
+                    $cart_items = CartItem::where('cart_id', $request->cart_id)->get();
+
+                    $total = $cart_items->sum(function ($item) {
+                        return $item->price * $item->quantity;
+                    });
+
+                    $new_total_price = $total - ($cart->discount_per_order + $cart->discount_per_item + $cart->customer_total_discount);
+
+                    $cart->update([
+                        'sub_total' => $total,
+                        'total_price' => $new_total_price,
                     ]);
+
+                    if ($cart->is_credit == 'true') {
+                        // Calculate the new balance: new total price minus any payments already made
+                        $total_payments = $cart->credit_payments()->sum('amount');
+                        $new_balance = $new_total_price - $total_payments;
+
+                        // Ensure balance doesn't go below 0
+                        $new_balance = max(0, $new_balance);
+
+                        // Update status based on balance
+                        $status = $new_balance <= 0 ? 'Paid' : ($total_payments > 0 ? 'Partial' : 'Pending');
+
+                        $cart->update([
+                            'balance' => $new_balance,
+                            'status' => $status,
+                        ]);
+                    }
                 }
-            }
-            $total = $request->quantity * $request->price - $cart_item->discount;
-            $fixed_price = $total / $request->quantity;
-            $profit = $total - ($cart_item->cost / $cart_item->quantity * $request->quantity);
-
-            $cart_item->update([
-                'quantity' => $request->quantity,
-                'total' => $total,
-                'fixed_price' => $fixed_price,
-                'profit' => $profit,
-            ]);
-            $cart_items = CartItem::where('cart_id', $request->cart_id)->get();
-
-            $total = $cart_items->sum(function ($item) {
-                return $item->price * $item->quantity;
+                return $cart;
             });
-
-            $new_total_price = $total - ($cart->discount_per_order + $cart->discount_per_item + $cart->customer_total_discount);
-
-            $cart->update([
-                'sub_total' => $total,
-                'total_price' => $new_total_price,
-            ]);
-
-            if ($cart->is_credit == 'true') {
-                // Calculate the new balance: new total price minus any payments already made
-                $total_payments = $cart->credit_payments()->sum('amount');
-                $new_balance = $new_total_price - $total_payments;
-
-                // Ensure balance doesn't go below 0
-                $new_balance = max(0, $new_balance);
-
-                // Update status based on balance
-                $status = $new_balance <= 0 ? 'Paid' : ($total_payments > 0 ? 'Partial' : 'Pending');
-
-                $cart->update([
-                    'balance' => $new_balance,
-                    'status' => $status,
-                ]);
-            }
+            return response()->json($cart, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 422);
         }
-        return response()->json($cart, 200);
     }
 
     public function edit_payment(Request $request)
@@ -1073,45 +1090,52 @@ class CartController extends Controller
     }
     public function update_all_status(Request $request)
     {
-        foreach ($request->data as $key => $data_value) {
-            $cart = Cart::where('cart_id',  $data_value['cart_id'])->first();
-            if ($cart) {
-                $cart->update([
-                    'status' => $request->status
-                ]);
-                if ($request->status == 'Returned') {
-                    foreach ($request->cart_items as $key => $value) {
-                        $product = Product::where('id', $value['product_id'])->first();
-                        if ($product) {
-                            $product->update([
-                                'quantity' => $value['quantity'] +  $product->quantity
-                            ]);
+        DB::transaction(function () use ($request) {
+            foreach ($request->data as $data_value) {
+                $cart = Cart::where('cart_id', $data_value['cart_id'])->lockForUpdate()->first();
+                if ($cart) {
+                    $cart->update([
+                        'status' => $request->status
+                    ]);
+                    if ($request->status == 'Returned') {
+                        $cartItems = CartItem::where('cart_id', $cart->cart_id)->get();
+                        foreach ($cartItems as $item) {
+                            $product = Product::where('id', $item->product_id)->lockForUpdate()->first();
+                            if ($product) {
+                                $product->update([
+                                    'quantity' => $product->quantity + $item->quantity
+                                ]);
+                            }
                         }
                     }
                 }
             }
-        }
+        });
         return response()->json('success', 200);
     }
 
     public function update_status(Request $request)
     {
-        $cart = Cart::where('id', $request->id)->first();
-        if ($cart) {
-            $cart->update([
-                'status' => $request->status
-            ]);
-            if ($request->status == 'Returned') {
-                foreach ($request->cart_items as $key => $value) {
-                    $product = Product::where('id', $value['product_id'])->first();
-                    if ($product) {
-                        $product->update([
-                            'quantity' => $value['quantity'] +  $product->quantity
-                        ]);
+        DB::transaction(function () use ($request) {
+            $cart = Cart::where('id', $request->id)->lockForUpdate()->first();
+            if ($cart) {
+                $cart->update([
+                    'status' => $request->status
+                ]);
+                if ($request->status == 'Returned') {
+                    $cartItems = CartItem::where('cart_id', $cart->cart_id)->get();
+                    foreach ($cartItems as $item) {
+                        $product = Product::where('id', $item->product_id)->lockForUpdate()->first();
+                        if ($product) {
+                            $product->update([
+                                'quantity' => $product->quantity + $item->quantity
+                            ]);
+                        }
                     }
                 }
             }
-        }
+        });
+        $cart = Cart::where('id', $request->id)->first();
         return response()->json($cart, 200);
     }
     public function index(Request $request)
@@ -1478,6 +1502,7 @@ class CartController extends Controller
 
         $cart_id = Carbon::now()->format('mdyHisv');
 
+        try {
         $cart = DB::transaction(function () use ($request, $cart_id, $cartItems) {
             $resolvedCartId = $request->cart_id ?? $cart_id;
             $itemCount      = count($cartItems);
@@ -1576,28 +1601,22 @@ class CartController extends Controller
                     $newQuantity = $product->quantity - $quantity;
 
                     if ($newQuantity < 0) {
-                        Log::warning('Product stock went below zero during sale', [
-                            'product_id' => $productId,
-                            'available'  => $product->quantity,
-                            'requested'  => $quantity,
-                            'cart_id'    => $resolvedCartId,
-                        ]);
-                        $newQuantity = 0;
+                        throw new \Exception("Insufficient stock for product '{$product->name}'. Available: {$product->quantity}, Requested: {$quantity}.");
                     }
 
                     $product->update(['quantity' => $newQuantity]);
                     // Update in-memory so a duplicate product in the same order deducts correctly
                     $product->quantity = $newQuantity;
                 } else {
-                    Log::warning('Product not found when updating quantity', [
-                        'product_id' => $productId,
-                        'cart_id'    => $resolvedCartId,
-                    ]);
+                    throw new \Exception("Product ID {$productId} not found.");
                 }
             }
 
             return $cart;
         });
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 422);
+        }
 
         event(new RenderData('success'));
         return $cart;

@@ -21,6 +21,8 @@ export default function SecurityModal({ isOpen, onClose }) {
         confirm_pin: "",
     });
     const [removePin, setRemovePin] = useState("");
+    const [verifyBy, setVerifyBy] = useState("pin");
+    const [removePassword, setRemovePassword] = useState("");
     const [errors, setErrors] = useState({});
     const [success, setSuccess] = useState("");
 
@@ -32,6 +34,8 @@ export default function SecurityModal({ isOpen, onClose }) {
             setShowRemoveForm(false);
             setForm({ current_pin: "", pin: "", confirm_pin: "" });
             setRemovePin("");
+            setRemovePassword("");
+            setVerifyBy("pin");
         }
     }, [isOpen]);
 
@@ -82,17 +86,21 @@ export default function SecurityModal({ isOpen, onClose }) {
         setSuccess("");
         setRemoving(true);
         try {
-            const res = await axios.delete("/api/security", {
-                data: { current_pin: removePin },
-            });
+            const payload =
+                verifyBy === "pin"
+                    ? { verify_by: "pin", current_pin: removePin }
+                    : { verify_by: "password", password: removePassword };
+            const res = await axios.delete("/api/security", { data: payload });
             setSuccess(res.data.message);
             setHasPin(false);
             setRemovePin("");
+            setRemovePassword("");
+            setVerifyBy("pin");
             setShowRemoveForm(false);
         } catch (err) {
             if (err.response?.status === 422) {
                 const data = err.response.data;
-                setErrors({ remove_pin: data.message || "Incorrect PIN." });
+                setErrors({ remove_field: data.message || "Verification failed." });
             }
         } finally {
             setRemoving(false);
@@ -326,30 +334,83 @@ export default function SecurityModal({ isOpen, onClose }) {
                                     {showRemoveForm && (
                                         <form onSubmit={handleRemove} className="space-y-3">
                                             <p className="text-sm text-gray-600">
-                                                Enter your current PIN to remove it.
+                                                Verify your identity to remove the PIN.
                                             </p>
-                                            <div>
-                                                <label className="block text-xs font-medium text-gray-700 mb-1">
-                                                    Current PIN
-                                                </label>
-                                                <input
-                                                    type="password"
-                                                    value={removePin}
-                                                    onChange={(e) => {
-                                                        setRemovePin(e.target.value);
+
+                                            {/* Verify-by toggle */}
+                                            <div className="flex rounded-lg border border-gray-200 overflow-hidden text-xs font-medium">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setVerifyBy("pin");
                                                         setErrors({});
                                                     }}
-                                                    inputMode="numeric"
-                                                    maxLength={8}
-                                                    placeholder="Enter current PIN"
-                                                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                                                />
-                                                {errors.remove_pin && (
-                                                    <p className="mt-1 text-xs text-red-500">
-                                                        {errors.remove_pin}
-                                                    </p>
-                                                )}
+                                                    className={`flex-1 py-2 transition-colors ${
+                                                        verifyBy === "pin"
+                                                            ? "bg-indigo-600 text-white"
+                                                            : "bg-white text-gray-600 hover:bg-gray-50"
+                                                    }`}
+                                                >
+                                                    Use Current PIN
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => {
+                                                        setVerifyBy("password");
+                                                        setErrors({});
+                                                    }}
+                                                    className={`flex-1 py-2 transition-colors ${
+                                                        verifyBy === "password"
+                                                            ? "bg-indigo-600 text-white"
+                                                            : "bg-white text-gray-600 hover:bg-gray-50"
+                                                    }`}
+                                                >
+                                                    Use Password
+                                                </button>
                                             </div>
+
+                                            {verifyBy === "pin" ? (
+                                                <div>
+                                                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                                                        Current PIN
+                                                    </label>
+                                                    <input
+                                                        type="password"
+                                                        value={removePin}
+                                                        onChange={(e) => {
+                                                            setRemovePin(e.target.value);
+                                                            setErrors({});
+                                                        }}
+                                                        inputMode="numeric"
+                                                        maxLength={8}
+                                                        placeholder="Enter current PIN"
+                                                        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <div>
+                                                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                                                        Account Password
+                                                    </label>
+                                                    <input
+                                                        type="password"
+                                                        value={removePassword}
+                                                        onChange={(e) => {
+                                                            setRemovePassword(e.target.value);
+                                                            setErrors({});
+                                                        }}
+                                                        placeholder="Enter your account password"
+                                                        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                                                    />
+                                                </div>
+                                            )}
+
+                                            {errors.remove_field && (
+                                                <p className="text-xs text-red-500">
+                                                    {errors.remove_field}
+                                                </p>
+                                            )}
+
                                             <div className="flex items-center justify-between pt-2 gap-2">
                                                 <button
                                                     type="button"
@@ -357,6 +418,8 @@ export default function SecurityModal({ isOpen, onClose }) {
                                                         setShowRemoveForm(false);
                                                         setErrors({});
                                                         setRemovePin("");
+                                                        setRemovePassword("");
+                                                        setVerifyBy("pin");
                                                     }}
                                                     className="text-xs text-gray-500 hover:text-gray-700 transition-colors"
                                                 >

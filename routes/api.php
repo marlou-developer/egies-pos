@@ -72,6 +72,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/get_discounted_products_by_id/{customer_id}', [ProductDiscountController::class, 'get_discounted_products_by_id']);
 
     // Security PIN
+    Route::get('security/status', [SecurityController::class, 'status']);
     Route::get('security', [SecurityController::class, 'index']);
     Route::post('security', [SecurityController::class, 'store']);
     Route::post('security/verify', [SecurityController::class, 'verify']);

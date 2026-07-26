@@ -1,4 +1,4 @@
-import React, { Fragment, useRef, useState } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { LockClosedIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
@@ -20,7 +20,32 @@ export default function VerifyPinModal({ isOpen, onClose, onVerified, actionLabe
     const [pin, setPin] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [checking, setChecking] = useState(false);
+    const [showModal, setShowModal] = useState(false);
     const inputRef = useRef(null);
+
+    // When opened, first check if a PIN is actually configured.
+    // If not, skip the modal and call onVerified() immediately.
+    useEffect(() => {
+        if (!isOpen) return;
+        setChecking(true);
+        setShowModal(false);
+        axios
+            .get("/api/security/status")
+            .then((res) => {
+                if (res.data.has_pin) {
+                    setShowModal(true);
+                } else {
+                    onVerified();
+                    onClose();
+                }
+            })
+            .catch(() => {
+                // On error, fall back to showing the modal
+                setShowModal(true);
+            })
+            .finally(() => setChecking(false));
+    }, [isOpen]);
 
     const reset = () => {
         setPin("");
@@ -34,6 +59,7 @@ export default function VerifyPinModal({ isOpen, onClose, onVerified, actionLabe
 
     const handleClose = () => {
         reset();
+        setShowModal(false);
         onClose();
     };
 
@@ -65,7 +91,7 @@ export default function VerifyPinModal({ isOpen, onClose, onVerified, actionLabe
     };
 
     return (
-        <Transition show={isOpen} as={Fragment} afterEnter={handleAfterEnter}>
+        <Transition show={showModal} as={Fragment} afterEnter={handleAfterEnter}>
             <Dialog as="div" className="relative z-50" onClose={handleClose}>
                 {/* Overlay */}
                 <Transition.Child

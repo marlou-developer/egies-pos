@@ -17,7 +17,20 @@ class SecurityController extends Controller
     }
 
     /**
-     * Return whether the Super Admin has a PIN set.
+     * Return whether ANY Super Admin has a PIN configured.
+     * Accessible by any authenticated user (used by VerifyPinModal).
+     */
+    public function status()
+    {
+        $hasPinConfigured = User::where('user_type', 'Super Admin')
+            ->whereNotNull('security_pin')
+            ->exists();
+
+        return response()->json(['has_pin' => $hasPinConfigured]);
+    }
+
+    /**
+     * Return whether the Super Admin has a PIN set (superadmin only).
      */
     public function index()
     {
@@ -61,16 +74,27 @@ class SecurityController extends Controller
 
     /**
      * Remove the security PIN.
+     * Accepts either current_pin or password for verification.
      */
     public function destroy(Request $request)
     {
         $this->requireSuperAdmin();
         $user = Auth::user();
 
-        $request->validate(['current_pin' => 'required']);
+        $request->validate([
+            'verify_by' => 'required|in:pin,password',
+            'current_pin' => 'required_if:verify_by,pin',
+            'password'    => 'required_if:verify_by,password',
+        ]);
 
-        if (!Hash::check($request->current_pin, $user->security_pin)) {
-            return response()->json(['message' => 'PIN is incorrect.'], 422);
+        if ($request->verify_by === 'pin') {
+            if (!$user->security_pin || !Hash::check($request->current_pin, $user->security_pin)) {
+                return response()->json(['message' => 'PIN is incorrect.'], 422);
+            }
+        } else {
+            if (!Hash::check($request->password, $user->password)) {
+                return response()->json(['message' => 'Password is incorrect.'], 422);
+            }
         }
 
         $user->security_pin = null;

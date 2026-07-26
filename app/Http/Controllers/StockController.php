@@ -56,27 +56,28 @@ class StockController extends Controller
 
     public function update(Request $request, $id)
     {
-
-        $stock = Stock::where('id', $request->id)->first();
-        if ($stock) {
-            $stock->update([
-                'quantity' => $request->new_quantity,
-                'date' => $request->date,
-                'supplier_id' => $request->supplier_id,
-            ]);
-            $product = Product::where('id', $request->products['id'])->first();
-            if ($product) {
-                if ($request->new_quantity > $request->quantity) {
-                    $product->update([
-                        'quantity' => $product->quantity + ($request->new_quantity - $request->quantity)
-                    ]);
-                } else {
-                    $product->update([
-                        'quantity' => $product->quantity - $request->return
-                    ]);
+        DB::transaction(function () use ($request) {
+            $stock = Stock::where('id', $request->id)->lockForUpdate()->first();
+            if ($stock) {
+                $stock->update([
+                    'quantity' => $request->new_quantity,
+                    'date' => $request->date,
+                    'supplier_id' => $request->supplier_id,
+                ]);
+                $product = Product::where('id', $request->products['id'])->lockForUpdate()->first();
+                if ($product) {
+                    if ($request->new_quantity > $request->quantity) {
+                        $product->update([
+                            'quantity' => $product->quantity + ($request->new_quantity - $request->quantity)
+                        ]);
+                    } else {
+                        $product->update([
+                            'quantity' => $product->quantity - $request->return
+                        ]);
+                    }
                 }
             }
-        }
+        });
         return response()->json('$stocks', 200);
     }
     public function get_stock_by_products_id($id)
@@ -97,23 +98,25 @@ class StockController extends Controller
         ]);
         $user = Auth::user();
 
-        Stock::create([
-            'product_id' => $request->product_id,
-            'user_id' => $user->id,
-            'date' => $request->date,
-            'delivery_id' => $request->delivery_id,
-            'quantity' => $request->quantity,
-            'remaining' => $request->remaining,
-            'price' => $request->price,
-            'status' => 'added',
-            'supplier_id' => $request->supplier_id,
-        ]);
+        DB::transaction(function () use ($request, $data, $user) {
+            Stock::create([
+                'product_id' => $request->product_id,
+                'user_id' => $user->id,
+                'date' => $request->date,
+                'delivery_id' => $request->delivery_id,
+                'quantity' => $request->quantity,
+                'remaining' => $request->remaining,
+                'price' => $request->price,
+                'status' => 'added',
+                'supplier_id' => $request->supplier_id,
+            ]);
 
-        $product = Product::find($data['product_id']);
-        if ($product) {
-            $product->quantity += (int) $data['quantity'];
-            $product->save();
-        }
+            $product = Product::where('id', $data['product_id'])->lockForUpdate()->first();
+            if ($product) {
+                $product->quantity += (int) $data['quantity'];
+                $product->save();
+            }
+        });
 
         return response()->json([
             'status' => 'success',
