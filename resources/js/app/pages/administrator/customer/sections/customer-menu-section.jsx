@@ -57,22 +57,7 @@ export default function CustomerMenuSection({ data }) {
                     >
                         <div className="py-1">
                             <MenuItem>
-                                {({ active }) => (
-                                    <button
-                                        onClick={() => setIsEditOpen(true)}
-                                        className={`${
-                                            active
-                                                ? "bg-gray-100 text-gray-900"
-                                                : "text-gray-700"
-                                        } group flex items-center px-4 py-2 text-sm w-full`}
-                                    >
-                                        <PencilSquareIcon
-                                            className="mr-3 size-5 text-gray-400"
-                                            aria-hidden="true"
-                                        />
-                                        Edit Customer
-                                    </button>
-                                )}
+                            <EditCustomerSection  data={data} />
                             </MenuItem>
 
                             <MenuItem>
@@ -141,11 +126,11 @@ export default function CustomerMenuSection({ data }) {
                 </Menu>
             </div>
 
-            <EditCustomerSection
+            {/* <EditCustomerSection
                 data={data}
                 isOpen={isEditOpen}
                 setIsOpen={setIsEditOpen}
-            />
+            /> */}
             <DeleteCustomerSection
                 data={data}
                 isOpen={isDeleteOpen}

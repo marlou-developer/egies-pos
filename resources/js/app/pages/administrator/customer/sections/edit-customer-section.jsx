@@ -1,17 +1,20 @@
-import Input from '@/app/_components/input';
-import DrawerSection from '@/app/_sections/drawer-section';
-import { get_customer_thunk, update_customer_thunk } from '@/app/redux/customer-thunk';
-import store from '@/app/store/store';
-import { XMarkIcon } from '@heroicons/react/24/outline';
-import { message } from 'antd';
-import React, { useEffect, useState } from 'react'
-import { FaClipboard, FaMoneyBill1Wave, FaUser } from 'react-icons/fa6';
-import { useSelector } from 'react-redux';
-import VerifyPinModal from '@/app/_components/verify-pin-modal';
+import Input from "@/app/_components/input";
+import DrawerSection from "@/app/_sections/drawer-section";
+import {
+    get_customer_thunk,
+    update_customer_thunk,
+} from "@/app/redux/customer-thunk";
+import store from "@/app/store/store";
+import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { message } from "antd";
+import React, { useEffect, useState } from "react";
+import { FaClipboard, FaMoneyBill1Wave, FaUser } from "react-icons/fa6";
+import { useSelector } from "react-redux";
+import VerifyPinModal from "@/app/_components/verify-pin-modal";
 
-export default function EditCustomerSection({ data, isOpen, setIsOpen }) {
-    const { customer } = useSelector((state) => state.customers)
-    const { categories } = useSelector((state) => state.categories)
+export default function EditCustomerSection({ data }) {
+    const { customer } = useSelector((state) => state.customers);
+    const { categories } = useSelector((state) => state.categories);
     const [uploadedFile1, setUploadedFile1] = useState(null);
     const [pinOpen, setPinOpen] = useState(false);
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -19,16 +22,8 @@ export default function EditCustomerSection({ data, isOpen, setIsOpen }) {
     const [form, setForm] = useState({});
 
     useEffect(() => {
-        setForm(data)
-    }, [])
-
-    useEffect(() => {
-        if (isOpen) {
-            setIsOpen(false);
-            setPinOpen(true);
-        }
-    }, [isOpen]);
-
+        setForm(data);
+    }, []);
 
     async function editCustomer(e) {
         e.preventDefault();
@@ -56,13 +51,11 @@ export default function EditCustomerSection({ data, isOpen, setIsOpen }) {
         }
 
         try {
-            await store.dispatch(
-                update_customer_thunk(form)
-            );
+            await store.dispatch(update_customer_thunk(form));
             // Refresh the customer list while preserving current page and search
             const params = new URLSearchParams(window.location.search);
-            const page = params.get('page') || 1;
-            const search = params.get('search') || '';
+            const page = params.get("page") || 1;
+            const search = params.get("search") || "";
             store.dispatch(get_customer_thunk({ page, search, per_page: 10 }));
             message.success("Updated Successfully!");
             setDrawerOpen(false);
@@ -73,10 +66,20 @@ export default function EditCustomerSection({ data, isOpen, setIsOpen }) {
         }
     }
 
-    console.log('foaaaarmm', form)
+    console.log("foaaaarmm", form);
 
     return (
         <>
+            <button
+                onClick={() => setPinOpen(true)}
+                className={`hover:bg-gray-100 hover:text-gray-900 text-gray-700 group flex items-center px-4 py-2 text-sm w-full`}
+            >
+                <PencilSquareIcon
+                    className="mr-3 size-5 text-gray-400"
+                    aria-hidden="true"
+                />
+                Edit Customer
+            </button>
             <VerifyPinModal
                 isOpen={pinOpen}
                 onClose={() => setPinOpen(false)}
@@ -86,7 +89,7 @@ export default function EditCustomerSection({ data, isOpen, setIsOpen }) {
                 }}
                 actionLabel="edit this customer"
             />
-            <DrawerSection open={drawerOpen} setOpen={setDrawerOpen} >
+            <DrawerSection open={drawerOpen} setOpen={setDrawerOpen}>
                 <form
                     onSubmit={editCustomer}
                     className="flex h-full flex-col divide-y divide-gray-200 bg-white shadow-xl"
@@ -117,7 +120,8 @@ export default function EditCustomerSection({ data, isOpen, setIsOpen }) {
                             </div>
                             <div className="mt-1">
                                 <p className="text-sm text-gray-600">
-                                    Get started by updating the information below to modify customer.
+                                    Get started by updating the information
+                                    below to modify customer.
                                 </p>
                             </div>
                         </div>
@@ -186,7 +190,8 @@ export default function EditCustomerSection({ data, isOpen, setIsOpen }) {
                                             label="City"
                                             type="text"
                                         />
-                                    </div> <div>
+                                    </div>{" "}
+                                    <div>
                                         <Input
                                             onChange={(e) =>
                                                 setForm({
@@ -199,7 +204,7 @@ export default function EditCustomerSection({ data, isOpen, setIsOpen }) {
                                             label="Province"
                                             type="text"
                                         />
-                                    </div> 
+                                    </div>
                                     <div>
                                         <Input
                                             onChange={(e) =>
@@ -258,7 +263,6 @@ export default function EditCustomerSection({ data, isOpen, setIsOpen }) {
                                             </div>
                                         </div>
                                     </div> */}
-
                                     {/* <div className="sm:col-span-12">
                                         <FaMoneyBill1Wave className="float-left size-5 mr-1 mt-3 text-pink-500" />
                                         <h3 className="text-base font-medium text-gray-600 pt-3">
