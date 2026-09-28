@@ -590,7 +590,10 @@ class CartController extends Controller
                     DB::raw('SUM(discount) as discount'),
 
                 )
-                    ->whereBetween('cart_items.created_at', [$start, $end])
+                    // Filter by the cart's date (not the item's) so totals match cart-based reports
+                    ->whereHas('cart', function ($q) use ($start, $end) {
+                        $q->whereBetween('created_at', [$start, $end]);
+                    })
                     ->when(!empty($request->customer) && $request->customer !== 'all', function ($query) use ($request) {
                         if ($request->customer == '1') {
                             $query->whereHas('cart', function ($q) {
