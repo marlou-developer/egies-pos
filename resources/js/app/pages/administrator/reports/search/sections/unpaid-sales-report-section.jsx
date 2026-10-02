@@ -293,7 +293,7 @@ const UnpaidSalesReportSection = () => {
                                             marginBottom: 4,
                                         }}
                                     >
-                                        Customer: {group.name}
+                                        Customers: {group.name}
                                     </Text>
 
                                     {/* Table Header */}
