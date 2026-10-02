@@ -1012,8 +1012,11 @@ class CartController extends Controller
             ], 200);
         } else if ($request->type == "Payment Types by Customer") {
             if (!empty($request->customer) && $request->customer === '1') {
-                // Anonymous carts (no customer_id)
-                $carts = Cart::whereNull('customer_id')
+                // Anonymous carts (no customer_id) or carts pointing to a deleted customer
+                $carts = Cart::where(function ($q) {
+                        $q->whereNull('customer_id')
+                            ->orWhereNotIn('customer_id', Customer::select('id'));
+                    })
                     ->whereBetween('created_at', [$start, $end])
                     ->whereNotNull('payment_type')
                     ->get();
@@ -1068,6 +1071,36 @@ class CartController extends Controller
                     })
                     ->filter(fn($item) => $item['payment_types']->isNotEmpty())
                     ->values();
+
+                // Include Walk-In carts (no customer_id, or customer_id points to a deleted customer) when viewing all customers
+                if (empty($request->customer) || $request->customer === 'all') {
+                    $walkInCarts = Cart::where(function ($q) {
+                            $q->whereNull('customer_id')
+                                ->orWhereNotIn('customer_id', Customer::select('id'));
+                        })
+                        ->whereBetween('created_at', [$start, $end])
+                        ->whereNotNull('payment_type')
+                        ->get();
+
+                    if ($walkInCarts->isNotEmpty()) {
+                        $walkInByPaymentType = $walkInCarts
+                            ->groupBy('payment_type')
+                            ->map(function ($group, $type) {
+                                return [
+                                    'type' => $type,
+                                    'count' => $group->count(),
+                                    'total_amount' => $group->sum(fn($item) => $item->total_price ?? 0),
+                                ];
+                            })
+                            ->values();
+
+                        $paymentTypes->push([
+                            'customer_id' => null,
+                            'customer_name' => 'Walk-In Customer',
+                            'payment_types' => $walkInByPaymentType,
+                        ]);
+                    }
+                }
             }
 
             return response()->json([
