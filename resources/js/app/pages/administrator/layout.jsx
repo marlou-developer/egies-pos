@@ -99,7 +99,7 @@ export default function AdminLayout({ children }) {
                   },
               ]
             : []),
-        ...(user?.user_type === "Admin" || user?.user_type === "Cashier" || user?.user_type === "Super Admin"
+        ...(user?.user_type === "Admin" || user?.user_type === "Super Admin"
             ? [
                   {
                       name: "Credits",
@@ -109,7 +109,7 @@ export default function AdminLayout({ children }) {
                   },
               ]
             : []),
-        ...(user?.user_type === "Admin" || user?.user_type === "Super Admin"
+        ...(user?.user_type === "Admin" || user?.user_type === "Cashier" || user?.user_type === "Super Admin"
             ? [
                   {
                       name: "Expenses",
