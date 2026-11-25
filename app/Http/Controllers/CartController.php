@@ -181,37 +181,52 @@ class CartController extends Controller
     public function edit_discount(Request $request)
     {
         $cart_item = CartItem::where('id', $request->id)->first();
-        $total = ($cart_item->price * $cart_item->quantity) - $request->discount_per_item;
-        $fixed_price = $total / $cart_item->quantity;
-        $profit = $total - $cart_item->cost;
-        if ($cart_item) {
+        $cart = Cart::where('cart_id', $request->cart_id)->first();
+
+        if (!$cart_item || !$cart) {
+            return response()->json(['message' => 'Cart or cart item not found'], 404);
+        }
+
+        DB::transaction(function () use ($request, $cart_item, $cart) {
+            $item_discount = $request->discount_per_item ?? 0;
+            $total = ($cart_item->price * $cart_item->quantity) - $item_discount;
+            $fixed_price = $cart_item->quantity > 0 ? $total / $cart_item->quantity : 0;
+
             $cart_item->update([
-                'discount' => $request->discount_per_item,
+                'discount' => $item_discount,
                 'fixed_price' => $fixed_price,
                 'total' => $total,
-                'profit' => $profit,
+                'profit' => $total - $cart_item->cost,
             ]);
-        }
-        $cart = Cart::where('cart_id', $request->cart_id)->first();
-        if ($cart) {
+
             // Recalculate cart totals based on all cart items
             $cart_items = CartItem::where('cart_id', $request->cart_id)->get();
 
-            $sub_total = $cart_items->sum(function ($item) {
-                return $item->price * $item->quantity;
-            });
-
+            $sub_total = $cart_items->sum(fn($item) => $item->price * $item->quantity);
             $total_item_discounts = $cart_items->sum('discount');
+            $discount_per_order = $request->discount_per_order ?? $cart->discount_per_order ?? 0;
 
-            $new_total_price = $sub_total - $total_item_discounts - ($request->discount_per_order ?? 0) - ($cart->customer_total_discount ?? 0);
+            $new_total_price = $sub_total - $total_item_discounts - $discount_per_order - ($cart->customer_total_discount ?? 0);
 
-            $cart->update([
-                'discount_per_order' => $request->discount_per_order ?? $cart->discount_per_order,
+            $data = [
+                'discount_per_order' => $discount_per_order,
                 'discount_per_item' => $total_item_discounts,
                 'sub_total' => $sub_total,
                 'total_price' => $new_total_price,
-            ]);
-        }
+            ];
+
+            if ($cart->is_credit == 'true') {
+                // Balance is the new total minus payments already made
+                $total_payments = $cart->credit_payments()->sum('amount');
+                $new_balance = max(0, $new_total_price - $total_payments);
+
+                $data['balance'] = $new_balance;
+                $data['status'] = $new_balance <= 0 ? 'Paid' : ($total_payments > 0 ? 'Partial' : 'Pending');
+            }
+
+            $cart->update($data);
+        });
+
         return response()->json($request, 200);
     }
 
@@ -1014,9 +1029,9 @@ class CartController extends Controller
             if (!empty($request->customer) && $request->customer === '1') {
                 // Anonymous carts (no customer_id) or carts pointing to a deleted customer
                 $carts = Cart::where(function ($q) {
-                        $q->whereNull('customer_id')
-                            ->orWhereNotIn('customer_id', Customer::select('id'));
-                    })
+                    $q->whereNull('customer_id')
+                        ->orWhereNotIn('customer_id', Customer::select('id'));
+                })
                     ->whereBetween('created_at', [$start, $end])
                     ->whereNotNull('payment_type')
                     ->get();
@@ -1075,9 +1090,9 @@ class CartController extends Controller
                 // Include Walk-In carts (no customer_id, or customer_id points to a deleted customer) when viewing all customers
                 if (empty($request->customer) || $request->customer === 'all') {
                     $walkInCarts = Cart::where(function ($q) {
-                            $q->whereNull('customer_id')
-                                ->orWhereNotIn('customer_id', Customer::select('id'));
-                        })
+                        $q->whereNull('customer_id')
+                            ->orWhereNotIn('customer_id', Customer::select('id'));
+                    })
                         ->whereBetween('created_at', [$start, $end])
                         ->whereNotNull('payment_type')
                         ->get();
@@ -1539,117 +1554,117 @@ class CartController extends Controller
         $cart_id = Carbon::now()->format('mdyHisv');
 
         try {
-        $cart = DB::transaction(function () use ($request, $cart_id, $cartItems) {
-            $resolvedCartId = $request->cart_id ?? $cart_id;
-            $itemCount      = count($cartItems);
-            $split_discount = $itemCount > 0 ? ($request->discount_per_order / $itemCount) : 0;
+            $cart = DB::transaction(function () use ($request, $cart_id, $cartItems) {
+                $resolvedCartId = $request->cart_id ?? $cart_id;
+                $itemCount      = count($cartItems);
+                $split_discount = $itemCount > 0 ? ($request->discount_per_order / $itemCount) : 0;
 
-            // Pre-load all products in one query and lock rows to prevent race conditions
-            $productIds = collect($cartItems)
-                ->map(fn($item) => $item['product_id'] ?? $item['id'])
-                ->unique()
-                ->values()
-                ->all();
+                // Pre-load all products in one query and lock rows to prevent race conditions
+                $productIds = collect($cartItems)
+                    ->map(fn($item) => $item['product_id'] ?? $item['id'])
+                    ->unique()
+                    ->values()
+                    ->all();
 
-            $products = Product::whereIn('id', $productIds)
-                ->lockForUpdate()
-                ->get()
-                ->keyBy('id');
+                $products = Product::whereIn('id', $productIds)
+                    ->lockForUpdate()
+                    ->get()
+                    ->keyBy('id');
 
-            // Create or update the cart (lock existing row to prevent duplicate updates)
-            $cart = Cart::where('cart_id', $resolvedCartId)->lockForUpdate()->first();
+                // Create or update the cart (lock existing row to prevent duplicate updates)
+                $cart = Cart::where('cart_id', $resolvedCartId)->lockForUpdate()->first();
 
-            if ($cart) {
-                $cart->update([
-                    'sub_total'          => $cart->sub_total + $request->sub_total,
-                    // 'customer_total_discount' => $request->customer_total_discount,
-                    'discount_per_item'  => $cart->discount_per_item + $request->total_item_discount,
-                    'discount_per_order' => $cart->discount_per_order + $request->discount_per_order,
-                    'total_price'        => $cart->total_price + $request->total_price,
-                    'customer_amount'    => $cart->customer_amount + $request->customer_amount,
-                    'change'             => $cart->change + $request->change,
-                    // Use $cart->balance (not $cart->total_price) so partial payments already made are respected
-                    'balance'            => $request->is_credit == 'true'
-                        ? $cart->balance + $request->total_price
-                        : '0',
-                ]);
-            } else {
-                $cart = Cart::create([
-                    'cart_id'                 => $resolvedCartId,
-                    'customer_id'             => $request->customer_id,
-                    'user_id'                 => Auth::id(),
-                    'order_id'                => $request->order_id ?? null,
-                    'customer'                => $request->customer_name ?? null,
-                    'sub_total'               => $request->sub_total,
-                    'customer_total_discount' => $request->customer_total_discount,
-                    'discount_per_item'       => $request->total_item_discount,
-                    'discount_per_order'      => $request->discount_per_order,
-                    'total_price'             => $request->total_price,
-                    'payment_type'            => $request->payment_type,
-                    'status'                  => $request->is_credit == 'true' || $request->shop == 'Shopee' ? 'Pending' : 'Paid',
-                    'customer_amount'         => $request->customer_amount,
-                    'change'                  => $request->change,
-                    'is_credit'               => $request->is_credit ?? null,
-                    'due_date'                => $request->due_date,
-                    'shop'                    => $request->shop,
-                    'shopee_store'            => $request->shopee_store,
-                    'balance'                 => $request->is_credit == 'true' ? $request->total_price : '0',
-                ]);
-            }
-
-            foreach ($cartItems as $item) {
-                $subPrice = $item['sub_price'];
-                $pricing_type = match (true) {
-                    $subPrice == $item['srp']                    => 'SRP',
-                    $subPrice == $item['shopee']                 => 'Shopee',
-                    $subPrice == $item['reseller']               => 'Reseller',
-                    $subPrice == $item['city_distributor']       => 'City Distributor',
-                    $subPrice == $item['district_distributor']   => 'District Distributor',
-                    $subPrice == $item['provincial_distributor'] => 'Provincial Distributor',
-                    default                                      => 'SRP',
-                };
-
-                $quantity          = $item['pcs'];
-                $discount          = $item['discount'] ?? 0;
-                $customer_discount = $item['customer_discount'] ?? 0;
-                $price             = $subPrice;
-                // Use consistent product_id resolution for both CartItem and stock deduction
-                $productId         = $item['product_id'] ?? $item['id'];
-                $itemDiscount      = $discount + $split_discount;
-
-                CartItem::create([
-                    'cart_id'           => $resolvedCartId,
-                    'product_id'        => $productId,
-                    'discount'          => $itemDiscount,
-                    'customer_discount' => $customer_discount * $quantity,
-                    'pricing_type'      => $pricing_type,
-                    'quantity'          => $quantity,
-                    'cost'              => $item['cost'] * $quantity,
-                    'profit'            => ($price * $quantity) - $itemDiscount - ($item['cost'] * $quantity),
-                    'price'             => $price,
-                    'fixed_price'       => $quantity > 0 ? (($price * $quantity) - $itemDiscount) / $quantity : 0,
-                    'total'             => ($price * $quantity) - $itemDiscount,
-                ]);
-
-                $product = $products->get($productId);
-
-                if ($product) {
-                    $newQuantity = $product->quantity - $quantity;
-
-                    if ($newQuantity < 0) {
-                        throw new \Exception("Insufficient stock for product '{$product->name}'. Available: {$product->quantity}, Requested: {$quantity}.");
-                    }
-
-                    $product->update(['quantity' => $newQuantity]);
-                    // Update in-memory so a duplicate product in the same order deducts correctly
-                    $product->quantity = $newQuantity;
+                if ($cart) {
+                    $cart->update([
+                        'sub_total'          => $cart->sub_total + $request->sub_total,
+                        // 'customer_total_discount' => $request->customer_total_discount,
+                        'discount_per_item'  => $cart->discount_per_item + $request->total_item_discount,
+                        'discount_per_order' => $cart->discount_per_order + $request->discount_per_order,
+                        'total_price'        => $cart->total_price + $request->total_price,
+                        'customer_amount'    => $cart->customer_amount + $request->customer_amount,
+                        'change'             => $cart->change + $request->change,
+                        // Use $cart->balance (not $cart->total_price) so partial payments already made are respected
+                        'balance'            => $request->is_credit == 'true'
+                            ? $cart->balance + $request->total_price
+                            : '0',
+                    ]);
                 } else {
-                    throw new \Exception("Product ID {$productId} not found.");
+                    $cart = Cart::create([
+                        'cart_id'                 => $resolvedCartId,
+                        'customer_id'             => $request->customer_id,
+                        'user_id'                 => Auth::id(),
+                        'order_id'                => $request->order_id ?? null,
+                        'customer'                => $request->customer_name ?? null,
+                        'sub_total'               => $request->sub_total,
+                        'customer_total_discount' => $request->customer_total_discount,
+                        'discount_per_item'       => $request->total_item_discount,
+                        'discount_per_order'      => $request->discount_per_order,
+                        'total_price'             => $request->total_price,
+                        'payment_type'            => $request->payment_type,
+                        'status'                  => $request->is_credit == 'true' || $request->shop == 'Shopee' ? 'Pending' : 'Paid',
+                        'customer_amount'         => $request->customer_amount,
+                        'change'                  => $request->change,
+                        'is_credit'               => $request->is_credit ?? null,
+                        'due_date'                => $request->due_date,
+                        'shop'                    => $request->shop,
+                        'shopee_store'            => $request->shopee_store,
+                        'balance'                 => $request->is_credit == 'true' ? $request->total_price : '0',
+                    ]);
                 }
-            }
 
-            return $cart;
-        });
+                foreach ($cartItems as $item) {
+                    $subPrice = $item['sub_price'];
+                    $pricing_type = match (true) {
+                        $subPrice == $item['srp']                    => 'SRP',
+                        $subPrice == $item['shopee']                 => 'Shopee',
+                        $subPrice == $item['reseller']               => 'Reseller',
+                        $subPrice == $item['city_distributor']       => 'City Distributor',
+                        $subPrice == $item['district_distributor']   => 'District Distributor',
+                        $subPrice == $item['provincial_distributor'] => 'Provincial Distributor',
+                        default                                      => 'SRP',
+                    };
+
+                    $quantity          = $item['pcs'];
+                    $discount          = $item['discount'] ?? 0;
+                    $customer_discount = $item['customer_discount'] ?? 0;
+                    $price             = $subPrice;
+                    // Use consistent product_id resolution for both CartItem and stock deduction
+                    $productId         = $item['product_id'] ?? $item['id'];
+                    $itemDiscount      = $discount + $split_discount;
+
+                    CartItem::create([
+                        'cart_id'           => $resolvedCartId,
+                        'product_id'        => $productId,
+                        'discount'          => $itemDiscount,
+                        'customer_discount' => $customer_discount * $quantity,
+                        'pricing_type'      => $pricing_type,
+                        'quantity'          => $quantity,
+                        'cost'              => $item['cost'] * $quantity,
+                        'profit'            => ($price * $quantity) - $itemDiscount - ($item['cost'] * $quantity),
+                        'price'             => $price,
+                        'fixed_price'       => $quantity > 0 ? (($price * $quantity) - $itemDiscount) / $quantity : 0,
+                        'total'             => ($price * $quantity) - $itemDiscount,
+                    ]);
+
+                    $product = $products->get($productId);
+
+                    if ($product) {
+                        $newQuantity = $product->quantity - $quantity;
+
+                        if ($newQuantity < 0) {
+                            throw new \Exception("Insufficient stock for product '{$product->name}'. Available: {$product->quantity}, Requested: {$quantity}.");
+                        }
+
+                        $product->update(['quantity' => $newQuantity]);
+                        // Update in-memory so a duplicate product in the same order deducts correctly
+                        $product->quantity = $newQuantity;
+                    } else {
+                        throw new \Exception("Product ID {$productId} not found.");
+                    }
+                }
+
+                return $cart;
+            });
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 422);
         }
